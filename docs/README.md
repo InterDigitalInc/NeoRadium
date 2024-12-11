@@ -1,6 +1,6 @@
 # Building NeoRadium Documentation
 
-0. See the DEMO DOCUMENTATION sectiobn in here: https://sphinx-rtd-theme.readthedocs.io/en/stable/demo/structure.html
+0. See the DEMO DOCUMENTATION section in here: https://sphinx-rtd-theme.readthedocs.io/en/stable/demo/structure.html
 
 1. Create a virtual environment in a location just outside the git folder:
 ```
@@ -23,8 +23,5 @@ pip install -U Sphinx sphinx_rtd_theme nbsphinx numpy scipy pyyaml matplotlib
 ```
 make clean html
 ```
-
-& /usr/bin/make
-
 
 The output html is generated in the `_build/html` folder. Open `_build/html/index.html` in your browser to view the locally generated documentation.

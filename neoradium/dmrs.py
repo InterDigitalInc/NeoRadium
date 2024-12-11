@@ -30,7 +30,7 @@ from .utils import goldSequence
 #   - TS 38.211 V17.0.0 (2021-12)
 #   - TS 38.212 V17.0.0 (2021-12)
 #   - TS 38.214 V17.0.0 (2021-12)
-# The following links can help with understanding some of the Standard ambiguities:
+# The following links can help understand the Standard easier:
 #   https://www.sharetechnote.com/html/5G/5G_PDSCH_DMRS.html
 #   https://www.sharetechnote.com/html/5G/5G_PTRS_DL.html
 

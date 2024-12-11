@@ -866,8 +866,8 @@ class AntennaBase:
 # ****************************************************************************************************************************************************
 class AntennaElement(AntennaBase):
     r"""
-    This class implements the functionality of a 3-GPP compliant antenna
-    element. This implementation is based on **3GPP TR 38.901 section 7.3**.
+    This class implements the functionality of an antenna element. This 
+    implementation is based on **3GPP TR 38.901 section 7.3**.
     """
     def __init__(self, **kwargs):
         r"""
