@@ -1,0 +1,270 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "81eee812",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "57ee48b3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def getSINR(h, w, noiseVar):\n",
+    "    # h: L x K x Nr x Nt  or n x Nr x Nt\n",
+    "    # w: Nt x Nl   (Note that Nl<= min(Nr,Nt))\n",
+    "    # Returns n x nl\n",
+    "    h = h.reshape(-1, h.shape[-2], h.shape[-1])          # n x Nr x Nt   (n=L*K if h is 4D)\n",
+    "    heff = np.matmul(h,w,axes=[(1,2),(0,1),(1,2)])       # n x Nr x Nl\n",
+    "    u, s, vH = np.linalg.svd(heff, full_matrices=False)  # n x Nr x Nl , n x Nl, n x Nl x Nl\n",
+    "    noisyInvS = 1/(np.square(s)+noiseVar)                # n x Nl\n",
+    "    # Calculating (V . noisyInvS . VH) is the same as:\n",
+    "    #  1) expanding dimensions of 'noisyInvS',  n x Nl =>                  n x Nl x 1\n",
+    "    #  2) calculating V.VH witch is the same square of magnitude of V      n x Nl x Nl\n",
+    "    #  3) doing elementwise multiplication (with boadcasting on last dim)  n x Nl x Nl\n",
+    "    #  4) summing on second axis                                           n x Nl\n",
+    "    gamma = 1/(noiseVar*(noisyInvS[:,:,None] * np.square(np.abs(vH))).sum(1)) - 1\n",
+    "    return gamma.real         # n x Nl"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "4e3ac98c",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "((5, 4, 3),\n",
+       " array([[[ 0.+0.j ,  4.+0.4j,  8.+0.8j],\n",
+       "         [ 1.+0.1j,  5.+0.5j,  9.+0.9j],\n",
+       "         [ 2.+0.2j,  6.+0.6j, 10.+1.j ],\n",
+       "         [ 3.+0.3j,  7.+0.7j, 11.+1.1j]],\n",
+       " \n",
+       "        [[12.+1.2j, 16.+1.6j, 20.+2.j ],\n",
+       "         [13.+1.3j, 17.+1.7j, 21.+2.1j],\n",
+       "         [14.+1.4j, 18.+1.8j, 22.+2.2j],\n",
+       "         [15.+1.5j, 19.+1.9j, 23.+2.3j]],\n",
+       " \n",
+       "        [[24.+2.4j, 28.+2.8j, 32.+3.2j],\n",
+       "         [25.+2.5j, 29.+2.9j, 33.+3.3j],\n",
+       "         [26.+2.6j, 30.+3.j , 34.+3.4j],\n",
+       "         [27.+2.7j, 31.+3.1j, 35.+3.5j]],\n",
+       " \n",
+       "        [[36.+3.6j, 40.+4.j , 44.+4.4j],\n",
+       "         [37.+3.7j, 41.+4.1j, 45.+4.5j],\n",
+       "         [38.+3.8j, 42.+4.2j, 46.+4.6j],\n",
+       "         [39.+3.9j, 43.+4.3j, 47.+4.7j]],\n",
+       " \n",
+       "        [[48.+4.8j, 52.+5.2j, 56.+5.6j],\n",
+       "         [49.+4.9j, 53.+5.3j, 57.+5.7j],\n",
+       "         [50.+5.j , 54.+5.4j, 58.+5.8j],\n",
+       "         [51.+5.1j, 55.+5.5j, 59.+5.9j]]]))"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "h = np.transpose(np.arange(60).reshape(5,3,4),(0,2,1))\n",
+    "h = h+0.1j*h\n",
+    "h.shape, h"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "f5c0d5a0",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "((6, 3, 2),\n",
+       " array([[[ 0.+0.j ,  3.+0.3j],\n",
+       "         [ 1.+0.1j,  4.+0.4j],\n",
+       "         [ 2.+0.2j,  5.+0.5j]],\n",
+       " \n",
+       "        [[ 6.+0.6j,  9.+0.9j],\n",
+       "         [ 7.+0.7j, 10.+1.j ],\n",
+       "         [ 8.+0.8j, 11.+1.1j]],\n",
+       " \n",
+       "        [[12.+1.2j, 15.+1.5j],\n",
+       "         [13.+1.3j, 16.+1.6j],\n",
+       "         [14.+1.4j, 17.+1.7j]],\n",
+       " \n",
+       "        [[18.+1.8j, 21.+2.1j],\n",
+       "         [19.+1.9j, 22.+2.2j],\n",
+       "         [20.+2.j , 23.+2.3j]],\n",
+       " \n",
+       "        [[24.+2.4j, 27.+2.7j],\n",
+       "         [25.+2.5j, 28.+2.8j],\n",
+       "         [26.+2.6j, 29.+2.9j]],\n",
+       " \n",
+       "        [[30.+3.j , 33.+3.3j],\n",
+       "         [31.+3.1j, 34.+3.4j],\n",
+       "         [32.+3.2j, 35.+3.5j]]]))"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "w = np.transpose(np.arange(36).reshape(6,2,3), (0,2,1))\n",
+    "w = w +.1j*w\n",
+    "w.shape, w"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "b2267442",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[ 37.99168153, 359.63323565],\n",
+       "       [  4.56863075,  71.35297339],\n",
+       "       [  1.70391124,  37.05619982],\n",
+       "       [  0.904854  ,  26.78160181],\n",
+       "       [  0.57413193,  22.42505049]])"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "getSINR(h, w[0], 0.1234)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "cfbdab24",
+   "metadata": {},
+   "source": [
+    "## Matlab:\n",
+    "```\n",
+    "K>> nVar = 0.1234;\n",
+    "K>> h = reshape(0:59,4,3,5)+0.1i*reshape(0:59,4,3,5);\n",
+    "K>> w = reshape(0:5,3,2)+0.1i*reshape(0:5,3,2);\n",
+    "K>> nr5g.internal.nrPrecodedSINR(h,nVar,w)\n",
+    "\n",
+    "ans =\n",
+    "\n",
+    "   1.0e+02 *\n",
+    "\n",
+    "   0.379916815287058   3.596332356494885\n",
+    "   0.045686307544590   0.713529733922738\n",
+    "   0.017039112368622   0.370561998195295\n",
+    "   0.009048539994034   0.267816018069208\n",
+    "   0.005741319256007   0.224250504865427\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "98ade39b",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "8834a628",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def getSINR2(h, w, noiseVar):\n",
+    "    # h: L x K x Nr x Nt  or n x Nr x Nt\n",
+    "    # w: Ncb x Nt x Nl   (Note that Nl<= min(Nr,Nt)) (Ncb: codebook size)\n",
+    "    # Returns Ncb x n x nl\n",
+    "    h = h.reshape(-1, h.shape[-2], h.shape[-1])          # n x Nr x Nt   (n=L*K if h is 4D)\n",
+    "    heff = np.matmul(h[None,:,:,:],w[:,None,:,:],axes=[(2,3),(2,3),(2,3)])       # Ncb x n x Nr x Nl\n",
+    "    u, s, vH = np.linalg.svd(heff, full_matrices=False)  # Ncb x n x Nr x Nl , Ncb x n x Nl, Ncb x n x Nl x Nl\n",
+    "    noisyInvS = 1/(np.square(s)+noiseVar)                # n x Nl\n",
+    "    # Calculating (V . noisyInvS . VH) is the same as:\n",
+    "    #  1) expanding dimensions of 'noisyInvS',  n x Nl =>                  Ncb x n x Nl x 1\n",
+    "    #  2) calculating V.VH witch is the same square of magnitude of V      Ncb x n x Nl x Nl\n",
+    "    #  3) doing elementwise multiplication (with boadcasting on last dim)  Ncb x n x Nl x Nl\n",
+    "    #  4) summing on second axis                                           Ncb x n x Nl\n",
+    "    gamma = 1/(noiseVar*(noisyInvS[:,:,:,None] * np.square(np.abs(vH))).sum(2)) - 1\n",
+    "    return gamma.real         # Ncb x n x Nl"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "2e7ba4b1",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "((6, 5, 2),\n",
+       " array([[ 37.99168153, 359.63323565],\n",
+       "        [  4.56863075,  71.35297339],\n",
+       "        [  1.70391124,  37.05619982],\n",
+       "        [  0.904854  ,  26.78160181],\n",
+       "        [  0.57413193,  22.42505049]]),\n",
+       " array([[ 7.40883222, 15.52340496],\n",
+       "        [ 1.2475617 ,  3.52864147],\n",
+       "        [ 0.76208101,  2.56866664],\n",
+       "        [ 0.62906288,  2.30651113],\n",
+       "        [ 0.57440452,  2.19946038]]),\n",
+       " array([[ 7.40883222, 15.52340496],\n",
+       "        [ 1.2475617 ,  3.52864147],\n",
+       "        [ 0.76208101,  2.56866664],\n",
+       "        [ 0.62906288,  2.30651113],\n",
+       "        [ 0.57440452,  2.19946038]]))"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "sinr = getSINR2(h, w, 0.1234)\n",
+    "sinr.shape, sinr[0], sinr[1], getSINR(h, w[1], 0.1234)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.16"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

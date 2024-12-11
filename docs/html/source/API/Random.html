@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Number Generator &mdash; NeoRadium 0.2.0 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/neoradium.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Channel Models" href="Channels.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NeoRadium 0.2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Random Number Generator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-random-object">The <code class="docutils literal notranslate"><span class="pre">random</span></code> object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-random-generators">Supported Random Generators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.random.RanGen"><code class="docutils literal notranslate"><span class="pre">RanGen</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.random.RanGen.getGenerator"><code class="docutils literal notranslate"><span class="pre">RanGen.getGenerator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.random.RanGen.setSeed"><code class="docutils literal notranslate"><span class="pre">RanGen.setSeed()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NeoRadium 0.2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Random Number Generator</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/source/API/Random.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-neoradium.random">
+<span id="random-number-generator"></span><h1>Random Number Generator<a class="headerlink" href="#module-neoradium.random" title="Permalink to this heading"></a></h1>
+<p>The module <code class="docutils literal notranslate"><span class="pre">random.py</span></code> contains the random generator classes which can
+be used to generate random numbers and control the random behavior of
+your code. This module also provides the global <code class="docutils literal notranslate"><span class="pre">random</span></code> object which
+is an instance of the <a class="reference internal" href="#neoradium.random.RanGen" title="neoradium.random.RanGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">RanGen</span></code></a> class.</p>
+<section id="the-random-object">
+<h2>The <code class="docutils literal notranslate"><span class="pre">random</span></code> object<a class="headerlink" href="#the-random-object" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">random</span></code> object by default is initialized as a <em>Permuted Congruential
+Generator</em> based on Numpy’s
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html">PCG64</a>
+class. It can be used to generate random numbers using the methods defined for
+Numpy’s
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator">Generator</a>
+class such as
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.choice.html#numpy-random-generator-choice">choice</a>
+or
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.shuffle.html#numpy-random-generator-shuffle">shuffle</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">array([1, 1, 4])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([5, 8, 0, 1, 6, 9, 7, 2, 3, 4])</span>
+</pre></div>
+</div>
+<p>In addition to the methods defined for the
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator">Generator</a>
+class, <strong>NeoRadium</strong>’s <code class="docutils literal notranslate"><span class="pre">random</span></code> object also supports the following additional methods:</p>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">bits(size)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This method create a bitstream of <code class="docutils literal notranslate"><span class="pre">size</span></code> random bits.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="go">array([0, 1, 1, 0, 1, 1, 0, 1], dtype=int8)</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">awgn(shape, noiseStd)<span class="colon">:</span></dt>
+<dd class="field-even"><p>This method creates <em>Additive White Gaussian Noise</em>
+with standard deviation specified by <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code>. The result will be
+a complex numpy array of shape <code class="docutils literal notranslate"><span class="pre">shape</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">random</span><span class="o">.</span><span class="n">awgn</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">array([[-0.38382838+0.35261486j,  0.10004801-0.5325556j ],</span>
+<span class="go">       [-0.20456608+0.58387099j, -0.85796067-0.15164351j]])</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="supported-random-generators">
+<span id="supportedrangens"></span><h2>Supported Random Generators<a class="headerlink" href="#supported-random-generators" title="Permalink to this heading"></a></h2>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">random</span></code> object’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">getGenerator()</span></code> method you can create
+all types of random generators supported by Numpy. Here is a list of supported
+generators:</p>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">Default Random Generator<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This is based on the numpy class
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.default_rng">default_rng</a>.
+which internally uses the default bit generator (PCG64). You can make
+this random generator predictable by providing a <code class="docutils literal notranslate"><span class="pre">seed</span></code> value.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Creating a predictable random generator based on &quot;default_rng&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getGenerator</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">array([0, 6, 5, 0, 9])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The same as above since both using &quot;PCG64&quot; internally</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getGenerator</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">array([0, 6, 5, 0, 9])</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">PCG64<span class="colon">:</span></dt>
+<dd class="field-even"><p>Permuted Congruential Generator (64-bit, PCG64). This is currently
+<strong>NeoRadium</strong>’s (and python’s) default bit generator object. It is based
+on Numpy’s
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html">PCG64</a>
+class. As you can see the results of the following example matches the
+above results as all of them use the same bit generator with the same seed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Creating a predictable random generator based on &quot;default_rng&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getGenerator</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PCG64</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">array([0, 6, 5, 0, 9])</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">MT19937<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Mersenne Twister. This is based on Numpy’s
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/bit_generators/mt19937.html#mersenne-twister-mt19937">MT19937</a>
+class. You can make this random generator predictable by providing
+a <code class="docutils literal notranslate"><span class="pre">seed</span></code> value.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Creating an unpredictable random generator based on &quot;MT19937&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getGenerator</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">MT19937</span><span class="p">())</span> <span class="c1"># No seed specified -&gt; Unpredictable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">array([1, 8, 6, 8, 9])</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">PCG64DXSM<span class="colon">:</span></dt>
+<dd class="field-even"><p>Permuted Congruential Generator (64-bit, PCG64 DXSM). This is based on Numpy’s
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/bit_generators/pcg64dxsm.html#permuted-congruential-generator-64-bit-pcg64-dxsm">PCG64DXSM</a>
+class. You can make this random generator predictable by providing
+a <code class="docutils literal notranslate"><span class="pre">seed</span></code> value.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Creating a predictable random generator based on &quot;PCG64DXSM&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getGenerator</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PCG64DXSM</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">array([9, 7, 0, 9, 7])</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Philox<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Philox Counter-based RNG. This is based on Numpy’s
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/bit_generators/philox.html#philox-counter-based-rng">Philox</a>
+class. You can make this random generator predictable by providing
+a <code class="docutils literal notranslate"><span class="pre">seed</span></code> value.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Creating an unpredictable random generator based on &quot;Philox&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getGenerator</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Philox</span><span class="p">())</span> <span class="c1"># No seed specified -&gt; Unpredictable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">array([4, 0, 1, 6, 4])</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">SFC64<span class="colon">:</span></dt>
+<dd class="field-even"><p>SFC64 Small Fast Chaotic PRNG. This is based on Numpy’s
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/bit_generators/sfc64.html#sfc64-small-fast-chaotic-prng">SFC64</a>
+class. You can make this random generator predictable by providing
+a <code class="docutils literal notranslate"><span class="pre">seed</span></code> value.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Creating an unpredictable random generator based on &quot;SFC64&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getGenerator</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">SFC64</span><span class="p">())</span> <span class="c1"># No seed specified -&gt; Unpredictable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">array([0, 7, 8, 1, 8])</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">RandomState<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Python’s Legacy Random Generation. This is based on Numpy’s
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState">RandomState</a>
+class. You can make this random generator predictable by providing
+a <code class="docutils literal notranslate"><span class="pre">seed</span></code> value.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Creating an unpredictable random generator based on &quot;RandomState&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getGenerator</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">array([2, 2, 6, 1, 3])</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">RandomState</span></code> can be used to create a random generator that matches
+Matlab’s default random generator. This is for example used by
+<strong>NeoRadium</strong> when comparing the simulation results with Matlab’s
+implementation.</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">predictable random generator based on <code class="docutils literal notranslate"><span class="pre">RandomState</span></code> in <strong>NeoRadium</strong></span><a class="headerlink" href="#id7" title="Permalink to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Creating a predictable random generator based on &quot;RandomState&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getGenerator</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myGen</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">array([0.69646919, 0.28613933, 0.22685145, 0.55131477, 0.71946897])</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">predictable random generator in <strong>Matlab</strong></span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nb">rng</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="nb">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="nb">ans</span><span class="w"> </span><span class="p">=</span>
+
+<span class="w">    </span><span class="mf">0.6965</span><span class="w">    </span><span class="mf">0.2861</span><span class="w">    </span><span class="mf">0.2269</span><span class="w">    </span><span class="mf">0.5513</span><span class="w">    </span><span class="mf">0.7195</span>
+</pre></div>
+</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.random.RanGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.random.</span></span><span class="sig-name descname"><span class="pre">RanGen</span></span><a class="headerlink" href="#neoradium.random.RanGen" title="Permalink to this definition"></a></dt>
+<dd><p>This is <strong>NeoRadium</strong>’s random number generator class. This class is
+used internally to create <strong>NeoRadium</strong>’s <code class="docutils literal notranslate"><span class="pre">random</span></code> object. It is
+strongly recommended to only use <strong>NeoRadium</strong>’s <code class="docutils literal notranslate"><span class="pre">random</span></code> object
+for all random operations.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.random.RanGen.getGenerator">
+<span class="sig-name descname"><span class="pre">getGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.random.RanGen.getGenerator" title="Permalink to this definition"></a></dt>
+<dd><p>This function creates a new random generator object that can be used
+to create new random values. See <a class="reference internal" href="#supportedrangens"><span class="std std-ref">Supported Random Generators</span></a>
+for examples of how to use this function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>seed</strong> (<em>int</em><em>, </em><em>BitGenerator</em><em>, </em><em>Generator</em><em>, </em><em>RandomState</em><em>, or </em><em>None</em>) – <p>This parameter specifies how the new random generator should
+be created. It can be one of the following:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">int<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If <code class="docutils literal notranslate"><span class="pre">seed</span></code> is an integer, it is used as the
+<code class="docutils literal notranslate"><span class="pre">seed</span></code> to generate a
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html">PCG64</a>
+random number generator. The returned random number
+generator is predictable.</p>
+</dd>
+<dt class="field-even">BitGenerator<span class="colon">:</span></dt>
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">seed</span></code> is one of the
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/bit_generators/index.html#supported-bitgenerators">Supported BitGenerators</a>
+the returned random generator is based on specified
+bit generator.</p>
+</dd>
+<dt class="field-odd">Generator<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If seed is a
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html">Generator</a>
+object, the returned random generator is based on <code class="docutils literal notranslate"><span class="pre">default_rng</span></code>.
+Note that internally, <code class="docutils literal notranslate"><span class="pre">default_rng</span></code> uses the
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html">PCG64</a>
+bit generator.</p>
+</dd>
+<dt class="field-even">RandomState<span class="colon">:</span></dt>
+<dd class="field-even"><p>If seed is a
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState">RandomState</a>
+object, the returned random generator is based on <code class="docutils literal notranslate"><span class="pre">RandomState</span></code>.</p>
+</dd>
+<dt class="field-odd">None<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If seed is <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), a default
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html">PCG64</a>
+bit generator is used without specifying the seed which results
+in an unpredictable random generator.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>The returned random generator object is based on a <strong>NeoRadium</strong> internal class which
+is derived from Numpy’s
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator">Generator</a>
+or
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState">RandomState</a>
+class.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Generator or RandomState</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.random.RanGen.setSeed">
+<span class="sig-name descname"><span class="pre">setSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.random.RanGen.setSeed" title="Permalink to this definition"></a></dt>
+<dd><p>This function changes the random generator used by this <a class="reference internal" href="#neoradium.random.RanGen" title="neoradium.random.RanGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">RanGen</span></code></a>
+object.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>It is recommended to avoid using this method on <strong>NeoRadium</strong>’s
+global <code class="docutils literal notranslate"><span class="pre">random</span></code> object. Since the <code class="docutils literal notranslate"><span class="pre">random</span></code> object is a single instance
+used globally by all of codebase using <strong>NeoRadium</strong>, changing it affects
+other parts of your code which may depend on the original <code class="docutils literal notranslate"><span class="pre">random</span></code> object.</p>
+<p>A better approach is to create a new random generator using the
+<a class="reference internal" href="#neoradium.random.RanGen.getGenerator" title="neoradium.random.RanGen.getGenerator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getGenerator()</span></code></a> method and use that for the part of code the needs
+a specific random generator.</p>
+<p>However, for smaller programs where you want to control the random behavior
+of your code, this function provides a quick and easy way to make your results
+reproducible by passing a constant integer value to this function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">random</span>
+
+<span class="c1"># Changing the &quot;random&quot; object to be predictable with &quot;MT19937&quot; bit generator</span>
+<span class="c1"># This is not recommended because it changes the &quot;random&quot; object which is</span>
+<span class="c1"># used globally in NeoRadium.</span>
+<span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">MT19937</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span>
+<span class="n">myRandInts</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Creating a new predictable random generator with &quot;MT19937&quot; bit generator</span>
+<span class="c1"># This is the preferred approach as the original &quot;random&quot; object remains unchanged</span>
+<span class="c1"># The results is the same as the above code.</span>
+<span class="n">myGen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getGenerator</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">MT19937</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span>
+<span class="n">myRandInts</span> <span class="o">=</span> <span class="n">myGen</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>seed</strong> (<em>int</em><em>, </em><em>BitGenerator</em><em>, </em><em>Generator</em><em>, </em><em>RandomState</em><em>, or </em><em>None</em>) – Please refer to <a class="reference internal" href="#neoradium.random.RanGen.getGenerator" title="neoradium.random.RanGen.getGenerator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getGenerator()</span></code></a> method for details about
+the <code class="docutils literal notranslate"><span class="pre">seed</span></code> parameter.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Channels.html" class="btn btn-neutral float-left" title="Channel Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

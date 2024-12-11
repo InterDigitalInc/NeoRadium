@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comparing the LDPC results with Matlab &mdash; NeoRadium 0.2.0 Documentation</title>
+      <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../../../_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../../../_static/neoradium.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../../../_static/jquery.js"></script>
+        <script src="../../../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../../../../../" id="documentation_options" src="../../../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../../../_static/doctools.js"></script>
+        <script src="../../../../../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../../../index.html" class="icon icon-home">
+            NeoRadium 0.2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../source/API/Random.html">Random Number Generator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../../index.html">NeoRadium 0.2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Comparing the LDPC results with Matlab</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../../../_sources/html/html/source/Playground/Notebooks/CompareWithMatlab/LDPC/LDPC-Matlab.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Comparing-the-LDPC-results-with-Matlab">
+<h1>Comparing the LDPC results with Matlab<a class="headerlink" href="#Comparing-the-LDPC-results-with-Matlab" title="Permalink to this heading"></a></h1>
+<p>Applying LDPC encoding/decoding on random transport blocks and comparing the results with the equivalent Matlab code “MatlabFiles/LDPC.mlx”. <a class="reference external" href="MatlabFiles/LDPC.html">Here</a> is the execution results of this code in Matlab.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">LdpcEncoder</span><span class="p">,</span> <span class="n">LdpcDecoder</span>
+
+<span class="n">matlabFilesPath</span> <span class="o">=</span> <span class="s2">&quot;./MatlabFiles&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an LDPC encoder object</span>
+<span class="n">ldpcEncoder</span> <span class="o">=</span> <span class="n">LdpcEncoder</span><span class="p">(</span><span class="n">baseGraphNo</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">&#39;QPSK&#39;</span><span class="p">,</span> <span class="n">rv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">txLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nRef</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">targetRate</span><span class="o">=</span><span class="mi">449</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read input bits from Matlab-generated file</span>
+<span class="n">inBits</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/in.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;in&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">inBits</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0, 0, 1, 1, 0, 0, 1, 1, 0, 1], dtype=int8)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Transport block padded with a 24-bit CRC</span>
+<span class="n">tbWithCrc</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">appendCrc</span><span class="p">(</span><span class="n">inBits</span><span class="p">,</span><span class="s1">&#39;24A&#39;</span><span class="p">)</span>
+<span class="n">tbWithCrc</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(10024,)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Do the segmentation:</span>
+<span class="c1"># To compare with Matlab, we need to use -1 for filler bits</span>
+<span class="n">codeBlocksCrc</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">doSegmentation</span><span class="p">(</span><span class="n">tbWithCrc</span><span class="p">,</span> <span class="n">fillerBit</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Compare results with Matlab:</span>
+<span class="n">codeBlocksCrcMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/cbsIn.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;cbsIn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="o">-</span><span class="n">codeBlocksCrcMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CodeBlocks Shape (Including CRC):&quot;</span><span class="p">,</span> <span class="n">codeBlocksCrc</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;liftingSize (Zc):                &quot;</span><span class="p">,</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">liftingSize</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;setIndex (Zero-Based):           &quot;</span><span class="p">,</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">setIndex</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;numFillerBits:                   &quot;</span><span class="p">,</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">numFillerBits</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+CodeBlocks Shape (Including CRC): (2, 5280)
+liftingSize (Zc):                 240
+setIndex (Zero-Based):            7
+numFillerBits:                    244
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Base Graph Shape:&quot;</span><span class="p">,</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">baseGraph</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;8x8 sub-matrix at the </span><span class="se">\&quot;</span><span class="s2">Double Diagonal</span><span class="se">\&quot;</span><span class="s2"> section:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">baseGraph</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="mi">22</span><span class="p">:</span><span class="mi">30</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="s2">&quot;   &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%3d</span><span class="s2">&quot;</span><span class="o">%</span><span class="k">x</span> for x in r))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Base Graph Shape: (46, 68)
+8x8 sub-matrix at the &#34;Double Diagonal&#34; section:
+      1     0    -1    -1    -1    -1    -1    -1
+      0     0     0    -1    -1    -1    -1    -1
+     -1    -1     0     0    -1    -1    -1    -1
+      1    -1    -1     0    -1    -1    -1    -1
+     -1    -1    -1    -1     0    -1    -1    -1
+    180    -1    -1    -1    -1     0    -1    -1
+     -1    -1    -1    -1    -1    -1     0    -1
+     -1    -1    -1    -1    -1    -1    -1     0
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check the valid LDPC codewords:</span>
+<span class="c1"># Set Filler bits to zero before encoding and do not puncture first 2 columns</span>
+<span class="n">codeBlocksCrc</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">setFillerBits</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">testCodeWords</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="p">,</span> <span class="n">zeroFillerBits</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">puncture</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="p">(</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodeword</span><span class="p">(</span><span class="n">testCodeWords</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+ <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodeword</span><span class="p">(</span><span class="n">testCodeWords</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+ <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodeword</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">68</span><span class="o">*</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">liftingSize</span><span class="p">)),</span>  <span class="c1"># Always valid</span>
+ <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodeword</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">68</span><span class="o">*</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">liftingSize</span><span class="p">)))</span>   <span class="c1"># Intentionally Invalid</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(True, True, True, False)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Normal usage (1st 2 columns punctured, zero filler bits)</span>
+<span class="c1"># Do segmentation</span>
+<span class="n">codeBlocksCrc</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">doSegmentation</span><span class="p">(</span><span class="n">tbWithCrc</span><span class="p">)</span>
+<span class="c1"># Encoding:</span>
+<span class="n">codeWords</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;codeWords Shape:&quot;</span><span class="p">,</span> <span class="n">codeWords</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Compare results with Matlab:</span>
+<span class="n">codeWordsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/enc.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;enc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codeWords</span><span class="o">-</span><span class="n">codeWordsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+codeWords Shape: (2, 15840)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rateMatchedCodeWords</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">rateMatch</span><span class="p">(</span><span class="n">codeWords</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate-Matched codeWords Shape:&quot;</span><span class="p">,</span> <span class="n">rateMatchedCodeWords</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># Compare results with Matlab:</span>
+<span class="n">rateMatchedCodeWordsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/chIn.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;chIn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeWords</span><span class="o">-</span><span class="n">rateMatchedCodeWordsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Rate-Matched codeWords Shape: (22808,)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Do all of it with one call end to end</span>
+<span class="n">rateMatchedCodeWords</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">getRateMatchedCodeWords</span><span class="p">(</span><span class="n">inBits</span><span class="p">)</span>
+
+<span class="c1"># Compare results with Matlab:</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeWords</span><span class="o">-</span><span class="n">rateMatchedCodeWordsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simple bipolar channel with no noise:</span>
+<span class="n">channelOutput</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">rateMatchedCodeWords</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an LDPC decoder</span>
+<span class="n">ldpcDecoder</span> <span class="o">=</span> <span class="n">LdpcDecoder</span><span class="p">(</span><span class="n">baseGraphNo</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">&#39;QPSK&#39;</span><span class="p">,</span> <span class="n">rv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">txLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nRef</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="c1"># Recover rate</span>
+<span class="n">rxCodedBlocks</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">recoverRate</span><span class="p">(</span><span class="n">channelOutput</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inBits</span><span class="p">))</span>
+
+<span class="c1"># Compare results with matlab:</span>
+<span class="n">rxCodedBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/raterec.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;raterec&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="n">rxCodedBlocksMatlab</span><span class="p">[</span><span class="n">rxCodedBlocksMatlab</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span><span class="o">=</span><span class="n">LdpcDecoder</span><span class="o">.</span><span class="n">LARGE_LLR</span>  <span class="c1"># Replace inf with our LARGE_LLR</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodedBlocks</span><span class="o">-</span><span class="n">rxCodedBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+
+<span class="n">rxCodedBlocks</span><span class="o">.</span><span class="n">shape</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(2, 15840)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Decode the rate-recovered message</span>
+<span class="n">rxCodeWords</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">rxCodedBlocks</span><span class="p">)</span>
+<span class="n">rxCodeWords</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(2, 5280)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare results with matlab:</span>
+<span class="n">rxCodeWordsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/decBits.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;decBits&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodeWords</span><span class="o">-</span><span class="n">rxCodeWordsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Undo Segmentation and CRC checking</span>
+<span class="n">rxDecodedWordsWithoutCrc</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrcAndMerge</span><span class="p">(</span><span class="n">rxCodeWords</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CRC Matched:&quot;</span><span class="p">,</span> <span class="n">crcMatch</span><span class="p">)</span>
+
+<span class="c1"># Compare results with matlab:</span>
+<span class="n">rxDecodedWordsWithoutCrcMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/decBlk.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;decBlk&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxDecodedWordsWithoutCrc</span><span class="o">-</span><span class="n">rxDecodedWordsWithoutCrcMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">rxDecodedWordsWithoutCrc</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+CRC Matched: [ True  True]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(10024,)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The transport block CRC checking</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrc</span><span class="p">(</span><span class="n">rxDecodedWordsWithoutCrc</span><span class="p">,</span><span class="s1">&#39;24A&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare with original input</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxDecodedWordsWithoutCrc</span><span class="p">[:</span><span class="o">-</span><span class="mi">24</span><span class="p">]</span><span class="o">-</span><span class="n">inBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
