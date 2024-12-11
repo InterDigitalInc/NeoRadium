@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generating Dataset for Channel Estimation Training &mdash; NeoRadium 0.2.0 Documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/neoradium.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Training A ResNet model for Channel Estimation" href="MLChestTrainTorch.html" />
+    <link rel="prev" title="Calculating BER/BLER for PDSCH Communication with LDPC" href="../PDSCH/PDSCH-BLER.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channels">Channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Generating Dataset for Channel Estimation Training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MLChestTrainTorch.html">Training A ResNet model for Channel Estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="MLChestEvaluateTorch.html">Evaluating the Trained Channel Estimator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab-5g-toolbox">Comparing with Matlab 5G Toolbox</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Generating Dataset for Channel Estimation Training</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/MLChEst/MLChestDataGen.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Generating-Dataset-for-Channel-Estimation-Training">
+<h1>Generating Dataset for Channel Estimation Training<a class="headerlink" href="#Generating-Dataset-for-Channel-Estimation-Training" title="Permalink to this heading"></a></h1>
+<p>The first step in any deep learning project is preparing the dataset. In this notebook we create an OFDM communication pipeline and capture the received grid together with the DMRS information. Based on the known pilot signals (DMRS) and received values at those pilot locations, the Channel Estimation algorithms calculate the OFDM Channel Matrix for every pair of receive antenna and layer. Please note that since we are using DMRS pilots, the effect of precoding is included in the estimated
+channel.</p>
+<p>Our Deep learning model is trained to predict one <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> OFDM channel matrix where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the number of OFDM symbols per slot and <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers. However, the channel matrix is a 4-D tensor of shape <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nl</span></code>, where <code class="docutils literal notranslate"><span class="pre">Nr</span></code> and <code class="docutils literal notranslate"><span class="pre">Nl</span></code> are the number of receiver antenna and the number of layers correspondingly. Therefore each channel matrix corresponds to <code class="docutils literal notranslate"><span class="pre">Nc=Nr.Nl</span></code> dataset samples. The following diagram shows how the data generation pipeline works.</p>
+<img alt="Data Generation Pipeline" src="../../../../_images/DataGenPipeline.png" />
+<p>So, let’s get started by importing some modules from <strong>NeoRadium</strong>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">Grid</span><span class="p">,</span> <span class="n">random</span>
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">getSamples</span></code> function below receives the DMRS information, the received resource grid, and the ground-truth channel and creates pairs of dataset samples and labels. Each call to this function results in <code class="docutils literal notranslate"><span class="pre">Nc=Nr.Nl</span></code> dataset samples where <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of receiver antenna and <code class="docutils literal notranslate"><span class="pre">Nl</span></code> is the number of layers. This function first calculates the channel values at the pilot locations using least squares (LS) method. Each dataset sample is an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> complex matrix which is initialized
+with zeros and updated by the channel values at pilot locations. The ground-truth channel is also broken down to <code class="docutils literal notranslate"><span class="pre">Nc</span></code> matrixes which are used as labels for the corresponding dataset samples.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">getSamples</span><span class="p">(</span><span class="n">dmrs</span><span class="p">,</span> <span class="n">rxGrid</span><span class="p">,</span> <span class="n">actualChannel</span><span class="p">):</span>
+    <span class="n">rsGrid</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">dmrs</span><span class="o">.</span><span class="n">pxxch</span><span class="o">.</span><span class="n">portSet</span><span class="p">)</span> <span class="p">)</span>   <span class="c1"># Create an empty resource grid</span>
+    <span class="n">dmrs</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">rsGrid</span><span class="p">)</span>                                   <span class="c1"># Populate the grid with DMRS values</span>
+    <span class="n">rsIndexes</span> <span class="o">=</span> <span class="n">rsGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>                     <span class="c1"># This contains the locations of DMRS values</span>
+
+    <span class="n">rr</span><span class="p">,</span> <span class="n">ll</span><span class="p">,</span> <span class="n">kk</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span>           <span class="c1"># Number of RX antenna, Number of symbols, Number of subcarriers</span>
+    <span class="n">pp</span><span class="p">,</span> <span class="n">ll2</span><span class="p">,</span> <span class="n">kk2</span> <span class="o">=</span> <span class="n">rsGrid</span><span class="o">.</span><span class="n">shape</span>         <span class="c1"># Number of Ports (From DMRS)</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">ll</span><span class="o">==</span><span class="n">ll2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">kk</span><span class="o">==</span><span class="n">kk2</span><span class="p">)</span>
+
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pp</span><span class="p">):</span>                             <span class="c1"># For each DMRS port (i.e. each layer)</span>
+        <span class="n">portLs</span> <span class="o">=</span> <span class="n">rsIndexes</span><span class="p">[</span><span class="mi">1</span><span class="p">][(</span><span class="n">rsIndexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">p</span><span class="p">)]</span>    <span class="c1"># Indexes of symbols containing pilots in this port</span>
+        <span class="n">portKs</span> <span class="o">=</span> <span class="n">rsIndexes</span><span class="p">[</span><span class="mi">2</span><span class="p">][(</span><span class="n">rsIndexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">p</span><span class="p">)]</span>    <span class="c1"># Indexes of subcarriers containing pilots in this port</span>
+
+        <span class="n">ls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">portLs</span><span class="p">)</span>                      <span class="c1"># Unique Indexes of symbols containing pilots in this port</span>
+        <span class="n">ks</span> <span class="o">=</span> <span class="n">portKs</span><span class="p">[</span><span class="n">portLs</span><span class="o">==</span><span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>                  <span class="c1"># Unique Indexes of subcarriers containing pilots in this port</span>
+        <span class="n">numLs</span><span class="p">,</span> <span class="n">numKs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ls</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">ks</span><span class="p">)</span>             <span class="c1"># Number of OFDM symbols and number of subcarriers</span>
+
+        <span class="n">pilotValues</span> <span class="o">=</span> <span class="n">rsGrid</span><span class="p">[</span><span class="n">p</span><span class="p">,</span><span class="n">ls</span><span class="p">,:][:,</span><span class="n">ks</span><span class="p">]</span>                              <span class="c1"># Pilot values in this port</span>
+        <span class="n">rxValues</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="n">ls</span><span class="p">,:][:,:,</span><span class="n">ks</span><span class="p">]</span>                          <span class="c1"># Received values for pilot signals</span>
+        <span class="n">hEst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">rxValues</span><span class="o">/</span><span class="n">pilotValues</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,:],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>    <span class="c1"># Channel estimates at pilot locations</span>
+
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rr</span><span class="p">):</span>                                         <span class="c1"># For each receiver antenna</span>
+            <span class="n">inH</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>   <span class="c1"># Create one 2D matrix with all zeros</span>
+            <span class="k">for</span> <span class="n">li</span><span class="p">,</span><span class="n">l</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ls</span><span class="p">):</span>
+                <span class="n">inH</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">ks</span><span class="p">]</span> <span class="o">=</span> <span class="n">hEst</span><span class="p">[</span><span class="n">li</span><span class="p">,:,</span><span class="n">r</span><span class="p">]</span>                            <span class="c1"># Set the LS estimates at pilot location</span>
+
+            <span class="n">samples</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">inH</span> <span class="p">]</span>                  <span class="c1"># The dataset sample for r&#39;th antenna and p&#39;th port (layer)</span>
+            <span class="n">labels</span> <span class="o">+=</span> <span class="p">[</span><span class="n">actualChannel</span><span class="p">[:,:,</span><span class="n">r</span><span class="p">,</span><span class="n">p</span><span class="p">]]</span>  <span class="c1"># The channel matrix (Label) for r&#39;th antenna and p&#39;th port (layer)</span>
+    <span class="k">return</span> <span class="n">samples</span><span class="p">,</span> <span class="n">labels</span>
+<br/></pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">makeDataset</span></code> function below receives the number of time-domain frames (<code class="docutils literal notranslate"><span class="pre">numFrames</span></code>), the SNR values in dB (<code class="docutils literal notranslate"><span class="pre">snrDbs</span></code>), the seed values to initialize <strong>NeoRadium</strong>’s random generator (<code class="docutils literal notranslate"><span class="pre">seeds</span></code>), and a file name to save the dataset (<code class="docutils literal notranslate"><span class="pre">fileName</span></code>).</p>
+<p>It implements the communication pipeline shown in the above diagram. For each OFDM slot, it uses the <code class="docutils literal notranslate"><span class="pre">getSamples</span></code> function above to create samples and labels. These samples and labels are then aggregated and saved to the file specified by the <code class="docutils literal notranslate"><span class="pre">fileName</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">makeDataset</span><span class="p">(</span><span class="n">numFrames</span><span class="p">,</span> <span class="n">snrDbs</span><span class="p">,</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">freqDomain</span> <span class="o">=</span> <span class="kc">False</span>                                  <span class="c1"># Set to True to apply channel in frequency domain</span>
+    <span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">51</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>            <span class="c1"># Create a carrier with 51 RBs and 30KHz subcarrier spacing</span>
+    <span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>                                <span class="c1"># The only bandwidth part in the carrier</span>
+
+    <span class="c1"># Create a PDSCH object</span>
+    <span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">interleavingBundleSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
+    <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">prgSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># Specify the DMRS configuration</span>
+
+    <span class="n">numSlots</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">slotsPerFrame</span><span class="o">*</span><span class="n">numFrames</span>                  <span class="c1"># Total number of slots</span>
+    <span class="n">samples</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">totalIter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seeds</span><span class="p">)</span> <span class="o">*</span> <span class="n">numSlots</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">)</span>         <span class="c1"># Total number of iterations</span>
+    <span class="n">curIter</span> <span class="o">=</span> <span class="mi">1</span>                                             <span class="c1"># Counter used for printed messages</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>                                        <span class="c1"># Start time for time estimation</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Making dataset for SNR=</span><span class="si">%s</span><span class="s2"> dB, with </span><span class="si">%d</span><span class="s2"> frames and </span><span class="si">%d</span><span class="s2"> seeds&quot;</span><span class="o">%</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">),</span> <span class="n">numFrames</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">seeds</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">s</span><span class="p">,</span><span class="n">seed</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seeds</span><span class="p">):</span>                     <span class="c1"># For each seed the channel is initialized differently</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">=</span> <span class="mi">0</span>                              <span class="c1"># Initialize the slot number</span>
+
+        <span class="c1"># Creating a CdlChannel object:</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                             <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>  <span class="c1"># 8 TX antenna</span>
+                             <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">),</span>  <span class="c1"># 2 RX antenna</span>
+                             <span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span><span class="p">,</span>
+                             <span class="n">timing</span> <span class="o">=</span> <span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrDbs</span><span class="p">:</span>                                <span class="c1"># For each SNR value in snrDbs</span>
+            <span class="k">for</span> <span class="n">slotNo</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSlots</span><span class="p">):</span>                  <span class="c1"># For each slot in the specified number of frames</span>
+                <span class="n">grid</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span>                      <span class="c1"># Create a resource grid populated with DMRS</span>
+                <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitSizes</span><span class="p">(</span><span class="n">grid</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>        <span class="c1"># Number of bits available in the resource grid</span>
+                <span class="n">txBits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numBits</span><span class="p">)</span>               <span class="c1"># Create random binary data</span>
+
+                <span class="n">pdsch</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">txBits</span><span class="p">)</span>            <span class="c1"># Map/modulate the data to the resource grid</span>
+
+                <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>       <span class="c1"># Get the (ground-truth) channel matrix</span>
+                <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>  <span class="c1"># Get the precoder matrix from the PDSCH object</span>
+                <span class="n">precodedGrid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">precode</span><span class="p">(</span><span class="n">precoder</span><span class="p">)</span>               <span class="c1"># Perform the precoding</span>
+
+                <span class="k">if</span> <span class="n">freqDomain</span><span class="p">:</span>
+                    <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">precodedGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>   <span class="c1"># Apply the channel in frequency domain</span>
+                    <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">)</span>               <span class="c1"># Add noise</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">precodedGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>            <span class="c1"># OFDM Modulation</span>
+                    <span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>                    <span class="c1"># Get the max. channel delay</span>
+                    <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>               <span class="c1"># Pad with zeros</span>
+                    <span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">)</span>      <span class="c1"># Apply channel in time domain</span>
+                    <span class="n">noisyRxWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">,</span> <span class="n">nFFT</span><span class="o">=</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="p">)</span>  <span class="c1"># Add noise</span>
+                    <span class="n">offset</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getTimingOffset</span><span class="p">()</span>                  <span class="c1"># Get timing info for synchronization</span>
+                    <span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">noisyRxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>       <span class="c1"># Synchronization</span>
+                    <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>         <span class="c1"># OFDM demodulation</span>
+
+                <span class="c1"># Get the dataset samples and labels for current slot</span>
+                <span class="n">newSamples</span><span class="p">,</span> <span class="n">newLabels</span> <span class="o">=</span> <span class="n">getSamples</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">dmrs</span><span class="p">,</span> <span class="n">rxGrid</span><span class="p">,</span> <span class="n">channelMatrix</span> <span class="o">@</span> <span class="n">precoder</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">])</span>
+                <span class="n">samples</span> <span class="o">+=</span> <span class="n">newSamples</span>
+                <span class="n">labels</span> <span class="o">+=</span> <span class="n">newLabels</span>
+
+                <span class="n">carrier</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>                        <span class="c1"># Prepare the carrier object for the next slot</span>
+                <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>                        <span class="c1"># Prepare the channel model for the next slot</span>
+
+                <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span>                     <span class="c1"># Get the duration of time since the beginning</span>
+                <span class="n">percentDone</span> <span class="o">=</span> <span class="n">curIter</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalIter</span>     <span class="c1"># Calculate the percentage of task done</span>
+
+                <span class="k">if</span> <span class="n">curIter</span> <span class="o">==</span> <span class="n">totalIter</span><span class="p">:</span> <span class="k">continue</span>       <span class="c1"># Last iteration</span>
+
+                <span class="c1"># Print messages about the progress</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  </span><span class="si">%%%d</span><span class="s2"> done in </span><span class="si">%d</span><span class="s2"> Sec. Estimated remaining time: </span><span class="si">%d</span><span class="s2"> Sec.  &quot;</span><span class="o">%</span>
+                      <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">percentDone</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">dt</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="n">dt</span><span class="o">/</span><span class="n">percentDone</span><span class="o">-</span><span class="n">dt</span><span class="p">)),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">curIter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># Convert the samples and labels to numpy arrays with float values. Shape: N x L x K x 2</span>
+    <span class="c1"># N: Number of samples in the dataset, L: Number of OFDM symbols, K: Number of subcarriers, 2: Real/Imag</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">.</span><span class="n">imag</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span><span class="o">.</span><span class="n">imag</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">fileName</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">samples</span><span class="p">,</span><span class="n">labels</span><span class="p">]))</span>   <span class="c1"># Save the dataset to the specified file</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  Done. (</span><span class="si">%.2f</span><span class="s2"> Sec.) Saved to </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">.                        &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">fileName</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  Done. (</span><span class="si">%.2f</span><span class="s2"> Sec.)                                                   &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">samples</span><span class="p">,</span> <span class="n">labels</span>
+</pre></div>
+</div>
+</div>
+<p>Now we can create the datasets for our deep learning project. The followin cell create 3 dataset files for training, validation, and test. We use 2 frames for time duration and create dataset using a mixture of SNR values 5, 10, 15, 20, and 25 dB. Different seeds are used for different datasets to make sure the data in validation and test datasets are not experienced by the model during the training. Depending on your machine, it can take 10 to 60 minutes to complete.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">trainSample</span><span class="p">,</span> <span class="n">trainlabels</span> <span class="o">=</span> <span class="n">makeDataset</span><span class="p">(</span><span class="n">numFrames</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">snrDbs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">25</span><span class="p">],</span>
+                                       <span class="n">seeds</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="n">fileName</span><span class="o">=</span><span class="s2">&quot;ChestTrain.npy&quot;</span><span class="p">)</span>
+<span class="n">validSample</span><span class="p">,</span> <span class="n">validlabels</span> <span class="o">=</span> <span class="n">makeDataset</span><span class="p">(</span><span class="n">numFrames</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">snrDbs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">25</span><span class="p">],</span>
+                                       <span class="n">seeds</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">fileName</span><span class="o">=</span><span class="s2">&quot;ChestValid.npy&quot;</span><span class="p">)</span>
+<span class="n">testSample</span><span class="p">,</span> <span class="n">testlabels</span> <span class="o">=</span> <span class="n">makeDataset</span><span class="p">(</span><span class="n">numFrames</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">snrDbs</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">25</span><span class="p">],</span>
+                                       <span class="n">seeds</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="mi">4000</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">fileName</span><span class="o">=</span><span class="s2">&quot;ChestTest.npy&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Making dataset for SNR=[5, 10, 15, 20, 25] dB, with 2 frames and 20 seeds
+  Done. (447.06 Sec.) Saved to &#34;ChestTrain.npy&#34;.
+Making dataset for SNR=[5, 10, 15, 20, 25] dB, with 2 frames and 3 seeds
+  Done. (68.59 Sec.) Saved to &#34;ChestValid.npy&#34;.
+Making dataset for SNR=[5, 10, 15, 20, 25] dB, with 2 frames and 3 seeds
+  Done. (67.99 Sec.) Saved to &#34;ChestTest.npy&#34;.
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../PDSCH/PDSCH-BLER.html" class="btn btn-neutral float-left" title="Calculating BER/BLER for PDSCH Communication with LDPC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MLChestTrainTorch.html" class="btn btn-neutral float-right" title="Training A ResNet model for Channel Estimation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modulation &mdash; NeoRadium 0.2.0 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/neoradium.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Reference Signals" href="RefSig.html" />
+    <link rel="prev" title="Waveform" href="Waveform.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NeoRadium 0.2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Waveform.html">Waveform</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Modulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.modulation.Modem"><code class="docutils literal notranslate"><span class="pre">Modem</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.modulation.Modem.print"><code class="docutils literal notranslate"><span class="pre">Modem.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.modulation.Modem.modulate"><code class="docutils literal notranslate"><span class="pre">Modem.modulate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.modulation.Modem.getLLRsFromSymbols"><code class="docutils literal notranslate"><span class="pre">Modem.getLLRsFromSymbols()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.modulation.Modem.demodulate"><code class="docutils literal notranslate"><span class="pre">Modem.demodulate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NeoRadium 0.2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Modulation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/source/API/Modulation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-neoradium.modulation">
+<span id="modulation"></span><h1>Modulation<a class="headerlink" href="#module-neoradium.modulation" title="Permalink to this heading"></a></h1>
+<p>This module implements the Modulation/Demodulation functionality based on
+<strong>3GPP TR 38.211</strong>. The <a class="reference internal" href="#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a> class is implemented to handle
+modulation and demodulation of bitstreams to complex symbols and vice
+versa.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.modulation.Modem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.modulation.</span></span><span class="sig-name descname"><span class="pre">Modem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modulation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'QPSK'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem" title="Permalink to this definition"></a></dt>
+<dd><p>This class handles the process of modulating a bitstream to an array of
+complex symbol values (Modulation) as well as extracting Log-Likelihood
+ratios (LLRs) from a list of complex symbols (Demodulation). This
+implementation is based on <strong>3GPP TR 38.211 section 7.3.1.2</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>modulation</strong> (<em>str</em><em> (</em><em>default: 'QPSK'</em><em>)</em>) – <p>The modulation scheme based on table 7.3.1.2-1 in <strong>3GPP TR 38.211</strong>.
+Here is a list of supported Modulation Schemes:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Modulation Scheme</p></th>
+<th class="head"><p>Modulation Order (<code class="docutils literal notranslate"><span class="pre">qm</span></code>)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BPSK</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>QPSK</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>16QAM</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>64QAM</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td><p>256QAM</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p>1024QAM</p></td>
+<td><p>10</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+</dl>
+<p><strong>Other Properties:</strong></p>
+<p>In addition to the <code class="docutils literal notranslate"><span class="pre">modulation</span></code> parameter, here is a list of additional
+properties for this class.</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">qm<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The modulation order. This is the number of bits per modulated
+symbol. See <strong>3GPP TR 38.211, Table 7.3.1.2-1</strong> for more details.</p>
+</dd>
+<dt class="field-even">constellation<span class="colon">:</span></dt>
+<dd class="field-even"><p>The constellation matrix of modulation. This is a lookup
+table that converts every <code class="docutils literal notranslate"><span class="pre">qm</span></code> bits of the input bitstream to
+a complex symbol.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.modulation.Modem.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem.print" title="Permalink to this definition"></a></dt>
+<dd><p>Prints the properties of this <a class="reference internal" href="#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em><em> (</em><em>default: None</em><em>)</em>) – If specified, it is used as a title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, it returns the information in a text string instead
+of printing the information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns
+the information in a text string. Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.modulation.Modem.modulate">
+<span class="sig-name descname"><span class="pre">modulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitstreams</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem.modulate" title="Permalink to this definition"></a></dt>
+<dd><p>Modulates the given bitstream to an array(s) of complex symbols using
+current modulation scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bitstreams</strong> (<em>numpy array</em><em> of </em><em>bits</em>) – A 1-D (one code block) or 2-D (several code blocks) array of bits.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns a 1-D or 2-D (depending on shape of <code class="docutils literal notranslate"><span class="pre">bitstreams</span></code>)
+numpy complex array of modulated symbols.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy array of complex values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.modulation.Modem.getLLRsFromSymbols">
+<span class="sig-name descname"><span class="pre">getLLRsFromSymbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem.getLLRsFromSymbols" title="Permalink to this definition"></a></dt>
+<dd><p>This function calculates the Log Likelihood Ratios (LLRs) for each bit
+from the received noisy symbols. The LLR values can then be used by
+<code class="xref py py-class docutils literal notranslate"><span class="pre">PolarDecoder</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">LdpcDecoder</span></code> to extract the
+decoded bitstream.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>symbols</strong> (<em>1-D</em><em> or </em><em>2-D Complex numpy array</em>) – A <code class="docutils literal notranslate"><span class="pre">m``x``n</span></code> complex numpy array where <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of
+coded blocks and <code class="docutils literal notranslate"><span class="pre">n</span></code> is the length of code blocks. If it is a
+1-D array, it means there is only one code block to demodulate.</p></li>
+<li><p><strong>noiseVar</strong> (<em>float</em>) – The noise variance obtained using noise estimation or using the
+actual noise variance value used in simulation.</p></li>
+<li><p><strong>useMax</strong> (<em>Boolean</em><em> (</em><em>default: True</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the
+calculation of the LLR values. This is faster but uses an
+approximation and is slightly less accurate than the actual Log
+Likelihood method which uses logarithm and exponential functions.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the slower more accurate method is used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A 1-D or 2-D numpy array of LLR values depending on dimensionality
+of <code class="docutils literal notranslate"><span class="pre">symbols</span></code>. In case of 2-D array, the return value is a <code class="docutils literal notranslate"><span class="pre">m``x``l</span></code>
+array of LLR values where <code class="docutils literal notranslate"><span class="pre">l=</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">qm</span></code>. In case of 1-D array, the
+output will be a 1-D array of <code class="docutils literal notranslate"><span class="pre">l</span></code> LLR values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy array of floating point</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.modulation.Modem.demodulate">
+<span class="sig-name descname"><span class="pre">demodulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem.demodulate" title="Permalink to this definition"></a></dt>
+<dd><p>Demodulates the received noisy symbols to bitstream using “Hard Decision”
+to convert Log Likelihood Ratios (LLRs) to bits. This function first
+calls the <code class="xref py py-meth docutils literal notranslate"><span class="pre">BandwidthPart.getLLRsFromSymbols()</span></code> method to get the
+LLR values and then uses “Hard Decision” to convert LLRs to bits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>symbols</strong> (<em>2-D Complex numpy array</em>) – A <code class="docutils literal notranslate"><span class="pre">m``x``n</span></code> complex numpy array where <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of
+coded blocks and <code class="docutils literal notranslate"><span class="pre">n</span></code> is the length of code blocks.</p></li>
+<li><p><strong>noiseVar</strong> (<em>float</em>) – The noise variance obtained using noise estimation or using the
+actual noise variance value used in simulation.</p></li>
+<li><p><strong>useMax</strong> (<em>Boolean</em><em> (</em><em>default: True</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the
+calculation of the LLR values. This is faster but uses an
+approximation and is slightly less accurate than the actual Log
+Likelihood method which uses logarithm and exponential functions.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the slower more accurate method is used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns a 2-D array of demodulated bits.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy array of bits values</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Waveform.html" class="btn btn-neutral float-left" title="Waveform" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="RefSig.html" class="btn btn-neutral float-right" title="Reference Signals" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

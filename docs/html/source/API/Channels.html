@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Channel Models &mdash; NeoRadium 0.2.0 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/neoradium.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Random Number Generator" href="Random.html" />
+    <link rel="prev" title="Antenna" href="Antenna.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NeoRadium 0.2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Channel Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.channel.ChannelBase"><code class="docutils literal notranslate"><span class="pre">ChannelBase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.channel.ChannelBase.print"><code class="docutils literal notranslate"><span class="pre">ChannelBase.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.channel.ChannelBase.restart"><code class="docutils literal notranslate"><span class="pre">ChannelBase.restart()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.channel.ChannelBase.goNext"><code class="docutils literal notranslate"><span class="pre">ChannelBase.goNext()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.channel.ChannelBase.getMaxDelay"><code class="docutils literal notranslate"><span class="pre">ChannelBase.getMaxDelay()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.channel.ChannelBase.applyToGrid"><code class="docutils literal notranslate"><span class="pre">ChannelBase.applyToGrid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.channel.ChannelBase.applyToSignal"><code class="docutils literal notranslate"><span class="pre">ChannelBase.applyToSignal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.channel.ChannelBase.getChannelMatrix"><code class="docutils literal notranslate"><span class="pre">ChannelBase.getChannelMatrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.channel.ChannelBase.getTimingOffset"><code class="docutils literal notranslate"><span class="pre">ChannelBase.getTimingOffset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.channel.ChannelBase.getPathGains"><code class="docutils literal notranslate"><span class="pre">ChannelBase.getPathGains()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.channel.ChannelBase.getPathFilters"><code class="docutils literal notranslate"><span class="pre">ChannelBase.getPathFilters()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-neoradium.cdl">CDL Channel Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.cdl.CdlChannel"><code class="docutils literal notranslate"><span class="pre">CdlChannel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#neoradium.cdl.CdlChannel.print"><code class="docutils literal notranslate"><span class="pre">CdlChannel.print()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neoradium.cdl.CdlChannel.restart"><code class="docutils literal notranslate"><span class="pre">CdlChannel.restart()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-neoradium.tdl">TDL Channel Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.tdl.TdlChannel"><code class="docutils literal notranslate"><span class="pre">TdlChannel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#neoradium.tdl.TdlChannel.print"><code class="docutils literal notranslate"><span class="pre">TdlChannel.print()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NeoRadium 0.2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Channel Models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/source/API/Channels.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="channel-models">
+<h1>Channel Models<a class="headerlink" href="#channel-models" title="Permalink to this heading"></a></h1>
+<p><strong>NeoRadium</strong> currently supports Clustered Delay Line (CDL) and Tapped Delay
+Line (TDL) channel models implemented as <a class="reference internal" href="#neoradium.cdl.CdlChannel" title="neoradium.cdl.CdlChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CdlChannel</span></code></a>
+and <a class="reference internal" href="#neoradium.tdl.TdlChannel" title="neoradium.tdl.TdlChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">TdlChannel</span></code></a> classes correspondingly. You
+can also derive your customized channel models from the
+<a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a> class explained below.</p>
+<span class="target" id="module-neoradium.channel"></span><p>This module implements the base class for channel models. Currently CDL
+and TDL channel models are available in <strong>NeoRadium</strong> both of which are
+derived from the <a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a> class in this module. For more
+details about these subclasses please refer to
+<a class="reference internal" href="#neoradium.cdl.CdlChannel" title="neoradium.cdl.CdlChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CdlChannel</span></code></a> or <a class="reference internal" href="#neoradium.tdl.TdlChannel" title="neoradium.tdl.TdlChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">TdlChannel</span></code></a>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.channel.ChannelBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.channel.</span></span><span class="sig-name descname"><span class="pre">ChannelBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channel.ChannelBase" title="Permalink to this definition"></a></dt>
+<dd><p>This is the base channel model class that handles higher level processing
+such as application to time-domain waveforms (<code class="xref py py-class docutils literal notranslate"><span class="pre">Waveforms</span></code>) or
+frequency-domain resource grids (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>).</p>
+<p>This class also provides the <a class="reference internal" href="#neoradium.channel.ChannelBase.getChannelMatrix" title="neoradium.channel.ChannelBase.getChannelMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getChannelMatrix()</span></code></a> function that calculates and
+returns the “Channel Matrix” for the channel model.</p>
+<p>Almost all of interactions with channel models are done using the methods
+of this class. The derived classes mostly implement the lower level processes
+such as how the channel multi-path information are generated or how MIMO
+antenna arrays are processed in connection with the channel multi-path
+properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – <p>A set of optional arguments.</p>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">delaySpread<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The delay spread in <strong>nanoseconds</strong>. The default is
+30 ns. It can also be a string containing one of the values in
+following table (See <strong>3GPP TR 38.901 table 7.7.3-1</strong>)</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Delay Spread str</p></th>
+<th class="head"><p>Delay spread</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>’VeryShort’</p></td>
+<td><p>10 ns</p></td>
+</tr>
+<tr class="row-odd"><td><p>’Short’</p></td>
+<td><p>30 ns</p></td>
+</tr>
+<tr class="row-even"><td><p>’Nominal’</p></td>
+<td><p>100 ns</p></td>
+</tr>
+<tr class="row-odd"><td><p>’Long’</p></td>
+<td><p>300 ns</p></td>
+</tr>
+<tr class="row-even"><td><p>’VeryLong’</p></td>
+<td><p>1000 ns</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt class="field-even">dopplerShift<span class="colon">:</span></dt>
+<dd class="field-even"><p>The maximum doppler shift in Hz. The default is 40 Hz (corresponding
+to a speed of about 10 km/h). A value of zero makes the channel model static.</p>
+</dd>
+<dt class="field-odd">carrierFreq<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The carrier frequency of the channel model in Hz. The default is 3.5 GHz.</p>
+</dd>
+<dt class="field-even">normalizeGains<span class="colon">:</span></dt>
+<dd class="field-even"><p>A boolean flag. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the path
+gains are normalized before being applied to the signals.</p>
+</dd>
+<dt class="field-odd">normalizeOutput<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A boolean flag. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the gains
+are normalized based on the number of receive antenna.</p>
+</dd>
+<dt class="field-even">txDir<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transmission direction. The default is “Downlink”. This is a string
+and must be one of “Downlink” or “Uplink”.</p>
+</dd>
+<dt class="field-odd">kFactor<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The K-Factor (in dB) used for scaling. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. If not
+specified (<code class="docutils literal notranslate"><span class="pre">kFactor=None</span></code>), K-factor scaling is disabled.</p>
+</dd>
+<dt class="field-even">timing<span class="colon">:</span></dt>
+<dd class="field-even"><p>A text string that specifies the way channel values are interpolated
+in time. It can be one of the following values.</p>
+<ul class="simple">
+<li><p><strong>’polar’</strong>: The channel values are converted to polar coordinates before being linearly interpolated.</p></li>
+<li><p><strong>’linear’</strong>: The channel values are interpolated linearly.</p></li>
+<li><p><strong>’nearest’</strong>: A nearest neighbor interpolation is used.</p></li>
+<li><p><strong>’matlab’</strong>: Use this only when comparing the results with Matlab’s 5G toolkit for debugging and diagnostics purposes.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">filterDelay<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The delay used by the channel filter class
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelFilter</span></code>). The default is 7 sample.</p>
+</dd>
+<dt class="field-even">stopBandAtten<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Stop-band attenuation value (in dB) used by the channel
+filter class (<code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelFilter</span></code>). The default is 80 dB.</p>
+</dd>
+<dt class="field-odd">seed<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The seed used for by the random functions in the channel model. Set
+this to a fixed value so that the channel model creates repeatable results.
+The default is <code class="docutils literal notranslate"><span class="pre">None</span></code> which means this channel model uses the
+<strong>NeoRadium</strong>’s <a class="reference internal" href="Random.html"><span class="doc">global random generator</span></a>.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+<p><strong>Other Properties:</strong></p>
+<p>All of the parameters mentioned above are directly available. Here is a list
+of additional properties.</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">coherenceTime<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Coherence_time_(communications_systems)">Coherence time</a>
+of the channel model in seconds.</p>
+</dd>
+<dt class="field-even">channelFilter<span class="colon">:</span></dt>
+<dd class="field-even"><p>The (<code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelFilter</span></code>) object used by this channel
+model.</p>
+</dd>
+<dt class="field-odd">sampleRate<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The sample rate used by this channel model. For 3GPP standard,
+this is set to 30,720,000 samples per second.</p>
+</dd>
+<dt class="field-even">curTime<span class="colon">:</span></dt>
+<dd class="field-even"><p>The current time for this channel. This starts at zero when the
+channel is created and is increased each time the <a class="reference internal" href="#neoradium.channel.ChannelBase.goNext" title="neoradium.channel.ChannelBase.goNext"><code class="xref py py-meth docutils literal notranslate"><span class="pre">goNext()</span></code></a>
+function is called.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.channel.ChannelBase.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channel.ChannelBase.print" title="Permalink to this definition"></a></dt>
+<dd><p>Prints the properties of this channel model object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em><em> (</em><em>default: None</em><em>)</em>) – If specified, it is used as a title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, it returns the information in a text string instead
+of printing the information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns
+the information in a text string. Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.channel.ChannelBase.restart">
+<span class="sig-name descname"><span class="pre">restart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">restartRanGen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channel.ChannelBase.restart" title="Permalink to this definition"></a></dt>
+<dd><p>Resets the state of this channel model to the initial state. Sets
+current time to zero and resets the channel filter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>restartRanGen</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If a <code class="docutils literal notranslate"><span class="pre">seed</span></code> was not provided to this channel model, this parameter
+is ignored. Otherwise, if <code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, this
+channel model’s random generator is reset and if <code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is
+<code class="docutils literal notranslate"><span class="pre">False</span></code> (default), the random generator is not reset. This means
+if <code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, calling this function starts a new
+sequence of channel instances which are different from the sequence when
+the channel was instantiated.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.channel.ChannelBase.goNext">
+<span class="sig-name descname"><span class="pre">goNext</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channel.ChannelBase.goNext" title="Permalink to this definition"></a></dt>
+<dd><p>This method is called after each application of the channel to a signal. It
+advances the current time value and updates the channel filter state making
+the channel model ready for the next application in time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.channel.ChannelBase.getMaxDelay">
+<span class="sig-name descname"><span class="pre">getMaxDelay</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channel.ChannelBase.getMaxDelay" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates and returns the maximum delay of this channel model in
+time-domain samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The maximum delay of this channel model in number of
+time-domain samples.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.channel.ChannelBase.applyToGrid">
+<span class="sig-name descname"><span class="pre">applyToGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channel.ChannelBase.applyToGrid" title="Permalink to this definition"></a></dt>
+<dd><p>Applies this channel model to the transmitted resource grid object specified
+by <code class="docutils literal notranslate"><span class="pre">grid</span></code> in frequency domain and returns the received resource grid in
+a new <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object. This function first calls the
+<a class="reference internal" href="#neoradium.channel.ChannelBase.getChannelMatrix" title="neoradium.channel.ChannelBase.getChannelMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getChannelMatrix()</span></code></a> function to get the channel
+matrix and then calls the <a class="reference internal" href="Grid.html#neoradium.grid.Grid.applyChannel" title="neoradium.grid.Grid.applyChannel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyChannel()</span></code></a> method of
+the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class to get the received resource grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The transmitted resource grid. It is an <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code>
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number
+of transmit antenna, <code class="docutils literal notranslate"><span class="pre">L</span></code> is the number OFDM symbols, and
+<code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers in the resource grid.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A resource grid containing the received signal information. It is
+an <code class="docutils literal notranslate"><span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object where <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number
+of receive antenna, <code class="docutils literal notranslate"><span class="pre">L</span></code> is the number OFDM symbols, and <code class="docutils literal notranslate"><span class="pre">K</span></code> is the
+number of subcarriers in the resource grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.channel.ChannelBase.applyToSignal">
+<span class="sig-name descname"><span class="pre">applyToSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputSignal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepNt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channel.ChannelBase.applyToSignal" title="Permalink to this definition"></a></dt>
+<dd><p>Applies this channel model to the time-domain <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a>
+specified by <code class="docutils literal notranslate"><span class="pre">inputSignal</span></code> and returns another <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a>
+object containing the received signal in time domain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputSignal</strong> (<a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a>) – The transmitted time-domain waveform. It is an <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Ns</span></code>
+<a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object where
+<code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmit antenna and <code class="docutils literal notranslate"><span class="pre">Ns</span></code> is
+the number of time samples in the transmitted waveform.</p></li>
+<li><p><strong>keepNt</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – This should always be set to <code class="docutils literal notranslate"><span class="pre">False</span></code>. It is only set to
+<code class="docutils literal notranslate"><span class="pre">True</span></code> when it is used internally to calculate a channel
+matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object containing the
+received signal. It is an <code class="docutils literal notranslate"><span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Ns</span></code> <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a>
+object where <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of receive antenna and <code class="docutils literal notranslate"><span class="pre">Ns</span></code> is
+the number of time samples in the received waveform.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.channel.ChannelBase.getChannelMatrix">
+<span class="sig-name descname"><span class="pre">getChannelMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numSlots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeDomain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interpolateTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channel.ChannelBase.getChannelMatrix" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates and returns the channel matrix of this channel model. The channel
+matrix is a 4-D <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> complex numpy array where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
+number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the
+number of receive antenna, and <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmit antenna.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bwp</strong> (<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>) – The bandwidth part object used to get information about the shape of
+the channel matrix, the timing information about OFDM symbols, and
+the FFT size.</p></li>
+<li><p><strong>numSlots</strong> (<em>int</em>) – The number slots. This is used to determine the number of OFDM symbols
+<code class="docutils literal notranslate"><span class="pre">L</span></code>. This function can create channel matrixes at slot boundaries. In
+other words <code class="docutils literal notranslate"><span class="pre">L</span></code> is always a multiple of <code class="docutils literal notranslate"><span class="pre">bwp.symbolsPerSlot</span></code>.</p></li>
+<li><p><strong>timeDomain</strong> (<em>Boolean</em><em> (</em><em>default: True</em><em>)</em>) – <p>Calculate the channel matrix in time domain. NeoRadium can calculate the
+channel matrix in both time domain and frequency domain.</p>
+<p>The time-domain calculation provides results that are closer to the
+effect of applying the channel in time domain to an OFDM-modulated
+waveform.</p>
+<p>The frequency domain method calculates the channel matrix directly
+using the multi-path information.</p>
+</p></li>
+<li><p><strong>interpolateTime</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – <p>This parameter is only used when <code class="docutils literal notranslate"><span class="pre">timeDomain=True</span></code>.</p>
+<p>If set to <code class="docutils literal notranslate"><span class="pre">True</span></code> the path gains are first calculated at the sampling
+times based on the current <code class="docutils literal notranslate"><span class="pre">dopplerShift</span></code> parameter of this channel
+model. These gains are then upsampled (Interpolated) using the method
+specified by the <code class="docutils literal notranslate"><span class="pre">timing</span></code> property of this channel model. This is usually
+slower and results in a less accurate channel matrix.</p>
+<p>If set to <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default) the path gains are calculated
+directly at the OFDM symbol times and there is no need for interpolation.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A 4-D <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> complex numpy array where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
+number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the
+number of receive antenna, and <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmit antenna.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>4-D complex numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.channel.ChannelBase.getTimingOffset">
+<span class="sig-name descname"><span class="pre">getTimingOffset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numSamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3072</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channel.ChannelBase.getTimingOffset" title="Permalink to this definition"></a></dt>
+<dd><p>This function calculates the timing offset used in synchronization of a
+received time-domain signal. It first calculates the Channel Impulse
+Response (CIR) and then uses it to find the index of the maximum power.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>numSamples</strong> (<em>int</em><em> (</em><em>default: 3072</em><em>)</em>) – The number of time-domain samples to consider when calculating the
+CIR. The default value of <code class="docutils literal notranslate"><span class="pre">3072</span></code> is equivalent to the duration of one
+sub-frame (1 millisecond) which works for most situations. When a
+time-domain signal is available, the actual number of samples could
+be used for this parameter.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The time-domain offset value used for synchronization of a received
+waveform. This return value can be directly passed to the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">sync()</span></code> function to synchronize a received waveform.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.channel.ChannelBase.getPathGains">
+<span class="sig-name descname"><span class="pre">getPathGains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channelTimes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channel.ChannelBase.getPathGains" title="Permalink to this definition"></a></dt>
+<dd><p>This function calculates the path gains of this channel at the times
+specified by the <code class="docutils literal notranslate"><span class="pre">channelTimes</span></code>. The returned value is a 4-D tensor
+of shape (<code class="docutils literal notranslate"><span class="pre">len(channelTimes)</span> <span class="pre">x</span> <span class="pre">nr</span> <span class="pre">x</span> <span class="pre">nt</span> <span class="pre">x</span> <span class="pre">np</span></code>). The path gains are
+normalized based on the <code class="docutils literal notranslate"><span class="pre">normalizeOutput</span></code> and <code class="docutils literal notranslate"><span class="pre">normalizeGains</span></code>
+values (See <a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channelTimes</strong> (<em>numpy array</em><em> or </em><em>None</em><em> (</em><em>default: None</em><em>)</em>) – This is a 1-D list of the times at which the path gains are
+calculated. If this is None, then the path gains are calculated
+for current time (See <code class="docutils literal notranslate"><span class="pre">curTime</span></code> in <a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a>).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path gains at the specified times. The shape of returned tensor
+is (<code class="docutils literal notranslate"><span class="pre">len(channelTimes)</span> <span class="pre">x</span> <span class="pre">nr</span> <span class="pre">x</span> <span class="pre">nt</span> <span class="pre">x</span> <span class="pre">np</span></code>).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>4-D complex numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.channel.ChannelBase.getPathFilters">
+<span class="sig-name descname"><span class="pre">getPathFilters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channel.ChannelBase.getPathFilters" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns the channel filter coefficients for each
+path. It can be used with the path gains obtained by the
+<a class="reference internal" href="#neoradium.channel.ChannelBase.getPathGains" title="neoradium.channel.ChannelBase.getPathGains"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getPathGains()</span></code></a> function to calculate Channel Impulse
+Response (CIR).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The p’th row of the returned matrix contains the filter
+coefficients of the p’th path. Please note that different
+paths may have different number of filter coefficients.
+The number of columns in the returned matrix is equal to
+maximum number of filter coefficients for all the paths.
+The rows are zero-padded at the end if the actual number
+of filter coefficients is less than the number of columns.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>2-D numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<section id="module-neoradium.cdl">
+<span id="cdl-channel-model"></span><h2>CDL Channel Model<a class="headerlink" href="#module-neoradium.cdl" title="Permalink to this heading"></a></h2>
+<p>This module implements the <a class="reference internal" href="#neoradium.cdl.CdlChannel" title="neoradium.cdl.CdlChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CdlChannel</span></code></a> class which
+encapsulates the Clustered Delay Line (CDL) channel model functionality.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.cdl.CdlChannel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.cdl.</span></span><span class="sig-name descname"><span class="pre">CdlChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'A'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.cdl.CdlChannel" title="Permalink to this definition"></a></dt>
+<dd><p>This class implements the Clustered Delay Line (CDL) channel model based
+on <strong>3GPP TR 38.901</strong>. It is derived from the
+<a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a> class.</p>
+<p>All of API functions used in most typical use cases are explained in the
+documentation of <a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a> class.</p>
+<p>The typical use case involves instantiating a <a class="reference internal" href="#neoradium.cdl.CdlChannel" title="neoradium.cdl.CdlChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CdlChannel</span></code></a> object
+and then calling functions such as
+<a class="reference internal" href="#neoradium.channel.ChannelBase.getChannelMatrix" title="neoradium.channel.ChannelBase.getChannelMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getChannelMatrix()</span></code></a>,
+<a class="reference internal" href="#neoradium.channel.ChannelBase.applyToSignal" title="neoradium.channel.ChannelBase.applyToSignal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyToSignal()</span></code></a>,
+<a class="reference internal" href="#neoradium.channel.ChannelBase.applyToGrid" title="neoradium.channel.ChannelBase.applyToGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyToGrid()</span></code></a>, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em><em> or </em><em>None</em><em> (</em><em>default: 'A'</em><em>)</em>) – The CDL profile. It can be one of ‘A’, ‘B’, ‘C’, ‘D’, ‘E’,
+or <code class="docutils literal notranslate"><span class="pre">None</span></code>. See <strong>3GPP TR 38.90 section 7.7.1</strong> for more
+information. Use <code class="docutils literal notranslate"><span class="pre">None</span></code> to indicate a customized version of
+CDL channel (See <a class="reference internal" href="#customizingcdl"><span class="std std-ref">Customizing CDL Model</span></a>).</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – <p>A set of optional arguments. Please refer to
+<a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a> for a list of inherited
+parameters. Here is a list of additional parameters specific to
+<code class="docutils literal notranslate"><span class="pre">CdlChannel</span></code>.</p>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">ueDirAZ<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This is a list of 2 angles for the Azimuth and Zenith
+of the UE’s direction of movement in degrees. The default
+is [0, 90] which indicates moving along the x-axis. In this
+version, the base station is assumed to be stationary.</p>
+</dd>
+<dt class="field-even">txAntenna<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transmitter antenna. This must be an instance of
+<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> or
+<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class.</p>
+</dd>
+<dt class="field-odd">rxAntenna<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The receiver antenna. This must be an instance of
+<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> or
+<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class.</p>
+</dd>
+<dt class="field-even">txOrientation<span class="colon">:</span></dt>
+<dd class="field-even"><p>The orientation of transmitter antenna. This
+is a list of 3 angle values in degrees for the <em>bearing</em> angle
+<span class="math notranslate nohighlight">\(\alpha\)</span>, <em>down-tilt</em> angle <span class="math notranslate nohighlight">\(\beta\)</span>, and <em>slant</em> angle
+<span class="math notranslate nohighlight">\(\gamma\)</span>. The default is [0,0,0]. Please refer to <strong>3GPP
+TR 38.901 Section 7.1.3</strong> for more information.</p>
+</dd>
+<dt class="field-odd">rxOrientation<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The orientation of receiver antenna. This
+is a list of 3 angle values in degrees for the <em>bearing</em> angle
+<span class="math notranslate nohighlight">\(\alpha\)</span>, <em>down-tilt</em> angle <span class="math notranslate nohighlight">\(\beta\)</span>, and <em>slant</em> angle
+<span class="math notranslate nohighlight">\(\gamma\)</span>. The default is [0,0,0]. Please refer to <strong>3GPP
+TR 38.901 Section 7.1.3</strong> for more information.</p>
+</dd>
+<dt class="field-even">xPolPower<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Cross Polarization Power in db. The default is 10db.
+For more details please refer to <strong>Step 3 in 3GPP TR 38.901 Section
+7.7.1</strong>.</p>
+</dd>
+<dt class="field-odd">angleScaling<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The <a class="reference internal" href="#anglescaling"><span class="std std-ref">Angle Scaling</span></a> parameters. If
+specified, it must be a tuple of 2 numpy arrays.</p>
+<p>The first item specifies the angle scaling mean values. It is a
+1-D numpy array of 4 values corresponding to the <em>Azimuth of
+Departure</em>, <em>Azimuth of Arrival</em>, <em>Zenith of Departure</em>, and
+<em>Zenith of Arrival</em> angles.</p>
+<p>The second item specifies the RMS angle spread values. It is a
+1-D numpy array of 4 values corresponding to the <em>Azimuth of
+Departure</em>, <em>Azimuth of Arrival</em>, <em>Zenith of Departure</em>, and
+<em>Zenith of Arrival</em> angles. If this is set to <code class="docutils literal notranslate"><span class="pre">None</span></code> (the
+default), the <em>Angle Scaling</em> is disabled. For more information
+please see <a class="reference internal" href="#anglescaling"><span class="std std-ref">Angle Scaling</span></a> below.</p>
+<p>If this is set to <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default), the <em>Angle Scaling</em>
+is disabled.</p>
+</dd>
+<dt class="field-even">pathDelays<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use this to customize or override the path delays which
+by default are set based on the CDL channel model as defined in
+<strong>3GPP TR 38.901</strong>. You don’t need to specify this parameter for
+most use cases. See <a class="reference internal" href="#customizingcdl"><span class="std std-ref">Customizing CDL Model</span></a>
+below for more information.</p>
+</dd>
+<dt class="field-odd">pathPowers<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Use this to customize or override the path powers which
+by default are set based on the CDL channel model as defined in
+<strong>3GPP TR 38.901</strong>. You don’t need to specify this parameter for
+most use cases. See <a class="reference internal" href="#customizingcdl"><span class="std std-ref">Customizing CDL Model</span></a>
+below for more information.</p>
+</dd>
+<dt class="field-even">aods<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use this to customize or override the Azimuth of Departure angles
+which by default are set based on the CDL channel model as defined
+in <strong>3GPP TR 38.901</strong>. You don’t need to specify this parameter for
+most use cases. See <a class="reference internal" href="#customizingcdl"><span class="std std-ref">Customizing CDL Model</span></a>
+below for more information.</p>
+</dd>
+<dt class="field-odd">aoas<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Use this to customize or override the Azimuth of Arrival angles
+which by default are set based on the CDL channel model as defined
+in <strong>3GPP TR 38.901</strong>. You don’t need to specify this parameter for
+most use cases. See <a class="reference internal" href="#customizingcdl"><span class="std std-ref">Customizing CDL Model</span></a>
+below for more information.</p>
+</dd>
+<dt class="field-even">zods<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use this to customize or override the Zenith of Departure angles
+which by default are set based on the CDL channel model as defined
+in <strong>3GPP TR 38.901</strong>. You don’t need to specify this parameter for
+most use cases. See <a class="reference internal" href="#customizingcdl"><span class="std std-ref">Customizing CDL Model</span></a>
+below for more information.</p>
+</dd>
+<dt class="field-odd">zoas<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Use this to customize or override the Zenith of Arrival angles
+which by default are set based on the CDL channel model as defined
+in <strong>3GPP TR 38.901</strong>. You don’t need to specify this parameter for
+most use cases. See <a class="reference internal" href="#customizingcdl"><span class="std std-ref">Customizing CDL Model</span></a>
+below for more information.</p>
+</dd>
+<dt class="field-even">angleSpreads<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use this to customize or override the RMS Angle spread
+(in degrees) which is used to normalized angles. This a list of 4
+values corresponding to the <em>Azimuth of Departure</em>, <em>Azimuth of
+Arrival</em>, <em>Zenith of Departure</em>, and <em>Zenith of Arrival</em> angles.
+These values by default are set based on the CDL channel model as
+defined in <strong>3GPP TR 38.901</strong>. You don’t need to specify this
+parameter for most use cases. See
+<a class="reference internal" href="#customizingcdl"><span class="std std-ref">Customizing CDL Model</span></a> below for more
+information.</p>
+<p>Please note that this should not be confused with angle spread
+values used for angle scaling.</p>
+</dd>
+<dt class="field-odd">hasLos<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Use this to customize or override the <code class="docutils literal notranslate"><span class="pre">hasLos</span></code> property of
+this channel model which by default is set based on the CDL channel
+model as defined in <strong>3GPP TR 38.901</strong>. You don’t need to specify
+this parameter for most use cases. See
+<a class="reference internal" href="#customizingcdl"><span class="std std-ref">Customizing CDL Model</span></a> below for more
+information.</p>
+</dd>
+<dt class="field-even">kFactorLos<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use this when customizing the CDL model. This is the K-Factor
+ratio (in dB) for the LOS cluster (1st cluster). You don’t need to specify
+this parameter for most use cases. See
+<a class="reference internal" href="#customizingcdl"><span class="std std-ref">Customizing CDL Model</span></a> below for more
+information. When customizing the CDL model, this value by default is set
+to the difference of path powers (in dB) for the first and second clusters.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Other Properties:</strong></p>
+<p>All of the parameters mentioned above are directly available. Please also refer to
+the <a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a> class for a list of inherited
+properties. Here is a list of additional properties specific to this class.</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">nrNt<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple of the form <code class="docutils literal notranslate"><span class="pre">(nr,nt)</span></code>, where <code class="docutils literal notranslate"><span class="pre">nr</span></code> and <code class="docutils literal notranslate"><span class="pre">nt</span></code> are the
+number receiver and transmitter antenna elements correspondingly.</p>
+</dd>
+<dt class="field-even">rayCoupling<span class="colon">:</span></dt>
+<dd class="field-even"><p>This property is used internally for ray coupling. See <strong>Step 2
+in 3GPP TR 38.901 Section 7.7.1</strong> for more details.</p>
+</dd>
+<dt class="field-odd">initialPhases<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The random initial phases used when creating channel gains.
+See <strong>Step 10 in 3GPP TR 38.901 Section 7.5</strong>  for more details.</p>
+</dd>
+</dl>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All of the angle values are provided to this class in degrees. Internally, this
+class uses radian values for all the calculations. So, when you access any of the
+angle values such as <code class="docutils literal notranslate"><span class="pre">aods</span></code>, <code class="docutils literal notranslate"><span class="pre">aoas</span></code>, <code class="docutils literal notranslate"><span class="pre">zods</span></code>, and <code class="docutils literal notranslate"><span class="pre">zoas</span></code>, remember that
+they are in radians.</p>
+</div>
+<p id="anglescaling"><strong>Angle Scaling:</strong></p>
+<p>If <code class="docutils literal notranslate"><span class="pre">angleScaling</span></code> is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, the angle scaling is disabled.
+Otherwise, angle scaling is applied to all angles of arrival and departure
+for all clusters according to <strong>3GPP TR 38.901 Section 7.7.5.1 and Annex A</strong>.</p>
+<p id="customizingcdl"><strong>Customizing CDL Model:</strong></p>
+<p>There are two different ways to customize the CDL model:</p>
+<ol class="loweralpha">
+<li><p>You can choose one of the predefined CDL profiles (A, B, C, D, or E) and then
+modify the parameters of the model by passing in additional information. For
+example you can choose CDL-B model and then pass your own path delays to
+override the path delays specified in the standard.</p></li>
+<li><p>You can also create your own model completely from scratch. You first pass
+<code class="docutils literal notranslate"><span class="pre">None</span></code> for the <code class="docutils literal notranslate"><span class="pre">profile</span></code> parameter and then specify all channel model
+parameters. Please note that you <strong>must</strong> specify at least the following
+parameters in this case:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>pathDelays</p></li>
+<li><p>pathPowers</p></li>
+<li><p>aods</p></li>
+<li><p>aoas</p></li>
+<li><p>zods</p></li>
+<li><p>zoas</p></li>
+<li><p>hasLos</p></li>
+</ul>
+</div></blockquote>
+<p>You can also optionally specify the following values:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>angleSpreads (defaults to [4.0, 10.0, 2.0, 2.0] if not specified)</p></li>
+<li><p>kFactorLos (defaults to <code class="docutils literal notranslate"><span class="pre">pathPowers[0]-pathPowers[1]</span></code>)</p></li>
+</ul>
+</div></blockquote>
+<p>Also note that if your channel model contains a LOS cluster, it <strong>must</strong> be
+the first cluster in the lists and the <code class="docutils literal notranslate"><span class="pre">hasLos</span></code> parameter should be set
+to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</li>
+</ol>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.cdl.CdlChannel.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.cdl.CdlChannel.print" title="Permalink to this definition"></a></dt>
+<dd><p>Prints the properties of this channel model object. It first calls
+the base class <a class="reference internal" href="#neoradium.channel.ChannelBase.print" title="neoradium.channel.ChannelBase.print"><code class="xref py py-meth docutils literal notranslate"><span class="pre">print()</span></code></a> and
+then adds the information specific to <a class="reference internal" href="#neoradium.cdl.CdlChannel" title="neoradium.cdl.CdlChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CdlChannel</span></code></a>
+class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em><em> (</em><em>default: None</em><em>)</em>) – If specified, it is used as a title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, it returns the information in a text string instead
+of printing the information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns
+the information in a text string. Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.cdl.CdlChannel.restart">
+<span class="sig-name descname"><span class="pre">restart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">restartRanGen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.cdl.CdlChannel.restart" title="Permalink to this definition"></a></dt>
+<dd><p>This method first calls the base class <a class="reference internal" href="#neoradium.channel.ChannelBase.restart" title="neoradium.channel.ChannelBase.restart"><code class="xref py py-meth docutils literal notranslate"><span class="pre">restart()</span></code></a>
+and then re-initializes the ray coupling and initial phases randomly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>restartRanGen</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If a <code class="docutils literal notranslate"><span class="pre">seed</span></code> was not provided to this channel model, this parameter
+is ignored. Otherwise, if <code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, this
+channel model’s random generator is reset and if <code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is
+<code class="docutils literal notranslate"><span class="pre">False</span></code> (default), the random generator is not reset. This means
+if <code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, calling this function starts a new
+sequence of channel instances which are different from the sequence when
+the channel was instantiated.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<hr class="docutils" />
+<section id="module-neoradium.tdl">
+<span id="tdl-channel-model"></span><h2>TDL Channel Model<a class="headerlink" href="#module-neoradium.tdl" title="Permalink to this heading"></a></h2>
+<p>This module implements the <a class="reference internal" href="#neoradium.tdl.TdlChannel" title="neoradium.tdl.TdlChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">TdlChannel</span></code></a> class which
+encapsulates the Tapped Delay Line (TDL) channel model functionality.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.tdl.TdlChannel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.tdl.</span></span><span class="sig-name descname"><span class="pre">TdlChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'A'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.tdl.TdlChannel" title="Permalink to this definition"></a></dt>
+<dd><p>This class implements the Tapped Delay Line (TDL) channel model based
+on <strong>3GPP TR 38.901</strong>. It is derived from the
+<a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a> class.</p>
+<p>According to <strong>3GPP TR 38.901</strong>, TDL models are mostly used for simplified
+evaluations, for non-MIMO cases. They are defined for the frequency range
+from 0.5 GHz to 100 GHz with a maximum bandwidth of 2 GHz.</p>
+<p>Although TDL model is defined for mostly non-MIMO use cases, this
+implementation does support MIMO configs. However, unlike
+<a class="reference internal" href="#neoradium.cdl.CdlChannel" title="neoradium.cdl.CdlChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CdlChannel</span></code></a>, this model does not work
+with the antenna classes <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>
+or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a>. For TDL channel models,
+you just need to specify the number of transmit and receive antenna.</p>
+<p>The typical use case involves instantiating a <a class="reference internal" href="#neoradium.tdl.TdlChannel" title="neoradium.tdl.TdlChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">TdlChannel</span></code></a> object
+and then calling functions such as
+<a class="reference internal" href="#neoradium.channel.ChannelBase.getChannelMatrix" title="neoradium.channel.ChannelBase.getChannelMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getChannelMatrix()</span></code></a>,
+<a class="reference internal" href="#neoradium.channel.ChannelBase.applyToSignal" title="neoradium.channel.ChannelBase.applyToSignal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyToSignal()</span></code></a>,
+<a class="reference internal" href="#neoradium.channel.ChannelBase.applyToGrid" title="neoradium.channel.ChannelBase.applyToGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyToGrid()</span></code></a>, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<em>str</em><em> or </em><em>None</em><em> (</em><em>default: 'A'</em><em>)</em>) – <p>The TDL profile name. It can be one of the following:</p>
+<blockquote>
+<div><ul>
+<li><p>The TDL profile which is one of ‘A’, ‘B’, ‘C’, ‘D’, ‘E’.</p></li>
+<li><p>A string that specifies both profile and delay spread
+according to <strong>3GPP TS 38.101-4</strong>: ‘A30’, ‘B100’, ‘C60’,
+‘C300’, ‘D30’. The numbers here are the delay spread in
+nano seconds. Please note that the delay spread specified
+here overrides any value passed to the <code class="docutils literal notranslate"><span class="pre">delaySpread</span></code>
+parameter (See <a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a>)</p></li>
+<li><p>A string that specifies profile, delay spread, and
+doppler shift according to <strong>3GPP TS 38.101-4 Table
+B.2.2-1</strong> and <strong>3GPP TS 38.101-4 Table B.2.2-2</strong>. This
+includes ‘A30-5’, ‘A30-10’, ‘B100-400’, ‘C300-100’,
+‘C300-600’, ‘C300-1200’, for FR1, and ‘A30-35’, ‘A30-75’,
+‘A30-300’, ‘C60-300’, ‘D30-75’ for FR2. Please note that
+the delay spread and doppler shift specified here overrides
+any values passed to the <code class="docutils literal notranslate"><span class="pre">delaySpread</span></code> and <code class="docutils literal notranslate"><span class="pre">dopplerShift</span></code>
+parameters (See <a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> can be used to completely customize the TDL
+channel. See <a class="reference internal" href="#customizingtdl"><span class="std std-ref">Customizing TDL Model</span></a>
+below for more information.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – <p>A set of optional arguments. Please refer to
+<a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a> for a list of inherited
+parameters. Here is a list of additional parameters specific to
+<code class="docutils literal notranslate"><span class="pre">TdlChannel</span></code>.</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">txAntennaCount<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of transmitter antenna. Isotropic
+antenna elements are assumed. The default is 1.</p>
+</dd>
+<dt class="field-even">rxAntennaCount<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of receiver antenna. Isotropic
+antenna elements are assumed. The default is 1.</p>
+</dd>
+<dt class="field-odd">mimoCorrelation<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Specifies the relative amount of MIMO correlation
+in MIMO use cases. It can be one of ‘Low’ (default), ‘Medium’,
+‘MediumA’, ‘MediumB’, and ‘High’. See
+<a class="reference internal" href="#calculatingcorrmat"><span class="std std-ref">Calculating Correlation Matrix</span></a>
+for more information.</p>
+</dd>
+<dt class="field-even">polarization<span class="colon">:</span></dt>
+<dd class="field-even"><p>The polarization type for the MIMO use cases. It can
+be one of ‘CoPolar’(default) or ‘CrossPolar’. See
+<a class="reference internal" href="#calculatingcorrmat"><span class="std std-ref">Calculating Correlation Matrix</span></a>
+for more information.</p>
+</dd>
+<dt class="field-odd">correlationMatrix<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The correlation matrix. By default this
+implementation calculates the correlation matrix based on 3GPP
+standard using the given parameters such as <code class="docutils literal notranslate"><span class="pre">mimoCorrelation</span></code>
+and <code class="docutils literal notranslate"><span class="pre">polarization</span></code>. However you can specify your own
+correlation matrix using this parameter. See
+<a class="reference internal" href="#calculatingcorrmat"><span class="std std-ref">Calculating Correlation Matrix</span></a>
+for more information.</p>
+</dd>
+<dt class="field-even">sosType<span class="colon">:</span></dt>
+<dd class="field-even"><p>The TDL model uses the Sum-of-Sinusoids method to calculate
+the channel gains. This implementation supports 2 different
+variations of this technique:</p>
+<ul>
+<li><p><strong>`GMEDS1`</strong>: The method introduced in the paper <a class="reference external" href="https://ieeexplore.ieee.org/document/5089993">“Two New
+Sum-of-Sinusoids-Based Methods for the Efficient Generation of
+Multiple Uncorrelated Rayleigh Fading Waveforms”</a>. This is the
+default method.</p></li>
+<li><p><strong>`Xiao`</strong>: The method introduced in the paper <a class="reference external" href="https://ieeexplore.ieee.org/document/4027602">“Novel
+Sum-of-Sinusoids Simulation Models for Rayleigh and Rician
+Fading Channels”</a>.
+Please note that this is a stateless statistical model. Sequential
+application of this channel model may not always have smooth
+transition between the resulting channel gains.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">sosNumSins<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of Sinusoids used in the Sum-of-Sinusoids
+algorithm. The default is 32.</p>
+</dd>
+<dt class="field-even">pathDelays<span class="colon">:</span></dt>
+<dd class="field-even"><p>Use this to customize or override the path delays which
+by default are set based on the TDL channel model as defined in
+<strong>3GPP TR 38.901 Tables Tables 7.7.2-1 to Table 7.7.2-5</strong>. You
+don’t need to specify this parameter for most use cases. See
+<a class="reference internal" href="#customizingtdl"><span class="std std-ref">Customizing TDL Model</span></a> below for more
+information.</p>
+</dd>
+<dt class="field-odd">pathPowers<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Use this to customize or override the path powers which
+by default are set based on the TDL channel model as defined in
+<strong>3GPP TR 38.901 Tables Tables 7.7.2-1 to Table 7.7.2-5</strong>. You
+don’t need to specify this parameter for most use cases. See
+<a class="reference internal" href="#customizingtdl"><span class="std std-ref">Customizing TDL Model</span></a> below for more
+information.</p>
+</dd>
+<dt class="field-even">kFactorLos<span class="colon">:</span></dt>
+<dd class="field-even"><p>The K-Factor ratio (in dB) for the LOS tap (1st tap).
+this value by default is set to <code class="docutils literal notranslate"><span class="pre">(pathPowers[0]-pathPowers[1])</span></code>.</p>
+</dd>
+<dt class="field-odd">hasLos<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Use this to customize or override the <code class="docutils literal notranslate"><span class="pre">hasLos</span></code> property of
+this channel model which by default is set based on the TDL channel
+model as defined in <strong>3GPP TR 38.901</strong>. You don’t need to specify
+this parameter for most use cases. See
+<a class="reference internal" href="#customizingtdl"><span class="std std-ref">Customizing TDL Model</span></a> below for more
+information.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Other Properties:</strong></p>
+<p>All of the parameters mentioned above are directly available. Please also refer to
+the <a class="reference internal" href="#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a> class for a list of inherited
+properties. Here is a list of additional properties specific to this class.</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">nrNt<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple of the form <code class="docutils literal notranslate"><span class="pre">(nr,nt)</span></code>, where <code class="docutils literal notranslate"><span class="pre">nr</span></code> and <code class="docutils literal notranslate"><span class="pre">nt</span></code> are the
+number receiver and transmitter antenna elements correspondingly.
+For TDL models, <code class="docutils literal notranslate"><span class="pre">nr</span></code> and <code class="docutils literal notranslate"><span class="pre">nt</span></code> are the same as <code class="docutils literal notranslate"><span class="pre">rxAntennaCount</span></code>
+and nt=txAntennaCount`` parameters.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p id="calculatingcorrmat"><strong>Calculating Correlation Matrix:</strong></p>
+<p>For MIMO use cases, by default, this class uses the parameters such as
+<code class="docutils literal notranslate"><span class="pre">mimoCorrelation</span></code> and <code class="docutils literal notranslate"><span class="pre">polarization</span></code> to calculate the correlation
+matrix based on the 3GPP standard documents. This implementation is based
+on the following documents:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>3GPP TS 38.101-4 Section B.2.3.2.1</p></li>
+<li><p>3GPP TS 38.101-4 Tables B.2.3.1.2-1 and B.2.3.2.2-1</p></li>
+<li><p>3GPP TS 38.104 Tables G.2.3.1.2-1 and G.2.3.2.3-1</p></li>
+</ul>
+</div></blockquote>
+<p id="customizingtdl"><strong>Customizing TDL Model:</strong></p>
+<p>There are two different ways to customize the TDL model:</p>
+<ol class="loweralpha">
+<li><p>You can choose one of the predefined TDL profiles (See the <code class="docutils literal notranslate"><span class="pre">profile</span></code>
+parameter above) and then modify the parameters of the model by passing
+in additional information. For example you can choose ‘B100-400’ for
+<code class="docutils literal notranslate"><span class="pre">profile</span></code> and then pass your own path delays to override the path
+delays specified in the standard.</p></li>
+<li><p>You can also define your own model completely from scratch. You first pass
+<code class="docutils literal notranslate"><span class="pre">None</span></code> for the <code class="docutils literal notranslate"><span class="pre">profile</span></code> parameter and then specify all channel model
+parameters. Please note that you <strong>must</strong> specify at least the following
+parameters in this case:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>pathDelays</p></li>
+<li><p>pathPowers</p></li>
+<li><p>hasLos</p></li>
+</ul>
+</div></blockquote>
+<p>You can also optionally specify the following values:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>kFactorLos (defaults to <code class="docutils literal notranslate"><span class="pre">pathPowers[0]-pathPowers[1]</span></code>)</p></li>
+</ul>
+</div></blockquote>
+<p>Also note that if your channel model contains a LOS tap, it <strong>must</strong> be
+the first tap in the lists and the <code class="docutils literal notranslate"><span class="pre">hasLos</span></code> parameter should be set
+to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</li>
+</ol>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.tdl.TdlChannel.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.tdl.TdlChannel.print" title="Permalink to this definition"></a></dt>
+<dd><p>Prints the properties of this channel model object. It first calls
+the base class <a class="reference internal" href="#neoradium.channel.ChannelBase.print" title="neoradium.channel.ChannelBase.print"><code class="xref py py-meth docutils literal notranslate"><span class="pre">print()</span></code></a> and
+then adds the information specific to <a class="reference internal" href="#neoradium.tdl.TdlChannel" title="neoradium.tdl.TdlChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">TdlChannel</span></code></a>
+class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em><em> (</em><em>default: None</em><em>)</em>) – If specified, it is used as a title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, it returns the information in a text string instead
+of printing the information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns
+the information in a text string. Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Antenna.html" class="btn btn-neutral float-left" title="Antenna" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Random.html" class="btn btn-neutral float-right" title="Random Number Generator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
