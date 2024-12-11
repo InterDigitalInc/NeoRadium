@@ -1,0 +1,292 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "b7e0a807",
+   "metadata": {},
+   "source": [
+    "# Channel Matrix\n",
+    "This notebook shows different ways of calculating the channel matrix and compares the application of channels matrixes in time domain vs frequency domain."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "b5013617",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import scipy.io\n",
+    "import time\n",
+    "\n",
+    "from neoradium import Carrier, Modem, CdlChannel, AntennaPanel, Grid, random\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "d0952472",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Shape of Resource Grid: (8, 14, 300)\n",
+      "Shape of Waveform:      (8, 9216)\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Create a valid random grid\n",
+    "random.setSeed(123)                                    # Make results reproducible\n",
+    "carrier = Carrier(startRb=0, numRbs=25, spacing=15)    # Crrier 25 Resource Blocks, 15KHz subcarrier spacing\n",
+    "bwp = carrier.curBwp                                   # The only bandwidth part in the carrier\n",
+    "txGrid = bwp.createGrid(numPlanes=8)                   # Create an empty resource grid\n",
+    "\n",
+    "stats = txGrid.getStats()                              # Get statistics about the grid\n",
+    "modem = Modem(\"16QAM\")                                 # Using 16QAM modulation\n",
+    "numRandomBits = stats['UNASSIGNED']*modem.qm           # Total number of bits available in the resource grid\n",
+    "\n",
+    "bits = random.bits(numRandomBits)                      # Create random bits\n",
+    "symbols = modem.modulate(bits)                         # Modulate the bits to get symbols\n",
+    "\n",
+    "indexes = txGrid.getReIndexes(\"UNASSIGNED\")            # Indexes of the \"UNASSIGNED\" resources\n",
+    "txGrid[indexes] = symbols                              # Put symbols in the resource grid\n",
+    "\n",
+    "txWaveform = txGrid.ofdmModulate()                     # OFDM-Modulate the resource grid to get a waveform\n",
+    "\n",
+    "print(\"Shape of Resource Grid:\",txGrid.shape)\n",
+    "print(\"Shape of Waveform:     \",txWaveform.shape)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "555f4b1b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "CDL-C Channel Properties:\n",
+      "  delaySpread: 300 ns\n",
+      "  dopplerShift: 5 Hz\n",
+      "  carrierFreq: 4000000000.0 Hz\n",
+      "  normalizeGains: True\n",
+      "  normalizeOutput: True\n",
+      "  txDir: Downlink\n",
+      "  timing method: Nearest\n",
+      "  coherenceTime: 0.084628 (Sec.)\n",
+      "  ueDirAZ: 0°, 90°\n",
+      "  pathDelays (ns): 0.0000 62.970 66.570 69.870 65.280 190.98 193.44 196.80 197.52 238.05\n",
+      "                   246.39 280.08 368.55 392.49 651.12 813.15 1277.6 1380.0 1647.0 1682.3\n",
+      "                   1891.9 1991.2 2112.8 2595.6\n",
+      "  pathPowers (db): -4.400 -1.200 -3.500 -5.200 -2.500 0.0000 -2.200 -3.900 -7.400 -7.100\n",
+      "                   -10.70 -11.10 -5.100 -6.800 -8.700 -13.20 -13.90 -13.90 -15.80 -17.10\n",
+      "                   -16.00 -15.70 -21.60 -22.80\n",
+      "  AODs (Degree):  -47  -23  -23  -23  -41    0    0    0   73  -64   80  -97  -55  -64  -78\n",
+      "                  103   99   89 -102   92   93  107  119 -124\n",
+      "  AOAs (Degree): -101  120  120  120 -128  170  170  170   55   66  -48   47   68  -69   82\n",
+      "                   31  -16    4  -14   10    6    1  -22   34\n",
+      "  ZODs (Degree):   97   99   99   99  101   99   99   99  105   95  106   94  104  104   93\n",
+      "                  104   95   93   92  107   93   93  105  108\n",
+      "  ZOAs (Degree):   88   72   72   72   70   75   75   75   67   64   71   60   91   60   61\n",
+      "                  101   62   67   53   62   52   62   58   57\n",
+      "  hasLOS: False\n",
+      "  Cross Pol. Power: 7 db\n",
+      "  angleSpreads: 2° 15° 3° 7°\n",
+      "  TX Antenna:\n",
+      "    Total Elements: 8\n",
+      "    spacing: 0.5𝜆, 0.5𝜆\n",
+      "    shape: 2 rows x 4 columns\n",
+      "    polarization: |\n",
+      "    taper: 1.0\n",
+      "  RX Antenna:\n",
+      "    Total Elements: 2\n",
+      "    spacing: 0.5𝜆, 0.5𝜆\n",
+      "    shape: 1 rows x 2 columns\n",
+      "    polarization: |\n",
+      "    taper: 1.0\n",
+      "  Channel Filter:\n",
+      "    filterDelay (samples): 7\n",
+      "    numTxAntenna: 8\n",
+      "    numPaths: 24\n",
+      "    pathDelays (ns): 0.0000 62.970 66.570 69.870 65.280 190.98 193.44 196.80 197.52 238.05\n",
+      "                     246.39 280.08 368.55 392.49 651.12 813.15 1277.6 1380.0 1647.0 1682.3\n",
+      "                     1891.9 1991.2 2112.8 2595.6\n",
+      "    filterLen: 16\n",
+      "    numInterpol: 50\n",
+      "    normalize: True\n",
+      "    stopBandAtten: 80\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Create a CDL-C channel model with 300ns delay spread, 4GHz carrier frequency, and 5Hz doppler shift\n",
+    "channel = CdlChannel('C', delaySpread=300, carrierFreq=4e9, dopplerShift=5,\n",
+    "                     txAntenna = AntennaPanel([2,4], polarization=\"|\"),       # 8 TX antenna\n",
+    "                     rxAntenna = AntennaPanel([1,2], polarization=\"|\"),       # 2 RX antenna\n",
+    "                     timing=\"Nearest\")      # Nearest Neighbors interpolation (Also try: \"Polar\", \"linear\")\n",
+    "print(channel)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "5b938fa2",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Time Domain, Experimental:\n",
+      "   Time: 0.07905101776123047\n",
+      "   Channel:\n",
+      " [0.00852756-0.12739031j 0.00853205-0.12739179j 0.00853205-0.12739179j\n",
+      " 0.00867352-0.1274171j  0.00908709-0.12725874j 0.00908709-0.12725874j\n",
+      " 0.00908488-0.12725828j 0.0090826 -0.12725726j 0.00908709-0.12725874j\n",
+      " 0.00908709-0.12725874j 0.00920746-0.12729786j 0.00964038-0.12712568j\n",
+      " 0.00964038-0.12712568j 0.00963817-0.12712521j]\n",
+      "Time Domain, Time Interpolation:\n",
+      "   Time: 0.004191875457763672\n",
+      "   Channel:\n",
+      " [0.00852756-0.12739031j 0.00852756-0.12739031j 0.00852756-0.12739031j\n",
+      " 0.00852756-0.12739031j 0.00907741-0.12725851j 0.00907741-0.12725851j\n",
+      " 0.00907741-0.12725851j 0.00907741-0.12725851j 0.00907741-0.12725851j\n",
+      " 0.00907741-0.12725851j 0.00907741-0.12725851j 0.00962556-0.12712669j\n",
+      " 0.00962556-0.12712669j 0.00962556-0.12712669j]\n",
+      "Time Domain, No Interpolation:\n",
+      "   Time: 0.0034291744232177734\n",
+      "   Channel:\n",
+      " [0.00854752-0.12738554j 0.00862589-0.12736677j 0.00870423-0.12734801j\n",
+      " 0.00878253-0.12732925j 0.0088608 -0.12731048j 0.00893904-0.12729172j\n",
+      " 0.00901724-0.12727295j 0.00909731-0.12725373j 0.00917544-0.12723497j\n",
+      " 0.00925354-0.1272162j  0.0093316 -0.12719743j 0.00940962-0.12717867j\n",
+      " 0.00948761-0.1271599j  0.00956557-0.12714113j]\n",
+      "Frequency Domain:\n",
+      "   Time: 0.005882978439331055\n",
+      "   Channel:\n",
+      " [-0.18121375-0.0519848j  -0.18111617-0.05204777j -0.18101976-0.05210998j\n",
+      " -0.18092332-0.05217218j -0.18082688-0.05223438j -0.18073041-0.05229657j\n",
+      " -0.18063394-0.05235875j -0.18053627-0.05242169j -0.18043859-0.05248462j\n",
+      " -0.18034207-0.05254679j -0.18024553-0.05260894j -0.18014899-0.0526711j\n",
+      " -0.18005242-0.05273324j -0.17995584-0.05279538j]\n"
+     ]
+    }
+   ],
+   "source": [
+    "t0 =time.time()\n",
+    "# This is the experimental method (Only used for verification and debugging). It calculates the \n",
+    "# channel matrix by first creating a fake grid, OFDM-modulating it, and applying the channel to \n",
+    "# the waveform. It then OFDM-demodulate the waveform to get the channel matrix. This is slowest but  \n",
+    "# closest to the effect of applying the channel in time domain.\n",
+    "channelMatrixTD0 = channel.getChannelMatrixTDExp(bwp,1)\n",
+    "t1 =time.time()\n",
+    "print(\"Time Domain, Experimental:\")\n",
+    "print(\"   Time:\", t1-t0)\n",
+    "print(\"   Channel:\\n\", channelMatrixTD0[:,0,0,0])\n",
+    "\n",
+    "# Getting the channel matrix in time domain and using interpolation to get the channel gains\n",
+    "# at the OFDM symbol times.\n",
+    "channelMatrixTD1 = channel.getChannelMatrix(bwp, 1, timeDomain=True, interpolateTime=True)\n",
+    "t2 = time.time()\n",
+    "print(\"Time Domain, Time Interpolation:\")\n",
+    "print(\"   Time:\", t2-t1)\n",
+    "print(\"   Channel:\\n\", channelMatrixTD1[:,0,0,0])\n",
+    "\n",
+    "# Getting the channel matrix in time domain without interpolation. The channel gains are\n",
+    "# calculated at the OFDM-symbol times directly. (This is the default config)\n",
+    "channelMatrixTD2 = channel.getChannelMatrix(bwp, 1, timeDomain=True, interpolateTime=False)\n",
+    "t3 = time.time()\n",
+    "print(\"Time Domain, No Interpolation:\")\n",
+    "print(\"   Time:\", t3-t2)\n",
+    "print(\"   Channel:\\n\", channelMatrixTD2[:,0,0,0])\n",
+    "\n",
+    "# Getting the channel matrix in frequency domain. \n",
+    "channelMatrixFD = channel.getChannelMatrix(bwp, 1, timeDomain=False)\n",
+    "t4 = time.time()\n",
+    "print(\"Frequency Domain:\")\n",
+    "print(\"   Time:\", t4-t3)\n",
+    "print(\"   Channel:\\n\", channelMatrixFD[:,0,0,0])\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "5beb0236",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "MSE between the rxGrid & \"Experimental\":                   2.3647531619647926e-07\n",
+      "MSE between the rxGrid & \"Time domain (Interpolation)\":    2.399270605372296e-07\n",
+      "MSE between the rxGrid & \"Time domain (No Interpolation)\": 2.893382278673798e-07\n",
+      "MSE between the rxGrid & \"Frequency domain\":               0.39108756885752305\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Applying the channel in time domain and demodulate to get a received resource grid (rxGrid)\n",
+    "maxDelay = channel.getMaxDelay()                         # Calculate the channel's max delay\n",
+    "paddedTxWaveform = txWaveform.pad(maxDelay)              # Pad the waveform with zeros\n",
+    "rxWaveform = channel.applyToSignal(paddedTxWaveform)     # Apply the channel to the waveform\n",
+    "offset = channel.getTimingOffset()                       # Get the timing offset for synchronization\n",
+    "syncedWaveform = rxWaveform.sync(offset)                 # Synchronization\n",
+    "rxGrid = Grid.ofdmDemodulate(bwp, syncedWaveform)        # OFDM-demodulation\n",
+    "\n",
+    "# Apply the \"Experimental\" channel matrix:\n",
+    "rxGridTD0 = txGrid.applyChannel(channelMatrixTD0)\n",
+    "print(\"MSE between the rxGrid & \\\"Experimental\\\":                  \",np.square(np.abs(rxGridTD0.grid-rxGrid.grid)).mean()) \n",
+    "\n",
+    "# Apply the \"Time-domain with interpolation\" channel matrix:\n",
+    "rxGridTD1 = txGrid.applyChannel(channelMatrixTD1)\n",
+    "print(\"MSE between the rxGrid & \\\"Time domain (Interpolation)\\\":   \",np.square(np.abs(rxGridTD1.grid-rxGrid.grid)).mean()) \n",
+    "\n",
+    "# Apply the \"Time-domain without interpolation\" channel matrix:\n",
+    "rxGridTD2 = txGrid.applyChannel(channelMatrixTD2)\n",
+    "print(\"MSE between the rxGrid & \\\"Time domain (No Interpolation)\\\":\",np.square(np.abs(rxGridTD2.grid-rxGrid.grid)).mean()) \n",
+    "\n",
+    "# Apply the \"Frequency-domain\" channel matrix:\n",
+    "rxGridFD = txGrid.applyChannel(channelMatrixFD)\n",
+    "print(\"MSE between the rxGrid & \\\"Frequency domain\\\":              \",np.square(np.abs(rxGridFD.grid-rxGrid.grid)).mean()) \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2c6e0954",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

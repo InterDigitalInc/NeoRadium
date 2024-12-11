@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antenna &mdash; NeoRadium 0.2.0 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/neoradium.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Channel Models" href="Channels.html" />
+    <link rel="prev" title="Channel Coding" href="ChanCode.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NeoRadium 0.2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Antenna</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.antenna.AntennaBase"><code class="docutils literal notranslate"><span class="pre">AntennaBase</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaBase.getSteeringVector"><code class="docutils literal notranslate"><span class="pre">AntennaBase.getSteeringVector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaBase.getFieldPattern"><code class="docutils literal notranslate"><span class="pre">AntennaBase.getFieldPattern()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaBase.getRotationMatrix"><code class="docutils literal notranslate"><span class="pre">AntennaBase.getRotationMatrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaBase.getElementsFields"><code class="docutils literal notranslate"><span class="pre">AntennaBase.getElementsFields()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaBase.getPolarizedFields"><code class="docutils literal notranslate"><span class="pre">AntennaBase.getPolarizedFields()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaBase.getField"><code class="docutils literal notranslate"><span class="pre">AntennaBase.getField()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaBase.getPowerPattern"><code class="docutils literal notranslate"><span class="pre">AntennaBase.getPowerPattern()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaBase.getPowerPatternDb"><code class="docutils literal notranslate"><span class="pre">AntennaBase.getPowerPatternDb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaBase.getDirectivity"><code class="docutils literal notranslate"><span class="pre">AntennaBase.getDirectivity()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaBase.drawRadiation"><code class="docutils literal notranslate"><span class="pre">AntennaBase.drawRadiation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.antenna.AntennaElement"><code class="docutils literal notranslate"><span class="pre">AntennaElement</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaElement.print"><code class="docutils literal notranslate"><span class="pre">AntennaElement.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaElement.posInArray"><code class="docutils literal notranslate"><span class="pre">AntennaElement.posInArray</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaElement.clone"><code class="docutils literal notranslate"><span class="pre">AntennaElement.clone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaElement.getPowerPatternDb"><code class="docutils literal notranslate"><span class="pre">AntennaElement.getPowerPatternDb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaElement.getPowerPattern"><code class="docutils literal notranslate"><span class="pre">AntennaElement.getPowerPattern()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaElement.getField"><code class="docutils literal notranslate"><span class="pre">AntennaElement.getField()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaElement.getPolarizedFields"><code class="docutils literal notranslate"><span class="pre">AntennaElement.getPolarizedFields()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaElement.getDirectivity"><code class="docutils literal notranslate"><span class="pre">AntennaElement.getDirectivity()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.antenna.AntennaPanel"><code class="docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaPanel.print"><code class="docutils literal notranslate"><span class="pre">AntennaPanel.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaPanel.clone"><code class="docutils literal notranslate"><span class="pre">AntennaPanel.clone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaPanel.getNumElements"><code class="docutils literal notranslate"><span class="pre">AntennaPanel.getNumElements()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaPanel.getElement"><code class="docutils literal notranslate"><span class="pre">AntennaPanel.getElement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaPanel.getElementPosition"><code class="docutils literal notranslate"><span class="pre">AntennaPanel.getElementPosition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaPanel.getAllPositions"><code class="docutils literal notranslate"><span class="pre">AntennaPanel.getAllPositions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaPanel.showElements"><code class="docutils literal notranslate"><span class="pre">AntennaPanel.showElements()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaPanel.allElements"><code class="docutils literal notranslate"><span class="pre">AntennaPanel.allElements()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.antenna.AntennaArray"><code class="docutils literal notranslate"><span class="pre">AntennaArray</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaArray.print"><code class="docutils literal notranslate"><span class="pre">AntennaArray.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaArray.getElement"><code class="docutils literal notranslate"><span class="pre">AntennaArray.getElement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaArray.getElementPosition"><code class="docutils literal notranslate"><span class="pre">AntennaArray.getElementPosition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaArray.allPanels"><code class="docutils literal notranslate"><span class="pre">AntennaArray.allPanels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaArray.allElements"><code class="docutils literal notranslate"><span class="pre">AntennaArray.allElements()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaArray.getAllPositions"><code class="docutils literal notranslate"><span class="pre">AntennaArray.getAllPositions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaArray.getNumElements"><code class="docutils literal notranslate"><span class="pre">AntennaArray.getNumElements()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaArray.showElements"><code class="docutils literal notranslate"><span class="pre">AntennaArray.showElements()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NeoRadium 0.2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Antenna</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/source/API/Antenna.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="antenna">
+<h1>Antenna<a class="headerlink" href="#antenna" title="Permalink to this heading"></a></h1>
+<p><strong>NeoRadium</strong> supports the antenna elements, panels, and arrays as defined in the 3-GPP standard <strong>TR 38.901</strong>. Using this API, you can easily create antenna arrays and study their charactristics.</p>
+<p><strong>Example</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">elementTemplate</span> <span class="o">=</span> <span class="n">AntennaElement</span><span class="p">(</span><span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">65</span><span class="p">,</span><span class="mi">65</span><span class="p">],</span> <span class="n">maxAttenuation</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">panelTemplate</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">elements</span><span class="o">=</span><span class="n">elementTemplate</span><span class="p">,</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">)</span>
+<span class="n">antennaArray</span> <span class="o">=</span> <span class="n">AntennaArray</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">spacing</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">panels</span><span class="o">=</span><span class="n">panelTemplate</span><span class="p">)</span>
+<span class="n">antennaArray</span><span class="o">.</span><span class="n">showElements</span><span class="p">(</span><span class="n">zeroTicks</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../../_images/AntennaArray.png" src="../../_images/AntennaArray.png" />
+</figure>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">antennaArray</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Directivity&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../../_images/AntennaArrayRad.png" src="../../_images/AntennaArrayRad.png" />
+</figure>
+<span class="target" id="module-neoradium.antenna"></span><p>This file contains the implementation of Antenna Elements, Panels, and Arrays.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase" title="Permalink to this definition"></a></dt>
+<dd><p>This is the base class for all Antenna objects in <strong>NeoRadium</strong>. The
+classes <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>, <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a>, and
+<a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> are all derived from this class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaBase.getSteeringVector">
+<span class="sig-name descname"><span class="pre">getSteeringVector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase.getSteeringVector" title="Permalink to this definition"></a></dt>
+<dd><p>This method calculates the Steering vector (A.K.A. Array Response) of an Antenna
+Array or Antenna Panel for the given Azimuth and Zenith angles. Note that
+this function can only be called on the <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> and
+<a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> classes. An exception is thrown if it is called on
+<a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>numpy array</em>) – A 1-D array of zenith angles in degrees. (between 0 and 180)</p></li>
+<li><p><strong>phi</strong> (<em>numpy array</em>) – A 1-D array of azimuth angles in degrees. (between -180 and 180)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A 3-D complex numpy array containing steering vectors for every combination
+of <cite>theta</cite> and <cite>phi</cite>. The shape of the output is (numElements, numTheta, numPhi)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaBase.getFieldPattern">
+<span class="sig-name descname"><span class="pre">getFieldPattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase.getFieldPattern" title="Permalink to this definition"></a></dt>
+<dd><p>This method is used to calculate the field patterns around an antenna
+panel or array in the directions given by the arguments
+<code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to calculate the fields.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the fields are calculated only for
+the single specified zenith angle (in degrees)</p>
+<p>If this is None, the fields are calculated for all zenith angles
+between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to calculate the fields.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the fields are calculated only for
+the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the fields are calculated for all azimuth angles
+between -180 and 180 degrees.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A 3-D complex numpy array containing steering vectors for each combination
+of <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. The shape of the output is (numElements x numTheta x
+numPhi)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaBase.getRotationMatrix">
+<span class="sig-name descname"><span class="pre">getRotationMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orientation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase.getRotationMatrix" title="Permalink to this definition"></a></dt>
+<dd><p>This method calculates the rotation matrix used to convert the
+coordinates from local to global system. For more information about the
+rotation matrix please refer to <strong>3GPP TR 38.901 equation (7.1-4)</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>orientation</strong> (<em>list</em><em> or </em><em>numpy array</em>) – A list or numpy array containing the orientation angles <span class="math notranslate nohighlight">\(\alpha\)</span>
+(bearing angle), <span class="math notranslate nohighlight">\(\beta\)</span> (downtilt angle), and <span class="math notranslate nohighlight">\(\gamma\)</span> (slant
+angle) in radians.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A 3x3 rotation matrix that is used to transform the local coordinates to
+global coordinates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaBase.getElementsFields">
+<span class="sig-name descname"><span class="pre">getElementsFields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.,</span> <span class="pre">0.,</span> <span class="pre">0.])</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase.getElementsFields" title="Permalink to this definition"></a></dt>
+<dd><p>This method calculates the fields used to calculate the channel response
+for CDL channel models. It returns polarized field values in the directions
+specified by the <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code> values. This function also handles the
+conversion from local to global coordinates using the provided rotation
+angles. Please refer to <strong>3GPP TR 38.901 sections 7.1 and 7.5</strong> for more
+details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>numpy array</em>) – A 2-D numpy array containing the zenith angles (in radians) used to
+calculate the fields. For CDL channels, this is an <code class="docutils literal notranslate"><span class="pre">n</span></code> by <code class="docutils literal notranslate"><span class="pre">m</span></code>
+matrix where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of clusters and <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number
+of rays per cluster.</p></li>
+<li><p><strong>phi</strong> (<em>numpy array</em>) – A 2-D numpy array containing the azimuth angles (in radians) used to
+calculate the fields. For CDL channels, this is an <code class="docutils literal notranslate"><span class="pre">n</span></code> by <code class="docutils literal notranslate"><span class="pre">m</span></code>
+matrix where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of clusters and <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number
+of rays per cluster.</p></li>
+<li><p><strong>orientation</strong> (<em>list</em><em> or </em><em>numpy array</em>) – A list or numpy array containing the orientation angles <span class="math notranslate nohighlight">\(\alpha\)</span>
+(bearing angle), <span class="math notranslate nohighlight">\(\beta\)</span> (downtilt angle), and <span class="math notranslate nohighlight">\(\gamma\)</span> (slant
+angle) in radians.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><dl class="simple">
+<dt><strong>field</strong>:</dt><dd><p>A numpy array of shape (numAntenna x 2 x n x m) containing
+the field information for each antenna element and each one of <code class="docutils literal notranslate"><span class="pre">m</span></code> rays
+in each one of <code class="docutils literal notranslate"><span class="pre">n</span></code> clusters. The second dimension (2) is used to separate
+the vertical and horizontal polarization.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>locFactor</strong>:</dt><dd><p>A numpy array of shape (numAntenna x n x m) containing
+the location factor. For more information please refer to <strong>3GPP TR 38.901
+equation 7.5-22</strong>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2 Numpy Arrays</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaBase.getPolarizedFields">
+<span class="sig-name descname"><span class="pre">getPolarizedFields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase.getPolarizedFields" title="Permalink to this definition"></a></dt>
+<dd><p>This method calculates the polarized fields and outputs 2 matrices for
+the field values for vertical and horizontal polarizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to calculate the fields.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the fields are calculated only for
+the single specified zenith angle (in degrees)</p>
+<p>If this is None, the fields are calculated for all zenith angles
+between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to calculate the fields.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the fields are calculated only for
+the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the fields are calculated for all azimuth angles
+between -180 and 180 degrees.</p>
+</p></li>
+<li><p><strong>weights</strong> (<em>numpy array</em>) – A vector of weights to be applied to the field values. The weights
+can be used to steer the beams to the desiered direction. If this is
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, the field pattern is returned without any beamforming.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><dl class="simple">
+<dt><strong>arrayFieldV</strong>:</dt><dd><p>A numpy array of shape (numElements x numTheta x numPhi) containing
+the field values with vertical polarization at the directions
+specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>arrayFieldH</strong>:</dt><dd><p>A numpy array of shape (numElements x numTheta x numPhi) containing
+the field values with horizontal polarization at the directions
+specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2 Numpy Arrays</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaBase.getField">
+<span class="sig-name descname"><span class="pre">getField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase.getField" title="Permalink to this definition"></a></dt>
+<dd><p>This method calculates the fields in directions specified by
+<code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. It calls the <a class="reference internal" href="#neoradium.antenna.AntennaBase.getPolarizedFields" title="neoradium.antenna.AntennaBase.getPolarizedFields"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getPolarizedFields()</span></code></a> method
+to get the vertical and horizontal polarized fields and combines them
+to get fields at the specified directions.</p>
+<div class="math notranslate nohighlight">
+\[F = \sqrt {F_v^2 + F_h^2}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to calculate the fields.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the fields are calculated only for
+the single specified zenith angle (in degrees)</p>
+<p>If this is None, the fields are calculated for all zenith angles
+between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to calculate the fields.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the fields are calculated only for
+the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the fields are calculated for all azimuth angles
+between -180 and 180 degrees.</p>
+</p></li>
+<li><p><strong>weights</strong> (<em>numpy array</em>) – A vector of weights to be applied to the field values. The weights
+can be used to steer the beams to the desiered direction. If this is
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, the field pattern is returned without any beamforming.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A numpy array of shape (numElements x numTheta x numPhi) containing
+the field values at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaBase.getPowerPattern">
+<span class="sig-name descname"><span class="pre">getPowerPattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase.getPowerPattern" title="Permalink to this definition"></a></dt>
+<dd><p>This method calculates the field power pattern in the directions specified
+by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. It calls the <a class="reference internal" href="#neoradium.antenna.AntennaBase.getField" title="neoradium.antenna.AntennaBase.getField"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getField()</span></code></a> method
+to get the fields then calculates the field powers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to calculate the field powers.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the field power is calculated only
+for the single specified zenith angle (in degrees)</p>
+<p>If this is None, the field powers are calculated for all zenith
+angles between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to calculate the field powers.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the field power is calculated only
+for the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the field powers are calculated for all azimuth
+angles between -180 and 180 degrees.</p>
+</p></li>
+<li><p><strong>weights</strong> (<em>numpy array</em>) – A vector of weights to be applied to the field values. The weights
+can be used to steer the beams to the desiered direction. If this is
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, the field pattern is returned without any beamforming.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A numpy array of shape (numElements x numTheta x numPhi) containing
+the field powers at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaBase.getPowerPatternDb">
+<span class="sig-name descname"><span class="pre">getPowerPatternDb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase.getPowerPatternDb" title="Permalink to this definition"></a></dt>
+<dd><p>This method calculates the field power pattern (in dB) in the
+directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. It calls the
+<a class="reference internal" href="#neoradium.antenna.AntennaBase.getPowerPattern" title="neoradium.antenna.AntennaBase.getPowerPattern"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getPowerPattern()</span></code></a> method to get the field powers and
+then converts them to dB.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to calculate the field powers.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the field power is calculated only
+for the single specified zenith angle (in degrees)</p>
+<p>If this is None, the field powers are calculated for all zenith
+angles between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to calculate the field powers.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the field power is calculated only
+for the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the field powers are calculated for all azimuth
+angles between -180 and 180 degrees.</p>
+</p></li>
+<li><p><strong>weights</strong> (<em>numpy array</em>) – A vector of weights to be applied to the field values. The weights
+can be used to steer the beams to the desiered direction. If this is
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, the field pattern is returned without any beamforming.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A numpy array of shape (numElements x numTheta x numPhi) containing
+the field powers in dB at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaBase.getDirectivity">
+<span class="sig-name descname"><span class="pre">getDirectivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase.getDirectivity" title="Permalink to this definition"></a></dt>
+<dd><p>Directivity at a specific direction is defined as:</p>
+<div class="math notranslate nohighlight">
+\[D = \frac {P} {P_{avg}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(P\)</span> is the power radiated at the specified angle and
+<span class="math notranslate nohighlight">\(P_{avg}\)</span> is the average power radiated in all directions. The
+average power is calculated by integrating the field values at all
+angles: (See
+<a class="reference external" href="https://www.antenna-theory.com/basics/directivity.php">this web page</a>
+for more details)</p>
+<div class="math notranslate nohighlight">
+\[P_{avg} = \frac {1} {4 \pi} \int_0^{2 \pi} \int_0^{\pi} |F(\theta, \phi)|^2 \sin \theta d\theta d\phi\]</div>
+<p>Directivity (without any specific direction) is defined as:</p>
+<div class="math notranslate nohighlight">
+\[D_{max} = \frac {P_{max}} {P_{avg}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(P_{max}\)</span> is maximum power radiated at a direction. Directivity
+is usually measured in dbi which is the relative directivity in db with
+respect to an “isotropic” radiator.</p>
+<p>This method calculates the directivity (in dbi) at directions specified by
+<code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to calculate the directivity.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the directivity is calculated only for
+the single specified zenith angle (in degrees)</p>
+<p>If this is None, the directivity is calculated for all
+zenith angles between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to calculate the directivity.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the directivity is calculated only for
+the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the directivity is calculated for all
+azimuth angles between -180 and 180 degrees.</p>
+</p></li>
+<li><p><strong>weights</strong> (<em>numpy array</em>) – A vector of weights to be applied to the field values. The weights
+can be used to steer the beams to the desiered direction. If this is
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, the field pattern is returned without any beamforming.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A numpy array of shape (numElements x numTheta x numPhi) containing
+the directivity in dbi at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaBase.drawRadiation">
+<span class="sig-name descname"><span class="pre">drawRadiation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radiationType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Directivity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">viewAngles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(45,</span> <span class="pre">20)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase.drawRadiation" title="Permalink to this definition"></a></dt>
+<dd><p>This is a multi-purpose visualization function that shows the
+radiation around antenna elements, panels, and arrays in the directions
+specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to visualize the radiations.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the radiations are visualized only for
+the single specified zenith angle (in degrees)</p>
+<p>If this is None, the radiations are visualized for all zenith
+angles between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to visualize the radiations.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the radiations are visualized only for
+the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the radiations are visualized for all azimuth
+angles between -180 and 180 degrees.</p>
+</p></li>
+<li><p><strong>radiationType</strong> (<em>str</em><em> (</em><em>default: &quot;Directivity&quot;</em><em>)</em>) – <p>This parameter specifies the type of radiation to plot. Here is a
+list of supported values:</p>
+<blockquote>
+<div><ul>
+<li><p><strong>Directivity</strong></p></li>
+<li><p><strong>Power</strong></p></li>
+<li><p><strong>PowerDb</strong></p></li>
+<li><p><strong>Field</strong></p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>normalize</strong> (<em>Boolean</em><em> (</em><em>default: True</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default) all the values are normalized before being
+plotted.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> (</em><em>default: None</em><em>)</em>) – The title to be used for the plot. If not specified, then this function
+creates a title based on the given parameters.</p></li>
+<li><p><strong>viewAngles</strong> (<em>tuple</em><em> (</em><em>default:</em><em> (</em><em>45</em><em>,</em><em>20</em><em>)</em><em>)</em>) – For 3-D plots, you can use this parameter to specify your
+desired viewing angle. For non-3D plots, this parameter is ignored.</p></li>
+<li><p><strong>figSize</strong> (<em>float</em><em> (</em><em>default: 6.0</em><em>)</em>) – The figure size. Use this to control size of the plot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A numpy array containing the actual data used for the visualization.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+<section id="plot-types">
+<h2>Plot Types:<a class="headerlink" href="#plot-types" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>Horizontal Cut at specified elevation</dt><dd><p>For this case specify one <code class="docutils literal notranslate"><span class="pre">theta</span></code> value and include all azimuth
+angles (<span class="math notranslate nohighlight">\(-\pi &lt; \phi &lt; \pi\)</span>). One common use case is the
+horizontal cut at zero elevation (<span class="math notranslate nohighlight">\(\theta = \pi / 2\)</span>).</p>
+</dd>
+<dt>Vertical Cut at specified azimuth</dt><dd><p>For this case specify one <code class="docutils literal notranslate"><span class="pre">phi</span></code> value and include all zenith
+angles (<span class="math notranslate nohighlight">\(0 &lt; \theta &lt; \pi\)</span>). One common use case is the
+vertical cut at zero azimuth (<span class="math notranslate nohighlight">\(\phi = 0\)</span>).</p>
+</dd>
+<dt>3-D pattern</dt><dd><p>For this case specify the complete range for both <code class="docutils literal notranslate"><span class="pre">theta</span></code> and
+<code class="docutils literal notranslate"><span class="pre">phi</span></code> (<span class="math notranslate nohighlight">\(0 &lt; \theta &lt; \pi\)</span> and <span class="math notranslate nohighlight">\(-\pi &lt; \phi &lt; \pi\)</span>).</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaElement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaElement" title="Permalink to this definition"></a></dt>
+<dd><p>This class implements the functionality of an antenna element. This
+implementation is based on <strong>3GPP TR 38.901 section 7.3</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – <p>A set of optional arguments. If you are creating a single antenna
+element object, most of the time you don’t need to specify any
+parameters and the default values are enough for normal functionality.
+Here is a list of supported parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>position</strong>: A list of 3 values (x, y, and z) specifying the position of this element in the <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> containing this element.</p></li>
+<li><p><strong>freqRange</strong>: A list of 2 values specifying the range of frequencies in which this antenna element operates.</p></li>
+<li><p><strong>polAngle</strong>: The polarization angle of this antenna element in degrees. A value of 0° means it is purely vertically polarized.</p></li>
+<li><p><strong>polModel</strong>: The polarization model (1 or 2). The default is 2. Please refer to <strong>TR38.901-Section 7.3.2</strong> for more details.</p></li>
+<li><p><strong>beamWidth</strong>: A list of 2 values specifying the beam width of this antenna element in degrees. The default is <code class="docutils literal notranslate"><span class="pre">[65,65]</span></code>. These values correspond to <span class="math notranslate nohighlight">\(\theta_{3dB}\)</span> and <span class="math notranslate nohighlight">\(\phi_{3dB}\)</span> in <strong>TR38.901-Table 7.3-1</strong>.</p></li>
+<li><p><strong>verticalSidelobeAttenuation</strong>: Vertical side-lobe attenuation (<span class="math notranslate nohighlight">\(SLA_V\)</span>). The default is 30. Please refer to <strong>TR38.901-Table 7.3-1</strong> for more details.</p></li>
+<li><p><strong>maxAttenuation</strong>: Maximum Attenuation (<span class="math notranslate nohighlight">\(A_{max}\)</span>) in dB. The default is 30. Please refer to <strong>TR38.901-Table 7.3-1</strong> for more details.</p></li>
+<li><p><strong>mainMaxGain</strong>: Maximum gain of main lobe in dBi. The default is 8. Please refer to <strong>TR38.901-Table 7.3-1</strong> for more details.</p></li>
+<li><p><strong>panel</strong>: The <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> object containing this element.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaElement.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaElement.print" title="Permalink to this definition"></a></dt>
+<dd><p>Prints the properties of this <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> (</em><em>default: None</em><em>)</em>) – If specified, it is used as a title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, it returns the information in a text string instead
+of printing the information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns
+the information in a text string. Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaElement.posInArray">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">posInArray</span></span><a class="headerlink" href="#neoradium.antenna.AntennaElement.posInArray" title="Permalink to this definition"></a></dt>
+<dd><p>Return the position of this element in the <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An array of 3 values (x, y, and z) specifying the position of this element
+in the <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaElement.clone">
+<span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polAngle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">panel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaElement.clone" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a copy of this <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object and modifies the
+<code class="docutils literal notranslate"><span class="pre">position</span></code>, polarization angle (<code class="docutils literal notranslate"><span class="pre">polAngle</span></code>), and the <code class="docutils literal notranslate"><span class="pre">panel</span></code> object
+based on the parameters provided.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaElement.getPowerPatternDb">
+<span class="sig-name descname"><span class="pre">getPowerPatternDb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaElement.getPowerPatternDb" title="Permalink to this definition"></a></dt>
+<dd><p>This method calculates the field power pattern (in dB) in the
+directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. This function is
+implemented based on <strong>TR38.901-Table 7.3-1</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to calculate the field powers.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the field power is calculated only for
+the single specified zenith angle (in degrees)</p>
+<p>If this is None, the field powers are calculated for all zenith
+angles between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to calculate the field powers.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the field power is calculated only for
+the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the field powers are calculated for all azimuth
+angles between -180 and 180 degrees.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A numpy array of shape (numTheta x numPhi) containing
+the field powers in dB at the directions specified by
+<code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaElement.getPowerPattern">
+<span class="sig-name descname"><span class="pre">getPowerPattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaElement.getPowerPattern" title="Permalink to this definition"></a></dt>
+<dd><p>This method calculates the field power pattern in the
+directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. This function
+calls the <a class="reference internal" href="#neoradium.antenna.AntennaElement.getPowerPatternDb" title="neoradium.antenna.AntennaElement.getPowerPatternDb"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntennaElement.getPowerPatternDb()</span></code></a> and
+converts the results from dB to linear representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to calculate the field powers.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the field power is calculated only for
+the single specified zenith angle (in degrees)</p>
+<p>If this is None, the field powers are calculated for all zenith
+angles between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to calculate the field powers.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the field power is calculated only for
+the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the field powers are calculated for all azimuth
+angles between -180 and 180 degrees.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A numpy array of shape (numTheta x numPhi) containing
+the field powers at the directions specified by
+<code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaElement.getField">
+<span class="sig-name descname"><span class="pre">getField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaElement.getField" title="Permalink to this definition"></a></dt>
+<dd><p>This method calculates the fields in directions specified by
+<code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. It calls the
+<a class="reference internal" href="#neoradium.antenna.AntennaElement.getPowerPatternDb" title="neoradium.antenna.AntennaElement.getPowerPatternDb"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntennaElement.getPowerPatternDb()</span></code></a> and converts the
+results to field values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to calculate the fields.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the fields are calculated only for
+the single specified zenith angle (in degrees)</p>
+<p>If this is None, the fields are calculated for all zenith angles
+between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to calculate the fields.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the fields are calculated only for
+the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the fields are calculated for all azimuth angles
+between -180 and 180 degrees.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A numpy array of shape (numElements x numTheta x numPhi) containing
+the field values at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code>
+and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaElement.getPolarizedFields">
+<span class="sig-name descname"><span class="pre">getPolarizedFields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaElement.getPolarizedFields" title="Permalink to this definition"></a></dt>
+<dd><p>This method calculates the polarized fields and outputs 2 matrices for
+the field values for vertical and horizontal polarizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to calculate the fields.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the fields are calculated only for
+the single specified zenith angle (in degrees)</p>
+<p>If this is None, the fields are calculated for all zenith angles
+between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to calculate the fields.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the fields are calculated only for
+the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the fields are calculated for all azimuth angles
+between -180 and 180 degrees.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><dl class="simple">
+<dt><strong>arrayFieldV</strong>:</dt><dd><p>A numpy array of shape (numTheta x numPhi) containing the field
+values with vertical polarization at the directions
+specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>arrayFieldH</strong>:</dt><dd><p>A numpy array of shape (numTheta x numPhi) containing the field
+values with horizontal polarization at the directions
+specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2 Numpy Arrays</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaElement.getDirectivity">
+<span class="sig-name descname"><span class="pre">getDirectivity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaElement.getDirectivity" title="Permalink to this definition"></a></dt>
+<dd><p>Directivity at a specific direction is defined as:</p>
+<div class="math notranslate nohighlight">
+\[D = \frac {P} {P_{avg}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(P\)</span> is the power radiated at the specified angle and
+<span class="math notranslate nohighlight">\(P_{avg}\)</span> is the average power radiated in all directions. The
+average power is calculated by integrating the field values at all
+angles: (See
+<a class="reference external" href="https://www.antenna-theory.com/basics/directivity.php">this web page</a>
+for more details)</p>
+<div class="math notranslate nohighlight">
+\[P_{avg} = \frac {1} {4 \pi} \int_0^{2 \pi} \int_0^{\pi} |F(\theta, \phi)|^2 \sin \theta d\theta d\phi\]</div>
+<p>Directivity (without any specific direction) is defined as:</p>
+<div class="math notranslate nohighlight">
+\[D_{max} = \frac {P_{max}} {P_{avg}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(P_{max}\)</span> is maximum power radiated at a direction. Directivity
+is usually measured in dbi which is the relative directivity in db with
+respect to an “isotropic” radiator.</p>
+<p>This method calculate the directivity (in dbi) at directions specified by
+<code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+(in degrees) used to calculate the directivity.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for zenith angles (in degrees)</p>
+<p>If this is a scaler value, the directivity is calculated only for
+the single specified zenith angle (in degrees)</p>
+<p>If this is None, the directivity is calculated for all zenith angles
+between 0 and 180 degrees.</p>
+</p></li>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scaler</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+(in degrees) used to calculate the directivity.</p>
+<p>If this is a tuple, the values are assumed to specify the range
+of values used for azimuth angles (in degrees)</p>
+<p>If this is a scaler value, the directivity is calculated only for
+the single specified azimuth angle (in degrees)</p>
+<p>If this is None, the directivity is calculated for all azimuth angles
+between -180 and 180 degrees.</p>
+</p></li>
+<li><p><strong>weights</strong> (<em>numpy array</em>) – This parameter is not used for <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> objects.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A numpy array of shape (numTheta x numPhi) containing
+the directivity in dbi at the directions specified by
+<code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaPanel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaPanel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2,</span> <span class="pre">2]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel" title="Permalink to this definition"></a></dt>
+<dd><p>This class implements the functionality of a rectangular antenna panel
+containing a set of antenna elements (See <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>)
+organized in a 2-d grid. The elements are assumed to be on the Y-Z plain.
+An antenna panel can be created individually or it can be grouped with
+other panels to form an antenna array (See <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<em>list</em>) – A list of 2 integers specifying the number of antenna elements
+along <code class="docutils literal notranslate"><span class="pre">z</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> axis. (The number of rows and columns of
+elements)</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – <p>A set of additional optional arguments. Here is a list of supported parameters:</p>
+<blockquote>
+<div><ul>
+<li><p><strong>spacing</strong>: A list of 2 values specifying the distance between neighboring elements in multiples of the wave-length. By default it is the elements are half the wave-length away from each other, which means <cite>spacing = [0.5, 0.5]</cite>.</p></li>
+<li><p><strong>elements</strong>: This can be an <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object, a 2-D array of <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> objects, or None.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If it is an <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object, it will be used as a template to create all the elements in this panel.</p></li>
+<li><p>If it is a 2-D array of <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> objects, the specified elements are used for the elements of this panel.</p></li>
+<li><p>If it is <code class="docutils literal notranslate"><span class="pre">None</span></code>, then antenna elements of the panel are created using the default values.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>polarization</strong>: The polarization of antenna elements on this panel. The panel can be singly polarized (P=1) or dually polarized (P=2). For singly polarized panels, the <code class="docutils literal notranslate"><span class="pre">polarization</span></code> can be either “|” (Vertical), or “-” (Horizontal). For dually polarized panels, the <code class="docutils literal notranslate"><span class="pre">polarization</span></code> can be either “+” (0 and 90 degree pairs), or “x” (-45 and 45 degree pairs). By default <code class="docutils literal notranslate"><span class="pre">polarization=&quot;|&quot;</span></code> (Vertically polarized).</p></li>
+<li><p><strong>position</strong>: The position of the center point of this panel in the antenna array containing this panel.</p></li>
+<li><p><strong>array</strong>: The <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> object containing this antenna panel or <code class="docutils literal notranslate"><span class="pre">None</span></code> is this panel is not part of an antenna array.</p></li>
+<li><p><strong>taper</strong>: The <cite>taper</cite> value applied when calculating the fields patterns around this antenna panel. By default, this is set to <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></li>
+<li><p><strong>matlabOrder</strong>: Current implementation of Matlab toolkit uses a different order for the elements in a panel compared to the order specified in the 3-GPP standard (See <strong>3GPP TR 38.901 - Section 7.3</strong>). By default this class uses the standard order (<code class="docutils literal notranslate"><span class="pre">matlabOrder=False</span></code>). If you need to compare your results with Matlab implementation, you can set this parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaPanel.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel.print" title="Permalink to this definition"></a></dt>
+<dd><p>Prints the properties of this <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> (</em><em>default: None</em><em>)</em>) – If specified, it is used as a title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, it returns the information in a text string instead
+of printing the information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns
+the information in a text string. Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaPanel.clone">
+<span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel.clone" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a copy of this <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> object and modifies the
+<code class="docutils literal notranslate"><span class="pre">position</span></code>, and <code class="docutils literal notranslate"><span class="pre">polarization</span></code> angles, and the parent <code class="docutils literal notranslate"><span class="pre">array</span></code> object
+based on the parameters provided.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaPanel.getNumElements">
+<span class="sig-name descname"><span class="pre">getNumElements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel.getNumElements" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the total number of antenna elements in this panel. For singly polarized
+panels, the total number of elements is <code class="docutils literal notranslate"><span class="pre">shape[0]</span> <span class="pre">x</span> <span class="pre">shape[1]</span></code>. For dually polarized
+panels, the total number of elements is <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">x</span> <span class="pre">shape[0]</span> <span class="pre">x</span> <span class="pre">shape[1]</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaPanel.getElement">
+<span class="sig-name descname"><span class="pre">getElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elementRC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel.getElement" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the specified <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object from this panel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>elementRC</strong> (<em>tuple</em><em> (</em><em>default:</em><em> (</em><em>0</em><em>,</em><em>0</em><em>)</em><em>) or </em><em>int</em>) – If this is a tuple, the first and second integer values in the tuple specify
+the row and column of the desired element in the panel (0-based).
+If this is an integer, the allowed values are 0 or -1 which return
+the first or last element in the panel respectively. If <code class="docutils literal notranslate"><span class="pre">elementRC</span></code>
+is not specified, by default the first element is returned.</p></li>
+<li><p><strong>p</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – If this panel is singly polarized, this parameter is ignored. Otherwise,
+the first and second polarized antenna element is returned for <code class="docutils literal notranslate"><span class="pre">p=0</span></code> and
+<code class="docutils literal notranslate"><span class="pre">p=1</span></code> respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The specified <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object from this panel.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaPanel.getElementPosition">
+<span class="sig-name descname"><span class="pre">getElementPosition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elementRC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Array'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel.getElementPosition" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the position of the specified <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object in
+this panel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>elementRC</strong> (<em>tuple</em><em> (</em><em>default:</em><em> (</em><em>0</em><em>,</em><em>0</em><em>)</em><em>) or </em><em>int</em>) – If this is a tuple, the first and second integer values in the tuple specify
+the row and column of the desired element in the panel (0-based).
+If this is an integer, the allowed values are 0 or -1 which return
+the first or last element in the array respectively. If <code class="docutils literal notranslate"><span class="pre">elementRC</span></code>
+is not specified, by default the first element is returned.</p></li>
+<li><p><strong>ref</strong> (<em>str</em><em> (</em><em>default: &quot;Array&quot;</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">ref=&quot;Array&quot;</span></code> this function returns the element position with respect to
+the <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> object containing this panel. Otherwise, if
+<code class="docutils literal notranslate"><span class="pre">ref==&quot;Panel&quot;</span></code>, the element position with respect to this panel is returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array of 3 values (x, y, and z) representing the position of the specified
+element. Note that the values are in multiples of wave-length.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaPanel.getAllPositions">
+<span class="sig-name descname"><span class="pre">getAllPositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polarization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel.getAllPositions" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the positions of all elements in this panel in a 2-D numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em><em> (</em><em>default: True</em><em>)</em>) – If this is a dually polarized panel and this parameter is
+<code class="docutils literal notranslate"><span class="pre">True</span></code>, the positions of all elements is returned. In this case,
+there will be repeated positions in the returned array as the 2
+polarized pairs of elements have the same position. Otherwise, if
+<code class="docutils literal notranslate"><span class="pre">polarization=False</span></code>, only one position is returned for a pair
+of polarized antenna elements. If this is a singly polarized panel,
+this parameter is ignored.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">x</span> <span class="pre">3</span></code> numpy array containing the positions of all <code class="docutils literal notranslate"><span class="pre">n</span></code>
+elements in this panel.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaPanel.showElements">
+<span class="sig-name descname"><span class="pre">showElements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Panel'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeroTicks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel.showElements" title="Permalink to this definition"></a></dt>
+<dd><p>This is a visualization function that draws this antenna panel using
+the <cite>matplotlib</cite> library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ref</strong> (<em>str</em><em> (</em><em>default: &quot;Panel&quot;</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">ref=&quot;Panel&quot;</span></code>, it means this is a standalone antenna panel
+that is visualized individually. Otherwise, if <code class="docutils literal notranslate"><span class="pre">ref=&quot;Array&quot;</span></code>,
+it means this is being visualized as part of an antenna array.
+(See <a class="reference internal" href="#neoradium.antenna.AntennaArray.showElements" title="neoradium.antenna.AntennaArray.showElements"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntennaArray.showElements()</span></code></a>)</p></li>
+<li><p><strong>maxSize</strong> (<em>(</em><em>float: 6.0</em><em>)</em>) – This parameter specifies how large the output image of this panel
+should be. Depending on the number of antenna element rows and
+columns in this panel, the <code class="docutils literal notranslate"><span class="pre">maxSize</span></code> can specify the width or
+height of the resulting image.</p></li>
+<li><p><strong>zeroTicks</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If this is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the 0 positions on both axes are indicated
+by additional “ticks” to somehow show the center of this panel.
+Otherwise the “ticks” on the horizontal and vertical axes are
+only at the locations of antenna elements.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> (</em><em>default: None</em><em>)</em>) – If specified, this will be used as the title for the image
+created for this panel. Otherwise the title “Panel Elements” is
+used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaPanel.allElements">
+<span class="sig-name descname"><span class="pre">allElements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polarization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel.allElements" title="Permalink to this definition"></a></dt>
+<dd><p>This is a generator function that can be used to iterate through
+all elements of this panel. For example the following code prints
+the position of every element in this panel:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">myPanel</span><span class="o">.</span><span class="n">allElements</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span> <span class="n">element</span><span class="o">.</span><span class="n">position</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>By default, this function iterates through elements in the order
+specified in <strong>3GPP TR 38.901 - Section 7.3</strong>. If the parameter
+<code class="docutils literal notranslate"><span class="pre">matlabOrder</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, then the Matlab order is used.
+Please refer <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> parameter documentation for
+more information about <code class="docutils literal notranslate"><span class="pre">matlabOrder</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em><em> (</em><em>default: True</em><em>)</em>) – If this is a dually polarized panel and this parameter is
+<code class="docutils literal notranslate"><span class="pre">True</span></code>, then all elements are included in the iteration.
+Otherwise, if <code class="docutils literal notranslate"><span class="pre">polarization=False</span></code>, only the first element
+of the polarized pair of elements at each position is included
+in the iteration. If this is a singly polarized panel, this
+parameter is ignored.</p>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p>The next <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object in this panel.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaArray">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray" title="Permalink to this definition"></a></dt>
+<dd><p>This class implements the functionality of a rectangular antenna array
+containing a set of antenna panels (See <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>)
+organized in a 2-d grid. The panels are assumed to be on the Y-Z plain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<em>list</em>) – A list of 2 integers specifying the number of antenna panels
+along <code class="docutils literal notranslate"><span class="pre">z</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> axis (The number of rows and columns of
+panels)</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – <p>A set of additional optional arguments. Here is a list of supported parameters:</p>
+<blockquote>
+<div><ul>
+<li><p><strong>spacing</strong>: A list of 2 values specifying the distance between the center point of neighboring panels in multiples of the wave-length. If not specified, by default the spacing is set such that the specing between antenna elements across different panels is the same as the antenna elements within panels.</p></li>
+<li><p><strong>panels</strong>: This can be an <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> object, a 2-D array of <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> objects, or None.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If it is an <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> object, it will be used as a template to create all the panels in this array.</p></li>
+<li><p>If it is a 2-D array of <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> objects, the specified panels are used for the panels of this array.</p></li>
+<li><p>If it is <code class="docutils literal notranslate"><span class="pre">None</span></code>, then antenna panels and elements of this array are created using the default values.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>taper</strong>: The <cite>taper</cite> value applied when calculating the fields patterns around this antenna array. By default, this is set to <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaArray.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray.print" title="Permalink to this definition"></a></dt>
+<dd><p>Prints the properties of this <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> (</em><em>default: None</em><em>)</em>) – If specified, it is used as a title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, it returns the information in a text string instead
+of printing the information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns
+the information in a text string. Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaArray.getElement">
+<span class="sig-name descname"><span class="pre">getElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">panelRC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elementInPanelRC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray.getElement" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object from this array specified
+by row and column of panel in this array and row and column of the element
+in that panel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>panelRC</strong> (<em>tuple</em><em> (</em><em>default:</em><em> (</em><em>0</em><em>,</em><em>0</em><em>)</em><em>) or </em><em>int</em>) – If this is a tuple, the first and second integer values in the tuple
+specify the row and column of the desired panel in the array (0-based).
+If this is an integer, the allowed values are 0 or -1 which specify
+the first or last panel in the array respectively. If <code class="docutils literal notranslate"><span class="pre">panelRC</span></code>
+is not specified, by default the first panel is used.</p></li>
+<li><p><strong>elementInPanelRC</strong> (<em>tuple</em><em> (</em><em>default:</em><em> (</em><em>0</em><em>,</em><em>0</em><em>)</em><em>) or </em><em>int</em>) – If this is a tuple, the first and second integer values in the
+tuple specify the row and column of the desired element in the
+panel (0-based). If this is an integer, the allowed values are 0
+or -1 which return the first or last element in the specified panel
+respectively. If <code class="docutils literal notranslate"><span class="pre">elementInPanelRC</span></code> is not specified, by default
+the first element in the specified panel is returned.</p></li>
+<li><p><strong>p</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – If the panels of this array are singly polarized, this parameter is
+ignored. Otherwise, the first and second polarized antenna element
+is returned for <code class="docutils literal notranslate"><span class="pre">p=0</span></code> and <code class="docutils literal notranslate"><span class="pre">p=1</span></code> respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The specified <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object from this panel.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaArray.getElementPosition">
+<span class="sig-name descname"><span class="pre">getElementPosition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">panelRC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elementInPanelRC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray.getElementPosition" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the position of the <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object in
+this array specified by <code class="docutils literal notranslate"><span class="pre">elementInPanelRC</span></code> in the panel specified by
+<code class="docutils literal notranslate"><span class="pre">panelRC</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>panelRC</strong> (<em>tuple</em><em> (</em><em>default:</em><em> (</em><em>0</em><em>,</em><em>0</em><em>)</em><em>) or </em><em>int</em>) – If this is a tuple, the first and second integer values in the tuple
+specify the row and column of the desired panel in the array (0-based).
+If this is an integer, the allowed values are 0 or -1 which specify
+the first or last panel in the array respectively. If <code class="docutils literal notranslate"><span class="pre">panelRC</span></code>
+is not specified, by default the first panel is used.</p></li>
+<li><p><strong>elementInPanelRC</strong> (<em>tuple</em><em> (</em><em>default:</em><em> (</em><em>0</em><em>,</em><em>0</em><em>)</em><em>) or </em><em>int</em>) – If this is a tuple, the first and second integer values in the
+tuple specify the row and column of the desired element in the
+specified panel (0-based). If this is an integer, the allowed values
+are 0 or -1 which return the position of the first or last element
+in the panel respectively. If <code class="docutils literal notranslate"><span class="pre">elementInPanelRC</span></code> is not specified,
+by default the position of the first element in the specified
+panel is returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array of 3 values (x, y, and z) representing the position of the
+specified element. Note that the values are in multiples of wave-length.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaArray.allPanels">
+<span class="sig-name descname"><span class="pre">allPanels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray.allPanels" title="Permalink to this definition"></a></dt>
+<dd><p>This is a generator function that can be used to iterate through
+all panels of this array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The next <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> object in this array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaArray.allElements">
+<span class="sig-name descname"><span class="pre">allElements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polarization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray.allElements" title="Permalink to this definition"></a></dt>
+<dd><p>This is a generator function that can be used to iterate through
+all elements of this array. For example the following code prints
+the position of every element in this array:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">myArray</span><span class="o">.</span><span class="n">allElements</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span> <span class="n">element</span><span class="o">.</span><span class="n">position</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>This function uses the <a class="reference internal" href="#neoradium.antenna.AntennaPanel.allElements" title="neoradium.antenna.AntennaPanel.allElements"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntennaPanel.allElements()</span></code></a> to
+iterate through each panel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em><em> (</em><em>default: True</em><em>)</em>) – If the panels of this array are dually polarized and this
+parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then all elements are included in the
+iteration. Otherwise, if <code class="docutils literal notranslate"><span class="pre">polarization=False</span></code>, only the first
+element of the polarized pair of elements at each position is
+included in the iteration. If the panels of this array are
+singly polarized, this parameter is ignored.</p>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p>The next <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> object in this array.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaArray.getAllPositions">
+<span class="sig-name descname"><span class="pre">getAllPositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polarization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray.getAllPositions" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the positions of all elements in this array in a 2-D numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em><em> (</em><em>default: True</em><em>)</em>) – If the panels of this array are dually polarized and this
+parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then the positions of all elements are
+returned. Otherwise, if <code class="docutils literal notranslate"><span class="pre">polarization=False</span></code>, only the position of
+the first element of the polarized pair of elements at each position is
+returned. If the panels of this array are singly polarized, this
+parameter is ignored.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">x</span> <span class="pre">3</span></code> numpy array containing the positions of all <code class="docutils literal notranslate"><span class="pre">n</span></code>
+elements in this array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy Array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaArray.getNumElements">
+<span class="sig-name descname"><span class="pre">getNumElements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray.getNumElements" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the total number of antenna elements in this array. It uses
+the <a class="reference internal" href="#neoradium.antenna.AntennaPanel.getNumElements" title="neoradium.antenna.AntennaPanel.getNumElements"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntennaPanel.getNumElements()</span></code></a> to get the number of elements
+in one panel (<code class="docutils literal notranslate"><span class="pre">Np</span></code>). Total number of elements in this array is then
+<code class="docutils literal notranslate"><span class="pre">shape[0]</span> <span class="pre">x</span> <span class="pre">shape[1]</span> <span class="pre">*</span> <span class="pre">Np</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.antenna.AntennaArray.showElements">
+<span class="sig-name descname"><span class="pre">showElements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeroTicks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray.showElements" title="Permalink to this definition"></a></dt>
+<dd><p>This is a visualization function that draws this antenna array using
+the <cite>matplotlib</cite> library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>maxSize</strong> (<em>(</em><em>float: 6.0</em><em>)</em>) – This parameter specifies how large the output image of this array
+should be. Depending on the number of antenna element/panel
+rows and columns in this array, the <code class="docutils literal notranslate"><span class="pre">maxSize</span></code> can specify the
+width or height of the resulting image.</p></li>
+<li><p><strong>zeroTicks</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If this is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the 0 positions on both axes are indicated
+by additional “ticks” to somehow show the center of this array.
+Otherwise the “ticks” on the horizontal and vertical axes are
+only at the locations of antenna elements.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> (</em><em>default: None</em><em>)</em>) – If specified, this will be used as the title for the image
+created for this array. Otherwise the title “Array Elements” is
+used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ChanCode.html" class="btn btn-neutral float-left" title="Channel Coding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Channels.html" class="btn btn-neutral float-right" title="Channel Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

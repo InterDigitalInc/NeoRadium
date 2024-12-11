@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuring PTRS &mdash; NeoRadium 0.2.0 Documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/neoradium.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="PDSCH end-to-end communication" href="../PDSCH/PDSCH-endToEnd.html" />
+    <link rel="prev" title="Using otherCdmGroups parameter" href="CDMsWithNoData.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channels">Channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="DMRS.html">Configuring DMRS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CDMsWithNoData.html">Using <code class="docutils literal notranslate"><span class="pre">otherCdmGroups</span></code> parameter</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Configuring PTRS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab-5g-toolbox">Comparing with Matlab 5G Toolbox</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Configuring PTRS</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/DMRS/PTRS.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Configuring-PTRS">
+<h1>Configuring PTRS<a class="headerlink" href="#Configuring-PTRS" title="Permalink to this heading"></a></h1>
+<p>This notebook shows different PTRS configurations</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span>
+
+<span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">Grid</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>  <span class="c1"># 5*12*30000 = 1,800,000 Hz</span>
+<span class="n">carrier</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Carrier Properties:
+  startRb: 0
+  numRbs: 5
+  Cell Id: 1
+  Active Bandwidth Part: 0
+  Bandwidth Parts: 1
+  Bandwidth Part 0:
+    Resource Blocks: 5 RBs starting at 0 (60 subcarriers)
+    Subcarrier Spacing: 30 KHz
+    CP Type: normal
+    bandwidth: 1800000 Hz
+    symbolsPerSlot: 14
+    slotsPerSubFrame: 2
+    nFFT: 128
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a 2-layer PDSCH with Mapping Type A (default) using All Symbols and PRBs in the BWP (default)</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">()</span>   <span class="c1"># Default DMRS settings</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setPTRS</span><span class="p">()</span>   <span class="c1"># Default PTRS settings</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+PDSCH Properties:
+  mappingType: A
+  nID: 1
+  rnti: 1
+  numLayers: 2
+  numCodewords: 1
+  modulation: 16QAM
+  portSet: [0, 1]
+  symSet:   0   1   2   3   4   5   6   7   8   9  10  11  12  13
+  prbSet:   0   1   2   3   4
+  interleavingBundleSize: 0
+  PRG Size: Wideband
+  Bandwidth Part:
+    Resource Blocks: 5 RBs starting at 0 (60 subcarriers)
+    Subcarrier Spacing: 30 KHz
+    CP Type: normal
+    bandwidth: 1800000 Hz
+    symbolsPerSlot: 14
+    slotsPerSubFrame: 2
+    nFFT: 128
+  DMRS:
+    configType: 1
+    nIDs: []
+    scID: 0
+    sameSeq: 1
+    symbols: Single
+    typeA1stPos: 2
+    additionalPos: 0
+    cdmGroups: [0, 0]
+    deltaShifts: [0, 0]
+    allCdmGroups: [0]
+    symSet: [2]
+    REs (before shift): [0, 2, 4, 6, 8, 10]
+    epreRatioDb: 0 (db)
+    PTRS:
+      timeDensity: 1
+      freqDensity: 2
+      reOffset: 0
+      portSet: [0]
+      epreRatio: 0
+      symSet: [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get a resourse grid from the PDSCH object. This creates a Grid object and populates it with the DMRS values</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span> <span class="c1"># Print some statistics about the grid</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;GridSize&#39;: 1680, &#39;UNASSIGNED&#39;: 1581, &#39;DMRS&#39;: 60, &#39;PTRS&#39;: 39}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Draw grid map for all layers, one slot and one PRB (reRange=(0,12))</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">,</span> <span class="n">reRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_5_0.png" src="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_5_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_5_1.png" src="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_5_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Lets see an example of DMRS with double symbol (symbols=2) with PTRS timeDensity of 2 which</span>
+<span class="c1"># means PTRS values at every other OFDM symbol. (Drawing only for one layer)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setPTRS</span><span class="p">(</span><span class="n">timeDensity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span><span class="o">.</span><span class="n">drawMap</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_6_0.png" src="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_6_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using 2 additional symbol positions for DMRS (additionalPos=2) with PTRS reOffset=3 (or &#39;11&#39;) which</span>
+<span class="c1"># means having PTRS at RE index 8 (See &quot;resourceElementOffset&quot; in 3GPP TS 38.211, Table 6.4.1.2.2.1-1).</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setPTRS</span><span class="p">(</span><span class="n">timeDensity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">reOffset</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;DMRS with 2 more symbol allocations (additionalPos=2)&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_7_0.png" src="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_7_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Comparing freqDensity=2 vs freqDensity=4</span>
+<span class="c1"># Using 1 additional symbol positions for DMRS (additionalPos=1) with PTRS reOffset=1 (or &#39;01&#39;) which</span>
+<span class="c1"># means having PTRS at RE index 2 (See &quot;resourceElementOffset&quot; in 3GPP TS 38.211, Table 6.4.1.2.2.1-1).</span>
+<span class="c1"># We do this once with freqDensity=2 (default) and once with freqDensity=4 and compare the map for</span>
+<span class="c1"># 5 RBs (60 REs)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">additionalPos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setPTRS</span><span class="p">(</span><span class="n">timeDensity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">freqDensity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">reOffset</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># PTRS in every other RB</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">reRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;PTRS with freqDensity=2&quot;</span><span class="p">)</span>
+
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setPTRS</span><span class="p">(</span><span class="n">timeDensity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">freqDensity</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">reOffset</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># PTRS in every other 4 RBs</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">reRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;PTRS with freqDensity=4&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_8_0.png" src="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_8_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_8_1.png" src="../../../../_images/source_Playground_Notebooks_DMRS_PTRS_8_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CDMsWithNoData.html" class="btn btn-neutral float-left" title="Using otherCdmGroups parameter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../PDSCH/PDSCH-endToEnd.html" class="btn btn-neutral float-right" title="PDSCH end-to-end communication" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evaluating the Trained Channel Estimator &mdash; NeoRadium 0.2.0 Documentation</title>
+      <link rel="stylesheet" href="../../../../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../../../../_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../../../../_static/neoradium.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../../../../_static/jquery.js"></script>
+        <script src="../../../../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../../../../../../" id="documentation_options" src="../../../../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../../../../_static/doctools.js"></script>
+        <script src="../../../../../../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../../../../index.html" class="icon icon-home">
+            NeoRadium 0.2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../../source/API/Random.html">Random Number Generator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../../../index.html">NeoRadium 0.2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Evaluating the Trained Channel Estimator</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../../../../_sources/html/html/html/html/source/Playground/Notebooks/MLChEst/MLChestEvaluate.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Evaluating-the-Trained-Channel-Estimator">
+<h1>Evaluating the Trained Channel Estimator<a class="headerlink" href="#Evaluating-the-Trained-Channel-Estimator" title="Permalink to this heading"></a></h1>
+<p>Now that we have a trained model, we can use it in the communication pipeline and compare its performance with baselines. In this case we compare it with perfect channel estimation and <strong>NeoRadium</strong>’s Least-Square channel estimation method.</p>
+<p>The following diagram shows the pipeline used for evaluation of our deep-learning-based channel estimator.</p>
+<img alt="Evaluation-Pipeline" src="html/html/html/html/source/Playground/Notebooks/MLChEst/EvalPipeline.png" />
+<p>So, lets get started by importing some <strong>NeoRadium</strong> and <a class="reference external" href="https://github.com/InterDigitalInc/Fireball">Fireball</a> modules.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">Grid</span><span class="p">,</span> <span class="n">random</span>
+
+<span class="kn">from</span> <span class="nn">fireball</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">Block</span>
+<span class="kn">from</span> <span class="nn">fireball.datasets.base</span> <span class="kn">import</span> <span class="n">BaseDSet</span>
+</pre></div>
+</div>
+</div>
+<section id="Load-the-trained-mode">
+<h2>Load the trained mode<a class="headerlink" href="#Load-the-trained-mode" title="Permalink to this heading"></a></h2>
+<p>Here we use the Fireball’s <a class="reference external" href="https://interdigitalinc.github.io/Fireball/html/source/model.html#fireball.model.Model.makeFromFile">makeFromFile</a> function to load the model trained and saved in the <a class="reference internal" href="MLChestTrain.html"><span class="doc">previous step</span></a>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="o">.</span><span class="n">makeFromFile</span><span class="p">(</span><span class="s2">&quot;Models/ChEstResNet.fbm&quot;</span><span class="p">,</span> <span class="n">gpus</span><span class="o">=</span><span class="s2">&quot;0&quot;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">printLayersInfo</span><span class="p">()</span>      <span class="c1"># Print layers</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Model Complexity:&quot;</span><span class="p">,</span><span class="s1">&#39;</span><span class="si">{:,}</span><span class="s1"> flops&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">getFlops</span><span class="p">()))</span>  <span class="c1"># Print model complexity</span>
+<span class="n">model</span><span class="o">.</span><span class="n">initSession</span><span class="p">()</span>          <span class="c1"># Initialize the TensorFlow session for inference</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Reading from &#34;Models/ChEstResNet.fbm&#34; ... Done.
+Creating the fireball model &#34;ChanEst&#34; ... Done.
+
+Scope            InShape       Comments                 OutShape      Activ.   Post Act.        # of Params
+---------------  ------------  -----------------------  ------------  -------  ---------------  -----------
+IN_TENSOR        14 612 2      Tensor Shape: 14x612x2   14 612 2      None                      0
+S1_L1_RES2       14 612 2      2 Paths, 8 layers        14 612 64     ReLU                      27,328
+S1_L2_RES1       14 612 64     2 Paths, 7 layers        14 612 64     ReLU                      7,904
+S2_L1_CONV       14 612 64     KSP: 3 1 s               14 612 2      None     L2               1,154
+OUT_REG          14 612 2                               14 612 2      None                      0
+---------------------------------------------------------------------------------------------------------
+                                                                  Total Number of parameters: 36,386
+Model Complexity: 608,672,256 flops
+Metal device set to: Apple M1 Max
+</pre></div></div>
+</div>
+</section>
+<section id="mlChanEst-function">
+<h2><code class="docutils literal notranslate"><span class="pre">mlChanEst</span></code> function<a class="headerlink" href="#mlChanEst-function" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">mlChanEst</span></code> function in the following cell receives the DMRS information, the received resource grid, and the trained model as input. It first calculates the channel estimates at the pilot locations using LS method and then converts these estimates to a set of <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> complex matrixes that are fed to the model for inference. (<code class="docutils literal notranslate"><span class="pre">L</span></code> is the number of OFDM symbols per slot and <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers)</p>
+<p>The model outputs another set of <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> matrixes which contain the predicted channel information. These matrixes are then re-packaged as a 4-D complex numpy array that is returned as the estimated channel.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mlChanEst</span><span class="p">(</span><span class="n">dmrs</span><span class="p">,</span> <span class="n">rxGrid</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+    <span class="n">rsGrid</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">dmrs</span><span class="o">.</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">)</span> <span class="p">)</span>   <span class="c1"># Create an empty resource grid</span>
+    <span class="n">dmrs</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">rsGrid</span><span class="p">)</span>                                   <span class="c1"># Populate the grid with DMRS values</span>
+    <span class="n">rsIndexes</span> <span class="o">=</span> <span class="n">rsGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>                     <span class="c1"># This contains the locations of DMRS values</span>
+
+    <span class="n">rr</span><span class="p">,</span> <span class="n">ll</span><span class="p">,</span> <span class="n">kk</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span>           <span class="c1"># Number of RX antenna, Number of symbols, Number of subcarriers</span>
+    <span class="n">pp</span><span class="p">,</span> <span class="n">ll2</span><span class="p">,</span> <span class="n">kk2</span> <span class="o">=</span> <span class="n">rsGrid</span><span class="o">.</span><span class="n">shape</span>         <span class="c1"># Number of Ports (From DMRS)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ll</span><span class="o">!=</span><span class="n">ll2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">kk</span><span class="o">!=</span><span class="n">kk2</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The Gird size (</span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">) does not match the DMRs (</span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">).&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">ll</span><span class="p">,</span><span class="n">kk</span><span class="p">,</span><span class="n">ll2</span><span class="p">,</span><span class="n">kk2</span><span class="p">))</span>
+
+    <span class="n">modelIn</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pp</span><span class="p">):</span>                             <span class="c1"># For each DMRS port (i.e. each layer)</span>
+        <span class="n">portLs</span> <span class="o">=</span> <span class="n">rsIndexes</span><span class="p">[</span><span class="mi">1</span><span class="p">][(</span><span class="n">rsIndexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">p</span><span class="p">)]</span>    <span class="c1"># Indexes of symbols containing pilots in this port</span>
+        <span class="n">portKs</span> <span class="o">=</span> <span class="n">rsIndexes</span><span class="p">[</span><span class="mi">2</span><span class="p">][(</span><span class="n">rsIndexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">p</span><span class="p">)]</span>    <span class="c1"># Indexes of subcarriers containing pilots in this port</span>
+
+        <span class="n">ls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">portLs</span><span class="p">)</span>                      <span class="c1"># Unique Indexes of symbols containing pilots in this port</span>
+        <span class="n">ks</span> <span class="o">=</span> <span class="n">portKs</span><span class="p">[</span><span class="n">portLs</span><span class="o">==</span><span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>                  <span class="c1"># Unique Indexes of subcarriers containing pilots in this port</span>
+        <span class="n">numLs</span><span class="p">,</span> <span class="n">numKs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ls</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">ks</span><span class="p">)</span>             <span class="c1"># Number of OFDM symbols and number of subcarriers</span>
+
+        <span class="n">pilotValues</span> <span class="o">=</span> <span class="n">rsGrid</span><span class="p">[</span><span class="n">p</span><span class="p">,</span><span class="n">ls</span><span class="p">,:][:,</span><span class="n">ks</span><span class="p">]</span>                              <span class="c1"># Pilot values in this port</span>
+        <span class="n">rxValues</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="n">ls</span><span class="p">,:][:,:,</span><span class="n">ks</span><span class="p">]</span>                          <span class="c1"># Received values for pilot signals</span>
+        <span class="n">hEst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">rxValues</span><span class="o">/</span><span class="n">pilotValues</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,:],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>    <span class="c1"># Channel estimates at pilot locations</span>
+
+
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rr</span><span class="p">):</span>                                         <span class="c1"># For each receiver antenna</span>
+            <span class="n">inH</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">+</span><span class="p">(</span><span class="mi">2</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="c1"># Create one 3D matrix with all zeros</span>
+            <span class="k">for</span> <span class="n">li</span><span class="p">,</span><span class="n">l</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ls</span><span class="p">):</span>
+                <span class="n">inH</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">ks</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">hEst</span><span class="p">[</span><span class="n">li</span><span class="p">,:,</span><span class="n">r</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>             <span class="c1"># Set the LS estimates at pilot location (Real)</span>
+                <span class="n">inH</span><span class="p">[</span><span class="n">l</span><span class="p">,</span><span class="n">ks</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">hEst</span><span class="p">[</span><span class="n">li</span><span class="p">,:,</span><span class="n">r</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span>             <span class="c1"># Set the LS estimates at pilot location (Imaginary)</span>
+            <span class="n">modelIn</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">inH</span> <span class="p">]</span>
+
+    <span class="n">modelIn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">modelIn</span><span class="p">)</span>                             <span class="c1"># Package all inputs as a batch</span>
+    <span class="n">modelOut</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">inferBatch</span><span class="p">(</span><span class="n">modelIn</span><span class="p">)</span>                    <span class="c1"># Run inference for the whole batch</span>
+    <span class="n">estChan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span> <span class="n">modelOut</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">pp</span><span class="p">,</span><span class="n">rr</span><span class="p">)</span><span class="o">+</span><span class="n">modelOut</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="p">)</span>  <span class="c1"># Convert to a 5-D tensor</span>
+    <span class="n">estChan</span> <span class="o">=</span> <span class="n">estChan</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">estChan</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>            <span class="c1"># Convert to a 4-D complex tensor</span>
+    <span class="k">return</span> <span class="n">estChan</span>
+<br/></pre></div>
+</div>
+</div>
+</section>
+<section id="Evaluation-Pipeline">
+<h2>Evaluation Pipeline<a class="headerlink" href="#Evaluation-Pipeline" title="Permalink to this heading"></a></h2>
+<p>The following cell implements the evaluation pipeline as shown above. It runs the pipeline 3 times with perfect, ML, and LS channel estimation and prints the results at the end. As it can be seen the ML-based channel estimation performs better than LS method which is based on interpolation.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numFrames</span> <span class="o">=</span> <span class="mi">2</span>                               <span class="c1"># Number of time-domain frames</span>
+<span class="n">snrDbs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">25</span><span class="p">]</span>                    <span class="c1"># SNR values (in dB) for which we want to evaluate the model</span>
+<span class="n">freqDomain</span> <span class="o">=</span> <span class="kc">False</span>                          <span class="c1"># Set to True to apply channel in frequency domain</span>
+
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">51</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>    <span class="c1"># Create a carrier with 51 RBs and 30KHz subcarrier spacing</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>                        <span class="c1"># The only bandwidth part in the carrier</span>
+
+<span class="c1"># Create a PDSCH object</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">interleavingBundleSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">prgSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>     <span class="c1"># Specify the DMRS configuration</span>
+
+<span class="n">numSlots</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">slotsPerFrame</span><span class="o">*</span><span class="n">numFrames</span>                      <span class="c1"># Total number of slots</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>                                                <span class="c1"># Dictionary to save the results</span>
+
+<span class="k">for</span> <span class="n">chanEstMethod</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Perfect&quot;</span><span class="p">,</span> <span class="s2">&quot;ML&quot;</span><span class="p">,</span> <span class="s2">&quot;LS&quot;</span><span class="p">]:</span>               <span class="c1"># Three different channel estimation methods</span>
+    <span class="n">results</span><span class="p">[</span><span class="n">chanEstMethod</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Simulating end-to-end for </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2">, with </span><span class="se">\&quot;</span><span class="si">%s</span><span class="se">\&quot;</span><span class="s2"> channel estimation, in </span><span class="si">%s</span><span class="s2"> domain.&quot;</span><span class="o">%</span>
+          <span class="p">(</span><span class="s2">&quot;16QAM&quot;</span><span class="p">,</span> <span class="n">chanEstMethod</span><span class="p">,</span> <span class="s2">&quot;frequency&quot;</span> <span class="k">if</span> <span class="n">freqDomain</span> <span class="k">else</span> <span class="s2">&quot;time&quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------   ----------   ----------   ------   ----------&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrDbs</span><span class="p">:</span>                                <span class="c1"># For each SNR value in snrDbs</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                             <span class="c1"># Making the results reproducible for each SNR</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>                                <span class="c1"># Start time for each SNR</span>
+        <span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Creating a CdlChannel object</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                             <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>  <span class="c1"># 8 TX antenna</span>
+                             <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">),</span>  <span class="c1"># 2 RX antenna</span>
+                             <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">,</span>
+                             <span class="n">timing</span> <span class="o">=</span> <span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+
+        <span class="n">bitErrors</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">totalBits</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">slotNo</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSlots</span><span class="p">):</span>
+            <span class="n">grid</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span>                      <span class="c1"># Create a resource grid populated with DMRS</span>
+            <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitSizes</span><span class="p">(</span><span class="n">grid</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>        <span class="c1"># Number of bits available in the resource grid</span>
+            <span class="n">txBits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numBits</span><span class="p">)</span>               <span class="c1"># Create random binary data</span>
+
+            <span class="n">pdsch</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">txBits</span><span class="p">)</span>            <span class="c1"># Map/modulate the data to the resource grid</span>
+
+            <span class="c1"># Store the indexes of the PDSCH data in pdschIndexes to be used later.</span>
+            <span class="n">pdschIndexes</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">&quot;PDSCH&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Getting the Precoding Matrix, and precoding the resource grid</span>
+            <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>           <span class="c1"># Get the channel matrix</span>
+            <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>      <span class="c1"># Get the precoder matrix from PDSCH object</span>
+            <span class="n">precodedGrid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">precode</span><span class="p">(</span><span class="n">precoder</span><span class="p">)</span>                   <span class="c1"># Perform the precoding</span>
+
+            <span class="k">if</span> <span class="n">freqDomain</span><span class="p">:</span>
+                <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">precodedGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>   <span class="c1"># Apply the channel in frequency domain</span>
+                <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">)</span>               <span class="c1"># Add noise</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">precodedGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>            <span class="c1"># OFDM Modulation</span>
+                <span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>                    <span class="c1"># Get the max. channel delay</span>
+                <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>               <span class="c1"># Pad with zeros</span>
+                <span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">)</span>      <span class="c1"># Apply channel in time domain</span>
+                <span class="n">noisyRxWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">,</span> <span class="n">nFFT</span><span class="o">=</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="p">)</span>  <span class="c1"># Add noise</span>
+                <span class="n">offset</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getTimingOffset</span><span class="p">()</span>                  <span class="c1"># Get timing info for synchronization</span>
+                <span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">noisyRxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>       <span class="c1"># Synchronization</span>
+                <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>         <span class="c1"># OFDM demodulation</span>
+
+            <span class="k">if</span> <span class="n">chanEstMethod</span> <span class="o">==</span> <span class="s2">&quot;Perfect&quot;</span><span class="p">:</span>                          <span class="c1"># Perfect Channel Estimation</span>
+                <span class="n">estChannelMatrix</span> <span class="o">=</span> <span class="n">channelMatrix</span> <span class="o">@</span> <span class="n">precoder</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">chanEstMethod</span> <span class="o">==</span> <span class="s2">&quot;LS&quot;</span><span class="p">:</span>                             <span class="c1"># LS + Interpolation Channel Estimation</span>
+                <span class="n">estChannelMatrix</span><span class="p">,</span> <span class="n">noiseEst</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">estimateChannelLS</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">dmrs</span><span class="p">,</span> <span class="n">polarInt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                                      <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">chanEstMethod</span> <span class="o">==</span> <span class="s2">&quot;ML&quot;</span><span class="p">:</span>                             <span class="c1"># ML-Based Channel Estimation</span>
+                <span class="n">estChannelMatrix</span> <span class="o">=</span> <span class="n">mlChanEst</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">dmrs</span><span class="p">,</span> <span class="n">rxGrid</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span> <span class="k">assert</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">estChannelMatrix</span><span class="p">)</span>           <span class="c1"># Equalization</span>
+
+            <span class="n">rxBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getHardBitsFromGrid</span><span class="p">(</span><span class="n">eqGrid</span><span class="p">,</span> <span class="n">pdschIndexes</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>     <span class="c1"># Demodulation</span>
+            <span class="n">bitErrors</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBits</span><span class="o">-</span><span class="n">txBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>                        <span class="c1"># Calculating number of bit errors</span>
+            <span class="n">totalBits</span> <span class="o">+=</span> <span class="n">numBits</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  </span><span class="si">%3d</span><span class="s2">      </span><span class="si">%8d</span><span class="s2">     </span><span class="si">%8d</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">snrDb</span><span class="p">,</span> <span class="n">totalBits</span><span class="p">,</span> <span class="n">bitErrors</span><span class="p">,</span>
+                                                                <span class="n">bitErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBits</span><span class="p">,</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="p">),</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+            <span class="n">carrier</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>                        <span class="c1"># Prepare the carrier object for the next slot</span>
+            <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>                        <span class="c1"># Prepare the channel model for the next slot</span>
+
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span>                         <span class="c1"># Total time for this SNR</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">chanEstMethod</span><span class="p">][</span><span class="n">snrDb</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;totalBits&quot;</span><span class="p">:</span><span class="n">totalBits</span><span class="p">,</span>
+                                         <span class="s2">&quot;bitErrors&quot;</span><span class="p">:</span><span class="n">bitErrors</span><span class="p">,</span>
+                                         <span class="s2">&quot;BER&quot;</span><span class="p">:</span>      <span class="n">bitErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBits</span><span class="p">,</span>
+                                         <span class="s2">&quot;Time&quot;</span><span class="p">:</span>     <span class="n">dt</span><span class="p">}</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  </span><span class="si">%3d</span><span class="s2">      </span><span class="si">%8d</span><span class="s2">     </span><span class="si">%8d</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">snrDb</span><span class="p">,</span> <span class="n">totalBits</span><span class="p">,</span> <span class="n">bitErrors</span><span class="p">,</span>
+                                                        <span class="n">bitErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBits</span><span class="p">,</span> <span class="n">dt</span><span class="p">))</span>
+
+<span class="c1"># Compare the results in a plot:</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">chanEstMethod</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s1">&#39;Perfect&#39;</span><span class="p">,</span> <span class="s1">&#39;ML&#39;</span><span class="p">,</span> <span class="s1">&#39;LS&#39;</span><span class="p">]):</span>
+    <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="n">chanEstMethod</span><span class="p">][</span><span class="n">snrDb</span><span class="p">][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrDbs</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">,</span> <span class="n">bers</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">chanEstMethod</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Bit Error Rate for different mothods of Channel Estimation.&quot;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;SNR&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;BER (%)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Simulating end-to-end for &#34;16QAM&#34;, with &#34;Perfect&#34; channel estimation, in time domain.
+SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)
+-------   ----------   ----------   ------   ----------
+    5       2545920      1036799     40.72      6.80
+   10       2545920       850716     33.41      6.95
+   15       2545920       606267     23.81      7.02
+   20       2545920       350625     13.77      6.81
+   25       2545920       145817      5.73      6.83
+
+Simulating end-to-end for &#34;16QAM&#34;, with &#34;ML&#34; channel estimation, in time domain.
+SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)
+-------   ----------   ----------   ------   ----------
+    5       2545920      1093175     42.94      7.42
+   10       2545920       894557     35.14      7.24
+   15       2545920       638622     25.08      7.25
+   20       2545920       388298     15.25      7.67
+   25       2545920       191185      7.51      7.64
+
+Simulating end-to-end for &#34;16QAM&#34;, with &#34;LS&#34; channel estimation, in time domain.
+SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)
+-------   ----------   ----------   ------   ----------
+    5       2545920      1138786     44.73      7.08
+   10       2545920       968019     38.02      6.93
+   15       2545920       717426     28.18      6.90
+   20       2545920       448406     17.61      6.99
+   25       2545920       217902      8.56      6.88
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../../../../../_images/html_html_html_html_source_Playground_Notebooks_MLChEst_MLChestEvaluate_7_1.png" src="../../../../../../../../_images/html_html_html_html_source_Playground_Notebooks_MLChEst_MLChestEvaluate_7_1.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

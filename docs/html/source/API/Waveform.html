@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Waveform &mdash; NeoRadium 0.2.0 Documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/neoradium.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Modulation" href="Modulation.html" />
+    <link rel="prev" title="Resource Grid" href="Grid.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NeoRadium 0.2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Grid.html">Resource Grid</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Waveform</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.waveform.Waveform"><code class="docutils literal notranslate"><span class="pre">Waveform</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.print"><code class="docutils literal notranslate"><span class="pre">Waveform.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.addNoise"><code class="docutils literal notranslate"><span class="pre">Waveform.addNoise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.pad"><code class="docutils literal notranslate"><span class="pre">Waveform.pad()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.sync"><code class="docutils literal notranslate"><span class="pre">Waveform.sync()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.applyChannel"><code class="docutils literal notranslate"><span class="pre">Waveform.applyChannel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.applyWindowing"><code class="docutils literal notranslate"><span class="pre">Waveform.applyWindowing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.ofdmDemodulate"><code class="docutils literal notranslate"><span class="pre">Waveform.ofdmDemodulate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NeoRadium 0.2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Waveform</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/source/API/Waveform.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-neoradium.waveform">
+<span id="waveform"></span><h1>Waveform<a class="headerlink" href="#module-neoradium.waveform" title="Permalink to this heading"></a></h1>
+<p>The module <code class="docutils literal notranslate"><span class="pre">waveform.py</span></code> implements the <a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> class which encapsulates
+a time-domain signal transmitted from a set of transmitter antenna or received by a set
+of receiver antenna. A waveform object is usually created by applying OFDM modulation to
+a resource grid object. See <a class="reference internal" href="Grid.html#neoradium.grid.Grid.ofdmModulate" title="neoradium.grid.Grid.ofdmModulate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ofdmModulate()</span></code></a> method of
+the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class for more information.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.waveform.Waveform">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.waveform.</span></span><span class="sig-name descname"><span class="pre">Waveform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">waveform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.waveform.Waveform" title="Permalink to this definition"></a></dt>
+<dd><p>This class encapsulates a set of sequences of complex values representing
+the time-domain signals as transmitted by each transmitter antenna or as
+received by each receiver antenna. A Waveform object is usually created by
+applying OFDM modulation to a resource grid.</p>
+<p>Once you have a Waveform object, you can apply a channel model to it, add AWGN
+noise to it, or apply other signal processing tasks such as <em>windowing</em>. All of
+these processes result in new Waveform objects.</p>
+<p>At the receiver the received signals are usually converted back to the frequency
+domain by applying OFDM demodulation, which results in a <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>
+object representing the received resource grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>waveform</strong> (<em>2D complex numpy array</em>) – An <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">x</span> <span class="pre">Ns</span></code> 2D complex numpy array representing a set of time-domain signals
+of length <code class="docutils literal notranslate"><span class="pre">Ns</span></code> for each one of <code class="docutils literal notranslate"><span class="pre">P</span></code> antenna elements. The value <code class="docutils literal notranslate"><span class="pre">P</span></code> is
+equal to <code class="docutils literal notranslate"><span class="pre">Nt</span></code> the number of transmitter antenna when this is a transmitted
+signal and equal to <code class="docutils literal notranslate"><span class="pre">Nr</span></code> the number of receiver antenna when this is a
+received signal.</p></li>
+<li><p><strong>noiseVar</strong> (<em>float</em><em> (</em><em>default: 0</em><em>)</em>) – The variance of the noise applied to the time-domain signals in this Waveform
+object. This is usually initialized to zero. When an AWGN noise is applied to
+the waveform using the <a class="reference internal" href="#neoradium.waveform.Waveform.addNoise" title="neoradium.waveform.Waveform.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a> function, the variance of the noise
+is saved in the Waveform object.</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Other Read-Only Properties:</strong></p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">shape<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns the shape of the 2-dimensional waveform numpy array.</p>
+</dd>
+<dt class="field-even">numPorts<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of transmitter or receiver antenna (<code class="docutils literal notranslate"><span class="pre">P</span></code>) for this waveform.</p>
+</dd>
+<dt class="field-odd">length<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The length of the time-domain signal in number of samples (<code class="docutils literal notranslate"><span class="pre">Ns</span></code>).</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.waveform.Waveform.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.waveform.Waveform.print" title="Permalink to this definition"></a></dt>
+<dd><p>Prints the properties of this Waveform object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em><em> (</em><em>default: None</em><em>)</em>) – If specified, it is used as a title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, it returns the information in a text string instead
+of printing the information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns
+the information in a text string. Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.waveform.Waveform.addNoise">
+<span class="sig-name descname"><span class="pre">addNoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.waveform.Waveform.addNoise" title="Permalink to this definition"></a></dt>
+<dd><p>Adds Additive White Gaussian Noise (AWGN) to this waveform based on
+the given noise properties. The <em>noisy</em> waveform is then returned in a new
+<a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object.</p>
+<p>This is to some extent similar to the <a class="reference internal" href="Grid.html#neoradium.grid.Grid.addNoise" title="neoradium.grid.Grid.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a>
+method of the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class which applies noise
+in frequency domain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – <p>One of the following parameters <strong>must</strong> be specified. They specify
+how the noise signal is generated.</p>
+<dl class="field-list">
+<dt class="field-odd">noise<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A numpy array with the same shape as this <a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a>
+object containing the noise information. If the noise information
+is provided by <code class="docutils literal notranslate"><span class="pre">noise</span></code> it is added directly to the waveform. In
+this case all other parameters are ignored.</p>
+</dd>
+<dt class="field-even">noiseStd<span class="colon">:</span></dt>
+<dd class="field-even"><p>The standard deviation of the noise. An AWGN complex noise
+signal is generated with zero-mean and the specified standard
+deviation. If <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> is specified, <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code>, <code class="docutils literal notranslate"><span class="pre">snrDb</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">nFFT</span></code> values below are ignored.</p>
+</dd>
+<dt class="field-odd">noiseVar<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The variance of the noise. An AWGN complex noise
+signal is generated with zero-mean and the specified variance. If
+<code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> is specified, the values of <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> and <code class="docutils literal notranslate"><span class="pre">nFFT</span></code>
+are ignored.</p>
+</dd>
+<dt class="field-even">snrDb<span class="colon">:</span></dt>
+<dd class="field-even"><p>The signal to noise ratio in dB. First the noise variance
+is calculated using the given SNR value and the <code class="docutils literal notranslate"><span class="pre">nFFT</span></code> value.
+Then an AWGN complex noise signal is generated with zero-mean and
+the calculated variance. Please note that if an SNR value is used
+to specify the amount of noise, the value of <code class="docutils literal notranslate"><span class="pre">nFFT</span></code> should also
+be provided.</p>
+</dd>
+<dt class="field-odd">nFFT<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This is only used if <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> is specified. It is the length of
+Fast Fourier Transform that is applied to the signals for time/frequency
+domain conversion. This value is usually available from the
+<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object being used for
+the transmission. This function uses the following formula to calculate
+the noise variance <span class="math notranslate nohighlight">\(\sigma^2_{AWGN}\)</span> from <span class="math notranslate nohighlight">\(snrDb\)</span> and
+<span class="math notranslate nohighlight">\(nFFT\)</span> values:</p>
+<div class="math notranslate nohighlight">
+\[\sigma^2_{AWGN} = \frac 1 {N_r.nFFT.10^{\frac {snrDb} {10}}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(N_r\)</span> is the number of receiver antenna.</p>
+</dd>
+<dt class="field-even">ranGen<span class="colon">:</span></dt>
+<dd class="field-even"><p>If provided, it is used as the random generator
+for the AWGN generation. Otherwise, if this is not specified,
+<strong>NeoRadium</strong>’s <a class="reference internal" href="Random.html"><span class="doc">global random generator</span></a> is
+used.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new Waveform object containing the <em>noisy</em> version of this waveform.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.waveform.Waveform.pad">
+<span class="sig-name descname"><span class="pre">pad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numPad</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.waveform.Waveform.pad" title="Permalink to this definition"></a></dt>
+<dd><p>Appends a sequence of <code class="docutils literal notranslate"><span class="pre">numPad</span></code> zeros to the end of time-domain signals
+in this <a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object.</p>
+<p>To make sure a signal is received in its entirety when it goes through a
+channel model, we usually need to pad zeros to the end of the time-domain
+signal. The number of these zeros usually depend on the maximum channel
+delay. The function <a class="reference internal" href="Channels.html#neoradium.channel.ChannelBase.getMaxDelay" title="neoradium.channel.ChannelBase.getMaxDelay"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getMaxDelay()</span></code></a>
+of the channel model can be used to get the number of padded zeros.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>numPad</strong> (<em>int</em>) – The number of time-domain zero samples to be appended to the end of this
+waveform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new Waveform object which is <code class="docutils literal notranslate"><span class="pre">numPad</span></code> samples longer than the original
+waveform.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.waveform.Waveform.sync">
+<span class="sig-name descname"><span class="pre">sync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timingOffset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.waveform.Waveform.sync" title="Permalink to this definition"></a></dt>
+<dd><p>Removes <code class="docutils literal notranslate"><span class="pre">timingOffset</span></code> values from the beginning of the time-domain signals
+in this <a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object. This effectively shifts the signal in
+time domain by <code class="docutils literal notranslate"><span class="pre">timingOffset</span></code> samples.</p>
+<p>When a time-domain signal goes through a channel model, it is delayed in time
+because of the propagation delay. Different transmission paths may be affected
+by different propagation delays. The function
+<a class="reference internal" href="Channels.html#neoradium.channel.ChannelBase.getTimingOffset" title="neoradium.channel.ChannelBase.getTimingOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getTimingOffset()</span></code></a> can be used to
+obtain the overall propagation delay given by <code class="docutils literal notranslate"><span class="pre">timingOffset</span></code>. In practice
+this value is calculated by finding the time-domain sample index where the
+correlation between the received signal and a set of reference signals is
+at its maximum. See for example the function
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid.estimateTimingOffset" title="neoradium.grid.Grid.estimateTimingOffset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">estimateTimingOffset()</span></code></a> of the
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>timingOffset</strong> (<em>int</em>) – The number of time-domain samples that are removed from the beginning of
+the time-domain signals in this <a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new Waveform object which is <code class="docutils literal notranslate"><span class="pre">timingOffset</span></code> samples shorter than the
+original waveform.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.waveform.Waveform.applyChannel">
+<span class="sig-name descname"><span class="pre">applyChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.waveform.Waveform.applyChannel" title="Permalink to this definition"></a></dt>
+<dd><p>Applies the channel model <code class="docutils literal notranslate"><span class="pre">channel</span></code> to this Waveform object and returns a
+new Waveform object representing the received signal. This function internally
+calls the <a class="reference internal" href="Channels.html#neoradium.channel.ChannelBase.applyToSignal" title="neoradium.channel.ChannelBase.applyToSignal"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyToSignal()</span></code></a> method
+of the channel model passing in this waveform object as the <code class="docutils literal notranslate"><span class="pre">inputSignal</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="Channels.html#neoradium.channel.ChannelBase" title="neoradium.channel.ChannelBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelBase</span></code></a>) – The channel model that is applied to this time-domain waveform.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new Waveform object which represents the received time-domain
+waveform.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.waveform.Waveform.applyWindowing">
+<span class="sig-name descname"><span class="pre">applyWindowing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpLens</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windowing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.waveform.Waveform.applyWindowing" title="Permalink to this definition"></a></dt>
+<dd><p>This is a helper function that is used to apply <em>windowing</em> to the OFDM
+waveform obtained from OFDM modulation of a resource grid.</p>
+<p>This method supports several different windowing approaches including the
+ones specified in <strong>3GPP TS 38.104, Sections B.5.2 and C.5.2</strong>.</p>
+<p>You usually do not need to call this function directly. It is called
+internally at the end of the OFDM modulation process when the function
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid.ofdmModulate" title="neoradium.grid.Grid.ofdmModulate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ofdmModulate()</span></code></a> of the
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class is called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cpLens</strong> (<em>list</em>) – A list of integer values each representing the length of cyclic prefix
+part at the beginning of each OFDM symbol in number of time-domain samples.
+This list can be obtained from the <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>
+object.</p></li>
+<li><p><strong>windowing</strong> (<em>str</em>) – <p>A text string specifying how the window length is obtained. It can be one
+the following:</p>
+<dl class="field-list simple">
+<dt class="field-odd">”STD”<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The windowing size is determined based on <strong>3GPP TS 38.104, Sections
+B.5.2 and C.5.2</strong>.</p>
+</dd>
+<dt class="field-even">Ratio as percentage<span class="colon">:</span></dt>
+<dd class="field-even"><p>A windowing ratio can be specified as a percentage value.
+For example the text string “%25” represents a windowing ratio of <code class="docutils literal notranslate"><span class="pre">0.25</span></code>.
+The window length is calculated as the minimum value of <code class="docutils literal notranslate"><span class="pre">cpLens</span></code> multiplied
+by the windowing ratio and rounded to the nearest integer value.</p>
+</dd>
+<dt class="field-odd">Ratio<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A windowing ratio (between 0 and 1) can be specified as a number.
+For example the text string “0.125” represents a windowing ratio of <code class="docutils literal notranslate"><span class="pre">0.125</span></code>.
+The window length is calculated as the minimum value of <code class="docutils literal notranslate"><span class="pre">cpLens</span></code> multiplied
+by the windowing ratio and rounded to the nearest integer value.</p>
+</dd>
+<dt class="field-even">Window Length<span class="colon">:</span></dt>
+<dd class="field-even"><p>The actual window length can also be specified as an integer value.
+For example the text string “164” represents a window length equal to <code class="docutils literal notranslate"><span class="pre">164</span></code>.</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>bwp</strong> (<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>) – The bandwidth part used for the communication.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new Waveform object which represents the waveform after applying the windowing.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.waveform.Waveform.ofdmDemodulate">
+<span class="sig-name descname"><span class="pre">ofdmDemodulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpOffsetRatio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.waveform.Waveform.ofdmDemodulate" title="Permalink to this definition"></a></dt>
+<dd><p>Applies OFDM demodulation to the waveform which results in a frequency-domain
+resource grid returned as a <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object.</p>
+<p>If an AWGN noise was applied to the waveform using the <a class="reference internal" href="#neoradium.waveform.Waveform.addNoise" title="neoradium.waveform.Waveform.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a>
+method, then the amount of noise is transferred to the
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object that is created. The noise variance of
+the returned resource grid is equal to the waveform’s noise variance times
+<code class="docutils literal notranslate"><span class="pre">nFFT</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bwp</strong> (<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>) – The bandwidth part used for the communication.</p></li>
+<li><p><strong>f0</strong> (<em>float</em><em> (</em><em>default: 0</em><em>)</em>) – The carrier frequency of the waveform. If it is 0 (default), then a baseband
+waveform is assumed. This should match the value originally used when applying
+OFDM modulation at the transmitter side. See the
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid.ofdmModulate" title="neoradium.grid.Grid.ofdmModulate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ofdmModulate()</span></code></a> method of the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>
+class.</p></li>
+<li><p><strong>cpOffsetRatio</strong> (<em>float</em><em> (</em><em>default: 0.5</em><em>)</em>) – This value determines where in the cyclic prefix (Ratio from the beginning of CP),
+should we start applying FFT. The default value of <code class="docutils literal notranslate"><span class="pre">0.5</span></code> means the starting sample
+for applying FFT is the mid point in the cyclic prefix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object representing the received resource grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Grid.html" class="btn btn-neutral float-left" title="Resource Grid" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Modulation.html" class="btn btn-neutral float-right" title="Modulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

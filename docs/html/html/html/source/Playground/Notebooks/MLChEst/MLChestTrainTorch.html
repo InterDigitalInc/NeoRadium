@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training A ResNet model for Channel Estimation &mdash; NeoRadium 0.2.0 Documentation</title>
+      <link rel="stylesheet" href="../../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../../_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../../_static/neoradium.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../../_static/jquery.js"></script>
+        <script src="../../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../../../../" id="documentation_options" src="../../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../../_static/doctools.js"></script>
+        <script src="../../../../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../../index.html" class="icon icon-home">
+            NeoRadium 0.2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../source/API/Random.html">Random Number Generator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../index.html">NeoRadium 0.2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Training A ResNet model for Channel Estimation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../../_sources/html/html/source/Playground/Notebooks/MLChEst/MLChestTrainTorch.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Training-A-ResNet-model-for-Channel-Estimation">
+<h1>Training A ResNet model for Channel Estimation<a class="headerlink" href="#Training-A-ResNet-model-for-Channel-Estimation" title="Permalink to this heading"></a></h1>
+<p>Now that we have a channel estimation dataset, we can train a model to receive the channel estimates at the pilot locations and predict the channel estimates for the whole channel matrix.</p>
+<p>We use <a class="reference external" href="https://pytorch.org">PyTorch</a> freamework to train our models but other machine learning tools can also be used. The following diagram shows the Neural Network structure used for the channel estimation model.</p>
+<img alt="NN Structure" src="html/html/source/Playground/Notebooks/MLChEst/NN.png" />
+<p>So let’s get started by importing the required modules.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">datetime</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataLoader</span>
+<span class="kn">from</span> <span class="nn">torch.optim.lr_scheduler</span> <span class="kn">import</span> <span class="n">ExponentialLR</span>
+<br/></pre></div>
+</div>
+</div>
+<section id="Loading-dataset">
+<h2>Loading dataset<a class="headerlink" href="#Loading-dataset" title="Permalink to this heading"></a></h2>
+<p>We first load our dataset files generated in the <a class="reference internal" href="MLChestDataGen.html"><span class="doc">previous step</span></a>. Then we create three sets of datasets and dataloaders for training, validation, and test.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define our dataset object</span>
+<span class="k">class</span> <span class="nc">ChEstDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fileName</span><span class="p">):</span>
+        <span class="n">samples</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">samples</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">labels</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numSamples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">numSamples</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">samples</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+<span class="c1"># Instantiate 3 datasets for train, validation, and test</span>
+<span class="n">trainDs</span> <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span><span class="s2">&quot;ChestTrain.npy&quot;</span><span class="p">)</span>
+<span class="n">validDs</span> <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span><span class="s2">&quot;ChestValid.npy&quot;</span><span class="p">)</span>
+<span class="n">testDs</span>  <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span><span class="s2">&quot;ChestTest.npy&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trainDs</span><span class="p">)</span><span class="si">}</span><span class="s2"> Training Samples&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">validDs</span><span class="p">)</span><span class="si">}</span><span class="s2"> Validation Samples&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">testDs</span><span class="p">)</span><span class="si">}</span><span class="s2"> Test Samples&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create the data loaders</span>
+<span class="n">batchSize</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">trainDl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">trainDs</span><span class="p">,</span> <span class="n">batchSize</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">validDl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">validDs</span><span class="p">,</span> <span class="n">batchSize</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">testDl</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">testDs</span><span class="p">,</span> <span class="n">batchSize</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+16000 Training Samples
+2400 Validation Samples
+2400 Test Samples
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Checking GPU availability</span>
+<span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;mps&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using &#39;</span><span class="si">%s</span><span class="s2">&#39; device.&quot;</span><span class="o">%</span><span class="p">({</span><span class="s1">&#39;cuda&#39;</span><span class="p">:</span><span class="s1">&#39;Cuda&#39;</span><span class="p">,</span> <span class="s1">&#39;mps&#39;</span><span class="p">:</span><span class="s1">&#39;Metal&#39;</span><span class="p">,</span><span class="s1">&#39;cpu&#39;</span><span class="p">:</span><span class="s1">&#39;CPU&#39;</span><span class="p">}[</span><span class="n">device</span><span class="p">]))</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Using &#39;Metal&#39; device.
+</pre></div></div>
+</div>
+</section>
+<section id="Creating-the-model">
+<h2>Creating the model<a class="headerlink" href="#Creating-the-model" title="Permalink to this heading"></a></h2>
+<p>Now we can create a model object that will be used for training. We first define the <code class="docutils literal notranslate"><span class="pre">ResBlock</span></code> (See the picture above)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define ResNet block</span>
+<span class="k">class</span> <span class="nc">ResBlock</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inDepth</span><span class="p">,</span> <span class="n">midDepth</span><span class="p">,</span> <span class="n">outDepth</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stride</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span> <span class="n">stride</span> <span class="o">=</span> <span class="p">(</span><span class="n">stride</span><span class="p">,</span> <span class="n">stride</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span> <span class="n">kernel</span> <span class="o">=</span> <span class="p">(</span><span class="n">kernel</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">inDepth</span><span class="p">,</span> <span class="n">midDepth</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">)</span>  <span class="c1"># 1x1 conv.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">midDepth</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">midDepth</span><span class="p">,</span> <span class="n">midDepth</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">midDepth</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">midDepth</span><span class="p">,</span> <span class="n">outDepth</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">)</span> <span class="c1"># 1x1 conv.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bn3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">outDepth</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">downSampleNet</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">stride</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="n">inDepth</span><span class="o">!=</span><span class="n">outDepth</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">downSampleNet</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">inDepth</span><span class="p">,</span> <span class="n">outDepth</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">stride</span><span class="p">),</span>  <span class="c1"># 1x1 conv.</span>
+                                               <span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">outDepth</span><span class="p">)</span> <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">bn</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bn1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn3</span><span class="p">]:</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">ones_</span><span class="p">(</span><span class="n">bn</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">zeros_</span><span class="p">(</span><span class="n">bn</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">conv</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span><span class="p">]:</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">trunc_normal_</span><span class="p">(</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])))</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">zeros_</span><span class="p">(</span><span class="n">conv</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
+
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">zeros_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bn3</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>  <span class="c1"># This could improve results. It makes the block start like identity.</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bn3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">downSampleNet</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="n">out</span> <span class="o">+=</span> <span class="n">x</span>
+        <span class="k">else</span><span class="p">:</span>                           <span class="n">out</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">downSampleNet</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+</div>
+</div>
+<p>And now we define our Channel Estimator model (<code class="docutils literal notranslate"><span class="pre">ChEstNet</span></code>) using 2 instances of <code class="docutils literal notranslate"><span class="pre">ResBlock</span></code> defined above together with an additional convolutional layer.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now the actual ChEstNet model</span>
+<span class="k">class</span> <span class="nc">ChEstNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res1</span> <span class="o">=</span> <span class="n">ResBlock</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>   <span class="c1"># Res Block 9x11 kernel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res2</span> <span class="o">=</span> <span class="n">ResBlock</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>   <span class="c1"># Res Block 3x7 kernel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res3</span> <span class="o">=</span> <span class="n">ResBlock</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>   <span class="c1"># Res Block 3x7 kernel</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">)</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">trunc_normal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])))</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">zeros_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+<span class="c1"># Instantiate the model and move it the target device</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ChEstNet</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Training-the-model">
+<h2>Training the model<a class="headerlink" href="#Training-the-model" title="Permalink to this heading"></a></h2>
+<p>Now we first create functions for the training and evaluation loops and use them to train the model.</p>
+<p><strong>Note</strong>: The following cell can take several hours to complete. A file containing the trained parameters of the model is included in this directory, so you can skip the following cells and proceed to the <a class="reference internal" href="MLChestEvaluateTorch.html"><span class="doc">next step</span></a>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Training loop for one epoch:</span>
+<span class="k">def</span> <span class="nf">trainEpoch</span><span class="p">(</span><span class="n">dataLoader</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">lossFunction</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
+    <span class="n">modelDevice</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="o">.</span><span class="n">device</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span> <span class="c1"># Set the model to training mode</span>
+    <span class="n">lossMin</span><span class="p">,</span> <span class="n">lossMean</span><span class="p">,</span> <span class="n">lossMax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="k">for</span> <span class="n">batchNo</span><span class="p">,</span> <span class="p">(</span><span class="n">batchSamples</span><span class="p">,</span> <span class="n">batchLabels</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataLoader</span><span class="p">):</span>
+        <span class="c1"># Compute prediction and loss</span>
+        <span class="n">batchPredictions</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span> <span class="n">batchSamples</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">modelDevice</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">lossFunction</span><span class="p">(</span><span class="n">batchPredictions</span><span class="p">,</span> <span class="n">batchLabels</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">modelDevice</span><span class="p">))</span>
+
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>  <span class="c1"># Backpropagation</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="n">lossValue</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">lossMean</span> <span class="o">+=</span> <span class="n">lossValue</span>
+        <span class="k">if</span> <span class="n">lossValue</span><span class="o">&gt;</span><span class="n">lossMax</span><span class="p">:</span> <span class="n">lossMax</span> <span class="o">=</span> <span class="n">lossValue</span>
+        <span class="k">if</span> <span class="n">lossValue</span><span class="o">&lt;</span><span class="n">lossMin</span><span class="p">:</span> <span class="n">lossMin</span> <span class="o">=</span> <span class="n">lossValue</span>
+
+    <span class="n">lossMean</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataLoader</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lossMin</span><span class="p">,</span> <span class="n">lossMean</span><span class="p">,</span> <span class="n">lossMax</span>
+
+<span class="c1"># Evaluation loop:</span>
+<span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">dataLoader</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">lossFunction</span><span class="p">):</span>
+    <span class="n">modelDevice</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="o">.</span><span class="n">device</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>  <span class="c1"># Set the model to evaluation mode</span>
+    <span class="n">numBatches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataLoader</span><span class="p">)</span>
+    <span class="n">lossMean</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">batchNo</span><span class="p">,</span> <span class="p">(</span><span class="n">batchSamples</span><span class="p">,</span> <span class="n">batchLabels</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataLoader</span><span class="p">):</span>
+            <span class="n">batchPredictions</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span> <span class="n">batchSamples</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">modelDevice</span><span class="p">)</span> <span class="p">)</span>
+            <span class="n">lossMean</span> <span class="o">+=</span> <span class="n">lossFunction</span><span class="p">(</span><span class="n">batchPredictions</span><span class="p">,</span> <span class="n">batchLabels</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">modelDevice</span><span class="p">))</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+    <span class="n">lossMean</span> <span class="o">/=</span> <span class="n">numBatches</span>
+    <span class="k">return</span> <span class="n">lossMean</span>
+
+<span class="n">numEpochs</span> <span class="o">=</span> <span class="mi">100</span>                    <span class="c1"># Number of epochs</span>
+<span class="n">learningRate</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0001</span><span class="p">,</span> <span class="mf">0.000001</span><span class="p">)</span>  <span class="c1"># Learning rate starts at 0.0001 and exponentially decays to 0.000001</span>
+<span class="n">lossFunction</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>        <span class="c1"># Using MSE as Loss</span>
+
+<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">learningRate</span><span class="p">,</span><span class="nb">tuple</span><span class="p">):</span>  <span class="c1"># learningRate is a tuple -&gt; use exponentially decaying learning rate</span>
+    <span class="kn">from</span> <span class="nn">torch.optim.lr_scheduler</span> <span class="kn">import</span> <span class="n">ExponentialLR</span>
+    <span class="n">lr1st</span><span class="p">,</span> <span class="n">lrLast</span> <span class="o">=</span> <span class="n">learningRate</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr1st</span><span class="p">)</span>
+    <span class="n">lrScheduler</span> <span class="o">=</span> <span class="n">ExponentialLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">lrLast</span><span class="o">/</span><span class="n">lr1st</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">numEpochs</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">learningRate</span><span class="p">)</span>  <span class="c1"># learningRate is a number</span>
+    <span class="n">lrScheduler</span> <span class="o">=</span> <span class="kc">None</span>                                                 <span class="c1"># No LR scheduling needed</span>
+
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch   Learning Rate   Training Loss   Validation Loss&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-----   -------------   -------------   ---------------&quot;</span><span class="p">)</span>
+<span class="n">lowestLoss</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numEpochs</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%-4d</span><span class="s2">     </span><span class="si">%-10f</span><span class="s2">      &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">lrScheduler</span><span class="o">.</span><span class="n">get_last_lr</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">lossMin</span><span class="p">,</span> <span class="n">lossMean</span><span class="p">,</span> <span class="n">lossMax</span> <span class="o">=</span> <span class="n">trainEpoch</span><span class="p">(</span><span class="n">trainDl</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">lossFunction</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%-10f</span><span class="s2">      &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">lossMean</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">validLoss</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">validDl</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">lossFunction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lowestLoss</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">lowestLoss</span> <span class="o">=</span> <span class="n">validLoss</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%-10f</span><span class="s2">   &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">validLoss</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">validLoss</span><span class="o">&lt;</span><span class="n">lowestLoss</span><span class="p">:</span>          <span class="c1"># This is the best model so far -&gt; Save it</span>
+        <span class="n">lowestLoss</span><span class="p">,</span> <span class="n">bestEpoch</span> <span class="o">=</span> <span class="n">validLoss</span><span class="p">,</span> <span class="n">epoch</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="s1">&#39;Models/ChEstModelWeights.pth&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%-10f</span><span class="s2"> * &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">validLoss</span><span class="p">))</span>   <span class="c1"># The &#39;*&#39; indicates best so far and saving</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%-10f</span><span class="s2">   &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">validLoss</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">lrScheduler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">lrScheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training complete. (Training Time: </span><span class="si">%s</span><span class="s2">)&quot;</span><span class="o">%</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="p">)))))</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch   Learning Rate   Training Loss   Validation Loss
+-----   -------------   -------------   ---------------
+ 1        0.000100        0.131095        0.018107
+ 2        0.000095        0.007698        0.004004   *
+ 3        0.000091        0.003329        0.002922   *
+ 4        0.000087        0.002697        0.002642   *
+ 5        0.000083        0.002430        0.002455   *
+ 6        0.000079        0.002270        0.002382   *
+ 7        0.000076        0.002169        0.002182   *
+ 8        0.000072        0.002083        0.002352
+ 9        0.000069        0.002019        0.002460
+ 10       0.000066        0.001962        0.002147   *
+ 11       0.000063        0.001917        0.001909   *
+ 12       0.000060        0.001873        0.002105
+ 13       0.000057        0.001842        0.001950
+ 14       0.000055        0.001809        0.001785   *
+ 15       0.000052        0.001781        0.001917
+ 16       0.000050        0.001757        0.002527
+ 17       0.000048        0.001736        0.001796
+ 18       0.000045        0.001719        0.001724   *
+ 19       0.000043        0.001700        0.001919
+ 20       0.000041        0.001682        0.001789
+ 21       0.000039        0.001668        0.001765
+ 22       0.000038        0.001657        0.001684   *
+ 23       0.000036        0.001651        0.001970
+ 24       0.000034        0.001632        0.001833
+ 25       0.000033        0.001624        0.001627   *
+ 26       0.000031        0.001621        0.001659
+ 27       0.000030        0.001609        0.001677
+ 28       0.000028        0.001600        0.001732
+ 29       0.000027        0.001594        0.001583   *
+ 30       0.000026        0.001586        0.001582   *
+ 31       0.000025        0.001579        0.001688
+ 32       0.000024        0.001575        0.001565   *
+ 33       0.000023        0.001572        0.001834
+ 34       0.000022        0.001563        0.001663
+ 35       0.000021        0.001561        0.001573
+ 36       0.000020        0.001554        0.001563   *
+ 37       0.000019        0.001550        0.001626
+ 38       0.000018        0.001545        0.001555   *
+ 39       0.000017        0.001542        0.001657
+ 40       0.000016        0.001540        0.001564
+ 41       0.000016        0.001534        0.001556
+ 42       0.000015        0.001532        0.001579
+ 43       0.000014        0.001534        0.001529   *
+ 44       0.000014        0.001527        0.001537
+ 45       0.000013        0.001527        0.001547
+ 46       0.000012        0.001521        0.001553
+ 47       0.000012        0.001521        0.001513   *
+ 48       0.000011        0.001517        0.001514
+ 49       0.000011        0.001517        0.001514
+ 50       0.000010        0.001513        0.001499   *
+ 51       0.000010        0.001512        0.001496   *
+ 52       0.000009        0.001509        0.001511
+ 53       0.000009        0.001507        0.001502
+ 54       0.000008        0.001508        0.001525
+ 55       0.000008        0.001506        0.001508
+ 56       0.000008        0.001504        0.001497
+ 57       0.000007        0.001503        0.001489   *
+ 58       0.000007        0.001501        0.001576
+ 59       0.000007        0.001498        0.001489   *
+ 60       0.000006        0.001500        0.001511
+ 61       0.000006        0.001496        0.001501
+ 62       0.000006        0.001496        0.001485   *
+ 63       0.000006        0.001494        0.001509
+ 64       0.000005        0.001497        0.001494
+ 65       0.000005        0.001494        0.001485
+ 66       0.000005        0.001493        0.001508
+ 67       0.000005        0.001490        0.001483   *
+ 68       0.000004        0.001492        0.001482   *
+ 69       0.000004        0.001492        0.001480   *
+ 70       0.000004        0.001490        0.001484
+ 71       0.000004        0.001492        0.001483
+ 72       0.000004        0.001488        0.001497
+ 73       0.000004        0.001486        0.001487
+ 74       0.000003        0.001486        0.001488
+ 75       0.000003        0.001486        0.001477   *
+ 76       0.000003        0.001485        0.001484
+ 77       0.000003        0.001487        0.001480
+ 78       0.000003        0.001484        0.001477   *
+ 79       0.000003        0.001485        0.001484
+ 80       0.000003        0.001482        0.001474   *
+ 81       0.000002        0.001485        0.001479
+ 82       0.000002        0.001482        0.001483
+ 83       0.000002        0.001481        0.001477
+ 84       0.000002        0.001481        0.001475
+ 85       0.000002        0.001482        0.001474
+ 86       0.000002        0.001481        0.001485
+ 87       0.000002        0.001481        0.001471   *
+ 88       0.000002        0.001481        0.001473
+ 89       0.000002        0.001483        0.001472
+ 90       0.000002        0.001479        0.001470   *
+ 91       0.000002        0.001481        0.001474
+ 92       0.000001        0.001481        0.001474
+ 93       0.000001        0.001482        0.001472
+ 94       0.000001        0.001480        0.001478
+ 95       0.000001        0.001481        0.001478
+ 96       0.000001        0.001480        0.001472
+ 97       0.000001        0.001480        0.001472
+ 98       0.000001        0.001480        0.001469   *
+ 99       0.000001        0.001479        0.001475
+ 100      0.000001        0.001477        0.001470
+Training complete. (Training Time: 0:53:29)
+</pre></div></div>
+</div>
+</section>
+<section id="Evaluating-the-model">
+<h2>Evaluating the model<a class="headerlink" href="#Evaluating-the-model" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">testLoss</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">testDl</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">lossFunction</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test Loss: %.6f&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">testLoss</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Test Loss: 0.001460
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Channel Matrix &mdash; NeoRadium 0.2.0 Documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/neoradium.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Channel timing" href="cdlTiming.html" />
+    <link rel="prev" title="Antenna Array" href="../Antenna/AntennaArray.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#channels">Channels</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Channel Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdlTiming.html">Channel timing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab-5g-toolbox">Comparing with Matlab 5G Toolbox</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Channel Matrix</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/Channels/ChannelMatrix.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Channel-Matrix">
+<h1>Channel Matrix<a class="headerlink" href="#Channel-Matrix" title="Permalink to this heading"></a></h1>
+<p>This notebook shows different ways of calculating the channel matrix and compares the application of channels matrixes in time domain vs frequency domain.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">Modem</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">Grid</span><span class="p">,</span> <span class="n">random</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a valid random grid</span>
+<span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                                    <span class="c1"># Make results reproducible</span>
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>    <span class="c1"># Crrier 25 Resource Blocks, 15KHz subcarrier spacing</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>                                   <span class="c1"># The only bandwidth part in the carrier</span>
+<span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">numPlanes</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>                   <span class="c1"># Create an empty resource grid</span>
+
+<span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>                              <span class="c1"># Get statistics about the grid</span>
+<span class="n">modem</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>                                 <span class="c1"># Using 16QAM modulation</span>
+<span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;UNASSIGNED&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>           <span class="c1"># Total number of bits available in the resource grid</span>
+
+<span class="n">bits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numRandomBits</span><span class="p">)</span>                      <span class="c1"># Create random bits</span>
+<span class="n">symbols</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>                         <span class="c1"># Modulate the bits to get symbols</span>
+
+<span class="n">indexes</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;UNASSIGNED&quot;</span><span class="p">)</span>            <span class="c1"># Indexes of the &quot;UNASSIGNED&quot; resources</span>
+<span class="n">txGrid</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbols</span>                              <span class="c1"># Put symbols in the resource grid</span>
+
+<span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>                     <span class="c1"># OFDM-Modulate the resource grid to get a waveform</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of Resource Grid:&quot;</span><span class="p">,</span><span class="n">txGrid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of Waveform:     &quot;</span><span class="p">,</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Shape of Resource Grid: (8, 14, 300)
+Shape of Waveform:      (8, 9216)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a CDL-C channel model with 300ns delay spread, 4GHz carrier frequency, and 5Hz doppler shift</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>       <span class="c1"># 8 TX antenna</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>       <span class="c1"># 2 RX antenna</span>
+                     <span class="n">timing</span><span class="o">=</span><span class="s2">&quot;Nearest&quot;</span><span class="p">)</span>      <span class="c1"># Nearest Neighbors interpolation (Also try: &quot;Polar&quot;, &quot;linear&quot;)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+CDL-C Channel Properties:
+  delaySpread: 300 ns
+  dopplerShift: 5 Hz
+  carrierFreq: 4000000000.0 Hz
+  normalizeGains: True
+  normalizeOutput: True
+  txDir: Downlink
+  timing method: Nearest
+  coherenceTime: 0.084628 (Sec.)
+  ueDirAZ: 0°, 90°
+  pathDelays (ns): 0.0000 62.970 66.570 69.870 65.280 190.98 193.44 196.80 197.52 238.05
+                   246.39 280.08 368.55 392.49 651.12 813.15 1277.6 1380.0 1647.0 1682.3
+                   1891.9 1991.2 2112.8 2595.6
+  pathPowers (db): -4.400 -1.200 -3.500 -5.200 -2.500 0.0000 -2.200 -3.900 -7.400 -7.100
+                   -10.70 -11.10 -5.100 -6.800 -8.700 -13.20 -13.90 -13.90 -15.80 -17.10
+                   -16.00 -15.70 -21.60 -22.80
+  AODs (Degree):  -47  -23  -23  -23  -41    0    0    0   73  -64   80  -97  -55  -64  -78
+                  103   99   89 -102   92   93  107  119 -124
+  AOAs (Degree): -101  120  120  120 -128  170  170  170   55   66  -48   47   68  -69   82
+                   31  -16    4  -14   10    6    1  -22   34
+  ZODs (Degree):   97   99   99   99  101   99   99   99  105   95  106   94  104  104   93
+                  104   95   93   92  107   93   93  105  108
+  ZOAs (Degree):   88   72   72   72   70   75   75   75   67   64   71   60   91   60   61
+                  101   62   67   53   62   52   62   58   57
+  hasLOS: False
+  Cross Pol. Power: 7 db
+  angleSpreads: 2° 15° 3° 7°
+  TX Antenna:
+    Total Elements: 8
+    spacing: 0.5𝜆, 0.5𝜆
+    shape: 2 rows x 4 columns
+    polarization: |
+    taper: 1.0
+  RX Antenna:
+    Total Elements: 2
+    spacing: 0.5𝜆, 0.5𝜆
+    shape: 1 rows x 2 columns
+    polarization: |
+    taper: 1.0
+  Channel Filter:
+    filterDelay (samples): 7
+    numTxAntenna: 8
+    numPaths: 24
+    pathDelays (ns): 0.0000 62.970 66.570 69.870 65.280 190.98 193.44 196.80 197.52 238.05
+                     246.39 280.08 368.55 392.49 651.12 813.15 1277.6 1380.0 1647.0 1682.3
+                     1891.9 1991.2 2112.8 2595.6
+    filterLen: 16
+    numInterpol: 50
+    normalize: True
+    stopBandAtten: 80
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># This is the experimental method (Only used for verification and debugging). It calculates the</span>
+<span class="c1"># channel matrix by first creating a fake grid, OFDM-modulating it, and applying the channel to</span>
+<span class="c1"># the waveform. It then OFDM-demodulate the waveform to get the channel matrix. This is slowest but</span>
+<span class="c1"># closest to the effect of applying the channel in time domain.</span>
+<span class="n">channelMatrixTD0</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrixTDExp</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">t1</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time Domain, Experimental:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Time:&quot;</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Channel:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">channelMatrixTD0</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Getting the channel matrix in time domain and using interpolation to get the channel gains</span>
+<span class="c1"># at the OFDM symbol times.</span>
+<span class="n">channelMatrixTD1</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">timeDomain</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolateTime</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time Domain, Time Interpolation:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Time:&quot;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Channel:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">channelMatrixTD1</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Getting the channel matrix in time domain without interpolation. The channel gains are</span>
+<span class="c1"># calculated at the OFDM-symbol times directly. (This is the default config)</span>
+<span class="n">channelMatrixTD2</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">timeDomain</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolateTime</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">t3</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time Domain, No Interpolation:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Time:&quot;</span><span class="p">,</span> <span class="n">t3</span><span class="o">-</span><span class="n">t2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Channel:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">channelMatrixTD2</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Getting the channel matrix in frequency domain.</span>
+<span class="n">channelMatrixFD</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">timeDomain</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">t4</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Frequency Domain:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Time:&quot;</span><span class="p">,</span> <span class="n">t4</span><span class="o">-</span><span class="n">t3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Channel:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">channelMatrixFD</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Time Domain, Experimental:
+   Time: 0.07905101776123047
+   Channel:
+ [0.00852756-0.12739031j 0.00853205-0.12739179j 0.00853205-0.12739179j
+ 0.00867352-0.1274171j  0.00908709-0.12725874j 0.00908709-0.12725874j
+ 0.00908488-0.12725828j 0.0090826 -0.12725726j 0.00908709-0.12725874j
+ 0.00908709-0.12725874j 0.00920746-0.12729786j 0.00964038-0.12712568j
+ 0.00964038-0.12712568j 0.00963817-0.12712521j]
+Time Domain, Time Interpolation:
+   Time: 0.004191875457763672
+   Channel:
+ [0.00852756-0.12739031j 0.00852756-0.12739031j 0.00852756-0.12739031j
+ 0.00852756-0.12739031j 0.00907741-0.12725851j 0.00907741-0.12725851j
+ 0.00907741-0.12725851j 0.00907741-0.12725851j 0.00907741-0.12725851j
+ 0.00907741-0.12725851j 0.00907741-0.12725851j 0.00962556-0.12712669j
+ 0.00962556-0.12712669j 0.00962556-0.12712669j]
+Time Domain, No Interpolation:
+   Time: 0.0034291744232177734
+   Channel:
+ [0.00854752-0.12738554j 0.00862589-0.12736677j 0.00870423-0.12734801j
+ 0.00878253-0.12732925j 0.0088608 -0.12731048j 0.00893904-0.12729172j
+ 0.00901724-0.12727295j 0.00909731-0.12725373j 0.00917544-0.12723497j
+ 0.00925354-0.1272162j  0.0093316 -0.12719743j 0.00940962-0.12717867j
+ 0.00948761-0.1271599j  0.00956557-0.12714113j]
+Frequency Domain:
+   Time: 0.005882978439331055
+   Channel:
+ [-0.18121375-0.0519848j  -0.18111617-0.05204777j -0.18101976-0.05210998j
+ -0.18092332-0.05217218j -0.18082688-0.05223438j -0.18073041-0.05229657j
+ -0.18063394-0.05235875j -0.18053627-0.05242169j -0.18043859-0.05248462j
+ -0.18034207-0.05254679j -0.18024553-0.05260894j -0.18014899-0.0526711j
+ -0.18005242-0.05273324j -0.17995584-0.05279538j]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Applying the channel in time domain and demodulate to get a received resource grid (rxGrid)</span>
+<span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>                         <span class="c1"># Calculate the channel&#39;s max delay</span>
+<span class="n">paddedTxWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>              <span class="c1"># Pad the waveform with zeros</span>
+<span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">paddedTxWaveform</span><span class="p">)</span>     <span class="c1"># Apply the channel to the waveform</span>
+<span class="n">offset</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getTimingOffset</span><span class="p">()</span>                       <span class="c1"># Get the timing offset for synchronization</span>
+<span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>                 <span class="c1"># Synchronization</span>
+<span class="n">rxGrid</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">syncedWaveform</span><span class="p">)</span>        <span class="c1"># OFDM-demodulation</span>
+
+<span class="c1"># Apply the &quot;Experimental&quot; channel matrix:</span>
+<span class="n">rxGridTD0</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrixTD0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MSE between the rxGrid &amp; </span><span class="se">\&quot;</span><span class="s2">Experimental</span><span class="se">\&quot;</span><span class="s2">:                  &quot;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxGridTD0</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="c1"># Apply the &quot;Time-domain with interpolation&quot; channel matrix:</span>
+<span class="n">rxGridTD1</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrixTD1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MSE between the rxGrid &amp; </span><span class="se">\&quot;</span><span class="s2">Time domain (Interpolation)</span><span class="se">\&quot;</span><span class="s2">:   &quot;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxGridTD1</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="c1"># Apply the &quot;Time-domain without interpolation&quot; channel matrix:</span>
+<span class="n">rxGridTD2</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrixTD2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MSE between the rxGrid &amp; </span><span class="se">\&quot;</span><span class="s2">Time domain (No Interpolation)</span><span class="se">\&quot;</span><span class="s2">:&quot;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxGridTD2</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+<span class="c1"># Apply the &quot;Frequency-domain&quot; channel matrix:</span>
+<span class="n">rxGridFD</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrixFD</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MSE between the rxGrid &amp; </span><span class="se">\&quot;</span><span class="s2">Frequency domain</span><span class="se">\&quot;</span><span class="s2">:              &quot;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxGridFD</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+MSE between the rxGrid &amp; &#34;Experimental&#34;:                   2.3647531619647926e-07
+MSE between the rxGrid &amp; &#34;Time domain (Interpolation)&#34;:    2.399270605372296e-07
+MSE between the rxGrid &amp; &#34;Time domain (No Interpolation)&#34;: 2.893382278673798e-07
+MSE between the rxGrid &amp; &#34;Frequency domain&#34;:               0.39108756885752305
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../Antenna/AntennaArray.html" class="btn btn-neutral float-left" title="Antenna Array" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cdlTiming.html" class="btn btn-neutral float-right" title="Channel timing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
