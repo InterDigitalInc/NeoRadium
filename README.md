@@ -4,14 +4,14 @@
 
 Wireless communication research often is focused on one particular block or module of the end-to-end communication pipeline (e.g. equalization). However, implementing the entire 3GPP pipeline just to test one block can be time-consuming and cumbersome. This is where **NeoRadium** comes in. It provides the end-to-end communication pipeline functionality based on 3GPP standard while allowing the researchers to customize, study, and evaluate performance of their implementation. It achieves all these capabilities without high-end hardware, complex setup, or costly GPUs. As long as your computer runs Python 3.8+ with a basic setup, you're good to go!
 
-**NeoRadium** includes a comprehensive [Playground](https://ail-wireless.pages.interdigital.com/neoradium/source/Playground/Playground.html), where you can experiment with numerous examples. These examples take the form of [Jupyter Notebooks](https://jupyter.org) and explain API details and their usage in practical contexts.
+**NeoRadium** includes a comprehensive [Playground](https://interdigitalinc.github.io/NeoRadium/html/source/Playground/Playground.html), where you can experiment with numerous examples. These examples take the form of [Jupyter Notebooks](https://jupyter.org) and explain API details and their usage in practical contexts.
 
 ## NeoRadium Documentation
-* [Installation](https://ail-wireless.pages.interdigital.com/neoradium/source/installation.html)
-* [Documentation Home](https://ail-wireless.pages.interdigital.com/neoradium/index.html)
+* [Installation](https://interdigitalinc.github.io/NeoRadium/html/source/installation.html)
+* [Documentation Home](https://interdigitalinc.github.io/NeoRadium/html/)
 
 ## Playground
-The ``Playground`` folder contains a set of tutorials explaining how to use different modules of **NeoRadium**. To run these examples, you need to start [Jupyter Notebook](https://jupyter.org) server on your computer and run them in your web browser. Please refer to [Playground](https://ail-wireless.pages.interdigital.com/neoradium/source/Playground/Playground.html) for a list of available examples.
+The ``Playground`` folder contains a set of tutorials explaining how to use different modules of **NeoRadium**. To run these examples, you need to start [Jupyter Notebook](https://jupyter.org) server on your computer and run them in your web browser. Please refer to [Playground](https://interdigitalinc.github.io/NeoRadium/html/source/Playground/Playground.html) for a list of available examples.
 
 ## Authors
 * Shahab Hamidi-Rad, InterDigital AI Lab.
