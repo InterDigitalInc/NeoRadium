@@ -12,6 +12,3 @@ Wireless communication research often is focused on one particular block or modu
 
 ## Playground
 The ``Playground`` folder contains a set of tutorials explaining how to use different modules of **NeoRadium**. To run these examples, you need to start [Jupyter Notebook](https://jupyter.org) server on your computer and run them in your web browser. Please refer to [Playground](https://interdigitalinc.github.io/NeoRadium/html/source/Playground/Playground.html) for a list of available examples.
-
-## Authors
-* Shahab Hamidi-Rad, InterDigital AI Lab.
