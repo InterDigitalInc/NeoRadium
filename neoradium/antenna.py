@@ -182,7 +182,7 @@ class AntennaBase:
             A 3x3 rotation matrix that is used to transform the local coordinates to
             global coordinates.
         """
-        if np.prod(orientation)==0: return np.eye(3)
+        if not np.any(orientation): return np.eye(3)    # If all zeros, return Identity
         sinAlpha, sinBeta, sinGamma = np.sin(orientation)
         cosAlpha, cosBeta, cosGamma = np.cos(orientation)
         # See TR38.901 - Eq. 7.1-4

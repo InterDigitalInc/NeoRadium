@@ -380,9 +380,12 @@ class CdlChannel(ChannelBase):
 
         # Orientation of TX and RX antenna arrays.
         # NOTE: To point an RX/TX antena to LOS angles of arrival/departure use: 𝛼=aoa[0]/aod[0], 𝛃=zoa[0]/zod[0]-90° 𝛄=0
+        # TODO: For LOS cases (and even for NLOS cases), it may be better to set the default rxOrientation to [180, 0, 0]. Limited
+        #       experoments show that the pair [0,0,0] with [180,0,0] (for tx/rx) generally works better. Using [180,0,0] with [0,0,0]
+        #       seems to work the worst (Antenna poining away from eachother)
         self.txOrientation = toRadian(kwargs.get('txOrientation', [0,0,0])) # Orientation of TX antenna array (alpha, beta, gamma) - degrees
         self.rxOrientation = toRadian(kwargs.get('rxOrientation', [0,0,0])) # Orientation of RX antenna array (alpha, beta, gamma) - degrees
-
+        
         # Angle Scaling according to TR38.901 - 7.5.1 and TR38.901 - Annex A
         #  - To disable, set both 'angleScaling' to None (This is the default)
         #  - To enable, provide 2 lists of 4 desired values for aods, aoas, zods, zoas respectively for the mean and spread used for scaling.
@@ -526,11 +529,11 @@ class CdlChannel(ChannelBase):
         repStr += indent*' ' + "  angleSpreads: %s°\n"%("° ".join(str(int(np.round(toDegrees(angle)))) for angle in self.angleSpreads ))
         
         repStr += self.txAntenna.print(indent+2, "TX Antenna:", True)
-        if np.prod(self.txOrientation)!=0:
+        if not np.any(self.txOrientation):
             repStr += indent*' ' + "  TX Antenna Orientation (𝛼,𝛃,𝛄): %s°\n"%("° ".join(str(int(np.round(toDegrees(angle)))) for angle in self.txOrientation ))
         
         repStr += self.rxAntenna.print(indent+2, "RX Antenna:", True)
-        if np.prod(self.rxOrientation)!=0:
+        if not np.any(self.rxOrientation):
             repStr += indent*' ' + "  RX Antenna Orientation (𝛼,𝛃,𝛄): %s°\n"%("° ".join(str(int(np.round(toDegrees(angle)))) for angle in self.rxOrientation ))
 
         repStr += self.channelFilter.print(indent+2, "Channel Filter:", True)
