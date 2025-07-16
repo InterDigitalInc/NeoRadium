@@ -131,7 +131,7 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numFrames</span> <span class="o">=</span> <span class="mi">4</span>                               <span class="c1"># Number of time-domain frames</span>
-<span class="n">ebNoDbs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">14</span><span class="p">)</span>                       <span class="c1"># Eb/No values (in dB)</span>
+<span class="n">ebNoDbs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>                       <span class="c1"># Eb/No values (in dB)</span>
 <span class="n">freqDomain</span> <span class="o">=</span> <span class="kc">False</span>                          <span class="c1"># Set to True to apply channel in frequency domain</span>
 
 <span class="n">modulation</span> <span class="o">=</span> <span class="s2">&quot;16QAM&quot;</span>
@@ -253,22 +253,22 @@
 Simulating end-to-end for &#34;16QAM&#34;, with &#34;Perfect&#34; channel estimation, in time domain.
 EB/No(dB)  Total Bits  Bit Errors  BER(%)  Total Blocks  Block Errors  BLER(%)  time(Sec.)
 ---------  ----------  ----------  ------  ------------  ------------  -------  ----------
-    8       2417280      330635     13.68         320           320     100.00      51.51
-    9       2417280       36366      1.50         320           197      61.56      54.02
-   10       2417280           0      0.00         320             0       0.00      53.96
-   11       2417280           0      0.00         320             0       0.00      52.48
-   12       2417280           0      0.00         320             0       0.00      52.22
-   13       2417280           0      0.00         320             0       0.00      53.31
+   -2       2417280      230262      9.53         320           181      56.56      53.77
+   -1       2417280      114397      4.73         320           107      33.44      54.84
+    0       2417280        7617      0.32         320            13       4.06      54.15
+    1       2417280           0      0.00         320             0       0.00      55.53
+    2       2417280           0      0.00         320             0       0.00      54.87
+    3       2417280           0      0.00         320             0       0.00      54.94
 
 Simulating end-to-end for &#34;16QAM&#34;, with &#34;LS&#34; channel estimation, in time domain.
 EB/No(dB)  Total Bits  Bit Errors  BER(%)  Total Blocks  Block Errors  BLER(%)  time(Sec.)
 ---------  ----------  ----------  ------  ------------  ------------  -------  ----------
-    8       2417280      470974     19.48         320           320     100.00      54.75
-    9       2417280      407612     16.86         320           320     100.00      53.35
-   10       2417280      294885     12.20         320           319      99.69      53.72
-   11       2417280      139796      5.78         320           160      50.00      53.54
-   12       2417280        4446      0.18         320            23       7.19      53.71
-   13       2417280           0      0.00         320             0       0.00      53.34
+   -2       2417280      447325     18.51         320           302      94.38      53.51
+   -1       2417280      350608     14.50         320           258      80.62      54.01
+    0       2417280      246521     10.20         320           196      61.25      54.24
+    1       2417280      120722      4.99         320           105      32.81      54.80
+    2       2417280       40487      1.67         320            40      12.50      55.53
+    3       2417280        2352      0.10         320             2       0.62      54.71
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
