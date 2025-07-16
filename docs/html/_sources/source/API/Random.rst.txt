@@ -4,4 +4,4 @@ Random Number Generator
    :members: RanGen
    :member-order: bysource
    :special-members:
-   :exclude-members: __init__, __repr__, __weakref__, __dict__, __getitem__, seqParams
+   :exclude-members: __init__, __repr__, __weakref__, __dict__, __getitem__

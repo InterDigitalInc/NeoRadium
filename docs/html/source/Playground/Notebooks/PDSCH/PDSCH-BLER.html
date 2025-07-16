@@ -1,26 +1,26 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculating BER/BLER for PDSCH Communication with LDPC &mdash; NeoRadium 0.2.0 Documentation</title>
-      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/nbsphinx-code-cells.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/neoradium.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Calculating BER/BLER for PDSCH Communication with LDPC &mdash; NeoRadium 0.3.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=eea1f72d" />
+
   
-        <script src="../../../../_static/jquery.js"></script>
-        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-        <script src="../../../../_static/doctools.js"></script>
-        <script src="../../../../_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.2.0
+            NeoRadium 0.3.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -55,7 +55,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channels">Channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a><ul class="current">
@@ -65,7 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab-5g-toolbox">Comparing with Matlab 5G Toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with Matlab</a></li>
 </ul>
 </li>
 </ul>
@@ -81,6 +82,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 </ul>
 
         </div>
@@ -89,7 +91,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.2.0</a>
+          <a href="../../../../index.html">NeoRadium 0.3.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -109,19 +111,18 @@
            <div itemprop="articleBody">
              
   <section id="Calculating-BER/BLER-for-PDSCH-Communication-with-LDPC">
-<h1>Calculating BER/BLER for PDSCH Communication with LDPC<a class="headerlink" href="#Calculating-BER/BLER-for-PDSCH-Communication-with-LDPC" title="Permalink to this heading"></a></h1>
+<h1>Calculating BER/BLER for PDSCH Communication with LDPC<a class="headerlink" href="#Calculating-BER/BLER-for-PDSCH-Communication-with-LDPC" title="Link to this heading"></a></h1>
 <p>This notebook shows how to calculate the bit error rate of PDSCH communication with LDPC channel coding.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.io</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">LdpcEncoder</span><span class="p">,</span> <span class="n">Grid</span>
-<span class="kn">from</span> <span class="nn">neoradium.utils</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">LdpcEncoder</span><span class="p">,</span> <span class="n">Grid</span><span class="p">,</span> <span class="n">random</span>
 <br/></pre></div>
 </div>
 </div>
@@ -131,7 +132,7 @@
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numFrames</span> <span class="o">=</span> <span class="mi">4</span>                               <span class="c1"># Number of time-domain frames</span>
 <span class="n">ebNoDbs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">14</span><span class="p">)</span>                       <span class="c1"># Eb/No values (in dB)</span>
-<span class="n">freqDomain</span> <span class="o">=</span> <span class="kc">False</span>                          <span class="c1"># Set this to True to apply channel in frequency domain</span>
+<span class="n">freqDomain</span> <span class="o">=</span> <span class="kc">False</span>                          <span class="c1"># Set to True to apply channel in frequency domain</span>
 
 <span class="n">modulation</span> <span class="o">=</span> <span class="s2">&quot;16QAM&quot;</span>
 <span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">51</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>    <span class="c1"># Create a carrier with 51 RBs and 30KHz subcarrier spacing</span>
@@ -162,11 +163,10 @@
         <span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># Creating a CdlChannel object:</span>
-        <span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                              <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]),</span>  <span class="c1"># 8 TX antenna</span>
                              <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]),</span>  <span class="c1"># 2 RX antenna</span>
-                             <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">,</span>
-                             <span class="n">timing</span> <span class="o">=</span> <span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+                             <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">)</span>
 
         <span class="n">blockErrors</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">totalBlocks</span> <span class="o">=</span> <span class="mi">0</span>
@@ -188,7 +188,7 @@
             <span class="n">pdschIndexes</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">&quot;PDSCH&quot;</span><span class="p">)</span>
 
             <span class="c1"># Getting the Precoding Matrix, and precoding the resource grid</span>
-            <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>           <span class="c1"># Get the channel matrix</span>
+            <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>              <span class="c1"># Get the channel matrix</span>
             <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>      <span class="c1"># Get the precoder matrix from the PDSCH object</span>
             <span class="n">precodedGrid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">precode</span><span class="p">(</span><span class="n">precoder</span><span class="p">)</span>                   <span class="c1"># Perform the precoding</span>
 
@@ -253,22 +253,22 @@
 Simulating end-to-end for &#34;16QAM&#34;, with &#34;Perfect&#34; channel estimation, in time domain.
 EB/No(dB)  Total Bits  Bit Errors  BER(%)  Total Blocks  Block Errors  BLER(%)  time(Sec.)
 ---------  ----------  ----------  ------  ------------  ------------  -------  ----------
-    8       2417280      323481     13.38         320           320     100.00      50.77
-    9       2417280       18663      0.77         320           145      45.31      52.54
-   10       2417280           0      0.00         320             0       0.00      52.12
-   11       2417280           0      0.00         320             0       0.00      53.20
-   12       2417280           0      0.00         320             0       0.00      52.58
-   13       2417280           0      0.00         320             0       0.00      53.00
+    8       2417280      330635     13.68         320           320     100.00      51.51
+    9       2417280       36366      1.50         320           197      61.56      54.02
+   10       2417280           0      0.00         320             0       0.00      53.96
+   11       2417280           0      0.00         320             0       0.00      52.48
+   12       2417280           0      0.00         320             0       0.00      52.22
+   13       2417280           0      0.00         320             0       0.00      53.31
 
 Simulating end-to-end for &#34;16QAM&#34;, with &#34;LS&#34; channel estimation, in time domain.
 EB/No(dB)  Total Bits  Bit Errors  BER(%)  Total Blocks  Block Errors  BLER(%)  time(Sec.)
 ---------  ----------  ----------  ------  ------------  ------------  -------  ----------
-    8       2417280      469554     19.42         320           320     100.00      54.17
-    9       2417280      404225     16.72         320           320     100.00      53.96
-   10       2417280      280051     11.59         320           319      99.69      53.13
-   11       2417280      133393      5.52         320           160      50.00      55.77
-   12       2417280        1518      0.06         320            12       3.75      53.92
-   13       2417280           0      0.00         320             0       0.00      56.55
+    8       2417280      470974     19.48         320           320     100.00      54.75
+    9       2417280      407612     16.86         320           320     100.00      53.35
+   10       2417280      294885     12.20         320           319      99.69      53.72
+   11       2417280      139796      5.78         320           160      50.00      53.54
+   12       2417280        4446      0.18         320            23       7.19      53.71
+   13       2417280           0      0.00         320             0       0.00      53.34
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -277,7 +277,7 @@ EB/No(dB)  Total Bits  Bit Errors  BER(%)  Total Blocks  Block Errors  BLER(%)  
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare the results in a couple of plots:</span>
 <span class="n">logGraph</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="k">def</span> <span class="nf">ebNo2Snr</span><span class="p">(</span><span class="n">ebNo</span><span class="p">):</span> <span class="k">return</span> <span class="n">ebNo</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">modems</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">qm</span> <span class="o">*</span> <span class="n">codeRate</span> <span class="o">*</span> <span class="n">bwp</span><span class="o">.</span><span class="n">dataTimeRatio</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ebNo2Snr</span><span class="p">(</span><span class="n">ebNo</span><span class="p">):</span> <span class="k">return</span> <span class="n">ebNo</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">modems</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">qm</span> <span class="o">*</span> <span class="n">codeRate</span> <span class="o">*</span> <span class="n">bwp</span><span class="o">.</span><span class="n">dataTimeRatio</span><span class="p">)</span>
 
 <span class="c1"># Bit Error Rate:</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">chanEstMethod</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s1">&#39;Perfect&#39;</span><span class="p">,</span> <span class="s1">&#39;LS&#39;</span><span class="p">]):</span>
@@ -342,7 +342,7 @@ EB/No(dB)  Total Bits  Bit Errors  BER(%)  Total Blocks  Block Errors  BLER(%)  
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

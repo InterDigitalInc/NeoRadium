@@ -1,26 +1,26 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Comparing Antenna Panel Calculations with Matlab &mdash; NeoRadium 0.2.0 Documentation</title>
-      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../../_static/nbsphinx-code-cells.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../../_static/neoradium.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Comparing Antenna Panel Calculations with Matlab &mdash; NeoRadium 0.3.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/neoradium.css?v=eea1f72d" />
+
   
-        <script src="../../../../../_static/jquery.js"></script>
-        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
-        <script src="../../../../../_static/doctools.js"></script>
-        <script src="../../../../../_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../../index.html" class="icon icon-home">
-            NeoRadium 0.2.0
+            NeoRadium 0.3.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -55,12 +55,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../Playground.html">Playground</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#antenna">Antenna</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#channels">Channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab-5g-toolbox">Comparing with Matlab 5G Toolbox</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab">Comparing with Matlab</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../Playground.html#id1">Antenna</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="AntennaElement.html">Comparing Antenna Element Calculations with Matlab</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Comparing Antenna Panel Calculations with Matlab</a></li>
@@ -88,6 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 </ul>
 
         </div>
@@ -96,7 +98,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../../index.html">NeoRadium 0.2.0</a>
+          <a href="../../../../../index.html">NeoRadium 0.3.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -116,17 +118,17 @@
            <div itemprop="articleBody">
              
   <section id="Comparing-Antenna-Panel-Calculations-with-Matlab">
-<h1>Comparing Antenna Panel Calculations with Matlab<a class="headerlink" href="#Comparing-Antenna-Panel-Calculations-with-Matlab" title="Permalink to this heading"></a></h1>
+<h1>Comparing Antenna Panel Calculations with Matlab<a class="headerlink" href="#Comparing-Antenna-Panel-Calculations-with-Matlab" title="Link to this heading"></a></h1>
 <p>Compare the results with the equivalent Matlab code “MatlabFiles/AntennaPanel.mlx”. <a class="reference external" href="MatlabFiles/AntennaPanel.html">Here</a> is the execution results of this code in Matlab.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.io</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
-<span class="kn">import</span> <span class="nn">neoradium</span> <span class="k">as</span> <span class="nn">nr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nr</span>
 <span class="c1"># Note: See the &quot;AntennaPanel.mlx&quot; file in the &quot;MatlabFiles&quot; directory and compare with the</span>
 <span class="c1"># following results.</span>
 </pre></div>
@@ -255,7 +257,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Time: 2.7155697345733643
+Time: 2.6720311641693115
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -373,7 +375,7 @@ Maximum difference between the results: 1.6186163520615082e-11
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

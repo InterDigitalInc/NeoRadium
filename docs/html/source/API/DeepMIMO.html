@@ -1,0 +1,760 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeepMIMO and UE Trajectories &mdash; NeoRadium 0.3.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=eea1f72d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Random Number Generator" href="Random.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NeoRadium 0.3.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DeepMIMO and UE Trajectories</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData"><code class="docutils literal notranslate"><span class="pre">DeepMimoData</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.showScenarioInfo"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.showScenarioInfo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.print"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.setScenariosPath"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.setScenariosPath()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.getRandomTrajectory"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.getRandomTrajectory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.drawMap"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.drawMap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.animateTrajectory"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.animateTrajectory()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.interactiveTrajPoints"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.interactiveTrajPoints()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.trajectoryFromPoints"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.trajectoryFromPoints()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.getChanGen"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.getChanGen()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NeoRadium 0.3.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">DeepMIMO and UE Trajectories</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/source/API/DeepMIMO.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-neoradium.deepmimo">
+<span id="deepmimo-and-ue-trajectories"></span><h1>DeepMIMO and UE Trajectories<a class="headerlink" href="#module-neoradium.deepmimo" title="Link to this heading"></a></h1>
+<p>This module introduces the <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData" title="neoradium.deepmimo.DeepMimoData"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeepMimoData</span></code></a> class, which encapsulates data related to
+various scenarios in the <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> framework. The
+<a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.getRandomTrajectory" title="neoradium.deepmimo.DeepMimoData.getRandomTrajectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getRandomTrajectory()</span></code></a> method within this class facilitates the generation of
+a random trajectory within the specified <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario. Additionally, the
+<a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.interactiveTrajPoints" title="neoradium.deepmimo.DeepMimoData.interactiveTrajPoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interactiveTrajPoints()</span></code></a> method enables you to define your own trajectory on
+an interactive map. A complete example of using the <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData" title="neoradium.deepmimo.DeepMimoData"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeepMimoData</span></code></a> class is available at
+<a class="reference internal" href="../Playground/Notebooks/RayTracing/DeepMimo.html"><span class="doc">Working with DeepMIMO Scenarios</span></a> in the playground.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.deepmimo.</span></span><span class="sig-name descname"><span class="pre">DeepMimoData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseStationId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData" title="Link to this definition"></a></dt>
+<dd><p>This class encapsulates all the ray-tracing data read from <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario
+files. It can be used to create random trajectories of user (UE) movements by interpolating the ray-tracing
+information at intermediate points on the trajectory.</p>
+<p>The generated trajectories can then be used by the <a class="reference internal" href="Channels.html#neoradium.trjchan.TrjChannel" title="neoradium.trjchan.TrjChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjChannel</span></code></a> class to generate
+temporally and spatially consistent sequences of MIMO channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scenario</strong> (<em>str</em>) – <p>The name of the <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario, which is also the name of the folder
+containing the scenario files.</p>
+</p></li>
+<li><p><strong>baseStationId</strong> (<em>int</em><em> or </em><em>str</em>) – <p>The base station identifier. In the newer versions of <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario
+files, the base station identifier is a text string. You can use the
+<a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.showScenarioInfo" title="neoradium.deepmimo.DeepMimoData.showScenarioInfo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">showScenarioInfo()</span></code></a> class
+method to print information about available base stations and corresponding <code class="docutils literal notranslate"><span class="pre">baseStationId</span></code> values. The
+default value is 1. In case of string base station identifiers, this default value results in selecting
+the first base station (after sorting the base station identifiers).</p>
+</p></li>
+<li><p><strong>gridId</strong> (<em>int</em><em> or </em><em>str</em>) – <p>For the scenarios with multiple user grids, this parameter determines which user grid data should be
+loaded. The default value is 0 which results in loading the first user grid. In the newer versions of
+<a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario files, the base station identifier is a text string. You
+can use the <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.showScenarioInfo" title="neoradium.deepmimo.DeepMimoData.showScenarioInfo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">showScenarioInfo()</span></code></a> class method to print
+information about available user grids and their corresponding identifiers. In case of string grid
+identifiers, this default value of 0 results in selecting the first user grid (after sorting the
+user grid identifiers).</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Other Properties:</strong></p>
+<p>After reading the <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario files, this class sets internal properties
+as follows:</p>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">gridSize<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A numpy array of 2 integers indicating the number of grid points  in <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>
+directions.</p>
+</dd>
+<dt class="field-even">numGridPoints<span class="colon">:</span></dt>
+<dd class="field-even"><p>The total number of grid points with ray-tracing data in the specified scenario. Note
+that <span class="math notranslate nohighlight">\(numGridPoints = gridSize[0] * gridSize[1]\)</span>.</p>
+</dd>
+<dt class="field-odd">delta<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The distance between 2 neighboring grid points (in <code class="docutils literal notranslate"><span class="pre">x</span></code> or <code class="docutils literal notranslate"><span class="pre">y</span></code> direction). It is assumed that
+this value is the same along the <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> axes.</p>
+</dd>
+<dt class="field-even">bsXyz<span class="colon">:</span></dt>
+<dd class="field-even"><p>A numpy array containing the three dimensional coordinates of the base station.</p>
+</dd>
+<dt class="field-odd">xyMin, xyMax<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy arrays containing the coordinates of lower left and upper right points on the grid.
+In other words, for the <span class="math notranslate nohighlight">\((x,y)\)</span> coordinates of any grid point, we have:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}xyMin[0] \le x \le xyMax[0]\\xyMin[1] \le y \le xyMax[1]\end{aligned}\end{align} \]</div>
+</dd>
+<dt class="field-even">carrierFreq<span class="colon">:</span></dt>
+<dd class="field-even"><p>The carrier frequency for the specified scenario.</p>
+</dd>
+<dt class="field-odd">minPaths, avgPaths, maxPaths<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Measured statistics representing the minimum, average, and maximum number of
+paths between the UE and the base station for all grid points in the specified scenario.</p>
+</dd>
+<dt class="field-even">numTotalBlockage<span class="colon">:</span></dt>
+<dd class="field-even"><p>Total number of grid points with no paths between the UE and the base station.</p>
+</dd>
+<dt class="field-odd">numLOS<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Total number of grid points where there is a Line-of-Sight (LOS) path between the UE and the base
+station.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Indexing:</strong></p>
+<p>This class supports direct indexing to the <a class="reference internal" href="Channels.html#neoradium.trjchan.TrjPoint" title="neoradium.trjchan.TrjPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjPoint</span></code></a> objects in the DeepMIMO
+dataset. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;O1_3p5B&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Read and create dataset</span>
+<span class="n">tenFirstPoints</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>      <span class="c1"># Getting the first 10 points in the dataset</span>
+</pre></div>
+</div>
+<p><strong>Iterating through points:</strong></p>
+<p>This class has a generator function (<code class="docutils literal notranslate"><span class="pre">__iter__</span></code>) which makes it easier to use it in a loop. For example, the
+following code counts the number of points with LOS paths.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;O1_3p5B&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Read and create dataset</span>
+<span class="n">numLosPoints</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">deepMimoData</span><span class="p">:</span>  <span class="c1"># Use &quot;deepMimoData&quot; directly with the &quot;for&quot; loop</span>
+    <span class="k">if</span> <span class="n">point</span><span class="o">.</span><span class="n">hasLos</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">numLosPoints</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.showScenarioInfo">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">showScenarioInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.showScenarioInfo" title="Link to this definition"></a></dt>
+<dd><p>This class method prints information about the specified <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario. It
+can be used to find out the base stations and user grids available in the scenario.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>scenario</strong> (<em>str</em>) – The name of DeepMIMO scenario, which is also the name of the folder containing the scenario files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DeepMimoData</span> <span class="pre">Properties:'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.print" title="Link to this definition"></a></dt>
+<dd><p>Prints the properties of this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em>) – Used internally to adjust the indentation of the printed info.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – The title used for the information. By default the text “DeepMimoData Properties:” is used.</p></li>
+<li><p><strong>getStr</strong> (<em>boolean</em>) – If this is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the function returns a text string instead of printing the info. Otherwise when this
+is <code class="docutils literal notranslate"><span class="pre">False</span></code> (default) the function prints the information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If “getStr” is true, this function returns a text string containing the information about the properties of
+this class. Otherwise, nothing is returned (default).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.setScenariosPath">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setScenariosPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newPath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.setScenariosPath" title="Link to this definition"></a></dt>
+<dd><p>This class method establishes the path to a folder that contains the ray-tracing scenarios. Within this
+folder, each scenario is organized into its own sub-folder, with the same name as the scenario itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>newPath</strong> (<em>str</em>) – The new path to the ray-tracing scenario files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.getRandomTrajectory">
+<span class="sig-name descname"><span class="pre">getRandomTrajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyBounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segLen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajLen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajDist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyStart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'All'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speedMps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.getRandomTrajectory" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns a random trajectory in the area specified by <code class="docutils literal notranslate"><span class="pre">xyBounds</span></code> inside the grid of points in the
+given scenario. This function first creates a random “On-Grid” trajectory of points. It then interpolates
+additional trajectory points between the grid points. See
+<a class="reference internal" href="../Playground/Notebooks/RayTracing/DeepMimo.html"><span class="doc">Working with DeepMIMO Scenarios</span></a> for a complete example.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xyBounds</strong> (<em>2-D list</em><em> of </em><em>integers</em>) – A 2x2 matrix representing the bounds of the area where the random trajectory will be generated. The matrix
+should be in the format <code class="docutils literal notranslate"><span class="pre">[[minX,</span> <span class="pre">minY],</span> <span class="pre">[maxX,</span> <span class="pre">maxY]]</span></code>. All points in the returned trajectory will be
+confined within these bounds. If the area defined by <code class="docutils literal notranslate"><span class="pre">xyBounds</span></code> overlaps with parts outside the grid area
+specified by <code class="docutils literal notranslate"><span class="pre">xyMin</span></code> and <code class="docutils literal notranslate"><span class="pre">xyMax</span></code>, the boundaries are internally adjusted to ensure that the trajectory
+falls within the intersection of the areas defined by <code class="docutils literal notranslate"><span class="pre">xyBounds</span></code> and the pair (<code class="docutils literal notranslate"><span class="pre">xyMin</span></code>, <code class="docutils literal notranslate"><span class="pre">xyMax</span></code>).</p></li>
+<li><p><strong>segLen</strong> (<em>integer</em>) – The number of grid points that the shortest segment of the trajectory traverses, excluding the starting
+point. For instance, if <code class="docutils literal notranslate"><span class="pre">segLen</span></code> is set to 2, it implies that each segment of the generated trajectory
+passes through at least three grid points (including the starting point). This parameter can be utilized
+to control the frequency of turns in a trajectory. A larger <code class="docutils literal notranslate"><span class="pre">segLen</span></code> value results in a reduced number of
+turns in the trajectory.</p></li>
+<li><p><strong>bwp</strong> (<em>The bandwidth part used to decide the timing</em><em> of </em><em>the interpolated trajectory points. One interpolated</em>) – trajectory point is created for each slot of communication.</p></li>
+<li><p><strong>trajTime</strong> (<em>float</em><em> or </em><em>None</em>) – If provided, it represents the total travel time (in seconds) along the trajectory. Note that the actual
+travel time on the generated trajectory may not be precisely equal to this value due to the approximations
+in the calculations.</p></li>
+<li><p><strong>trajDist</strong> (<em>float</em><em> or </em><em>None</em>) – If provided, it represents the total travel distance (in meters) along the trajectory. This parameter is
+ignored if <code class="docutils literal notranslate"><span class="pre">trajTime</span></code> is specified. Note that the actual travel distance on the generated trajectory may
+not be precisely equal to this value due to the approximations in the calculations.</p></li>
+<li><p><strong>trajLen</strong> (<em>integer</em><em> or </em><em>None</em>) – <p>If provided, it represents the total number of grid points on the trajectory (excluding the starting point).
+This parameter is ignored if one of <code class="docutils literal notranslate"><span class="pre">trajTime</span></code> or <code class="docutils literal notranslate"><span class="pre">trajDist</span></code> is specified.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>At least one of <code class="docutils literal notranslate"><span class="pre">trajTime</span></code>, <code class="docutils literal notranslate"><span class="pre">trajDist</span></code>, or <code class="docutils literal notranslate"><span class="pre">trajLen</span></code> must be specified.</p>
+</div>
+</p></li>
+<li><p><strong>xyStart</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, or </em><em>None</em>) – The 2-D coordinates of the the trajectory’s initial position. If this parameter is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>
+(default), the trajectory’s starting point is automatically determined based on <code class="docutils literal notranslate"><span class="pre">trajDir</span></code> and
+<code class="docutils literal notranslate"><span class="pre">xyBounds</span></code>. Otherwise, the given value is first checked against the trajectory bounds (<code class="docutils literal notranslate"><span class="pre">xyBounds</span></code>) and
+modified if needed to ensure that the starting point falls within the specified boundaries.</p></li>
+<li><p><strong>prob</strong> (<em>tuple</em><em> or </em><em>None</em>) – If provided, it must be a tuple containing three probability values for turning right, going straight, and
+turning left. These three probability values must collectively sum up to 1. If not specified, all three
+probabilities are assumed to be equal: <span class="math notranslate nohighlight">\(P_{right}=P_{straight}=P_{left}=\frac 1 3\)</span></p></li>
+<li><p><strong>trajDir</strong> (<em>str</em>) – <p>This value can be used to restrict the direction of movement along the trajectory. At each step, the moving
+direction is the angle between the velocity vector and the X-axis. There are eight possible directions,
+corresponding to angles: 0, 45, 90, 135, 180, 225, 270, and 315 degrees. This parameter provides a general
+direction to the trajectory. It can take one of the following values:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">All<span class="colon">:</span></dt>
+<dd class="field-odd"><p>No restriction in direction of movement in the trajectory. This is the default value.</p>
+</dd>
+<dt class="field-even">+X<span class="colon">:</span></dt>
+<dd class="field-even"><p>This forces the trajectory to move along the X-axis in positive direction. The only movement
+directions allowed in the trajectory are 45, 0, and 315 degrees.</p>
+</dd>
+<dt class="field-odd">-X<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This forces the trajectory to move along the X-axis in negative direction. The only movement
+directions allowed in the trajectory are 135, 180, and 225 degrees.</p>
+</dd>
+<dt class="field-even">+Y<span class="colon">:</span></dt>
+<dd class="field-even"><p>This forces the trajectory to move along the Y-axis in positive direction. The only movement
+directions allowed in the trajectory are 135, 90, and 45 degrees.</p>
+</dd>
+<dt class="field-odd">-Y<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This forces the trajectory to move along the Y-axis in negative direction. The only movement
+directions allowed in the trajectory are 225, 270, and 315 degrees.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>speedMps</strong> (<em>float</em><em> or </em><em>None</em>) – If provided, it specifies the trajectory speed in meters per second. If not provided, the speed is
+automatically determined based on the scenario type (indoor vs outdoor). The current implementation uses
+an average walking speed of 1.2 m/s for indoor scenarios and 14 m/s for outdoor scenarios (which
+corresponds to a car moving at 31.32 miles per hour). Note that the actual linear speed on the trajectory
+may not be precisely equal to this value due to the approximations in the calculations.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a> object containing all the information about the created
+trajectory</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.drawMap">
+<span class="sig-name descname"><span class="pre">drawMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LOS-NLOS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.drawMap" title="Link to this definition"></a></dt>
+<dd><p>This visualization function creates a map of the scenario, assigning different colors to the points
+on the grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mapType</strong> (<em>str</em>) – <p>This specifies the type of map to be drawn by this function:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">LOS-NLOS<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The color used for each point depends on whether it has a Line-of-Sight path, or if there
+is a total blockage at that point.</p>
+</dd>
+<dt class="field-even">1stPathDelays<span class="colon">:</span></dt>
+<dd class="field-even"><p>The color used for each point depends the amount of delay for the strongest path at
+that point.</p>
+</dd>
+<dt class="field-odd">1stPathPowers<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The color used for each point depends the path power of the strongest path at that
+point.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>overlay</strong> (<a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a> or numpy array or None) – If this is a <a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a> object, then the trajectory will be drawn over the
+map. If this is a numpy array, it must contain a list of indices of the points in the current scenario. In
+this case all the points in the list will be drawn (scatter plot) over the map.</p></li>
+<li><p><strong>figSize</strong> (<em>float</em>) – This value determines the approximate size of the drawn map. If the maximum of the map’s width and height
+is less than the specified value, the map is scaled to match the specified size. The default value is set
+to <code class="docutils literal notranslate"><span class="pre">6</span></code>.</p></li>
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes">matplotlib.axes.Axes</a> or None) – If specified, it must be a matplotlib <code class="docutils literal notranslate"><span class="pre">Axis</span></code> object on which the Scenario Map is drawn. This can be used
+if you want to have a group of matplotlib subplots and draw the map in one of them.</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus1&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;1stPathDelays&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-center" style="width: 600px">
+<img alt="../../_images/DeepMimoMap.png" src="../../_images/DeepMimoMap.png" />
+</figure>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.animateTrajectory">
+<span class="sig-name descname"><span class="pre">animateTrajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trajectory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numGraphs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graphCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LOS-NLOS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pointsPerFrame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.animateTrajectory" title="Link to this definition"></a></dt>
+<dd><p>This visualization function generates a scenario map and animates the movement of a UE device along the
+specified trajectory within the map. Furthermore, it can animate up to three graphs below the scenario map. A
+complete example of using this function is available at
+<a class="reference internal" href="../Playground/Notebooks/RayTracing/TrajChannelAnim.html"><span class="doc">Animating Trajectories</span></a> in the playground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trajectory</strong> (<a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a>) – The trajectory to animate. It must be an instance of <a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a>.</p></li>
+<li><p><strong>numGraphs</strong> (<em>int</em>) – The number of graphs drawn below the scenario map. The default is 0, which animates only the trajectory
+on the map.</p></li>
+<li><p><strong>graphCallback</strong> (<em>function</em><em> or </em><em>None</em>) – If <code class="docutils literal notranslate"><span class="pre">numGraphs</span></code> is not zero, a callback function should be provided, which will be automatically called
+by this method. The function is initially called to configure the graphs, and then it is invoked for
+every frame of the animation to update or draw the graphs. For more information, please refer to the
+<a class="reference internal" href="#callback"><span class="std std-ref">callback function section</span></a> below.</p></li>
+<li><p><strong>mapType</strong> (<em>str</em>) – This specifies the type of map that will be used as the background of the animation. For more information
+about the available values, please refer to the <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.drawMap" title="neoradium.deepmimo.DeepMimoData.drawMap"><code class="xref py py-meth docutils literal notranslate"><span class="pre">drawMap()</span></code></a> method.</p></li>
+<li><p><strong>pointsPerFrame</strong> (<em>int</em>) – <p>This function creates a frame of animation every <code class="docutils literal notranslate"><span class="pre">pointsPerFrame</span></code> trajectory points. The default is
+10 which means create an animation frame every other 10 trajectory points. A value of 1, creates a frame
+for every trajectory point which takes 10 times more memory than the default value of 10.</p>
+<p>This function generates an animation frame every <code class="docutils literal notranslate"><span class="pre">pointsPerFrame</span></code> trajectory points. By default, it
+creates an animation frame every other 10 trajectory points. If you set the value to 1, it creates a
+frame for every trajectory point, which requires 10 times more memory compared to the default value of 10.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For long trajectories, the animation can consume a significant amount of memory, and the
+matplotlib library may truncate it. To mitigate this issue, you can increase the value of
+<code class="docutils literal notranslate"><span class="pre">pointsPerFrame</span></code> to reduce the memory required for the animation. Alternatively, you can configure
+the maximum memory usage for the animation by adding a line similar to the following somewhere near
+the beginning of your code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;animation.embed_limit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100000000</span>  <span class="c1"># Set the limit to 100 MB</span>
+</pre></div>
+</div>
+</div>
+</p></li>
+<li><p><strong>fileName</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it must be a path to a GIF file, and the animation will be saved to that file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <code class="docutils literal notranslate"><span class="pre">FuncAnimation</span></code> object containing the information about the animation. In a Jupyter Notebook, you can
+utilize the <code class="docutils literal notranslate"><span class="pre">to_jshtml()</span></code> method of the <code class="docutils literal notranslate"><span class="pre">FuncAnimation</span></code> class to display the animation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.FuncAnimation.html">matplotlib.animation.FuncAnimation</a></p>
+</dd>
+</dl>
+<p id="callback"><strong>Animation Callback Function</strong></p>
+<p>This function is automatically invoked to configure and display additional graphs below the scenario map
+during the animation. It accepts the following parameters:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">request<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This string can be either <code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;Draw&quot;</span></code>, indicating the purpose of the call.</p>
+</dd>
+<dt class="field-even">ax<span class="colon">:</span></dt>
+<dd class="field-even"><p>This is an array of
+<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes">matplotlib.axes.Axes</a>
+objects. Each element of this array is used to draw a graph below the animated scenario map.</p>
+</dd>
+<dt class="field-odd">trajectory<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The <a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a> object used for the animation.</p>
+</dd>
+<dt class="field-even">points<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple of two integer values, representing the indices of points in the trajectory for the
+previous and current frames, respectively. This parameter is utilized only when the <code class="docutils literal notranslate"><span class="pre">request</span></code>
+parameter is set to <code class="docutils literal notranslate"><span class="pre">&quot;Draw&quot;</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>The following is an example of a callback function that draws two graphs below the animated trajectory on
+the scenario map.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">handleGraph</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;Config&quot;</span><span class="p">:</span>
+        <span class="c1"># Configure 1st graph for delay of first path</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span><span class="mi">1300</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Delay of first path (ns)&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Configure 2nd graph for Power of first path</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">130</span><span class="p">,</span><span class="o">-</span><span class="mi">80</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Power of first path (dB)&quot;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;Draw&quot;</span><span class="p">:</span>
+        <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">points</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">],</span> <span class="p">[</span><span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">p0</span><span class="p">]</span><span class="o">.</span><span class="n">delays</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span><span class="o">.</span><span class="n">delays</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">],</span> <span class="p">[</span><span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">p0</span><span class="p">]</span><span class="o">.</span><span class="n">powers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span><span class="o">.</span><span class="n">powers</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.interactiveTrajPoints">
+<span class="sig-name descname"><span class="pre">interactiveTrajPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LOS-NLOS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backEnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MacOSX'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.interactiveTrajPoints" title="Link to this definition"></a></dt>
+<dd><p>This function enables you to create a trajectory by selecting points on the map. It opens a separate window
+displaying the scenario map. You can then click on the map points to create the trajectory. After each click,
+the map updates to show current trajectory. To end the trajectory, simply close the window. This function
+returns the selected points after closing the map window. The function <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.trajectoryFromPoints" title="neoradium.deepmimo.DeepMimoData.trajectoryFromPoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">trajectoryFromPoints()</span></code></a> can then
+be used to create a <a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a> object based on the captured trajectory points.
+The notebook file <a class="reference internal" href="../Playground/Notebooks/RayTracing/DeepMimo.html"><span class="doc">Working with DeepMIMO Scenarios</span></a> contains an example of using this
+function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mapType</strong> (<em>str</em>) – <p>This specifies the type of map to be drawn by this function:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">LOS-NLOS<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The color used for each point depends on whether it has a Line-of-Sight path, or if there
+is a total blockage at that point.</p>
+</dd>
+<dt class="field-even">1stPathDelays<span class="colon">:</span></dt>
+<dd class="field-even"><p>The color used for each point depends the amount of delay for the strongest path at
+that point.</p>
+</dd>
+<dt class="field-odd">1stPathPowers<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The color used for each point depends the path power for the strongest path at that
+point.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>backEnd</strong> (<em>str</em>) – The name of the interactive backend to be used by the matplotlib library. For more information, please
+refer to <a class="reference external" href="https://matplotlib.org/stable/users/explain/figure/backends.html">matplotlib backends</a>. The
+default backend is “MacOSX”.</p></li>
+<li><p><strong>figSize</strong> (<em>float</em>) – This value determines the approximate size of the drawn map. If the maximum of the map’s width and height
+is less than the specified value, the map is scaled to match the specified size. The default value is set
+to <code class="docutils literal notranslate"><span class="pre">6</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array of 2-D points on the current scenario map specifying the trajectory.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy array</p>
+</dd>
+</dl>
+<p><strong>Example:</strong></p>
+<p>The code below can be utilized to generate a trajectory of points for the “asu_campus1” scenario. The image
+below illustrates the current trajectory, depicted by blue lines, and the starting point, marked by a small
+blue circle.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus1&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">interactiveTrajPoints</span><span class="p">(</span><span class="n">mapType</span><span class="o">=</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-center" style="width: 600px">
+<img alt="../../_images/DeepMimoInteractiveMap.png" src="../../_images/DeepMimoInteractiveMap.png" />
+</figure>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.trajectoryFromPoints">
+<span class="sig-name descname"><span class="pre">trajectoryFromPoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speedMps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.trajectoryFromPoints" title="Link to this definition"></a></dt>
+<dd><p>Creates and returns a <a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a> object based on the given trajectory points
+and parameters. Please refer to the notebook <a class="reference internal" href="../Playground/Notebooks/RayTracing/DeepMimo.html"><span class="doc">Working with DeepMIMO Scenarios</span></a> for an example
+of using this function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<em>numpy array</em>) – This array of 2-D points on the current scenario map specifies the trajectory. The
+<a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.interactiveTrajPoints" title="neoradium.deepmimo.DeepMimoData.interactiveTrajPoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interactiveTrajPoints()</span></code></a> function can be used to obtain these points interactively.</p></li>
+<li><p><strong>bwp</strong> (<em>The bandwidth part used to determine the timing</em><em> of </em><em>the interpolated trajectory points. This implementation</em>) – generates one interpolated trajectory point for each communication slot.</p></li>
+<li><p><strong>speedMps</strong> (<em>float</em><em> or </em><em>None</em>) – If provided, it specifies the trajectory speed in meters per second. If not provided, the speed is
+automatically determined based on the scenario type (indoor vs outdoor). The current implementation uses
+an average walking speed of 1.2 m/s for indoor scenarios and 14 m/s for outdoor scenarios (which
+corresponds to a car moving at 31.32 miles per hour). Note that the actual linear speed on the trajectory
+may not be precisely equal to this value due to the approximations in the calculations.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a> object containing all the information about the created
+trajectory</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.getChanGen">
+<span class="sig-name descname"><span class="pre">getChanGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numChannels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">los</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minDist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxDist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minY</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxY</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.getChanGen" title="Link to this definition"></a></dt>
+<dd><p>Samples random points from the current scenario based on the specified criteria and returns a generator object
+that can generate channel matrices corresponding to those random points.</p>
+<p>The indices of the random points can be retrieved using the <code class="docutils literal notranslate"><span class="pre">pointIdx</span></code> property of the returned generator
+object. These point indices can then be passed to the <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.drawMap" title="neoradium.deepmimo.DeepMimoData.drawMap"><code class="xref py py-meth docutils literal notranslate"><span class="pre">drawMap()</span></code></a> method as an “overlay” to be
+displayed on the map</p>
+<p>Refer to the notebook <a class="reference internal" href="../Playground/Notebooks/RayTracing/ChannelGeneration.html"><span class="doc">Creating random MIMO Channel Matrices from a DeepMimo Scenario</span></a> for an example of
+using this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numChannels</strong> (<em>int</em>) – This is the number of channel matrices generated by the returned generator which is equal to the number of
+points sampled from all the points on the grid of the current scenario. However, it disregards points
+with total blockage (i.e., points with no paths to the base station). If the given filter criteria result
+in insufficient points being available in the current scenario, the number of points sampled (and
+consequently, the number of channels generated) may be less than <code class="docutils literal notranslate"><span class="pre">numChannels</span></code>.</p></li>
+<li><p><strong>bwp</strong> (<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>) – The bandwidth part object used by the returned generator to construct channel matrices.</p></li>
+<li><p><strong>los</strong> (<em>Boolean</em><em> or </em><em>None</em>) – <p>It can be set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">True</span></code>, or <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<blockquote>
+<div><ul>
+<li><p>If set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, the sampled points are not filtered based on their Line-of-Sight communication
+path (default).</p></li>
+<li><p>If set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, only the points with a Line-of-Sight communication path to the base station are
+considered.</p></li>
+<li><p>If set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, only the points without a Line-of-Sight communication path to the base station
+are considered.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>minDist</strong> (<em>float</em>) – If specified, this parameter determines the minimum distance between the points and the base station.
+Points closer than this specified value will not be considered. The default is <code class="docutils literal notranslate"><span class="pre">0</span></code> which effectively
+disables this filter.</p></li>
+<li><p><strong>maxDist</strong> (<em>float</em>) – If specified, this parameter determines the maximum distance between the points and the base station.
+Points farther than this specified value will not be considered. By default, this parameter is set to
+<code class="docutils literal notranslate"><span class="pre">np.inf</span></code>, which effectively disables this filter.</p></li>
+<li><p><strong>minX</strong> (<em>float</em>) – If specified, parameter determines a lower bound for the <code class="docutils literal notranslate"><span class="pre">x</span></code> coordinate of the points to consider. It
+can be used with other filters to limit the points to a specific region. By default, this parameter is
+set to <code class="docutils literal notranslate"><span class="pre">-np.inf</span></code>, which effectively disables this filter.</p></li>
+<li><p><strong>minY</strong> (<em>float</em>) – If specified, parameter determines a lower bound for the <code class="docutils literal notranslate"><span class="pre">y</span></code> coordinate of the points to consider. It
+can be used with other filters to limit the points to a specific region. By default, this parameter is
+set to <code class="docutils literal notranslate"><span class="pre">-np.inf</span></code>, which effectively disables this filter.</p></li>
+<li><p><strong>maxX</strong> (<em>float</em>) – If specified, parameter determines an upper bound for the <code class="docutils literal notranslate"><span class="pre">x</span></code> coordinate of the points to consider. It
+can be used with other filters to limit the points to a specific region. By default, this parameter is
+set to <code class="docutils literal notranslate"><span class="pre">np.inf</span></code>, which effectively disables this filter.</p></li>
+<li><p><strong>maxY</strong> (<em>float</em>) – If specified, parameter determines an upper bound for the <code class="docutils literal notranslate"><span class="pre">y</span></code> coordinate of the points to consider. It
+can be used with other filters to limit the points to a specific region. By default, this parameter is
+set to <code class="docutils literal notranslate"><span class="pre">np.inf</span></code>, which effectively disables this filter.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – <p>Here is a list of additional optional parameters that can be used to further customize the calculation
+of the channel matrices:</p>
+<blockquote>
+<div><dl class="field-list">
+<dt class="field-odd">normalizeGains<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the default value of <code class="docutils literal notranslate"><span class="pre">True</span></code> is used, the path gains are normalized.</p>
+</dd>
+<dt class="field-even">normalizeOutput<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the default value of <code class="docutils literal notranslate"><span class="pre">True</span></code> is used, the gains are normalized based on the
+number of receive antenna.</p>
+</dd>
+<dt class="field-odd">normalizeDelays<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the default value of <code class="docutils literal notranslate"><span class="pre">True</span></code> is used, the delays are normalized as specified in
+“Step 3” of <strong>3GPP TR 38.901 section 8.4</strong>. Otherwise, the original delays obtained from
+ray-tracing are used.</p>
+</dd>
+<dt class="field-even">filterLen<span class="colon">:</span></dt>
+<dd class="field-even"><p>The length of the channel filter. The default is 16 sample.</p>
+</dd>
+<dt class="field-odd">delayQuantSize<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The size of the delay fraction quantization for the channel filter. The default is 64.</p>
+</dd>
+<dt class="field-even">stopBandAtten<span class="colon">:</span></dt>
+<dd class="field-even"><p>The stop-band attenuation value (in dB) used by the channel filter. The default is 80 dB.</p>
+</dd>
+<dt class="field-odd">txAntenna<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The transmitter antenna, which is an instance of either the
+<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">neoradium.antenna.AntennaPanel</span></code></a> or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">neoradium.antenna.AntennaArray</span></code></a> class.
+By default, it is a single antenna in a 1x1 antenna panel with vertical polarization.</p>
+</dd>
+<dt class="field-even">rxAntenna<span class="colon">:</span></dt>
+<dd class="field-even"><p>The receiver antenna which is an instance of either the
+<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">neoradium.antenna.AntennaPanel</span></code></a> or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">neoradium.antenna.AntennaArray</span></code></a> class.
+By default, it is a single antenna in a 1x1 antenna panel with vertical polarization.</p>
+</dd>
+<dt class="field-odd">txOrientation<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The orientation of transmitter antenna. This is a list of 3 angle values in degrees for
+the <em>bearing</em> angle <span class="math notranslate nohighlight">\(\alpha\)</span>, <em>downtilt</em> angle <span class="math notranslate nohighlight">\(\beta\)</span>, and <em>slant</em> angle
+<span class="math notranslate nohighlight">\(\gamma\)</span>. The default is [0,0,0]. Please refer to <strong>3GPP TR 38.901 Section 7.1.3</strong> for more
+information.</p>
+</dd>
+<dt class="field-even">rxOrientation<span class="colon">:</span></dt>
+<dd class="field-even"><p>The orientation of receiver antenna. This is a list of 3 angle values in degrees for
+the <em>bearing</em> angle <span class="math notranslate nohighlight">\(\alpha\)</span>, <em>downtilt</em> angle <span class="math notranslate nohighlight">\(\beta\)</span>, and <em>slant</em> angle
+<span class="math notranslate nohighlight">\(\gamma\)</span>. The default is [0,0,0]. Please refer to <strong>3GPP TR 38.901 Section 7.1.3</strong> for more
+information.</p>
+</dd>
+<dt class="field-odd">xPolPower<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The cross-polarization power in dB. The default is 10 dB. It is defined as
+<span class="math notranslate nohighlight">\(X=10 log_{10} \kappa^{RT}\)</span> where <span class="math notranslate nohighlight">\(\kappa^{RT}\)</span> is the cross-polarization ratio (XPR).
+In the current implementation, this value is used for all paths.</p>
+</dd>
+<dt class="field-even">ueSpeed<span class="colon">:</span></dt>
+<dd class="field-even"><p>Specifies the speed of the UE. It can be one of the following:</p>
+<blockquote>
+<div><ul>
+<li><p>If it is a tuple of the form <code class="docutils literal notranslate"><span class="pre">(speedMin,</span> <span class="pre">speedMax)</span></code>, at each point a random speed is sampled
+uniformly between <code class="docutils literal notranslate"><span class="pre">speedMin</span></code> and <code class="docutils literal notranslate"><span class="pre">speedMax</span></code>.</p></li>
+<li><p>If it is a list of the form [<span class="math notranslate nohighlight">\(s_1\)</span>, <span class="math notranslate nohighlight">\(s_2\)</span>, …, <span class="math notranslate nohighlight">\(s_n\)</span>], at each point a
+random speed is picked from those specified in the list.</p></li>
+<li><p>If it is a single number, then the same UE speed is used at all points.</p></li>
+</ul>
+</div></blockquote>
+<p>The default is <code class="docutils literal notranslate"><span class="pre">(0,20)</span></code>.</p>
+</dd>
+<dt class="field-odd">ueDir<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Specifies the direction of UE movement in the X-Y plane as an angle in degrees. It can be one
+of the following:</p>
+<blockquote>
+<div><ul>
+<li><p>If it is a tuple of the form <code class="docutils literal notranslate"><span class="pre">(dirMin,</span> <span class="pre">dirMax)</span></code>, at each point a random angle is sampled
+uniformly between <code class="docutils literal notranslate"><span class="pre">dirMin</span></code> and <code class="docutils literal notranslate"><span class="pre">dirMax</span></code>.</p></li>
+<li><p>If it is a list of the form [<span class="math notranslate nohighlight">\(a_1\)</span>, <span class="math notranslate nohighlight">\(a_2\)</span>, …, <span class="math notranslate nohighlight">\(a_n\)</span>], at each point a
+random angle is picked from those specified in the list.</p></li>
+<li><p>If it is a single number, then the same UE direction is used at all points.</p></li>
+</ul>
+</div></blockquote>
+<p>The default is <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">360)</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">ChanGen</span></code>, a generator object that is used to generate channel matrices.</p>
+</dd>
+</dl>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span> <span class="c1"># Carrier with 25 PRBs, 15 kHz subcarrier spacing</span>
+
+<span class="c1"># Create 100 channel matrices</span>
+<span class="n">chanGen</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">getChanGen</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span>
+                                  <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span>   <span class="c1"># Bandwidth Part</span>
+                                  <span class="n">los</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>        <span class="c1"># Include only Non-Line-of-Sight channels</span>
+                                  <span class="n">minDist</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>      <span class="c1"># With distances to the base station between 200</span>
+                                  <span class="n">maxDist</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>      <span class="c1"># and 250 meters</span>
+                                  <span class="n">maxX</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>         <span class="c1"># With maximum x coordinate of 100 meters</span>
+                                  <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>         <span class="c1"># Reproducible results</span>
+<span class="n">allChannels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">chan</span> <span class="k">for</span> <span class="n">chan</span> <span class="ow">in</span> <span class="n">chanGen</span><span class="p">])</span>  <span class="c1"># Create the channel matrices</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">allChannels</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>                            <span class="c1"># Prints (100, 14, 300, 1, 1)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Random.html" class="btn btn-neutral float-left" title="Random Number Generator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

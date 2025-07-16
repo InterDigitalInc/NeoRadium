@@ -1,23 +1,25 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Playground &mdash; NeoRadium 0.2.0 Documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/neoradium.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Playground &mdash; NeoRadium 0.3.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=eea1f72d" />
+
   
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -34,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.2.0
+            NeoRadium 0.3.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -57,9 +59,22 @@
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/Antenna/AntennaArray.html">Antenna Array</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#channels">Channels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#stochastic-channel-models">Stochastic Channel Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/ChannelMatrix.html">Channel Matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/cdlTiming.html">Channel timing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/TdlChannel.html">TDL Channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/CdlChannelDataset.html">Creating random CDL channels for a dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#trajectory-based-channel-model">Trajectory-based Channel Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/DeepMimo.html">Working with DeepMIMO Scenarios</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/TrajChannel.html">Using the Trajectory-based Channel Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/TrajEndToEnd.html">An end-to-end PDSCH Simulation with Trajectory-based Channel Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/TrajChannelAnim.html">Animating Trajectories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/ChannelGeneration.html">Creating random MIMO Channel Matrices from a DeepMimo Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/ChannelSequences.html">Creating temporally and spatially consistent sequences of channel matrices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/AnimatedBER.html">Studying Bit Error Rate changes while moving along a trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/AnimatedCN.html">Studying channel condition number while moving along a trajectory</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a><ul>
@@ -85,7 +100,7 @@
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/MLChEst/MLChestEvaluateTorch.html">Evaluating the Trained Channel Estimator</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#comparing-with-matlab-5g-toolbox">Comparing with Matlab 5G Toolbox</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#comparing-with-matlab">Comparing with Matlab</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id1">Antenna</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaElement.html">Comparing Antenna Element Calculations with Matlab</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaPanel.html">Comparing Antenna Panel Calculations with Matlab</a></li>
@@ -98,6 +113,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#csi-rs">CSI-RS</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html">Comparing the CSI-RS results with Matlab</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html#Side-Note:">Side Note:</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pdsch">PDSCH</a><ul>
@@ -126,6 +142,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../API/Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 </ul>
 
         </div>
@@ -134,7 +151,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.2.0</a>
+          <a href="../../index.html">NeoRadium 0.3.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -153,10 +170,10 @@
            <div itemprop="articleBody">
              
   <section id="playground">
-<h1>Playground<a class="headerlink" href="#playground" title="Permalink to this heading"></a></h1>
-<p>The following pages explain by example how different APIs are used and show more details of <strong>NeoRadium</strong>’s capabilities. The code in the following pages are available in the <code class="docutils literal notranslate"><span class="pre">Playgrounds</span></code> directory. You can open them in jupyter notebook and “play” with them.</p>
+<h1>Playground<a class="headerlink" href="#playground" title="Link to this heading"></a></h1>
+<p>The following pages illustrate how various APIs are utilized and provide more detailed information about <strong>NeoRadium</strong>’s capabilities. The code presented in these pages is available in the <code class="docutils literal notranslate"><span class="pre">Playgrounds</span></code> directory. You can open them in a Jupyter notebook and interact with them.</p>
 <section id="antenna">
-<h2>Antenna<a class="headerlink" href="#antenna" title="Permalink to this heading"></a></h2>
+<h2>Antenna<a class="headerlink" href="#antenna" title="Link to this heading"></a></h2>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
@@ -167,19 +184,38 @@
 </div>
 </div></blockquote>
 </section>
-<section id="channels">
-<h2>Channels<a class="headerlink" href="#channels" title="Permalink to this heading"></a></h2>
+<section id="stochastic-channel-models">
+<h2>Stochastic Channel Models<a class="headerlink" href="#stochastic-channel-models" title="Link to this heading"></a></h2>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/ChannelMatrix.html">Channel Matrix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/cdlTiming.html">Channel timing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/TdlChannel.html">TDL Channel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/CdlChannelDataset.html">Creating random CDL channels for a dataset</a></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="trajectory-based-channel-model">
+<h2>Trajectory-based Channel Model<a class="headerlink" href="#trajectory-based-channel-model" title="Link to this heading"></a></h2>
+<blockquote>
+<div><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/DeepMimo.html">Working with DeepMIMO Scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/TrajChannel.html">Using the Trajectory-based Channel Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/TrajEndToEnd.html">An end-to-end PDSCH Simulation with Trajectory-based Channel Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/TrajChannelAnim.html">Animating Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/ChannelGeneration.html">Creating random MIMO Channel Matrices from a DeepMimo Scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/ChannelSequences.html">Creating temporally and spatially consistent sequences of channel matrices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/AnimatedBER.html">Studying Bit Error Rate changes while moving along a trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/AnimatedCN.html">Studying channel condition number while moving along a trajectory</a></li>
 </ul>
 </div>
 </div></blockquote>
 </section>
 <section id="channel-state-information-reference-signals-csi-rs">
-<h2>Channel State Information Reference Signals (CSI-RS)<a class="headerlink" href="#channel-state-information-reference-signals-csi-rs" title="Permalink to this heading"></a></h2>
+<h2>Channel State Information Reference Signals (CSI-RS)<a class="headerlink" href="#channel-state-information-reference-signals-csi-rs" title="Link to this heading"></a></h2>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
@@ -190,7 +226,7 @@
 </div></blockquote>
 </section>
 <section id="dmrs-and-ptrs">
-<h2>DMRS and PTRS<a class="headerlink" href="#dmrs-and-ptrs" title="Permalink to this heading"></a></h2>
+<h2>DMRS and PTRS<a class="headerlink" href="#dmrs-and-ptrs" title="Link to this heading"></a></h2>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
@@ -202,7 +238,7 @@
 </div></blockquote>
 </section>
 <section id="physical-downlink-shared-channel-pdsch">
-<h2>Physical Downlink Shared Channel (PDSCH)<a class="headerlink" href="#physical-downlink-shared-channel-pdsch" title="Permalink to this heading"></a></h2>
+<h2>Physical Downlink Shared Channel (PDSCH)<a class="headerlink" href="#physical-downlink-shared-channel-pdsch" title="Link to this heading"></a></h2>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
@@ -214,7 +250,7 @@
 </div></blockquote>
 </section>
 <section id="a-deep-learning-case-study">
-<h2>A Deep Learning Case Study<a class="headerlink" href="#a-deep-learning-case-study" title="Permalink to this heading"></a></h2>
+<h2>A Deep Learning Case Study<a class="headerlink" href="#a-deep-learning-case-study" title="Link to this heading"></a></h2>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
@@ -225,10 +261,10 @@
 </div>
 </div></blockquote>
 </section>
-<section id="comparing-with-matlab-5g-toolbox">
-<h2>Comparing with Matlab 5G Toolbox<a class="headerlink" href="#comparing-with-matlab-5g-toolbox" title="Permalink to this heading"></a></h2>
+<section id="comparing-with-matlab">
+<h2>Comparing with Matlab<a class="headerlink" href="#comparing-with-matlab" title="Link to this heading"></a></h2>
 <section id="id1">
-<h3>Antenna<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<h3>Antenna<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
@@ -240,7 +276,7 @@
 </div></blockquote>
 </section>
 <section id="cdl-channel-model">
-<h3>CDL Channel Model<a class="headerlink" href="#cdl-channel-model" title="Permalink to this heading"></a></h3>
+<h3>CDL Channel Model<a class="headerlink" href="#cdl-channel-model" title="Link to this heading"></a></h3>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
@@ -250,17 +286,18 @@
 </div></blockquote>
 </section>
 <section id="csi-rs">
-<h3>CSI-RS<a class="headerlink" href="#csi-rs" title="Permalink to this heading"></a></h3>
+<h3>CSI-RS<a class="headerlink" href="#csi-rs" title="Link to this heading"></a></h3>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html">Comparing the CSI-RS results with Matlab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html#Side-Note:">Side Note:</a></li>
 </ul>
 </div>
 </div></blockquote>
 </section>
 <section id="pdsch">
-<h3>PDSCH<a class="headerlink" href="#pdsch" title="Permalink to this heading"></a></h3>
+<h3>PDSCH<a class="headerlink" href="#pdsch" title="Link to this heading"></a></h3>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
@@ -270,7 +307,7 @@
 </div></blockquote>
 </section>
 <section id="ldpc-and-polar-coding">
-<h3>LDPC and Polar Coding<a class="headerlink" href="#ldpc-and-polar-coding" title="Permalink to this heading"></a></h3>
+<h3>LDPC and Polar Coding<a class="headerlink" href="#ldpc-and-polar-coding" title="Link to this heading"></a></h3>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
@@ -294,7 +331,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

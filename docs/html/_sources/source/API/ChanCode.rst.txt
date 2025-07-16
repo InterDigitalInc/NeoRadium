@@ -4,7 +4,7 @@ Channel Coding
    :members: ChanCodeBase
    :member-order: bysource
    :special-members:
-   :exclude-members: __init__, __repr__, __weakref__, __dict__, __getitem__, seqParams
+   :exclude-members: __init__, __repr__, __weakref__, __dict__, __getitem__
 
 -----------------------------------------------
 
@@ -14,7 +14,7 @@ LDPC
    :members: LdpcBase, LdpcEncoder, LdpcDecoder
    :member-order: bysource
    :special-members:
-   :exclude-members: __init__, __repr__, __weakref__, __dict__, __getitem__, seqParams
+   :exclude-members: __init__, __repr__, __weakref__, __dict__, __getitem__
 
 -----------------------------------------------
 
@@ -24,7 +24,7 @@ Polar Coding
    :members: PolarBase, PolarEncoder, PolarDecoder
    :member-order: bysource
    :special-members:
-   :exclude-members: __init__, __repr__, __weakref__, __dict__, __getitem__, seqParams
+   :exclude-members: __init__, __repr__, __weakref__, __dict__, __getitem__
 
 -----------------------------------------------
 

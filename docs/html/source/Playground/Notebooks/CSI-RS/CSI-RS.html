@@ -1,31 +1,31 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Channel State Information Reference Signals (CSI-RS) Configuration &mdash; NeoRadium 0.2.0 Documentation</title>
-      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/nbsphinx-code-cells.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/neoradium.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Channel State Information Reference Signals (CSI-RS) Configuration &mdash; NeoRadium 0.3.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=eea1f72d" />
+
   
-        <script src="../../../../_static/jquery.js"></script>
-        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-        <script src="../../../../_static/doctools.js"></script>
-        <script src="../../../../_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <link rel="next" title="CSI-RS timing configurations" href="CSI-RS-Time.html" />
-    <link rel="prev" title="Channel timing" href="../Channels/cdlTiming.html" /> 
+    <link rel="prev" title="Studying channel condition number while moving along a trajectory" href="../RayTracing/AnimatedCN.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.2.0
+            NeoRadium 0.3.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -55,7 +55,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channels">Channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Channel State Information Reference Signals (CSI-RS) Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="CSI-RS-Time.html">CSI-RS timing configurations</a></li>
@@ -64,7 +65,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab-5g-toolbox">Comparing with Matlab 5G Toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with Matlab</a></li>
 </ul>
 </li>
 </ul>
@@ -80,6 +81,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 </ul>
 
         </div>
@@ -88,7 +90,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.2.0</a>
+          <a href="../../../../index.html">NeoRadium 0.3.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -108,16 +110,16 @@
            <div itemprop="articleBody">
              
   <section id="Channel-State-Information-Reference-Signals-(CSI-RS)-Configuration">
-<h1>Channel State Information Reference Signals (CSI-RS) Configuration<a class="headerlink" href="#Channel-State-Information-Reference-Signals-(CSI-RS)-Configuration" title="Permalink to this heading"></a></h1>
+<h1>Channel State Information Reference Signals (CSI-RS) Configuration<a class="headerlink" href="#Channel-State-Information-Reference-Signals-(CSI-RS)-Configuration" title="Link to this heading"></a></h1>
 <p>This notebook shows the CSI-RS configuration examples for all 18 rows of 38.211 Table 7.4.1.5.3-1</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.io</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
 
-<span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">Grid</span><span class="p">,</span> <span class="n">CsiRsConfig</span><span class="p">,</span> <span class="n">CsiRsSet</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">Grid</span><span class="p">,</span> <span class="n">CsiRsConfig</span><span class="p">,</span> <span class="n">CsiRsSet</span>
 </pre></div>
 </div>
 </div>
@@ -138,13 +140,15 @@
 <div class="highlight"><pre>
 
 Bandwidth Part Properties:
-  Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+  Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
   Subcarrier Spacing: 15 KHz
-  CP Type: normal
-  bandwidth: 4320000 Hz
-  symbolsPerSlot: 14
-  slotsPerSubFrame: 1
-  nFFT: 512
+  CP Type:            normal
+  bandwidth:          4.32 MHz
+  symbolsPerSlot:     14
+  slotsPerSubFrame:   1
+  nFFT:               2048
+  frameNo:            0
+  slotNo:             0
 
 </pre></div></div>
 </div>
@@ -174,29 +178,31 @@ Bandwidth Part Properties:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 1
-      cdmSize: 1 (noCDM)
-      density: 3
-      RE Indexes: 3
-      Symbol Indexes: 1
-      Table Row: 1
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            3
+      RE Indexes:         3
+      Symbol Indexes:     1
+      Table Row:          1
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 4032
@@ -212,7 +218,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 2nd row of 38.211 Table 7.4.1.5.3-1 with density=0.5</span>
@@ -238,29 +244,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 1
-      cdmSize: 1 (noCDM)
-      density: 0.5
-      RE Indexes: 3
-      Symbol Indexes: 1
-      Table Row: 2
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            0.5
+      RE Indexes:         3
+      Symbol Indexes:     1
+      Table Row:          2
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 4032
@@ -276,7 +284,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 2nd row of 38.211 Table 7.4.1.5.3-1 with density=1 using a different symbol (3)</span>
@@ -301,29 +309,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 1
-      cdmSize: 1 (noCDM)
-      density: 1
-      RE Indexes: 3
-      Symbol Indexes: 3
-      Table Row: 2
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indexes:         3
+      Symbol Indexes:     3
+      Table Row:          2
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 4032
@@ -339,7 +349,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 3rd row of 38.211 Table 7.4.1.5.3-1 with density=.5</span>
@@ -364,29 +374,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 2
-      cdmSize: 2 (fd-CDM2)
-      density: 0.5
-      RE Indexes: 0
-      Symbol Indexes: 3
-      Table Row: 3
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           2
+      cdmSize:            2 (fd-CDM2)
+      density:            0.5
+      RE Indexes:         0
+      Symbol Indexes:     3
+      Table Row:          3
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 8064
@@ -409,7 +421,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 3rd row of 38.211 Table 7.4.1.5.3-1 with density=1 using a different symbol (6)</span>
@@ -434,29 +446,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 2
-      cdmSize: 2 (fd-CDM2)
-      density: 1
-      RE Indexes: 6
-      Symbol Indexes: 6
-      Table Row: 3
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           2
+      cdmSize:            2 (fd-CDM2)
+      density:            1
+      RE Indexes:         6
+      Symbol Indexes:     6
+      Table Row:          3
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 8064
@@ -479,14 +493,14 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 4th row of 38.211 Table 7.4.1.5.3-1</span>
 <span class="c1"># 4 ports, 1 of 3 bits set in freqMap, CDM size is 2, and density is 1.</span>
 <span class="c1"># The CSI-RS resources are at symbol 6 and REs (4,5) and (6,7).</span>
 <span class="c1"># Note that REs (4,5) are used for the first 2 ports and REs (6,7) for the next 2.</span>
-<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;010&quot;</span><span class="p">,</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">4</span><span class="p">)])</span>
+<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;010&quot;</span><span class="p">,</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">4</span><span class="p">)])</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="o">.</span><span class="n">numPorts</span><span class="p">)</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
@@ -505,29 +519,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 4
-      cdmSize: 2 (fd-CDM2)
-      density: 1
-      RE Indexes: 4
-      Symbol Indexes: 0
-      Table Row: 4
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           4
+      cdmSize:            2 (fd-CDM2)
+      density:            1
+      RE Indexes:         4
+      Symbol Indexes:     6
+      Table Row:          4
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 16128
@@ -564,7 +580,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 5th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -590,29 +606,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 4
-      cdmSize: 2 (fd-CDM2)
-      density: 1
-      RE Indexes: 2
-      Symbol Indexes: 6
-      Table Row: 5
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           4
+      cdmSize:            2 (fd-CDM2)
+      density:            1
+      RE Indexes:         2
+      Symbol Indexes:     6
+      Table Row:          5
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 16128
@@ -649,7 +667,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 6th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -674,29 +692,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 8
-      cdmSize: 2 (fd-CDM2)
-      density: 1
-      RE Indexes: 0  4  6  10
-      Symbol Indexes: 6
-      Table Row: 6
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           8
+      cdmSize:            2 (fd-CDM2)
+      density:            1
+      RE Indexes:         0  4  6  10
+      Symbol Indexes:     6
+      Table Row:          6
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 32256
@@ -761,7 +781,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 7th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -786,29 +806,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 8
-      cdmSize: 2 (fd-CDM2)
-      density: 1
-      RE Indexes: 2  8
-      Symbol Indexes: 6
-      Table Row: 7
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           8
+      cdmSize:            2 (fd-CDM2)
+      density:            1
+      RE Indexes:         2  8
+      Symbol Indexes:     6
+      Table Row:          7
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 32256
@@ -873,7 +895,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 8th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -898,29 +920,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 8
-      cdmSize: 4 (cdm4-FD2-TD2)
-      density: 1
-      RE Indexes: 2  8
-      Symbol Indexes: 6
-      Table Row: 8
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           8
+      cdmSize:            4 (cdm4-FD2-TD2)
+      density:            1
+      RE Indexes:         2  8
+      Symbol Indexes:     6
+      Table Row:          8
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 32256
@@ -985,7 +1009,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 9th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -1010,29 +1034,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 12
-      cdmSize: 2 (fd-CDM2)
-      density: 1
-      RE Indexes: 0  2  4  6  8  10
-      Symbol Indexes: 6
-      Table Row: 9
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           12
+      cdmSize:            2 (fd-CDM2)
+      density:            1
+      RE Indexes:         0  2  4  6  8  10
+      Symbol Indexes:     6
+      Table Row:          9
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 48384
@@ -1125,7 +1151,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 10th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -1150,29 +1176,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 12
-      cdmSize: 4 (cdm4-FD2-TD2)
-      density: 1
-      RE Indexes: 2  6  10
-      Symbol Indexes: 6
-      Table Row: 10
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           12
+      cdmSize:            4 (cdm4-FD2-TD2)
+      density:            1
+      RE Indexes:         2  6  10
+      Symbol Indexes:     6
+      Table Row:          10
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 48384
@@ -1265,7 +1293,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 11th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -1292,29 +1320,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 16
-      cdmSize: 2 (fd-CDM2)
-      density: 1
-      RE Indexes: 0  2  8  10
-      Symbol Indexes: 6
-      Table Row: 11
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           16
+      cdmSize:            2 (fd-CDM2)
+      density:            1
+      RE Indexes:         0  2  8  10
+      Symbol Indexes:     6
+      Table Row:          11
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 64512
@@ -1435,7 +1465,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 12th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -1462,29 +1492,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 16
-      cdmSize: 4 (cdm4-FD2-TD2)
-      density: 1
-      RE Indexes: 0  2  8  10
-      Symbol Indexes: 6
-      Table Row: 12
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           16
+      cdmSize:            4 (cdm4-FD2-TD2)
+      density:            1
+      RE Indexes:         0  2  8  10
+      Symbol Indexes:     6
+      Table Row:          12
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 64512
@@ -1605,7 +1637,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 13th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -1632,29 +1664,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 24
-      cdmSize: 2 (fd-CDM2)
-      density: 1
-      RE Indexes: 2  6  10
-      Symbol Indexes: 4  8
-      Table Row: 13
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           24
+      cdmSize:            2 (fd-CDM2)
+      density:            1
+      RE Indexes:         2  6  10
+      Symbol Indexes:     4  8
+      Table Row:          13
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 96768
@@ -1831,7 +1865,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 14th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -1858,29 +1892,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 24
-      cdmSize: 4 (cdm4-FD2-TD2)
-      density: 1
-      RE Indexes: 2  6  10
-      Symbol Indexes: 4  8
-      Table Row: 14
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           24
+      cdmSize:            4 (cdm4-FD2-TD2)
+      density:            1
+      RE Indexes:         2  6  10
+      Symbol Indexes:     4  8
+      Table Row:          14
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 96768
@@ -2057,7 +2093,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 15th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -2084,29 +2120,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 24
-      cdmSize: 8 (cdm8-FD2-TD4)
-      density: 1
-      RE Indexes: 2  6  10
-      Symbol Indexes: 5
-      Table Row: 15
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           24
+      cdmSize:            8 (cdm8-FD2-TD4)
+      density:            1
+      RE Indexes:         2  6  10
+      Symbol Indexes:     5
+      Table Row:          15
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 96768
@@ -2283,7 +2321,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 16th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -2310,29 +2348,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 32
-      cdmSize: 2 (fd-CDM2)
-      density: 1
-      RE Indexes: 0  2  8  10
-      Symbol Indexes: 4  8
-      Table Row: 16
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           32
+      cdmSize:            2 (fd-CDM2)
+      density:            1
+      RE Indexes:         0  2  8  10
+      Symbol Indexes:     4  8
+      Table Row:          16
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 129024
@@ -2565,7 +2605,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 17th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -2592,29 +2632,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 32
-      cdmSize: 4 (cdm4-FD2-TD2)
-      density: 1
-      RE Indexes: 0  2  8  10
-      Symbol Indexes: 2  8
-      Table Row: 17
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           32
+      cdmSize:            4 (cdm4-FD2-TD2)
+      density:            1
+      RE Indexes:         0  2  8  10
+      Symbol Indexes:     2  8
+      Table Row:          17
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 129024
@@ -2847,7 +2889,7 @@ Grid Stats:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 18th row of 38.211 Table 7.4.1.5.3-1</span>
@@ -2874,29 +2916,31 @@ Grid Stats:
 
 CSI-RS Configuration: (1 Resource Sets)
   CSI-RS Resource Set:(1 NZP Resources)
-    Resource Set ID: 0
-    Resource Type: periodic
-    Resource Blocks: 24 RBs starting at 0
-    Slot Period: 4
+    Resource Set ID:      0
+    Resource Type:        periodic
+    Resource Blocks:      24 RBs starting at 0
+    Slot Period:          4
     Bandwidth Part:
-      Resource Blocks: 24 RBs starting at 0 (288 subcarriers)
+      Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
       Subcarrier Spacing: 15 KHz
-      CP Type: normal
-      bandwidth: 4320000 Hz
-      symbolsPerSlot: 14
-      slotsPerSubFrame: 1
-      nFFT: 512
+      CP Type:            normal
+      bandwidth:          4.32 MHz
+      symbolsPerSlot:     14
+      slotsPerSubFrame:   1
+      nFFT:               2048
+      frameNo:            0
+      slotNo:             0
     CSI-RS:
-      resourceId: 0
-      numPorts: 32
-      cdmSize: 8 (cdm8-FD2-TD4)
-      density: 1
-      RE Indexes: 0  2  8  10
-      Symbol Indexes: 6
-      Table Row: 18
-      Slot Offset: 0
-      Power: 0 db
-      scramblingID: 0
+      resourceId:         0
+      numPorts:           32
+      cdmSize:            8 (cdm8-FD2-TD4)
+      density:            1
+      RE Indexes:         0  2  8  10
+      Symbol Indexes:     6
+      Table Row:          18
+      Slot Offset:        0
+      Power:              0 db
+      scramblingID:       0
 
 Grid Stats:
   GridSize: 129024
@@ -3136,28 +3180,20 @@ Grid Stats:
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../Channels/cdlTiming.html" class="btn btn-neutral float-left" title="Channel timing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../RayTracing/AnimatedCN.html" class="btn btn-neutral float-left" title="Studying channel condition number while moving along a trajectory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="CSI-RS-Time.html" class="btn btn-neutral float-right" title="CSI-RS timing configurations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

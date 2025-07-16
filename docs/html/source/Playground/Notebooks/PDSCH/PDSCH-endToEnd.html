@@ -1,26 +1,26 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PDSCH end-to-end communication &mdash; NeoRadium 0.2.0 Documentation</title>
-      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/nbsphinx-code-cells.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/neoradium.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>PDSCH end-to-end communication &mdash; NeoRadium 0.3.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=eea1f72d" />
+
   
-        <script src="../../../../_static/jquery.js"></script>
-        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-        <script src="../../../../_static/doctools.js"></script>
-        <script src="../../../../_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.2.0
+            NeoRadium 0.3.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -55,7 +55,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channels">Channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a><ul class="current">
@@ -83,7 +84,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab-5g-toolbox">Comparing with Matlab 5G Toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with Matlab</a></li>
 </ul>
 </li>
 </ul>
@@ -99,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 </ul>
 
         </div>
@@ -107,7 +109,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.2.0</a>
+          <a href="../../../../index.html">NeoRadium 0.3.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -127,7 +129,7 @@
            <div itemprop="articleBody">
              
   <section id="PDSCH-end-to-end-communication">
-<h1>PDSCH end-to-end communication<a class="headerlink" href="#PDSCH-end-to-end-communication" title="Permalink to this heading"></a></h1>
+<h1>PDSCH end-to-end communication<a class="headerlink" href="#PDSCH-end-to-end-communication" title="Link to this heading"></a></h1>
 <p>This notebook shows how an end-to-end communication through a 5G Physical Downlink Shared Channel (PDSCH) can be simulated in <strong>NeoRadium</strong> based on 3GPP NR standard. It demonstrate the following steps:</p>
 <ul class="simple">
 <li><p>Creating LDPC encoder object and using it to perform transport block segmentation, LDPC encoding and rate matching based on 3GPP TS 38.212.</p></li>
@@ -149,17 +151,16 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.io</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">LdpcEncoder</span><span class="p">,</span> <span class="n">Grid</span>
-<span class="kn">from</span> <span class="nn">neoradium.utils</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">LdpcEncoder</span><span class="p">,</span> <span class="n">Grid</span><span class="p">,</span> <span class="n">random</span>
 <br/></pre></div>
 </div>
 </div>
 <section id="Carrier-Configuration">
-<h2>Carrier Configuration<a class="headerlink" href="#Carrier-Configuration" title="Permalink to this heading"></a></h2>
+<h2>Carrier Configuration<a class="headerlink" href="#Carrier-Configuration" title="Link to this heading"></a></h2>
 <p>Here using the <code class="docutils literal notranslate"><span class="pre">Carrier</span></code> class we define a carrier with 30 KHz subcarrier spacing with 51 resource blocks. The print function prints information about the carrier. Please note that by default a single bandwidth part is defined which covers the whole carrier. Additional bandwidth parts can be added to the carrier if needed.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -178,25 +179,25 @@
 <div class="highlight"><pre>
 
 Carrier Properties:
-  startRb: 0
-  numRbs: 51
-  Cell Id: 1
+  Cell Id:               1
+  Bandwidth Parts:       1
   Active Bandwidth Part: 0
-  Bandwidth Parts: 1
   Bandwidth Part 0:
-    Resource Blocks: 51 RBs starting at 0 (612 subcarriers)
+    Resource Blocks:    51 RBs starting at 0 (612 subcarriers)
     Subcarrier Spacing: 30 KHz
-    CP Type: normal
-    bandwidth: 18360000 Hz
-    symbolsPerSlot: 14
-    slotsPerSubFrame: 2
-    nFFT: 1024
+    CP Type:            normal
+    bandwidth:          18.36 MHz
+    symbolsPerSlot:     14
+    slotsPerSubFrame:   2
+    nFFT:               1024
+    frameNo:            0
+    slotNo:             0
 
 </pre></div></div>
 </div>
 </section>
 <section id="PDSCH-and-DMRS-Configuration">
-<h2>PDSCH and DMRS Configuration<a class="headerlink" href="#PDSCH-and-DMRS-Configuration" title="Permalink to this heading"></a></h2>
+<h2>PDSCH and DMRS Configuration<a class="headerlink" href="#PDSCH-and-DMRS-Configuration" title="Link to this heading"></a></h2>
 <p>Now let’s use the <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code> class to configure the PDSCH communication parameters. Here we choose “Mapping Type A” and “QAM16” modulation (by default). We also set the number of layers to 2 and disable interleaving by setting <code class="docutils literal notranslate"><span class="pre">interleavingBundleSize</span></code> to zero.</p>
 <p>We then set the DMRS configuration using the <code class="docutils literal notranslate"><span class="pre">setDMRD</span></code> method of the <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code> class. Here we use DMRS <code class="docutils literal notranslate"><span class="pre">configType</span></code> set to 2 with 2 additional symbol time allocations (<code class="docutils literal notranslate"><span class="pre">additionalPos=2</span></code>). Although <strong>NeoRadium</strong> supports both wide band and narrow band precoding, we set the “Precoding RB Group (PRG)” size to 0 which means the same precoding is used for all subcarriers (Wideband Precoding).</p>
 <div class="nbinput docutils container">
@@ -230,13 +231,15 @@ PDSCH Properties:
   interleavingBundleSize: 0
   PRG Size: Wideband
   Bandwidth Part:
-    Resource Blocks: 51 RBs starting at 0 (612 subcarriers)
+    Resource Blocks:    51 RBs starting at 0 (612 subcarriers)
     Subcarrier Spacing: 30 KHz
-    CP Type: normal
-    bandwidth: 18360000 Hz
-    symbolsPerSlot: 14
-    slotsPerSubFrame: 2
-    nFFT: 1024
+    CP Type:            normal
+    bandwidth:          18.36 MHz
+    symbolsPerSlot:     14
+    slotsPerSubFrame:   2
+    nFFT:               1024
+    frameNo:            0
+    slotNo:             0
   DMRS:
     configType: 2
     nIDs: []
@@ -256,7 +259,7 @@ PDSCH Properties:
 </div>
 </section>
 <section id="Channel-Coding-Configuration">
-<h2>Channel Coding Configuration<a class="headerlink" href="#Channel-Coding-Configuration" title="Permalink to this heading"></a></h2>
+<h2>Channel Coding Configuration<a class="headerlink" href="#Channel-Coding-Configuration" title="Link to this heading"></a></h2>
 <p>Now it is time to define the parameters of LDPC channel coding. <strong>NeoRadium</strong> provides the <code class="docutils literal notranslate"><span class="pre">LdpcEncoder</span></code> and <code class="docutils literal notranslate"><span class="pre">LdpcDecoder</span></code> classes. These classes can be used to perform data segmentation/de-segmentation, rate-matching/rate-recovery, and encoding/decoding. Here we first set our desired code rate, then create an <code class="docutils literal notranslate"><span class="pre">LdpcEncoder</span></code> object that will be used for LDPC encoding.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -270,10 +273,10 @@ PDSCH Properties:
 </div>
 </section>
 <section id="Resource-Grid-Creation-and-Mapping">
-<h2>Resource Grid Creation and Mapping<a class="headerlink" href="#Resource-Grid-Creation-and-Mapping" title="Permalink to this heading"></a></h2>
+<h2>Resource Grid Creation and Mapping<a class="headerlink" href="#Resource-Grid-Creation-and-Mapping" title="Link to this heading"></a></h2>
 <p>Now that we have created the PDSCH and LDPC encoder objects, we can use them to perform channel coding and resource mapping. In the following cell, we first create a resource grid object using the <code class="docutils literal notranslate"><span class="pre">getGrid</span></code> method of the <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code> object. This will create a resource grid, creates the DMRS reference signals and puts them in the specified locations in the resource grid.</p>
 <p>The method <code class="docutils literal notranslate"><span class="pre">getTxBlockSize</span></code> is used to calculate the transport block size(s) based on the resources available in the grid for data transmission at the specified code rate. This function calculates the the transport block size based on 3GPP TS 38.214.</p>
-<p>Once we have the transport block size, we create random bits for transmission using the utility function <code class="docutils literal notranslate"><span class="pre">bits</span></code> of <strong>NeoRadium</strong>’s <code class="docutils literal notranslate"><span class="pre">random</span></code> module.</p>
+<p>Once we have the transport block size, we create random bits for transmission using the utility function <code class="docutils literal notranslate"><span class="pre">makeRandomBits</span></code>.</p>
 <p>The function <code class="docutils literal notranslate"><span class="pre">getBitSizes</span></code> returns total bit capacity of the resource grid for each code word. This is the total number of encoded data bits that can be transmitted using the resource grid. It is used to perform rate-matching by the <code class="docutils literal notranslate"><span class="pre">LdpcEncoder</span></code> class.</p>
 <p>The function <code class="docutils literal notranslate"><span class="pre">getRateMatchedCodeWords</span></code> performs segmentation, rate-matching, and LDPC encoding in a single call. The output contains the encoded bits for each codeword.</p>
 <p>Once we have the rated-matched encoded bits, we can map them to the available resources in the resource grid. This is exactly what the <code class="docutils literal notranslate"><span class="pre">populateGrid</span></code> method of the <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code> class does. This function first converts bits to complex symbols using the QAM modulation and then assigns the symbols to the available resource elements in the resource grid at different time, frequency, and layer locations.</p>
@@ -336,7 +339,7 @@ Grid Allocation Stats:
 </div>
 </section>
 <section id="Channel-Simulation-and-Precoding">
-<h2>Channel Simulation and Precoding<a class="headerlink" href="#Channel-Simulation-and-Precoding" title="Permalink to this heading"></a></h2>
+<h2>Channel Simulation and Precoding<a class="headerlink" href="#Channel-Simulation-and-Precoding" title="Link to this heading"></a></h2>
 <p>The next step in the pipeline is the precoding process. In practice the precoding information is extracted at the UE side (The receiver in this case) from the estimated channel. Since we are demonstrating only a downlink communication here, we assume that the precoding matrix is somehow available.</p>
 <p>To calculate the precoding matrix we first need to define the channel model. Here we use a CDL channel model as specified in 3GPP TR 38.901. The <code class="docutils literal notranslate"><span class="pre">CdlChannel</span></code> class is used to create a channel model object. Here we are using a CDL-C model which simulates NLOS communication. We use delay spread of 300 ns and a doppler shift of 5 Hz. We also use a small MIMO configuration with 8 transmitter antenna and 2 receiver antenna. The <code class="docutils literal notranslate"><span class="pre">print</span></code> function of the <code class="docutils literal notranslate"><span class="pre">CdlChannel</span></code> class can be used to show all
 properties of the CDL channel model.</p>
@@ -349,13 +352,13 @@ properties of the CDL channel model.</p>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Creating a CdlChannel object:</span>
 <span class="n">f0</span> <span class="o">=</span> <span class="mf">4e9</span>  <span class="c1"># Carrier Frequency</span>
-<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="n">f0</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="n">f0</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                      <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>  <span class="c1"># 8 TX antenna</span>
                      <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">))</span>  <span class="c1"># 2 RX antenna</span>
 <span class="c1"># channel.print()                                       # Unremark to pring all channel information</span>
 
 <span class="c1"># Getting the Precoding Matrix, and precoding the resource grid</span>
-<span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>           <span class="c1"># Get the channel matrix</span>
+<span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>              <span class="c1"># Get the channel matrix</span>
 <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>      <span class="c1"># Get the precoder matrix from the PDSCH object</span>
 <span class="n">precodedGrid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">precode</span><span class="p">(</span><span class="n">precoder</span><span class="p">)</span>                   <span class="c1"># Perform the precoding</span>
 
@@ -377,7 +380,7 @@ Shape of Precoded Resource Grid: (8, 14, 612)
 </div>
 </section>
 <section id="OFDM-Modulation">
-<h2>OFDM Modulation<a class="headerlink" href="#OFDM-Modulation" title="Permalink to this heading"></a></h2>
+<h2>OFDM Modulation<a class="headerlink" href="#OFDM-Modulation" title="Link to this heading"></a></h2>
 <p>To transmit the precoded resource grid it first needs to be transformed to time-domain. The method <code class="docutils literal notranslate"><span class="pre">ofdmModulate</span></code> of the <code class="docutils literal notranslate"><span class="pre">Grid</span></code> class converts the precoded grid into a set of time-domain waveforms for each transmit antenna. The output of the OFDM modulation is a <code class="docutils literal notranslate"><span class="pre">Waveform</span></code> class that contains the waveforms for each transmit antenna.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -399,14 +402,14 @@ Shape of txWaveform: (8, 15360)
 </div>
 </section>
 <section id="Applying-the-channel-model-to-the-transmitted-waveform">
-<h2>Applying the channel model to the transmitted waveform<a class="headerlink" href="#Applying-the-channel-model-to-the-transmitted-waveform" title="Permalink to this heading"></a></h2>
+<h2>Applying the channel model to the transmitted waveform<a class="headerlink" href="#Applying-the-channel-model-to-the-transmitted-waveform" title="Link to this heading"></a></h2>
 <p>Now we need to pass the transmitted waveform through our CDL channel model. Since channel models usually delay the signals, to make sure we get the whole waveform on the output end of the channel, we need to append some zeros to the end of the waveform. The number of these zeros depend on the maximum channel delay that can be obtained using the <code class="docutils literal notranslate"><span class="pre">getMaxDelay</span></code> method of the <code class="docutils literal notranslate"><span class="pre">CdlChannel</span></code> class. The <code class="docutils literal notranslate"><span class="pre">pad</span></code> method of <code class="docutils literal notranslate"><span class="pre">Waveform</span></code> class append zeros to the end of waveform.</p>
 <p>Now the channel model can be applied to the transmitted waveform to obtain the received waveform. This is exactly what the <code class="docutils literal notranslate"><span class="pre">applyToSignal</span></code> method of the <code class="docutils literal notranslate"><span class="pre">CdlChannel</span></code> class does. The output is another <code class="docutils literal notranslate"><span class="pre">Waveform</span></code> object containing the received waveform for each receiver antenna.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Need to append zeros to the end of signal based on the maximum channel delay</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Need to append zeros to the end of signal based on the maximum channel filter delay</span>
 <span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Max Channel Delay:  &quot;</span><span class="p">,</span> <span class="n">maxDelay</span><span class="p">)</span>
 <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>
@@ -428,7 +431,7 @@ Shape of rxWaveform: (2, 15447)
 </div>
 </section>
 <section id="Adding-Noise">
-<h2>Adding Noise<a class="headerlink" href="#Adding-Noise" title="Permalink to this heading"></a></h2>
+<h2>Adding Noise<a class="headerlink" href="#Adding-Noise" title="Link to this heading"></a></h2>
 <p>We can use the <code class="docutils literal notranslate"><span class="pre">addNoise</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Waveform</span></code> class to add AWGN to the received signal. Since we are adding the noise in the time-domain, the FFT size is also used in the calculation noise variance. So, we are passing both SNR value and the FFT size to the <code class="docutils literal notranslate"><span class="pre">addNoise</span></code> method.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -440,7 +443,7 @@ Shape of rxWaveform: (2, 15447)
 </div>
 </section>
 <section id="Synchronization-and-OFDM-Demodulation">
-<h2>Synchronization and OFDM Demodulation<a class="headerlink" href="#Synchronization-and-OFDM-Demodulation" title="Permalink to this heading"></a></h2>
+<h2>Synchronization and OFDM Demodulation<a class="headerlink" href="#Synchronization-and-OFDM-Demodulation" title="Link to this heading"></a></h2>
 <p>Because of multiple different path delays involved in the channel model, we need to find the best starting point in the received waveform. This is usually done by finding the position of maximum correlation between the received signal and reference signals. The function <code class="docutils literal notranslate"><span class="pre">getTimingOffset</span></code> of the <code class="docutils literal notranslate"><span class="pre">CdlChannel</span></code> provides this “timing offset” which is the number of samples we need to skip from the beginning of the received waveform.</p>
 <p>After synchronization, the waveform can be used for OFDM demodulation to the received resource grid. The class method <code class="docutils literal notranslate"><span class="pre">ofdmDemodulate</span></code> creates a <code class="docutils literal notranslate"><span class="pre">Grid</span></code> class instance containing the received resource grid.</p>
 <div class="nbinput docutils container">
@@ -469,7 +472,7 @@ Shape of received resource grid: (2, 14, 612)
 </div>
 </section>
 <section id="Applying-channel-in-Frequency-Domain">
-<h2>Applying channel in Frequency Domain<a class="headerlink" href="#Applying-channel-in-Frequency-Domain" title="Permalink to this heading"></a></h2>
+<h2>Applying channel in Frequency Domain<a class="headerlink" href="#Applying-channel-in-Frequency-Domain" title="Link to this heading"></a></h2>
 <p>You can also use a shortcut method of applying the channel model to the transmitted grid directly without going to time domain. Although this is not exactly what happens in practice, it is sometimes useful (or convenient) to avid the time domain.</p>
 <p>The method <code class="docutils literal notranslate"><span class="pre">applyChannel</span></code> of the <code class="docutils literal notranslate"><span class="pre">Grid</span></code> class can be used to apply a channel matrix to a resource grid. For example:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Applying the channel matrix to the precoded grid
@@ -478,14 +481,14 @@ rxGrid = precodedGrid.applyChannel(channelMatrix)
 </div>
 </section>
 <section id="Channel-Estimation">
-<h2>Channel Estimation<a class="headerlink" href="#Channel-Estimation" title="Permalink to this heading"></a></h2>
+<h2>Channel Estimation<a class="headerlink" href="#Channel-Estimation" title="Link to this heading"></a></h2>
 <p>The input to the channel estimation process is the received resource grid and the known reference signals (in this case DMRS) and the output is the estimated channel. Note that in this case the estimated channel includes the precoding process. That is because the DMRS reference signals were added to the resource grid <strong>before</strong> precoding.</p>
 <section id="Perfect-Channel-Estimation">
-<h3>Perfect Channel Estimation<a class="headerlink" href="#Perfect-Channel-Estimation" title="Permalink to this heading"></a></h3>
+<h3>Perfect Channel Estimation<a class="headerlink" href="#Perfect-Channel-Estimation" title="Link to this heading"></a></h3>
 <p>For perfect channel estimation, we need to apply precoding to the channel matrix. This can be done by a simple matrix multiplication as shown in the following cell.</p>
 </section>
 <section id="Practical-Channel-Estimation">
-<h3>Practical Channel Estimation<a class="headerlink" href="#Practical-Channel-Estimation" title="Permalink to this heading"></a></h3>
+<h3>Practical Channel Estimation<a class="headerlink" href="#Practical-Channel-Estimation" title="Link to this heading"></a></h3>
 <p>The method <code class="docutils literal notranslate"><span class="pre">estimateChannelLS</span></code> of the <code class="docutils literal notranslate"><span class="pre">Grid</span></code> class can be used to estimate the channel matrix. This method performs CDM averaging, Least-Squared channel estimation at pilot locations, and applying interpolation to get the whole channel matrix.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
@@ -511,7 +514,7 @@ Shape of estimated channel: (14, 612, 2, 2)
 </section>
 </section>
 <section id="Equalization">
-<h2>Equalization<a class="headerlink" href="#Equalization" title="Permalink to this heading"></a></h2>
+<h2>Equalization<a class="headerlink" href="#Equalization" title="Link to this heading"></a></h2>
 <p>Now that we have an estimation of channel matrix, we can use it for equalization. The method <code class="docutils literal notranslate"><span class="pre">equalize</span></code> of the <code class="docutils literal notranslate"><span class="pre">Grid</span></code> class uses the Minimum mean-squared error (MMSE) equalization algorithm to cancel the effect of the channel in the received resource grid.</p>
 <p>It outputs a <code class="docutils literal notranslate"><span class="pre">Grid</span></code> object containing the equalized received resource grid and the LLR scaling values which is used later to scale the log-likelihood ratios from the demodulation process.</p>
 <div class="nbinput docutils container">
@@ -535,7 +538,7 @@ Shape of LLR Scales:     (2, 14, 612)
 </div>
 </section>
 <section id="Demodulation,-De-mapping,-Descrambling">
-<h2>Demodulation, De-mapping, Descrambling<a class="headerlink" href="#Demodulation,-De-mapping,-Descrambling" title="Permalink to this heading"></a></h2>
+<h2>Demodulation, De-mapping, Descrambling<a class="headerlink" href="#Demodulation,-De-mapping,-Descrambling" title="Link to this heading"></a></h2>
 <p>The method <code class="docutils literal notranslate"><span class="pre">getLLRsFromGrid</span></code> of the <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code> object performs demodulation, de-mapping, and descrambling of the received grid in one call. The output of this process is a set of log-likelihood ratios (LLRs) for the each received codeword extracted from the received resource grid. Note that in this example there is only one codeword.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
@@ -556,7 +559,7 @@ Length of LLRs for the first code-word: 63648
 </div>
 </section>
 <section id="Rate-Recovery-and-LDPC-decoding">
-<h2>Rate Recovery and LDPC decoding<a class="headerlink" href="#Rate-Recovery-and-LDPC-decoding" title="Permalink to this heading"></a></h2>
+<h2>Rate Recovery and LDPC decoding<a class="headerlink" href="#Rate-Recovery-and-LDPC-decoding" title="Link to this heading"></a></h2>
 <p>We are close to the end of pipeline. We just need to decode the LLRs to the actual transport blocks. To do this, we need an LDPC decoder object. The method <code class="docutils literal notranslate"><span class="pre">getDecoder</span></code> of the <code class="docutils literal notranslate"><span class="pre">LdpcEncoder</span></code> class conveniently creates a decoder object matching the parameters of the encoder.</p>
 <p>The function <code class="docutils literal notranslate"><span class="pre">recoverRate</span></code> of the LDPC decoder object can then be used to recover the rate of LDPC codewords based on the transport block size. This is based on the procedure specified in 3GPP TS 38.212.</p>
 <p>The rate-recovered coded blocks are then ready to be LDPC-decoded using the <code class="docutils literal notranslate"><span class="pre">decode</span></code> method of the <code class="docutils literal notranslate"><span class="pre">LdpcDecoder</span></code> class (Each coded block is decoded separately). The output is a set of the decoded blocks.</p>
@@ -588,7 +591,7 @@ Shape of Decoded Blocks: (4, 7744)
 </div>
 </section>
 <section id="CRC-checking-and-De-segmentation">
-<h2>CRC checking and De-segmentation<a class="headerlink" href="#CRC-checking-and-De-segmentation" title="Permalink to this heading"></a></h2>
+<h2>CRC checking and De-segmentation<a class="headerlink" href="#CRC-checking-and-De-segmentation" title="Link to this heading"></a></h2>
 <p>The CRC of each decoded block must be checked and then the decoded blocks need to be merged (de-segmented) to provide the transport blocks. The method <code class="docutils literal notranslate"><span class="pre">checkCrcAndMerge</span></code> of the <code class="docutils literal notranslate"><span class="pre">LdpcDecoder</span></code> class does exactly this. The output of this method is a decoded transport block wich also contains a transport block CRC appended at the end.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">checkCrc</span></code> method of the <code class="docutils literal notranslate"><span class="pre">LdpcDecoder</span></code> class can be used to check the transport block CRC.</p>
 <div class="nbinput docutils container">
@@ -616,7 +619,7 @@ Transport block CRC Match:        True
 </div>
 </section>
 <section id="Comparing-the-decoded-transport-block-with-the-original">
-<h2>Comparing the decoded transport block with the original<a class="headerlink" href="#Comparing-the-decoded-transport-block-with-the-original" title="Permalink to this heading"></a></h2>
+<h2>Comparing the decoded transport block with the original<a class="headerlink" href="#Comparing-the-decoded-transport-block-with-the-original" title="Link to this heading"></a></h2>
 <p>We can get the decoded transport block by removing the 24-bit CRC at the end. Then we can compare the results with the original transport block that was created randomly at the beginning of this pipeline.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
@@ -665,7 +668,7 @@ The number of bit mismatches between the decoded transport block and original: 0
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

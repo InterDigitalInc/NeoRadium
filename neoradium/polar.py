@@ -1,31 +1,30 @@
 # Copyright (c) 2024 InterDigital AI Lab
 """
-The module ``polar.py`` contains the API used for
-`Polar coding <https://en.wikipedia.org/wiki/Polar_code_(coding_theory)>`_.
-It implements the class :py:class:`PolarBase` which is the base class for
-other Polar Coding classes and is derived from the
-:py:class:`~neoradium.chancodebase.ChanCodeBase` class. It also implements
-the classes :py:class:`PolarEncoder` and :py:class:`PolarDecoder`
-both of which are derived from :py:class:`PolarBase`.
+The module ``polar.py`` contains the API used for 
+`Polar coding <https://en.wikipedia.org/wiki/Polar_code_(coding_theory)>`_. It implements the class
+:py:class:`PolarBase`, which is the base class for other polar coding classes and is derived from the
+:py:class:`~neoradium.chancodebase.ChanCodeBase` class. It also implements the classes :py:class:`PolarEncoder` and 
+:py:class:`PolarDecoder` both of which are derived from :py:class:`PolarBase`.
 
 This implementation is based on **3GPP TS 38.212**.
 """
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 # Revision History:
 # Date Changed  By                      Description
-# ------------  --------------------    --------------------------------------------------------------------------------------------------------------
+# ------------  --------------------    --------------------------------------------------------------------------------
 # 07/18/2023    Shahab Hamidi-Rad       First version of the file.
 # 01/09/2024    Shahab Hamidi-Rad       Completed the documentation
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 import numpy as np
 from .chancodebase import ChanCodeBase
 
 # Suggested Course:
 # LDPC and Polar Codes in 5G Standard: https://www.youtube.com/playlist?list=PLyqSpQzTE6M81HJ26ZaNv0V3ROBrcv-Kc
 # This file is based on 3GPP TS 38.212 V17.0.0 (2021-12)
-# The decoder class uses a recursive implementation of Successive Cancelation List decoder written
-# from scratch. (See sclDecode)
-# ****************************************************************************************************************************************************
+# The decoder class uses a recursive implementation of Successive Cancellation List decoder written from
+# scratch. (See ``sclDecode``)
+
+# **********************************************************************************************************************
 # This is based on TS 38.212 Table 5.3.1.2-1: Polar sequence
 reliabilitySeq = np.int16([
     0,    1,    2,    4,    8,    16,   32,   3,    5,    64,   9,    6,    17,   10,   18,   128,
@@ -93,7 +92,7 @@ reliabilitySeq = np.int16([
     1009, 955,  1004, 1010, 957,  983,  958,  987,  1012, 999,  1016, 767,  989,  1003, 990,  1005,
     959,  1011, 1013, 895,  1006, 1014, 1017, 1018, 991,  1020, 1007, 1015, 1019, 1021, 1022, 1023])
 
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 # Input interleaving Pattern according to TS 38.212 V17.0.0 (2021-12) Table 5.3.1.1-1
 inputInterleaver = [  0,   2,   4,   7,   9,  14,  19,  20,  24,  25,  26,  28,  31,  34,
                      42,  45,  49,  50,  51,  53,  54,  56,  58,  59,  61,  62,  65,  66,
@@ -108,150 +107,133 @@ inputInterleaver = [  0,   2,   4,   7,   9,  14,  19,  20,  24,  25,  26,  28, 
                      38, 144,  39, 145,  40, 146,  41, 147, 148, 149, 150, 151, 152, 153,
                     154, 155, 156, 157, 158, 159, 160, 161, 162, 163 ]
 
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 # Sub-block interleaving pattern based on TS 38.212 V17.0.0 (2021-12) Table 5.4.1.1-1
 subBlockInterleaver = np.uint16([ 0,  1,  2,  4,  3,  5,  6,  7,  8, 16,  9, 17, 10, 18, 11, 19,
                                  12, 20, 13, 21, 14, 22, 15, 23, 24, 25, 26, 28, 27, 29, 30, 31])
 
-# ****************************************************************************************************************************************************
-# The base class for Polar Coding
+# **********************************************************************************************************************
+# The base class for polar coding
 class PolarBase(ChanCodeBase):
     r"""
-    This is the base class for all Polar Coding classes. Both :py:class:`PolarEncoder` and
-    :py:class:`PolarDecoder` classes are derived from this class. In 5G NR, Polar Coding is
-    used for the following cases:
+    This is the base class for all polar coding classes. Both :py:class:`PolarEncoder` and :py:class:`PolarDecoder`
+    classes are derived from it. In 5G NR, polar coding is used for the following cases:
     
         - Downlink Control Information (DCI)
         - Uplink Control Information (UCI)
         - Physical Broadcast Channel (PBCH)
     """
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def __init__(self, payloadSize=0, rateMatchedLen=0, dataType=None, **kwargs):
         r"""
         Parameters
         ----------
-        payloadSize: int (default: 0)
-            The size of input bitstream not including the CRC bits. This is the
-            value :math:`A` in **3GPP TS 38.212, Section 5.2.1**.
+        payloadSize: int
+            The size of input bitstream not including the CRC bits. This is the value :math:`A` in **3GPP TS 38.212,
+            Section 5.2.1**.
             
-        rateMatchedLen: int (default: 0)
-            The total length of rate-matched output bitstream. This is the value
-            :math:`E` in **3GPP TS 38.212, Sections 5.3.1 and 5.4.1**.
+        rateMatchedLen: int
+            The total length of rate-matched output bitstream. This is the value :math:`E` in **3GPP TS 38.212,
+            Sections 5.3.1 and 5.4.1**.
             
-        dataType: str or None (default: None)
+        dataType: str or None
             The type of data using this Polar encoder/decoder. It can be one of the
             following:
             
             :"DCI": Downlink Control Information
             :"UCI": Uplink Control Information
-            :"PBCH": Physical broadcast channel
+            :"PBCH": Physical Broadcast Channel
             :None: Customized Polar Coding.
 
         kwargs : dict
             A set of optional arguments depending on the ``dataType``:
 
-                :iBIL: Coded bits Interleaving flag. This is a boolean value that
-                    indicates whether coded bits interleaving is enabled (``True``)
-                    or disabled (``False``). By default ``iBIL=False``. This is the
-                    value :math:`I_{BIL}` in **3GPP TS 38.212, Section 5.4.1.3**. This
-                    parameter is ignored if the ``dataType`` is not ``None``. In this
-                    case, ``iBIL`` is set to ``True`` for ``dataType="UCI"``, and
-                    ``False`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                :iBIL: Coded bits Interleaving flag. This is a boolean value that indicates whether coded bits
+                    interleaving is enabled (``True``) or disabled (``False``). By default ``iBIL=False``. This
+                    is the value :math:`I_{BIL}` in **3GPP TS 38.212, Section 5.4.1.3**. This parameter is ignored
+                    if the ``dataType`` is not ``None``. In this case, ``iBIL`` is set to ``True`` for 
+                    ``dataType="UCI"``, and ``False`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
 
-                :nMax: Max value of :math:`n` where :math:`N=2^n` is the length of the
-                    polar code. By default this is set to 10 (which means :math:`N=10241`.
-                    This is the value :math:`N_{max}` in **3GPP TS 38.212, Section
-                    5.3.1.2**. This parameter is ignored if the ``dataType`` is not
-                    ``None``. In this case, ``nMax=10`` when ``dataType="UCI"``, and
-                    ``nMax=9`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                :nMax: Max value of :math:`n` where :math:`N=2^n` is the length of the polar code. By default this
+                    is set to 10 (which means :math:`N=1024`. This is the value :math:`N_{max}` in **3GPP TS 38.212,
+                    Section 5.3.1.2**. This parameter is ignored if the ``dataType`` is not ``None``. In this case,
+                    ``nMax=10`` when ``dataType="UCI"``, and ``nMax=9`` for ``dataType="DCI"`` and ``dataType="PBCH"``
+                    cases.
 
-                :iIL: Input Interleaving flag. This is a boolean value that
-                    indicates whether input interleaving is enabled (``True``)
-                    or disabled (``False``). By default ``iIL=False``. This is the
-                    value :math:`I_{IL}` in **3GPP TS 38.212, Section 5.3.1.1**. This
-                    parameter is ignored if the ``dataType`` is not ``None``. In this
-                    case, ``iIL`` is set to ``False`` for ``dataType="UCI"``, and
-                    ``True`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                :iIL: Input Interleaving flag. This is a boolean value that indicates whether input interleaving
+                    is enabled (``True``) or disabled (``False``). By default ``iIL=False``. This is the value
+                    :math:`I_{IL}` in **3GPP TS 38.212, Section 5.3.1.1**. This parameter is ignored if the 
+                    ``dataType`` is not ``None``. In this case, ``iIL`` is set to ``False`` for ``dataType="UCI"``,
+                    and ``True`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
 
-                :nPC: Total number of Parity Check bits. By default this is
-                    set to 0. This is the value :math:`N_{PC}` in **3GPP TS 38.212,
-                    Section 5.3.1**. This parameter is ignored if the ``dataType``
-                    is not ``None``. In this case, ``nPC=0`` when ``dataType`` is set
-                    to ``"DCI"`` or ``"PBCH"``. For the ``"UCI"`` case, this value may
-                    be set to 0 or 3 which is determined based on the procedure explained
-                    in **3GPP TS 38.212, Section 5.3.1.2**.
+                :nPC: Total number of parity-check bits. By default this is set to 0. This is the value :math:`N_{PC}`
+                    in **3GPP TS 38.212, Section 5.3.1**. This parameter is ignored if the ``dataType`` is not 
+                    ``None``. In this case, ``nPC=0`` when ``dataType`` is set to ``"DCI"`` or ``"PBCH"``. For the
+                    ``"UCI"`` case, this value may be set to 0 or 3 which is determined based on the procedure
+                    explained in **3GPP TS 38.212, Section 5.3.1.2**.
                     
-                :nPCwm: The number of *Low-weight*, *High-Reliability* Parity Check
-                    bits out of the total parity check bits ``nPC``. By default this
-                    is set to 0. This is the value :math:`n_{PC}^{wm}` in **3GPP TS
-                    38.212, Sections 5.3.1.2, 6.3.1.3.1, and 6.3.2.3.1**. This parameter
-                    is ignored if the ``dataType`` is not ``None``. In this case, ``nPCwm=0``
-                    when ``dataType`` is set to ``"DCI"`` or ``"PBCH"``. For the ``"UCI"``
-                    case, this value may be set to 0 or 1 which is determined based on the
-                    procedures explained in **3GPP TS 38.212, Sections 6.3.1.3.1 and
-                    6.3.2.3.1**.
+                :nPCwm: The number of *Low-weight*, *High-Reliability* parity-check bits out of the total parity-check
+                    bits ``nPC``. By default this is set to 0. This is the value :math:`n_{PC}^{wm}` in **3GPP TS
+                    38.212, Sections 5.3.1.2, 6.3.1.3.1, and 6.3.2.3.1**. This parameter is ignored if the 
+                    ``dataType`` is not ``None``. In this case, ``nPCwm=0`` when ``dataType`` is set to ``"DCI"``
+                    or ``"PBCH"``. For the ``"UCI"`` case, this value may be set to 0 or 1 which is determined based
+                    on the procedure explained in **3GPP TS 38.212, Sections 6.3.1.3.1 and 6.3.2.3.1**.
 
-                :iSeg: Segmentation flag. This is a boolean value that indicates
-                    whether segmentation is enabled (``True``) or disabled (``False``).
-                    By default ``iSeg=False``. This is the value :math:`I_{seg}` in
-                    **3GPP TS 38.212, Section 5.2.1**. This parameter is ignored if
-                    the ``dataType`` is not ``None``. In this case, ``iSeg=False``
-                    when ``dataType="DCI"`` or ``dataType="PBCH"``. When
-                    ``dataType="UCI"``, ``iSeg`` is set based on the value of
-                    ``payloadSize``.
+                :iSeg: Segmentation flag. This is a boolean value that indicates whether segmentation is enabled 
+                    (``True``) or disabled (``False``). By default ``iSeg=False``. This is the value :math:`I_{seg}`
+                    in **3GPP TS 38.212, Section 5.2.1**. This parameter is ignored if the ``dataType`` is not
+                    ``None``. In this case, ``iSeg=False`` when ``dataType="DCI"`` or ``dataType="PBCH"``. When
+                    ``dataType="UCI"``, ``iSeg`` is set based on the value of ``payloadSize``.
 
-                :crcPoly: The CRC polynomial. This is a string specifying the
-                    CRC polynomial or ``None``. If specified, it must be
-                    one of the values specified in
-                    :py:meth:`~neoradium.chancodebase.ChanCodeBase.getCrc` for the
-                    ``poly`` parameter. The default value is ``"11"``. This parameter
-                    is ignored if the ``dataType`` is not ``None``. In this case
-                    ``crcPoly`` is set to ``"6"`` or ``"11"`` depending on
-                    ``payloadSize`` for ``dataType="UCI"``, and ``"24C"`` for
-                    ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                :crcPoly: The CRC polynomial. This is a string specifying the CRC polynomial or ``None``. If
+                    specified, it must be one of the values specified in 
+                    :py:meth:`~neoradium.chancodebase.ChanCodeBase.getCrc` for the ``poly`` parameter. The default 
+                    value is ``"11"``. This parameter is ignored if the ``dataType`` is not ``None``. In this case
+                    ``crcPoly`` is set to ``"6"`` or ``"11"`` depending on ``payloadSize`` for ``dataType="UCI"``,
+                    and ``"24C"`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
                     
 
         **Other Properties:**
         
-            :rateMatchedBlockLen: The number of rate-matched bits transmitted for each code block
-                when segmented. This is the same as ``rateMatchedLen`` if segmentation is disabled.
-                This is the value :math:`E_r` in **3GPP TS 38.212, Section 5.5**.
+            :rateMatchedBlockLen: The number of rate-matched bits transmitted for each code block when segmented. This
+                is the same as ``rateMatchedLen`` if segmentation is disabled. This is the value :math:`E_r` in
+                **3GPP TS 38.212, Section 5.5**.
                 
-            :codeBlockSize: The code-block size. This is the value :math:`K` in **3GPP TS 38.212,
-                Section 5.3.1** which includes the CRC bits (if any).
+            :codeBlockSize: The code-block size. This is the value :math:`K` in **3GPP TS 38.212, Section 5.3.1**
+                which includes the CRC bits (if any).
 
             :polarCodeSize: The polar code size :math:`N`. This is always a power of 2.
                     
-            :msgBits: A list of indexes of the message bits in the coded bitstream.
+            :msgBits: A list of indices of the message bits in the coded bitstream.
             
-            :frozenBits: A list of indexes of the *frozen bits* in the coded bitstream.
+            :frozenBits: A list of indices of the *frozen bits* in the coded bitstream.
             
-            :pcBits: A list of indexes of the parity check bits in the coded bitstream. This can
-                be empty depending on ``nPC``.
+            :pcBits: A list of indices of the parity-check bits in the coded bitstream. This can be empty depending 
+                on ``nPC``.
     
             :generator: The polar coding *generator* matrix as a 2-D numpy array.
         """
         super().__init__()
         
-        self.payloadSize = int(payloadSize)             # The payload size (A)              (This does not include the CRC bits)
-        self.rateMatchedLen = int(rateMatchedLen)       # Rate-matched output length (E)    (The total number of bits transmitted)
-        self.rateMatchedBlockLen = int(rateMatchedLen)  # Rate-matched output length (Er)   (The bits transmitted for each code block when segmented)
-        self.codeBlockSize = 0                          # Code Block Size (K)               (This includes CRC bits)
+        self.payloadSize = int(payloadSize)             # Payload size not including the CRC bits (A)
+        self.rateMatchedLen = int(rateMatchedLen)       # Total transmitted bits (E)
+        self.rateMatchedBlockLen = int(rateMatchedLen)  # The bits transmitted for each code block when segmented (Er)
+        self.codeBlockSize = 0                          # Code Block Size including CRC bits (K)
         self.polarCodeSize = 0                          # The polar code size (N = 2^n)
         self.inInterleaveIndexes = None                 # Used for Input interleaving only if enabled (iIL=True)
         self.cbInterleaveIndexes = None                 # Used only if coded bit interleaving is enabled (iBIL=True)
-        self.sbInterleaveIndexes = None                 # Sub-block interleaving indexes. Initialized in the "initialize" function
+        self.sbInterleaveIndexes = None                 # Sub-block interleaving indices. See in "initialize" function
         
         if dataType is None:                # If the dataType is not given all parameters should be specified
-            self.iBIL =  kwargs.get('iBIL', False)          # Coded bits Interleaving flag
-            self.nMax =  kwargs.get('nMax', 10)             # Max value of n. The total number of Polar-Coded bits is 2^n
-            self.iIL =   kwargs.get('iIL', False)           # Input Interleaving flag
-            self.nPC =   kwargs.get('nPC', 0)               # Total number of Parity Check bits
-            self.nPCwm = kwargs.get('nPCwm', 0)             # Number "Low-weight, High-Reliability" Parity Check bits (Count is included in nPC)
-            self.iSeg =  kwargs.get('iSeg', False)          # Segmentation flag
-            self.crcPoly = kwargs.get('crcPoly', "11")      # CRC polynomial Identifier Str
+            self.iBIL =  kwargs.get('iBIL', False)      # Coded bits Interleaving flag
+            self.nMax =  kwargs.get('nMax', 10)         # Max value of n. The total number of Polar-Coded bits is 2^n
+            self.iIL =   kwargs.get('iIL', False)       # Input Interleaving flag
+            self.nPC =   kwargs.get('nPC', 0)           # Total number of parity-check bits
+            self.nPCwm = kwargs.get('nPCwm', 0)     # "Low-weight, High-Reliability" parity-check bits (included in nPC)
+            self.iSeg =  kwargs.get('iSeg', False)      # Segmentation flag
+            self.crcPoly = kwargs.get('crcPoly', "11")  # CRC polynomial Identifier Str
             crcLen = self.getCrcLen(self.crcPoly)
-            self.codeBlockSize = ((payloadSize+1)//2 + crcLen) if self.iSeg else (payloadSize+crcLen)    # Code Block Size (Kr)
+            self.codeBlockSize = ((payloadSize+1)//2 + crcLen) if self.iSeg else (payloadSize+crcLen)   # Kr
         else:
             self.dataType = dataType.lower()
             if self.dataType == 'uci':      # Uplink control information
@@ -283,12 +265,12 @@ class PolarBase(ChanCodeBase):
                 self.crcPoly = '24C'        # CRC bits (See TS 38.212 V17.0.0 (2021-12), section 7.3.2)
 
             else:
-                raise ValueError("Invalid 'dataType' value \"%s\". It must be one of \"UCI\", \"DCI\", or \"PBCH\"."%(self.dataType))
+                raise ValueError("'dataType' value must be one of 'UCI', 'DCI', or 'PBCH'.")
 
         if (dataType is not None) and (payloadSize>0) and (rateMatchedLen>0):
             self.initialize(payloadSize, rateMatchedLen)
             
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def __repr__(self):     return self.print(getStr=True)      # Not documented - Not called directly by the user
     def print(self, indent, title, getStr):                     # Not documented - Not called directly by the user
         repStr = "\n" if indent==0 else ""
@@ -305,14 +287,14 @@ class PolarBase(ChanCodeBase):
         repStr += indent*' ' + "  polarCodeSize (N) .............: %d\n"%(self.polarCodeSize)
         repStr += indent*' ' + "  Max Log2(N) (nMax) ............: %d\n"%(self.nMax)
         repStr += indent*' ' + "  Segmentation (iSeg) ...........: %s\n"%("Enabled" if self.iSeg else "Disabled")
-        repStr += indent*' ' + "  Code Block CRC (crcPoly) ......: %s\n"%("None" if self.crcPoly is None else self.crcPoly)
+        repStr += indent*' ' + "  Code Block CRC (crcPoly) ......: %s\n"%(self.crcPoly)
         repStr += indent*' ' + "  Input Interleaving (iIL) ......: %s\n"%("Enabled" if self.iIL else "Disabled")
         repStr += indent*' ' + "  Coded bit Interleaving (iBIL)..: %s\n"%("Enabled" if self.iBIL else "Disabled")
-        repStr += indent*' ' + "  Num Parity checks (nPC, nPCwm) : %d,%d\n"%(self.nPC, self.nPCwm)
+        repStr += indent*' ' + "  Parity-check bits (nPC, nPCwm) : %d,%d\n"%(self.nPC, self.nPCwm)
         if getStr: return repStr
         print(repStr)
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def initialize(self, payloadSize, rateMatchedLen):          # Not documented - Not called directly by the user
         self.payloadSize = int(payloadSize)
         self.rateMatchedLen = int(rateMatchedLen)
@@ -321,7 +303,7 @@ class PolarBase(ChanCodeBase):
         if self.dataType == 'uci':      # Uplink control information
             # Note: UCI can be sent in PUCCH or PUSCH. The parameters are the same for both cases.
             # See TS 38.212 V17.0.0 (2021-12), section 6.3.1.2.1 for PUCCH and section 6.3.2.2.1 for PUSCH
-            if a<12:    raise ValueError("Polar Coding is not supported for UCI with payload size smaller than 12!")
+            if a<12:    raise ValueError("Polar coding is not supported for UCI with payload size smaller than 12!")
 
             self.iSeg = ((a>=360 and eTot>=1088) or a>=1013)
             self.crcPoly = '6' if a<20 else '11'
@@ -358,7 +340,7 @@ class PolarBase(ChanCodeBase):
         n = max( min(n1, n2, self.nMax), nMin)
         nn = self.polarCodeSize = 1<<n              # N
 
-        # Input Interleaving indexes:
+        # Input interleaving indices:
         if self.iIL:
             # See TS 38.212 V17.0.0 (2021-12), Section 5.3.1.1
             kIlMax = 164
@@ -367,10 +349,10 @@ class PolarBase(ChanCodeBase):
         
         reliabilitySeqN = reliabilitySeq[reliabilitySeq<nn]
 
-        # Sub-block Interleaving Indexes. See TS 38.212 V17.0.0 (2021-12), Section 5.4.1.1
-        jj = self.sbInterleaveIndexes = [ subBlockInterleaver[(i<<5)//nn]*(nn>>5) + i%(nn>>5) for i in range(nn) ]  # Shape: (nn,)
+        # Sub-block interleaving indices. See TS 38.212 V17.0.0 (2021-12), Section 5.4.1.1, Shape: (nn,)
+        jj = self.sbInterleaveIndexes = [ subBlockInterleaver[(i<<5)//nn]*(nn>>5) + i%(nn>>5) for i in range(nn) ]
 
-        # Getting frozen and message bit indexes:
+        # Getting frozen and message bit indices:
         fTemp = set()
         if eR<nn:
             if k/eR <= 7.0/16:       # Puncturing
@@ -380,27 +362,31 @@ class PolarBase(ChanCodeBase):
             else:                   # Shortening
                 fTemp.update(jj[eR:])
         
-        self.msgBits = sorted([x for x in reliabilitySeqN if x not in fTemp][-(k+self.nPC):])  # Using the last K+nPC bits (most reliable bits)
+        # Using the last K+nPC bits (most reliable bits)
+        self.msgBits = sorted([x for x in reliabilitySeqN if x not in fTemp][-(k+self.nPC):])
         self.frozenBits = sorted(x for x in reliabilitySeqN if x not in self.msgBits)
 
-        # Making the generator matrix for the Polar Coding
+        # Making the generator matrix for polar coding
         g = [1]
         for _ in range(n): g = np.kron([[1, 0], [1, 1]], g)
         self.generator = g
 
-        # Getting Parity-Check bits. See TS 38.212 V17.0.0 (2021-12), Section 5.3.1.2
+        # Getting parity-check bits. See TS 38.212 V17.0.0 (2021-12), Section 5.3.1.2
         self.pcBits = []
         if self.nPC>0:
-            self.pcBits = self.msgBits[:(self.nPC - self.nPCwm)]                            # (nPC - nPCwm) Least reliable bits
+            self.pcBits = self.msgBits[:(self.nPC - self.nPCwm)]                    # (nPC - nPCwm) Least reliable bits
             if self.nPCwm>0:
-                mostReliableMsgBits = self.msgBits[(self.nPC - self.nPCwm):][::-1]          # The remaining message bits reversed so that most reliable bits come first
-                idx = np.argsort(g[ mostReliableMsgBits ].sum(1), kind='stable')            # argsort indexes of weights based on 1st row-weights and then highest reliability
-                pcWmBits = mostReliableMsgBits[idx][::-1][:nPCwm]                           # Get the nPCwm lowest row-weight bits in message bits.
-                self.pcBits += pcWmBits.tolist()                                            # Add to the parity-check bits
-            self.msgBits = [b for b in self.msgBits if b not in self.pcBits]                # Remove the parity-check bits from message bits
+                # The remaining message bits reversed so that most reliable bits come first
+                mostReliableMsgBits = self.msgBits[(self.nPC - self.nPCwm):][::-1]
+                
+                # The argsort indices of weights based on 1st row-weights and then highest reliability
+                idx = np.argsort(g[ mostReliableMsgBits ].sum(1), kind='stable')
+                pcWmBits = mostReliableMsgBits[idx][::-1][:nPCwm]   # The nPCwm lowest row-weight bits in message bits.
+                self.pcBits += pcWmBits.tolist()                                # Add to the parity-check bits
+            self.msgBits = [b for b in self.msgBits if b not in self.pcBits]    # Remove the parity-check bits
 
         if self.iBIL:
-            # Pre-calculate Coded Bit Interleaving indexes
+            # Pre-calculate coded bit interleaving indices
             # See TS 38.212 V17.0.0 (2021-12), Section 5.4.1.3
 
             # Find smallest t such that t*(t+1)/2 >= eR
@@ -417,64 +403,65 @@ class PolarBase(ChanCodeBase):
                     k += 1
                 if k>=eR: break
             self.cbInterleaveIndexes = np.transpose(v[:i+1]).flatten()
-            self.cbInterleaveIndexes = self.cbInterleaveIndexes[ self.cbInterleaveIndexes>=0 ]  # This is the indexes for the encoder. For decoder we need the inverse of this.
+            
+            # This is the indices for the encoder. For decoder we need the inverse of this.
+            self.cbInterleaveIndexes = self.cbInterleaveIndexes[ self.cbInterleaveIndexes>=0 ]
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def setIoSizes(self, payloadSize, rateMatchedLen):
         r"""
-        This function can be called to re-initialize the class properties. When
-        the ``payloadSize`` or ``rateMatchedLen`` parameter change but other properties
-        remain the same, you can create a new polar encoder/decoder object or you can
-        reuse the existing objects and re-initialize them using this method.
+        This function can be called to re-initialize the class properties. When the ``payloadSize`` or
+        ``rateMatchedLen`` parameters change but other properties remain the same, you can either create a new polar
+        encoder/decoder object or reuse the existing objects and re-initialize them using this method.
         
-        Note that if there is no change in the values of ``payloadSize`` and
-        ``rateMatchedLen``, this function returns without doing anything.
+        Note that if there is no change in the values of ``payloadSize`` and ``rateMatchedLen``, this function
+        returns without doing anything.
         
         Parameters
         ----------
         payloadSize: int
-            The new size of input bitstream not including the CRC bits. This is the
-            value :math:`A` in **3GPP TS 38.212, Section 5.2.1**.
+            The new size of input bitstream not including the CRC bits. This is the value :math:`A` in **3GPP 
+            TS 38.212, Section 5.2.1**.
             
-        rateMatchedLen: int (default: 0)
-            The new total length of rate-matched output bitstream. This is the value
-            :math:`E` in **3GPP TS 38.212, Sections 5.3.1 and 5.4.1**.
+        rateMatchedLen: int
+            The new total length of rate-matched output bitstream. This is the value :math:`E` in **3GPP TS 38.212,
+            Sections 5.3.1 and 5.4.1**.
         """
         if (self.payloadSize != payloadSize) or (self.rateMatchedLen != rateMatchedLen):
             self.initialize(payloadSize, rateMatchedLen)
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     @classmethod
     def intLog2(cls, num):                                      # Not documented - Not called directly by the user
         n,i = int(num), 0
         while n>1: n >>= 1; i+=1
         return i
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     @classmethod
     def ceilLog2(cls, num):                                     # Not documented - Not called directly by the user
         n,i = int(num)-1, 1
         while n>1: n >>= 1; i+=1
         return i
 
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 class PolarEncoder(PolarBase):
     r"""
-    This class is used to encode a bitstream using
-    `Polar coding <https://en.wikipedia.org/wiki/Polar_code_(coding_theory)>`_.
-    It is derived from the :py:class:`PolarBase` class and performs the following tasks:
+    This class is used to encode a bitstream using 
+    `Polar coding <https://en.wikipedia.org/wiki/Polar_code_(coding_theory)>`_. It is derived from the
+    :py:class:`PolarBase` class and performs the following tasks:
     
     - Segmentation of the transport block based on **3GPP TS 38.212, Section 5.2.1**
     - Polar encoding based on **3GPP TS 38.212, Section 5.3.1**
-    - Rate Matching with Sub-block Interleaving, Bit Selection, and Interleaving of
-      Coded bits based on **3GPP TS 38.212, Section 5.4.1**
+    - Rate Matching with Sub-block interleaving, bit selection, and interleaving of coded bits based on **3GPP 
+      TS 38.212, Section 5.4.1**
     """
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def __init__(self, payloadSize=0, rateMatchedLen=0, dataType=None, **kwargs):
         # NOTE: Documentation is inherited from PolarBase
         super().__init__(payloadSize, rateMatchedLen, dataType, **kwargs)
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def __repr__(self):     return self.print(getStr=True)
     def print(self, indent=0, title=None, getStr=False):
         r"""
@@ -482,37 +469,34 @@ class PolarEncoder(PolarBase):
 
         Parameters
         ----------
-        indent: int (default: 0)
+        indent: int
             The number of indentation characters.
             
-        title: str or None (default: None)
+        title: str
             If specified, it is used as a title for the printed information.
 
-        getStr: Boolean (default: False)
-            If ``True``, it returns the information in a text string instead
-            of printing the information.
+        getStr: Boolean
+            If ``True``, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns
-            the information in a text string. Otherwise, nothing is returned.
+            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string.
+            Otherwise, nothing is returned.
         """
         if title is None:   title = "Polar Encoder Properties:"
         repStr = super().print(indent, title, True)
         if getStr: return repStr
         print(repStr)
     
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def doSegmentation(self, txBlock):
         r"""
-        If segmentation is enabled, the first step in Polar encoding process
-        is breaking down the transport block into smaller code-blocks. This
-        function receives a transport block ``txBlock``, performs segmentation
-        depending on the value of ``iSeg`` property based on **3GPP
-        TS 38.212, Section 5.2.1**, and outputs a 2D ``C x K`` numpy array
-        containing ``C`` code-blocks of length ``K``. Note that ``C`` can
-        only be 1 or 2 and if ``iSeg=False``, then ``C=1``.
+        If segmentation is enabled, the first step in Polar encoding process is breaking down the transport block
+        into smaller code-blocks. This function receives a transport block ``txBlock``, performs segmentation
+        depending on the value of ``iSeg`` property based on **3GPP TS 38.212, Section 5.2.1**, and outputs a 2D
+        ``C x K`` numpy array containing ``C`` code-blocks of length ``K``. Note that ``C`` can only be 1 or 2 and
+        if ``iSeg=False``, then ``C=1``.
 
         Parameters
         ----------
@@ -522,8 +506,7 @@ class PolarEncoder(PolarBase):
         Returns
         -------
         numpy array
-            A 2D ``C x K`` numpy array containing ``C`` code-blocks of length
-            ``K``.
+            A 2D ``C x K`` numpy array containing ``C`` code-blocks of length ``K``.
         """
         a = len(txBlock)
             
@@ -540,23 +523,21 @@ class PolarEncoder(PolarBase):
         if self.crcPoly is None:    return codeBlocks                                           # Shape: (c,k)
         return np.int8([ self.appendCrc(codeBlocks[i], self.crcPoly) for i in range(c) ])       # Shape: (c,k)
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def encode(self, codeBlocks):
         r"""
-        This function encodes a set of code-blocks and returns a set of Polar-coded
-        code-words based on the procedure explained in **3GPP TS 38.212, Section
-        5.3.1**.
+        This function encodes a set of code-blocks and returns a set of Polar-coded codewords based on the procedure
+        explained in **3GPP TS 38.212, Section 5.3.1**.
 
         Parameters
         ----------
         codeBlocks: numpy array
-            A ``C x K`` numpy array containing ``C`` code-blocks of length ``K``
-            being Polar-encoded by this function.
+            A ``C x K`` numpy array containing ``C`` code-blocks of length ``K`` being Polar-encoded by this function.
 
         Returns
         -------
         numpy array
-            A ``C x N`` numpy array containing the ``C`` encoded code-words.
+            A ``C x N`` numpy array containing the ``C`` encoded codewords.
         """
         c, k = codeBlocks.shape
         nn, e = self.polarCodeSize, self.rateMatchedBlockLen
@@ -571,47 +552,44 @@ class PolarEncoder(PolarBase):
             u = np.zeros(nn, dtype=np.uint8)
             u[self.msgBits] = codeBlock                 # Populate the message bits
             if self.nPC>0:
-                # Now Populate the Parity-Check bits
+                # Now Populate the parity-check bits
                 y = [0,0,0,0,0]   # y0 ... y4
                 for n in range(nn):
                     y = np.roll(y,-1)
                     if n in self.pcBits:    u[n] = y[0]
                     else:                   y[0] ^= u[n]
                     
-            codewords += [u.dot(self.generator)%2]      # Apply the generator matrix and add to the encoded code-words
+            codewords += [u.dot(self.generator)%2]      # Apply the generator matrix and add to the encoded codewords
                     
         return np.int8(codewords)
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def rateMatch(self, codewords):
         r"""
-        This function receives a set of encoded code-words and returns the
-        rate-matched code-words. It first performs Sub-block interleaving
-        based on **3GPP TS 38.212, Section 5.4.1.1**, then bit selection is
-        done based on **3GPP TS 38.212, Section 5.4.1.2**. Finally, if
-        *Coded bits Interleaving* is enabled (``iBIL=True``), this function
-        applies the procedure in **3GPP TS 38.212, Section 5.4.1.3** for
-        *Coded bits Interleaving*.
+        This function receives a set of encoded codewords and returns the rate-matched codewords. It first performs
+        Sub-block interleaving based on **3GPP TS 38.212, Section 5.4.1.1**, then bit selection is done based on
+        **3GPP TS 38.212, Section 5.4.1.2**. Finally, if *Coded bits Interleaving* is enabled (``iBIL=True``), this
+        function applies the procedure in **3GPP TS 38.212, Section 5.4.1.3** for *Coded bits Interleaving*.
 
         Parameters
         ----------
         codeWords: numpy array
-            A ``C x N`` numpy array containing ``C`` encoded code-words of length
-            ``N`` being rate-matched by this function.
+            A ``C x N`` numpy array containing ``C`` encoded codewords of length ``N`` being rate-matched by
+            this function.
 
         Returns
         -------
         numpy array
-            A ``C x E`` numpy array containing the ``C`` rate-matched code-words of
-            length ``E`` where ``E=rateMatchedBlockLen``.
+            A ``C x E`` numpy array containing the ``C`` rate-matched codewords of length ``E`` where
+            ``E=rateMatchedBlockLen``.
         """
-        # Sub-block Interleaving Indexes. See TS 38.212 V17.0.0 (2021-12), Section 5.4.1.1
+        # Sub-block Interleaving indices. See TS 38.212 V17.0.0 (2021-12), Section 5.4.1.1
         jj = self.sbInterleaveIndexes
         codewords = codewords[:,jj]
         nn, k, e = self.polarCodeSize, self.codeBlockSize, self.rateMatchedBlockLen
         
             
-        # Bit Selection. TS 38.212 Section 5.4.1.2
+        # Bit Selection. TS 38.212, Section 5.4.1.2
         if e>=nn:                   rateMatchedCWs = codewords[:, [k%nn for k in range(e)] ]    # Repetition
         elif (k/e) <= (7.0/16):     rateMatchedCWs = codewords[:, nn-e:]                        # Puncturing
         else:                       rateMatchedCWs = codewords[:, :e]                           # Shortening
@@ -624,32 +602,32 @@ class PolarEncoder(PolarBase):
            
         return rateMatchedCWs       # Shape: c, e
 
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 class SclDecoder:                                               # Not documented - Not used directly by the user
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def __init__(self, frozenBits, maxCount=8, useMinSum=True):
-        self.frozenBits = frozenBits        # The indexes of the frozen and punctured bits
+        self.frozenBits = frozenBits        # The indices of the frozen and punctured bits
         self.maxCount = maxCount            # Max number of candidates to keep
         self.useMinSum = useMinSum          # Use Min-Sum approximation
         self.reset()                        # Reset all candidate info
         
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def reset(self):
         self.pathCosts = np.float64([0])    # Path Costs (Lower value means more probable results)
         self.uHats = np.int8([[]])          # uHats. The 'U' candidates (Including frozen bits)
-        self.xHats = np.int8([[]])          # xHat. The code-words candidates
-        self.llrIdxs = np.int16([0])        # The indexes mapping candidates to LLRs
+        self.xHats = np.int8([[]])          # xHat. The codewords candidates
+        self.llrIdxs = np.int16([0])        # The indices mapping candidates to LLRs
         self.count = 1                      # Current number of candidates
         
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def updateFrozen(self, llrs):
         zeroBits = np.int8(self.count*[[0]])
         self.pathCosts -= np.minimum(0,llrs)                        # 0 cost if llr>0 else cost: abs(llr)=-llr
         self.uHats = np.concatenate([self.uHats,zeroBits],axis=1)   # Add the new bit(zero) to the U for all candidates
-        self.xHats = zeroBits                                       # The new bit(zero) for all xHat candidates
-        self.llrIdxs = np.arange(self.count)                        # The LLR Indexes just map to the same candidate numbers
+        self.xHats = zeroBits                               # The new bit(zero) for all xHat candidates
+        self.llrIdxs = np.arange(self.count)                # The LLR indices just map to the same candidate numbers
  
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def updateMessage(self, llrs):
         zeroBits = np.int8(self.count*[[0]])
         oneBits = np.int8(self.count*[[1]])
@@ -667,7 +645,7 @@ class SclDecoder:                                               # Not documented
         xHats = np.concatenate([zeroBits,oneBits], axis=0)
         llrIdxs = np.concatenate([np.arange(self.count),np.arange(self.count)], axis=0)
         
-        # Get best 'maxCount' candidate indexes
+        # Get best 'maxCount' candidate indices
         bestKPaths = np.argsort(pathCosts)[:self.maxCount]
         
         # Keep the best candidates and discard the others
@@ -677,19 +655,19 @@ class SclDecoder:                                               # Not documented
         self.llrIdxs = llrIdxs[bestKPaths]
         self.count = len(self.pathCosts)
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def getRightLLRs(self, llr2s):
         c, n = self.xHats.shape
-        rightLLRs =llr2s[self.llrIdxs,:,:]                                                                  # shape: (c, 2, n)
-        rightLLRs *= np.concatenate([ (1-2*self.xHats)[:,None,:], np.ones((c, 1, n),np.int8) ], axis=1)     # shape: (c, 2, n)
-        return rightLLRs.sum(1)                                                                             # shape: (c, n)
+        rightLLRs =llr2s[self.llrIdxs,:,:]                                                              # shape: (c,2,n)
+        rightLLRs *= np.concatenate([ (1-2*self.xHats)[:,None,:], np.ones((c, 1, n),np.int8) ], axis=1) # shape: (c,2,n)
+        return rightLLRs.sum(1)                                                                         # shape: (c, n)
     
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def updateEnd(self, xHatsLeft, leftToOriginal):
-        self.xHats = np.concatenate([ xHatsLeft[self.llrIdxs]^self.xHats, self.xHats ], axis=1)             # shape: (c, n)
-        self.llrIdxs = leftToOriginal[ self.llrIdxs ]                                                       # shape: (c,)
+        self.xHats = np.concatenate([ xHatsLeft[self.llrIdxs]^self.xHats, self.xHats ], axis=1)         # shape: (c, n)
+        self.llrIdxs = leftToOriginal[ self.llrIdxs ]                                                   # shape: (c,)
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def uHatsSorted(self):
         # Sort based on path costs (Lowest cost first), then return the uHats
         pathOrders = np.argsort(self.pathCosts)
@@ -699,7 +677,7 @@ class SclDecoder:                                               # Not documented
         self.llrIdxs = self.llrIdxs[pathOrders]
         return self.uHats
     
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def decode(self, rxLlrs, idx=-1):
         firstCall = (idx==-1)
         if firstCall:
@@ -720,37 +698,36 @@ class SclDecoder:                                               # Not documented
         sign = np.sign(llr2s).prod(axis=1)                              # shape: (c, n/2)
 
         def f(x): return np.abs(np.log(np.tanh(np.abs(x/2.0))+1e-12))   # SPC extrinsic likelihood function
-        if self.useMinSum:  lext = np.abs(llr2s).min(axis=1)            # Minsum approximation (Fast)
+        if self.useMinSum:  lext = np.abs(llr2s).min(axis=1)            # Min-sum approximation (Fast)
         else:               lext = f(f(llr2s).sum(axis=1))              # The extrinsic likelihood (Slow, precise)
 
         leftLLRs = sign*lext                                            # The LLRs for the left child, shape: (c, n/2)
         self.decode(leftLLRs, idx)                                      # Process the left child
 
         # The candidate information can change after returning from left child. Save a lookup table of
-        # indexes mapping from each new candidate to the corresponding LLR.
+        # indices mapping from each new candidate to the corresponding LLR.
         leftToOriginal = self.llrIdxs.copy()
-        xHatsLeft = self.xHats.copy()                                   # Save left xHats before going to the right child, shape: (c, n/2)
+        xHatsLeft = self.xHats.copy()               # Save left xHats before going to the right child, shape: (c, n/2)
 
-        rightLLRs = self.getRightLLRs(llr2s)                            # Calculate the LLRs for the right child for all candidates
-        self.decode(rightLLRs, idx+n//2)                                # Process the right child
+        rightLLRs = self.getRightLLRs(llr2s)        # Calculate the LLRs for the right child for all candidates
+        self.decode(rightLLRs, idx+n//2)            # Process the right child
         
-        self.updateEnd(xHatsLeft, leftToOriginal)                       # Update xHat and the candidate<>LLR mappings before returning to the upper node
+        self.updateEnd(xHatsLeft, leftToOriginal)   # Update xHat and the candidate ↔︎ LLR mappings before returning
 
         if firstCall:
-            # If this is the first call, then we are done. Sort the candidates (Based on Path Costs) and return the uHats
+            # If this is the first call, then we are done. Sort the candidates (Based on path costs) and
+            # return the uHats
             return self.uHatsSorted()
                
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 class PolarDecoder(PolarBase):
     r"""
-    This class is used to decode a set of Log-Likelihood-Ratios (LLRs) to
-    a transport block using the Successive Cancelation List (SCL) [2]_
-    algorithm. It is derived from the :py:class:`PolarBase` class
-    and performs rate recovery and Polar decoding which are basically
-    the opposite of the encoding tasks performed in reverse order.
+    This class is used to decode a set of Log-Likelihood-Ratios (LLRs) to a transport block using the Successive 
+    Cancellation List (SCL) [2]_ algorithm. It is derived from the :py:class:`PolarBase` class and performs rate
+    recovery and Polar decoding which are basically the opposite of the encoding tasks performed in reverse order.
     
-    The following example shows a typical use case for decoding the received
-    Polar-coded information into transport blocks:
+    The following example shows a typical use case for decoding the received Polar-coded information into transport
+    blocks:
     
     .. code-block:: python
         :caption: An example of Polar decoding
@@ -767,22 +744,21 @@ class PolarDecoder(PolarBase):
         # Polar Decoding using SCL algorithm
         decTxBlock, numCrcErrors = polarDecoder.decode(rateRecoveredRxBlocks)
     """
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def __init__(self, payloadSize=0, rateMatchedLen=0, dataType=None, **kwargs):
         r"""
         Parameters
         ----------
-        payloadSize: int (default: 0)
-            The size of input bitstream not including the CRC bits. This is the
-            value :math:`A` in **3GPP TS 38.212, Section 5.2.1**.
+        payloadSize: int
+            The size of input bitstream not including the CRC bits. This is the value :math:`A` in **3GPP TS 38.212,
+            Section 5.2.1**.
             
-        rateMatchedLen: int (default: 0)
-            The total length of rate-matched output bitstream. This is the value
-            :math:`E` in **3GPP TS 38.212, Sections 5.3.1 and 5.4.1**.
+        rateMatchedLen: int
+            The total length of rate-matched output bitstream. This is the value :math:`E` in **3GPP TS 38.212,
+            Sections 5.3.1 and 5.4.1**.
             
-        dataType: str or None (default: None)
-            The type of data using this Polar decoder. It can be one of the
-            following:
+        dataType: str or None
+            The type of data using this Polar decoder. It can be one of the following:
             
             :"DCI": Downlink Control Information
             :"UCI": Uplink Control Information
@@ -792,90 +768,71 @@ class PolarDecoder(PolarBase):
         kwargs : dict
             A set of optional arguments depending on the ``dataType``:
 
-                :iBIL: Coded bits Interleaving flag. This is a boolean value that
-                    indicates whether coded bits interleaving is enabled (``True``)
-                    or disabled (``False``). By default ``iBIL=False``. This is the
-                    value :math:`I_{BIL}` in **3GPP TS 38.212, Section 5.4.1.3**. This
-                    parameter is ignored if the ``dataType`` is not ``None``. In this
-                    case, ``iBIL`` is set to ``True`` for ``dataType="UCI"``, and
-                    ``False`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                :iBIL: Coded bits Interleaving flag. This is a boolean value that indicates whether coded bits
+                    interleaving is enabled (``True``) or disabled (``False``). By default ``iBIL=False``. This
+                    is the value :math:`I_{BIL}` in **3GPP TS 38.212, Section 5.4.1.3**. This parameter is ignored
+                    if the ``dataType`` is not ``None``. In this case, ``iBIL`` is set to ``True`` for 
+                    ``dataType="UCI"``, and ``False`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
 
-                :nMax: Max value of :math:`n` where :math:`N=2^n` is the length of the
-                    polar code. By default this is set to 10 (which means :math:`N=10241`.
-                    This is the value :math:`N_{max}` in **3GPP TS 38.212, Section
-                    5.3.1.2**. This parameter is ignored if the ``dataType`` is not
-                    ``None``. In this case, ``nMax=10`` when ``dataType="UCI"``, and
-                    ``nMax=9`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                :nMax: Max value of :math:`n` where :math:`N=2^n` is the length of the polar code. By default this
+                    is set to 10 (which means :math:`N=1024`. This is the value :math:`N_{max}` in **3GPP TS 38.212,
+                    Section 5.3.1.2**. This parameter is ignored if the ``dataType`` is not ``None``. In this case,
+                    ``nMax=10`` when ``dataType="UCI"``, and ``nMax=9`` for ``dataType="DCI"`` and ``dataType="PBCH"``
+                    cases.
 
-                :iIL: Input Interleaving flag. This is a boolean value that
-                    indicates whether input interleaving is enabled (``True``)
-                    or disabled (``False``). By default ``iIL=False``. This is the
-                    value :math:`I_{IL}` in **3GPP TS 38.212, Section 5.3.1.1**. This
-                    parameter is ignored if the ``dataType`` is not ``None``. In this
-                    case, ``iIL`` is set to ``False`` for ``dataType="UCI"``, and
-                    ``True`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                :iIL: Input Interleaving flag. This is a boolean value that indicates whether input interleaving
+                    is enabled (``True``) or disabled (``False``). By default ``iIL=False``. This is the value
+                    :math:`I_{IL}` in **3GPP TS 38.212, Section 5.3.1.1**. This parameter is ignored if the 
+                    ``dataType`` is not ``None``. In this case, ``iIL`` is set to ``False`` for ``dataType="UCI"``,
+                    and ``True`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
 
-                :nPC: Total number of Parity Check bits. By default this is
-                    set to 0. This is the value :math:`N_{PC}` in **3GPP TS 38.212,
-                    Section 5.3.1**. This parameter is ignored if the ``dataType``
-                    is not ``None``. In this case, ``nPC=0`` when ``dataType`` is set
-                    to ``"DCI"`` or ``"PBCH"``. For the ``"UCI"`` case, this value may
-                    be set to 0 or 3 which is determined based on the procedure explained
-                    in **3GPP TS 38.212, Section 5.3.1.2**.
+                :nPC: Total number of parity-check bits. By default this is set to 0. This is the value :math:`N_{PC}`
+                    in **3GPP TS 38.212, Section 5.3.1**. This parameter is ignored if the ``dataType`` is not 
+                    ``None``. In this case, ``nPC=0`` when ``dataType`` is set to ``"DCI"`` or ``"PBCH"``. For the
+                    ``"UCI"`` case, this value may be set to 0 or 3 which is determined based on the procedure
+                    explained in **3GPP TS 38.212, Section 5.3.1.2**.
+
+                :nPCwm: The number of *Low-weight*, *High-Reliability* parity-check bits out of the total parity-check
+                    bits ``nPC``. By default this is set to 0. This is the value :math:`n_{PC}^{wm}` in **3GPP TS
+                    38.212, Sections 5.3.1.2, 6.3.1.3.1, and 6.3.2.3.1**. This parameter is ignored if the 
+                    ``dataType`` is not ``None``. In this case, ``nPCwm=0`` when ``dataType`` is set to ``"DCI"``
+                    or ``"PBCH"``. For the ``"UCI"`` case, this value may be set to 0 or 1 which is determined based
+                    on the procedure explained in **3GPP TS 38.212, Sections 6.3.1.3.1 and 6.3.2.3.1**.
+
+                :iSeg: Segmentation flag. This is a boolean value that indicates whether segmentation is enabled 
+                    (``True``) or disabled (``False``). By default ``iSeg=False``. This is the value :math:`I_{seg}`
+                    in **3GPP TS 38.212, Section 5.2.1**. This parameter is ignored if the ``dataType`` is not
+                    ``None``. In this case, ``iSeg=False`` when ``dataType="DCI"`` or ``dataType="PBCH"``. When
+                    ``dataType="UCI"``, ``iSeg`` is set based on the value of ``payloadSize``.
+
+                :crcPoly: The CRC polynomial. This is a string specifying the CRC polynomial or ``None``. If
+                    specified, it must be one of the values specified in 
+                    :py:meth:`~neoradium.chancodebase.ChanCodeBase.getCrc` for the ``poly`` parameter. The default 
+                    value is ``"11"``. This parameter is ignored if the ``dataType`` is not ``None``. In this case
+                    ``crcPoly`` is set to ``"6"`` or ``"11"`` depending on ``payloadSize`` for ``dataType="UCI"``,
+                    and ``"24C"`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
                     
-                :nPCwm: The number of *Low-weight*, *High-Reliability* Parity Check
-                    bits out of the total parity check bits ``nPC``. By default this
-                    is set to 0. This is the value :math:`n_{PC}^{wm}` in **3GPP TS
-                    38.212, Sections 5.3.1.2, 6.3.1.3.1, and 6.3.2.3.1**. This parameter
-                    is ignored if the ``dataType`` is not ``None``. In this case, ``nPCwm=0``
-                    when ``dataType`` is set to ``"DCI"`` or ``"PBCH"``. For the ``"UCI"``
-                    case, this value may be set to 0 or 1 which is determined based on the
-                    procedures explained in **3GPP TS 38.212, Sections 6.3.1.3.1 and
-                    6.3.2.3.1**.
-
-                :iSeg: Segmentation flag. This is a boolean value that indicates
-                    whether segmentation is enabled (``True``) or disabled (``False``).
-                    By default ``iSeg=False``. This is the value :math:`I_{seg}` in
-                    **3GPP TS 38.212, Section 5.2.1**. This parameter is ignored if
-                    the ``dataType`` is not ``None``. In this case, ``iSeg=False``
-                    when ``dataType="DCI"`` or ``dataType="PBCH"``. When
-                    ``dataType="UCI"``, ``iSeg`` is set based on the value of
-                    ``payloadSize``.
-
-                :crcPoly: The CRC polynomial. This is a string specifying the
-                    CRC polynomial or ``None``. If specified, it must be
-                    one of the values specified in
-                    :py:meth:`~neoradium.chancodebase.ChanCodeBase.getCrc` for the
-                    ``poly`` parameter. The default value is ``"11"``. This parameter
-                    is ignored if the ``dataType`` is not ``None``. In this case
-                    ``crcPoly`` is set to ``"6"`` or ``"11"`` depending on
-                    ``payloadSize`` for ``dataType="UCI"``, and ``"24C"`` for
-                    ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                :sclListSize: The list size of the *Successive Cancellation List (SCL)* algorithm used for decoding. 
+                    The default is 8.
                     
-                :sclListSize: The list size of the *Successive Cancelation List
-                    (SCL)* algorithm used for decoding. The default is 8.
-                    
-                :useMinsum: A Boolean value indicating whether the *Min-Sum*
-                    approximation should be used in the SCL algorithm. ``True``
-                    (default) means the "Min-Sum" approximation is used resulting
-                    in faster decoding with slightly less precise results. ``False``
-                    means the actual extrinsic likelihood function based on hyperbolic
-                    tangent function is used.
+                :useMinsum: A Boolean value indicating whether the *Min-Sum* approximation should be used in the SCL 
+                    algorithm. ``True`` (default) means the "Min-Sum" approximation is used resulting in faster
+                    decoding with slightly less precise results. ``False`` means the actual extrinsic likelihood
+                    function based on hyperbolic tangent function is used.
 
 
-        .. Note:: For a pair of :py:class:`PolarEncoder`/:py:class:`PolarDecoder` objects to
-           work properly, the above parameters used to configure them should match.
+        .. Note:: For a pair of :py:class:`PolarEncoder`/:py:class:`PolarDecoder` objects to work properly, the 
+                  above parameters used to configure them should match.
 
-        Please refer to :py:class:`PolarBase` class for a list of properties inherited from
-        the base class.
+        Please refer to :py:class:`PolarBase` class for a list of properties inherited from the base class.
         """
         super().__init__(payloadSize, rateMatchedLen, dataType, **kwargs)
         self.sclListSize = kwargs.get('sclListSize', 8)     # The list size for the SCL decoding algorithm.
-        self.useMinsum = kwargs.get('useMinsum', True)      # If True, use "minsum" approximation in the SCL algorithm
+        self.useMinsum = kwargs.get('useMinsum', True)      # If True, use "min-sum" approximation in the SCL algorithm
         
         self.candidates = None
         
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def __repr__(self):     return self.print(getStr=True)
     def print(self, indent=0, title=None, getStr=False):
         r"""
@@ -883,34 +840,33 @@ class PolarDecoder(PolarBase):
 
         Parameters
         ----------
-        indent: int (default: 0)
+        indent: int
             The number of indentation characters.
             
-        title: str or None (default: None)
+        title: str
             If specified, it is used as a title for the printed information.
 
-        getStr: Boolean (default: False)
-            If ``True``, it returns the information in a text string instead
-            of printing the information.
+        getStr: Boolean
+            If ``True``, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns
-            the information in a text string. Otherwise, nothing is returned.
+            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string.
+            Otherwise, nothing is returned.
         """
         if title is None:   title = "Polar Decoder Properties:"
         repStr = super().print(indent, title, True)
         repStr += indent*' ' + "  SCL List Size .................: %s\n"%(self.sclListSize)
-        repStr += indent*' ' + "  MinSum Approximation ..........: %s\n"%("Enabled" if self.useMinsum else "Disabled")
+        repStr += indent*' ' + "  Min-sum Approximation .........: %s\n"%("Enabled" if self.useMinsum else "Disabled")
         if getStr: return repStr
         print(repStr)
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def initialize(self, payloadSize, rateMatchedLen):          # Not documented - Not called directly by the user
         super().initialize(payloadSize, rateMatchedLen)
         
-        # For the decoder we need the inverse of the three interleaving indexes.
+        # For the decoder we need the inverse of the three interleaving indices.
         # Input Interleaver:
         if self.inInterleaveIndexes is not None:
             self.inInterleaveIndexes = np.argsort(self.inInterleaveIndexes)
@@ -922,29 +878,26 @@ class PolarDecoder(PolarBase):
         if self.cbInterleaveIndexes is not None:
             self.cbInterleaveIndexes = np.argsort(self.cbInterleaveIndexes)
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def recoverRate(self, rxBlock):
         r"""
-        This function receives an array of Log-Likelihood Ratios (LLRs) in
-        ``rxBlock`` and returns a set of rate-recovered LLRs for each code-word
-        which are ready for Polar decoding. This function does the exact opposite
-        of the :py:class:`PolarEncoder`'s :py:meth:`rateMatch` method. Note that while
-        the :py:meth:`rateMatch` works with bits, this method works on LLRs which
-        are usually obtained by performing demodulation process.
+        This function receives an array of Log-Likelihood Ratios (LLRs) in ``rxBlock`` and returns a set of
+        rate-recovered LLRs for each codeword which are ready for Polar decoding. This function does the exact opposite
+        of the :py:class:`PolarEncoder`'s :py:meth:`rateMatch` method. Note that while the :py:meth:`rateMatch`
+        works with bits, this method works on LLRs which are usually obtained by performing demodulation process.
 
         Parameters
         ----------
         rxBlock: numpy array
-            A numpy array of Log-Likelihood Ratios (LLRs) obtained as a result
-            of demodulation process. Each element is a real LLR value corresponding
-            to a each received bit. The larger the LLR value, the more likely it is
+            A numpy array of Log-Likelihood Ratios (LLRs) obtained as a result of demodulation process. Each element
+            is a real LLR value corresponding to a each received bit. The larger the LLR value, the more likely it is
             for that bit to be a ``0``.
 
         Returns
         -------
         numpy array
-            A ``C x N`` numpy array of ``C`` received coded blocks of length ``N``
-            containing the LLR values for each coded block ready to be Polar-decoded.
+            A ``C x N`` numpy array of ``C`` received coded blocks of length ``N`` containing the LLR values for
+            each coded block ready to be polar-decoded.
         """
         c, e = rxBlock.shape
         assert e == self.rateMatchedBlockLen
@@ -969,59 +922,59 @@ class PolarDecoder(PolarBase):
             # Need to add Large LLR values (at the end) for the Shortened bits.
             rateRecoveredCWs = np.concatenate([rxBlock, self.LARGE_LLR*np.ones((c,nn-e))], axis=1)
 
-        # Sub-block Interleaving Indexes. See TS 38.212 V17.0.0 (2021-12), Section 5.4.1.1
+        # Sub-block Interleaving indices. See TS 38.212 V17.0.0 (2021-12), Section 5.4.1.1
         rateRecoveredCWs = rateRecoveredCWs[:,self.sbInterleaveIndexes]
         
         return rateRecoveredCWs         # Shape: c,nn
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def decode(self, rxLlrBlocks):
         r"""
-        This function implements the *Successive Cancelation List (SCL)* algorithm
-        for Polar-decoding of LLRs into decoded transport blocks. This implementation
-        was inspired mostly by `LDPC and Polar Codes in 5G Standard
-        <https://www.youtube.com/playlist?list=PLyqSpQzTE6M81HJ26ZaNv0V3ROBrcv-Kc>`_
-        set of videos and was written from scratch using a recursive algorithm to
-        efficiently perform the SCL decoding process.
+        This function implements the *Successive Cancellation List (SCL)* algorithm for Polar-decoding of LLRs into
+        decoded transport blocks. This implementation was inspired mostly by `LDPC and Polar Codes in 5G Standard
+        <https://www.youtube.com/playlist?list=PLyqSpQzTE6M81HJ26ZaNv0V3ROBrcv-Kc>`_ set of videos and was written
+        from scratch using a recursive algorithm to efficiently perform the SCL decoding process.
 
         Parameters
         ----------
         rxLlrBlocks: numpy array
-            A ``C x N`` numpy array of ``C`` received coded blocks of length ``N``
-            containing the LLR values for each coded block.
+            A ``C x N`` numpy array of ``C`` received coded blocks of length ``N`` containing the LLR values for each
+            coded block.
 
         Returns
         -------
         txBlock: numpy array of bits
-            A 1D numpy array of length :math:`A` containing the decoded transport
-            block bits where :math:`A` is equal to the parameter ``payloadSize``.
+            A 1D numpy array of length :math:`A` containing the decoded transport block bits where :math:`A` is
+            equal to the parameter ``payloadSize``.
             
         numCrcErrors: int
-            The total number of CRC errors if ``crcPoly`` is not ``None``, otherwise
-            zero.
+            The total number of CRC errors if ``crcPoly`` is not ``None``, otherwise, zero.
         """
         c, nn = rxLlrBlocks.shape
         if nn != self.polarCodeSize:
-            raise ValueError("The rxLLRs's second dimension(%d) must match the configured Polar Code Size(%d)"%(nn, self.polarCodeSize))
+            raise ValueError("The rxLLRs's second dimension(%d) must match the configured Polar Code Size(%d)"%
+                             (nn, self.polarCodeSize))
 
         rxLlrBlocks = np.clip(rxLlrBlocks, -20, 20)
         txpBlock = []
         crcErrors = 0
         for rxLlrBlock in rxLlrBlocks:
-            uHats = SclDecoder(self.frozenBits, self.sclListSize).decode(rxLlrBlock)        # uHats contains up to 'sclListSize' candidates
+            # uHats contains up to 'sclListSize' candidates
+            uHats = SclDecoder(self.frozenBits, self.sclListSize).decode(rxLlrBlock)
             
             messages = uHats[:,self.msgBits]
                 
-            if self.iIL:    messages = messages[:,self.inInterleaveIndexes]                 # Do the input De-interleaving if it is enabled (iIL=True)
+            if self.iIL:                                # Do the input De-interleaving if it is enabled (iIL=True)
+                messages = messages[:,self.inInterleaveIndexes]
 
-            if self.crcPoly is None:                                                        # If there is no CRC ...
-                message = messages[0]                                                       #    ... just use the first candidate
+            if self.crcPoly is None:                    # If there is no CRC ...
+                message = messages[0]                   #    ... just use the first candidate
             else:
-                crcResults = self.checkCrc(messages, self.crcPoly)                          # All CRC results
-                goodIndexes = np.where(crcResults)[0]                                       # The ones that passed CRC check
+                crcResults = self.checkCrc(messages, self.crcPoly)                  # All CRC results
+                goodIndexes = np.where(crcResults)[0]                               # The ones that passed CRC check
                 message = messages[goodIndexes[0]] if len(goodIndexes)>0 else messages[0]   # The one with lowest cost
-                if len(goodIndexes)==0: crcErrors += 1                                      # If CRC failed for all candidates
-                message = message[:-self.getCrcLen(self.crcPoly)]                           # Remove the CRC block
+                if len(goodIndexes)==0: crcErrors += 1                              # If CRC failed for all candidates
+                message = message[:-self.getCrcLen(self.crcPoly)]                   # Remove the CRC block
                                 
             txpBlock += message.tolist()
         

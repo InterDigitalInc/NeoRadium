@@ -1,26 +1,26 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PDSCH Waveform generation &mdash; NeoRadium 0.2.0 Documentation</title>
-      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../../_static/nbsphinx-code-cells.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../../_static/neoradium.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>PDSCH Waveform generation &mdash; NeoRadium 0.3.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/neoradium.css?v=eea1f72d" />
+
   
-        <script src="../../../../../_static/jquery.js"></script>
-        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
-        <script src="../../../../../_static/doctools.js"></script>
-        <script src="../../../../../_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" />
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../../index.html" class="icon icon-home">
-            NeoRadium 0.2.0
+            NeoRadium 0.3.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -55,12 +55,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../Playground.html">Playground</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#antenna">Antenna</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#channels">Channels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab-5g-toolbox">Comparing with Matlab 5G Toolbox</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab">Comparing with Matlab</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id1">Antenna</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#cdl-channel-model">CDL Channel Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#csi-rs">CSI-RS</a></li>
@@ -86,6 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 </ul>
 
         </div>
@@ -94,7 +96,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../../index.html">NeoRadium 0.2.0</a>
+          <a href="../../../../../index.html">NeoRadium 0.3.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -114,23 +116,23 @@
            <div itemprop="articleBody">
              
   <section id="PDSCH-Waveform-generation">
-<h1>PDSCH Waveform generation<a class="headerlink" href="#PDSCH-Waveform-generation" title="Permalink to this heading"></a></h1>
+<h1>PDSCH Waveform generation<a class="headerlink" href="#PDSCH-Waveform-generation" title="Link to this heading"></a></h1>
 <p>Creating PDSCH time domain waveform and comparing the results with the equivalent Matlab code “MatlabFiles/PDSCH-waveform.mlx”. <a class="reference external" href="MatlabFiles/PDSCH-waveform.html">Here</a> is the execution results of this code in Matlab.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.io</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
 
-<span class="kn">from</span> <span class="nn">neoradium</span> <span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">LdpcEncoder</span><span class="p">,</span> <span class="n">LdpcDecoder</span><span class="p">,</span> <span class="n">Grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">LdpcEncoder</span><span class="p">,</span> <span class="n">LdpcDecoder</span><span class="p">,</span> <span class="n">Grid</span>
 
 <span class="n">matlabFilesPath</span> <span class="o">=</span> <span class="s2">&quot;./MatlabFiles&quot;</span>
 <br/></pre></div>
 </div>
 </div>
 <section id="Carrier-Configuration">
-<h2>Carrier Configuration<a class="headerlink" href="#Carrier-Configuration" title="Permalink to this heading"></a></h2>
+<h2>Carrier Configuration<a class="headerlink" href="#Carrier-Configuration" title="Link to this heading"></a></h2>
 <p>Create an instance of <code class="docutils literal notranslate"><span class="pre">Carrier</span></code> object. We use 30KHz subcarrier spacing, with a single Bandwidth Part starting at Resource Block 1, and 52 total Resource Blocks. We then call the <code class="docutils literal notranslate"><span class="pre">print</span></code> method to show the carrier information.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -148,25 +150,25 @@
 <div class="highlight"><pre>
 
 Carrier Properties:
-  startRb: 1
-  numRbs: 52
-  Cell Id: 1
+  Cell Id:               1
+  Bandwidth Parts:       1
   Active Bandwidth Part: 0
-  Bandwidth Parts: 1
   Bandwidth Part 0:
-    Resource Blocks: 52 RBs starting at 1 (624 subcarriers)
+    Resource Blocks:    52 RBs starting at 1 (624 subcarriers)
     Subcarrier Spacing: 30 KHz
-    CP Type: normal
-    bandwidth: 18720000 Hz
-    symbolsPerSlot: 14
-    slotsPerSubFrame: 2
-    nFFT: 1024
+    CP Type:            normal
+    bandwidth:          18.72 MHz
+    symbolsPerSlot:     14
+    slotsPerSubFrame:   2
+    nFFT:               1024
+    frameNo:            0
+    slotNo:             0
 
 </pre></div></div>
 </div>
 </section>
 <section id="PDSCH-Configuration">
-<h2>PDSCH Configuration<a class="headerlink" href="#PDSCH-Configuration" title="Permalink to this heading"></a></h2>
+<h2>PDSCH Configuration<a class="headerlink" href="#PDSCH-Configuration" title="Link to this heading"></a></h2>
 <p>Create an instance of <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code> object. We use the only Bandwidth Part of the above carrier for this PDSCH object. We then, enable the interleaving by setting the <code class="docutils literal notranslate"><span class="pre">interleavingBundleSize</span></code> argument to 2 and set number of layers to 2. The <code class="docutils literal notranslate"><span class="pre">print</span></code> function is then called to show all the information about this <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code> object.</p>
 <p>Note that we could also set the parameters of <code class="docutils literal notranslate"><span class="pre">DMRS</span></code> object owned by <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code> by passing them when instantiating the <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code> object. Here we are just using the default values.</p>
 <p>Also note that the Matlab implementation does not take into account the scaling factor $ <span class="math">\beta`^{DMRS}\ *{PDSCH} $ as specified in newer versions of the standard. Our implementation by default uses the ``TS 38.214 V17.0.0 (2021-12), Table 4.1-1`</span> to get the ratio of PDSCH EPRE to DMRS EPRE ($ <span class="math">\beta`*\ {DMRS} $). To make our results match Matlab's results, we have to force the ``epreRatioDb`</span> value to zero here to ignore the table in the standard.</p>
@@ -202,13 +204,15 @@ PDSCH Properties:
   interleavingBundleSize: 2
   PRG Size: Wideband
   Bandwidth Part:
-    Resource Blocks: 52 RBs starting at 1 (624 subcarriers)
+    Resource Blocks:    52 RBs starting at 1 (624 subcarriers)
     Subcarrier Spacing: 30 KHz
-    CP Type: normal
-    bandwidth: 18720000 Hz
-    symbolsPerSlot: 14
-    slotsPerSubFrame: 2
-    nFFT: 1024
+    CP Type:            normal
+    bandwidth:          18.72 MHz
+    symbolsPerSlot:     14
+    slotsPerSubFrame:   2
+    nFFT:               1024
+    frameNo:            0
+    slotNo:             0
   DMRS:
     configType: 1
     nIDs: []
@@ -228,7 +232,7 @@ PDSCH Properties:
 </div>
 </section>
 <section id="Create-a-grid-and-populate-it-with-DMRS-data">
-<h2>Create a grid and populate it with DMRS data<a class="headerlink" href="#Create-a-grid-and-populate-it-with-DMRS-data" title="Permalink to this heading"></a></h2>
+<h2>Create a grid and populate it with DMRS data<a class="headerlink" href="#Create-a-grid-and-populate-it-with-DMRS-data" title="Link to this heading"></a></h2>
 <p>Now we can create a resource grid (A <code class="docutils literal notranslate"><span class="pre">Grid</span></code> object) for our <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code> and populate it with DMRS data.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -250,7 +254,7 @@ PDSCH Properties:
 </div>
 </section>
 <section id="Comparing-DMRS-symbols">
-<h2>Comparing DMRS symbols<a class="headerlink" href="#Comparing-DMRS-symbols" title="Permalink to this heading"></a></h2>
+<h2>Comparing DMRS symbols<a class="headerlink" href="#Comparing-DMRS-symbols" title="Link to this heading"></a></h2>
 <p>Now we want to compare the DMRS symbols generated by our <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code> object with Matlab’s results. Again, we first get the indexes of the DMRS symbols from the grid map. Then we get the symbols at this indexes. We then print out the first 10 DMRS symbols. We can now compare these results with the ones printed by the Matlab program <code class="docutils literal notranslate"><span class="pre">Mapping5GPhysicalChannelsAndSignalsToTheResourceGridExample.mlx</span></code>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -287,7 +291,7 @@ Matlab-Generated DMRS Values:
 </div>
 </section>
 <section id="Generate-random-bits-and-create-resource-block">
-<h2>Generate random bits and create resource block<a class="headerlink" href="#Generate-random-bits-and-create-resource-block" title="Permalink to this heading"></a></h2>
+<h2>Generate random bits and create resource block<a class="headerlink" href="#Generate-random-bits-and-create-resource-block" title="Link to this heading"></a></h2>
 <p>Here we first get the number of bits that are available in our <code class="docutils literal notranslate"><span class="pre">grid</span></code> object by calling the <code class="docutils literal notranslate"><span class="pre">getGridBitSize</span></code> method. Then we creare <code class="docutils literal notranslate"><span class="pre">numBits</span></code> random bits and feed them to the <code class="docutils literal notranslate"><span class="pre">populateGrid</span></code> method of <code class="docutils literal notranslate"><span class="pre">PDSCH</span></code>. This method scrambles, modulates, and map the modulated symbols to different layers of the grid.</p>
 <p><strong>Note</strong>: To have deterministic results and be able to compare the results with matlab, we are reading the random bits from a Matlab-generated data file. You can un-remark the second line in the code below to create random bits instead of reading them from the file.</p>
 <div class="nbinput nblast docutils container">
@@ -307,7 +311,7 @@ Matlab-Generated DMRS Values:
 </div>
 </section>
 <section id="Comparing-the-results-with-Matlab">
-<h2>Comparing the results with Matlab<a class="headerlink" href="#Comparing-the-results-with-Matlab" title="Permalink to this heading"></a></h2>
+<h2>Comparing the results with Matlab<a class="headerlink" href="#Comparing-the-results-with-Matlab" title="Link to this heading"></a></h2>
 <p>Now we want to compare the generated symbols with the Matlab’s results. We first get the data symbols from the <code class="docutils literal notranslate"><span class="pre">pdsch</span></code> object’s <code class="docutils literal notranslate"><span class="pre">getDataSymbols</span></code> method which returns all data symbols in the grid.</p>
 <p>We then read all the Matlab-generated symbols (from the same random set of bits) from the file generated by the Matlab program <code class="docutils literal notranslate"><span class="pre">Mapping5GPhysicalChannelsAndSignalsToTheResourceGridExample.mlx</span></code>.</p>
 <p>As you can see the results exactly matches the ones generated by Matlab.</p>
@@ -351,7 +355,7 @@ Matlab-Generated Data Symbols:
 </div>
 </section>
 <section id="Grid-Statistics">
-<h2>Grid Statistics<a class="headerlink" href="#Grid-Statistics" title="Permalink to this heading"></a></h2>
+<h2>Grid Statistics<a class="headerlink" href="#Grid-Statistics" title="Link to this heading"></a></h2>
 <p>Now we can get some information about the resource grid statistics. The function <code class="docutils literal notranslate"><span class="pre">getStats</span></code> counts the number of resource elements allocated for data, DMRS, PTRS, reserved resources, and returns the information as a dictionary.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -375,13 +379,13 @@ PDSCH     : 16224
 </div>
 </section>
 <section id="Draw-resource-allocation-map">
-<h2>Draw resource allocation map<a class="headerlink" href="#Draw-resource-allocation-map" title="Permalink to this heading"></a></h2>
+<h2>Draw resource allocation map<a class="headerlink" href="#Draw-resource-allocation-map" title="Link to this heading"></a></h2>
 <p>We can also draw the resource allocation map (before precoding) for different layers. For example, the following code uses the <code class="docutils literal notranslate"><span class="pre">drawMap</span></code> function to draw the resource map for the first two Resource Blocks of the grid in the first layer.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">reRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">36</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">reRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -394,7 +398,7 @@ PDSCH     : 16224
 </div>
 </section>
 <section id="MIMO-Precoding">
-<h2>MIMO Precoding<a class="headerlink" href="#MIMO-Precoding" title="Permalink to this heading"></a></h2>
+<h2>MIMO Precoding<a class="headerlink" href="#MIMO-Precoding" title="Link to this heading"></a></h2>
 <p>Now we can apply precoding to the our data grid. Assuming 4 transmit antenna, we create a simple precoding matrix which is based on Identity matrix. We then call the <code class="docutils literal notranslate"><span class="pre">precode</span></code> method of <code class="docutils literal notranslate"><span class="pre">grid</span></code> to get the precoded grid.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
@@ -472,7 +476,7 @@ Matlab-Generated Precoded Grid:
 </div>
 </section>
 <section id="OFDM-Modulation">
-<h2>OFDM Modulation<a class="headerlink" href="#OFDM-Modulation" title="Permalink to this heading"></a></h2>
+<h2>OFDM Modulation<a class="headerlink" href="#OFDM-Modulation" title="Link to this heading"></a></h2>
 <p>Now we call the <code class="docutils literal notranslate"><span class="pre">ofdmModulate</span></code> method of our <code class="docutils literal notranslate"><span class="pre">precodedGrid</span></code> object to get the output waveform for each antenna and compare these results with the ones printed by the Matlab program <code class="docutils literal notranslate"><span class="pre">Mapping5GPhysicalChannelsAndSignalsToTheResourceGridExample.mlx</span></code>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
@@ -514,7 +518,7 @@ Matlab-Generated Waveform Data:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">waveForm</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
@@ -562,7 +566,7 @@ Text(0.5, 1.0, &#39;Magnitude of the time-domain waveform for the first antenna&
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

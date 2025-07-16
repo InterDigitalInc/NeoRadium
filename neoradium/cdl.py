@@ -1,34 +1,35 @@
 # Copyright (c) 2024 InterDigital AI Lab
 """
-This module implements the :py:class:`~neoradium.cdl.CdlChannel` class which
-encapsulates the Clustered Delay Line (CDL) channel model functionality.
+This module implements the :py:class:`~neoradium.cdl.CdlChannel` class which encapsulates the functionality of the 
+Clustered Delay Line (CDL) channel model.
 """
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 # Revision History:
 # Date Changed  By                      Description
-# ------------  --------------------    --------------------------------------------------------------------------------------------------------------
+# ------------  --------------------    --------------------------------------------------------------------------------
 # 06/05/2023    Shahab Hamidi-Rad       First version of the file.
-# 11/30/2023    Shahab Hamidi-Rad       Completed the documentation
-# ****************************************************************************************************************************************************
-
+# 11/30/2023    Shahab                  Completed the documentation
+# 04/01/2025    Shahab                  Restructured the file to work with the new ChannelModel class
+# 05/07/2025    Shahab                  * Changed the default orientation of receiver antenna to [180,0,0] instead
+#                                         of [0,0,0].
+#                                       * Reviewed and updated the documentation.
+# 06/20/2025    Shahab                  * The default antenna for the CDL channel model is now a 1x1 antenna panel.
+#                                       * The new "getChanGen" class method can be used to return a generator object
+#                                         that can generate CDL channel matrices according to the given parameters and
+#                                         criteria.
+#                                       * Updated the "restart" method with the new parameter "applyToBwp".
+# **********************************************************************************************************************
 import numpy as np
 import scipy.io
 from scipy.signal import lfilter
 
-from .antenna import AntennaPanel
-from .channel import ChannelBase, ChannelFilter
-from .utils import getMultiLineStr
+from .antenna import AntennaElement
+from .channelmodel import ChannelModel
+from .utils import getMultiLineStr, toRadian, toDegrees, toLinear, toDb, freqStr
 from .random import random
 
-# This file is based on 3GPP TR 38.901 V17.0.0 (2022-03) available at:
-#   https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3173
-
-# ****************************************************************************************************************************************************
-# Note: All angles are received in degrees but used and kept internally as radians
-def toRadian(angle):    return (None if angle is None else np.float64(angle)*np.pi/180.0)
-def toDegrees(angle):   return (None if angle is None else np.float64(angle)*180.0/np.pi)
-
-# ****************************************************************************************************************************************************
+# This file is based on 3GPP TR 38.901 V17.1.0
+# **********************************************************************************************************************
 clusterInfo = {
                 'A':   # TR38.901 - Table 7.7.1-1 CDL-A
                    ## Delay     Power      AOD       AOA      ZOD     ZOA         Cluster #
@@ -145,7 +146,7 @@ clusterInfo = {
                     [ 20.6419,  -29.2,     57.6,     -26,     104.6,  78.3 ]],   # 14
                }
 
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 perClusterParams = {#           C_ASD  C_ASA  C_ZSD  C_ZSA   XPR
                         'A':  ([5,     11,    3,     3],     10),     # TR38.901 - Table 7.7.1-1 CDL-A
                         'B':  ([10,    22,    3,     7],     8),      # TR38.901 - Table 7.7.1-2 CDL-B
@@ -154,185 +155,205 @@ perClusterParams = {#           C_ASD  C_ASA  C_ZSD  C_ZSA   XPR
                         'E':  ([5,     11,    3,     7],     8),      # TR38.901 - Table 7.7.1-5 CDL-E
                    }
 
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 # TR38.901 - Table 7.5-3: Ray offset angles within a cluster, given for rms angle spread normalized to 1
+# These are the 𝛼m in Eq. 7.7-0a (20 values for 20 rays)
 rayOffsets = [0.0447, -0.0447, 0.1413, -0.1413, 0.2492, -0.2492, 0.3715, -0.3715, 0.5129, -0.5129,
               0.6797, -0.6797, 0.8844, -0.8844, 1.1481, -1.1481, 1.5195, -1.5195, 2.1551, -2.1551]
 
-# ****************************************************************************************************************************************************
-class CdlChannel(ChannelBase):
+# **********************************************************************************************************************
+class CdlChannel(ChannelModel):
     r"""
-    This class implements the Clustered Delay Line (CDL) channel model based
-    on **3GPP TR 38.901**. It is derived from the
-    :py:class:`~neoradium.channel.ChannelBase` class.
+    This class implements the Clustered Delay Line (CDL) channel model based on **3GPP TR 38.901**. It is derived 
+    from the :py:class:`~neoradium.channelmodel.ChannelModel` class.
     
-    All of API functions used in most typical use cases are explained in the
-    documentation of :py:class:`~neoradium.channel.ChannelBase` class.
+    All of the API functions used in typical use cases are explained in the documentation of the
+    :py:class:`~neoradium.channelmodel.ChannelModel` class.
     
-    The typical use case involves instantiating a :py:class:`CdlChannel` object
-    and then calling functions such as
-    :py:meth:`~neoradium.channel.ChannelBase.getChannelMatrix`,
-    :py:meth:`~neoradium.channel.ChannelBase.applyToSignal`,
-    :py:meth:`~neoradium.channel.ChannelBase.applyToGrid`, etc.
+    The typical use case involves instantiating a :py:class:`CdlChannel` object and then calling functions such as
+    :py:meth:`~neoradium.channelmodel.ChannelModel.getChannelMatrix`,
+    :py:meth:`~neoradium.channelmodel.ChannelModel.applyToSignal`,
+    :py:meth:`~neoradium.channelmodel.ChannelModel.applyToGrid`, etc. Please refer to the notebook 
+    :doc:`../Playground/Notebooks/Channels/ChannelMatrix` for an example of using this class.
     """
-    # ************************************************************************************************************************************************
-    def __init__(self, profile='A', **kwargs):
+    # ******************************************************************************************************************
+    def __init__(self, bwp, profile='A', **kwargs):
         r"""
         Parameters
         ----------
-        profile : str or None (default: 'A')
-            The CDL profile. It can be one of 'A', 'B', 'C', 'D', 'E',
-            or ``None``. See **3GPP TR 38.90 section 7.7.1** for more
-            information. Use ``None`` to indicate a customized version of
-            CDL channel (See :ref:`Customizing CDL Model <CustomizingCDL>`).
+        bwp : :py:class:`~neoradium.carrier.BandwidthPart` 
+            The bandwidth part object used by the channel model to create channel matrices.
+            
+        profile : str or None
+            The CDL profile. It can be one of 'A', 'B', 'C', 'D', 'E', or ``None``. See **3GPP TR 38.90, Section 
+            7.7.1** for more information. Use ``None`` to indicate a customized version of CDL channel (See 
+            :ref:`Customizing CDL Model <CustomizingCDL>`).
 
         kwargs : dict
-            A set of optional arguments. Please refer to
-            :py:class:`~neoradium.channel.ChannelBase` for a list of inherited
-            parameters. Here is a list of additional parameters specific to
-            ``CdlChannel``.
+            Here’s a list of additional optional parameters that can be used to further customize this channel model:
 
-                :ueDirAZ: This is a list of 2 angles for the Azimuth and Zenith
-                    of the UE's direction of movement in degrees. The default
-                    is [0, 90] which indicates moving along the x-axis. In this
+                :normalizeGains: A boolean flag. The default value is ``True``, indicating that the path gains 
+                    are normalized before they are applied to the signals.
+                    
+                :normalizeOutput: A boolean flag. The default value is ``True``, indicating that the gains are 
+                    normalized based on the number of receive antennas.
+                    
+                :txDir: A string that represents the transmission direction, which can be either “Downlink” or 
+                    “Uplink”. By default, it is set to “Downlink”.
+                    
+                :filterLen: The length of the channel filter. The default is 16 samples.
+                
+                :delayQuantSize: The size of delay fraction quantization for the channel filter. The default is 64.
+                
+                :stopBandAtten: The stop-band attenuation (in dB) used by the channel filter. The default is 80 dB.
+                
+                :seed: The seed used by the random functions in the channel model. Setting this to a fixed value ensures
+                    that the channel model generates repeatable results. The default value is ``None``, indicating 
+                    that this channel model uses the **NeoRadium**’s :doc:`global random generator <./Random>`.
+                    
+                :dopplerShift: The maximum Doppler shift in Hertz. The default value is 40 Hertz, which corresponds to
+                    a speed of approximately 10 kilometers per hour. A value of zero makes the channel model static. 
+                    For trajectory-based channel models, this value is automatically assigned based on the maximum 
+                    trajectory speed.
+                    
+                :carrierFreq: The carrier frequency of the channel model in Hz. The default is 3.5 GHz.
+                
+                :delaySpread: The delay spread in nanoseconds. The default is 30 ns. It can also be a string 
+                    containing one of the values in following table (See **3GPP TR 38.901, table 7.7.3-1**)
+                    
+                    ======================  ==============
+                    Delay Spread str        Delay spread
+                    ======================  ==============
+                    'VeryShort'             10 ns
+                    'Short'                 30 ns
+                    'Nominal'               100 ns
+                    'Long'                  300 ns
+                    'VeryLong'              1000 ns
+                    ======================  ==============
+
+                :ueDirAZ: This is a list of two angles for the Azimuth and Zenith of the UE’s direction of movement 
+                    in degrees. The default value is [0, 90], which indicates movement along the x-axis. In the current
                     version, the base station is assumed to be stationary.
                     
-                :txAntenna: The transmitter antenna. This must be an instance of
-                    :py:class:`~neoradium.antenna.AntennaPanel` or
-                    :py:class:`~neoradium.antenna.AntennaArray` class.
+                :txAntenna: The transmitter antenna, which is an instance of 
+                    :py:class:`~neoradium.antenna.AntennaElement`, :py:class:`~neoradium.antenna.AntennaPanel`,
+                    or :py:class:`~neoradium.antenna.AntennaArray` class. If not specified, a single antenna element is
+                    automatically created by default.
                 
-                :rxAntenna: The receiver antenna. This must be an instance of
-                    :py:class:`~neoradium.antenna.AntennaPanel` or
-                    :py:class:`~neoradium.antenna.AntennaArray` class.
+                :rxAntenna: The receiver antenna, which is an instance of 
+                    :py:class:`~neoradium.antenna.AntennaElement`, :py:class:`~neoradium.antenna.AntennaPanel`,
+                    or :py:class:`~neoradium.antenna.AntennaArray` class. If not specified, a single antenna element is
+                    automatically created by default.
                     
-                :txOrientation: The orientation of transmitter antenna. This
-                    is a list of 3 angle values in degrees for the *bearing* angle
-                    :math:`\alpha`, *down-tilt* angle :math:`\beta`, and *slant* angle
-                    :math:`\gamma`. The default is [0,0,0]. Please refer to **3GPP
-                    TR 38.901 Section 7.1.3** for more information.
+                :txOrientation: The orientation of the transmitter antenna. This is a list of three angle values in 
+                    degrees: bearing angle (math:`\alpha`), downtilt angle (math:`\beta`), and slant angle 
+                    (math:`\gamma`). The default orientation is [0,0,0]. For more information, please refer to 
+                    **3GPP TR 38.901, Section 7.1.3**.
 
-                :rxOrientation: The orientation of receiver antenna. This
-                    is a list of 3 angle values in degrees for the *bearing* angle
-                    :math:`\alpha`, *down-tilt* angle :math:`\beta`, and *slant* angle
-                    :math:`\gamma`. The default is [0,0,0]. Please refer to **3GPP
-                    TR 38.901 Section 7.1.3** for more information.
+                :rxOrientation: The orientation of receiver antenna. This is a list of three angle values in 
+                    degrees: bearing angle (math:`\alpha`), downtilt angle (math:`\beta`), and slant angle 
+                    (math:`\gamma`). The default orientation is [180,0,0]. For more information, please refer to 
+                    **3GPP TR 38.901, Section 7.1.3**.
 
-                :xPolPower: The Cross Polarization Power in db. The default is 10db.
-                    For more details please refer to **Step 3 in 3GPP TR 38.901 Section
-                    7.7.1**.
+                :kFactor: The K-Factor (in dB) used for scaling. The default is ``None``. If not specified 
+                    (``kFactor=None``), K-factor scaling is disabled.
 
-                :angleScaling: The :ref:`Angle Scaling <AngleScaling>` parameters. If
-                    specified, it must be a tuple of 2 numpy arrays.
+                :xPolPower: The cross-polarization Power in dB. The default is 10 dB. For more details please refer 
+                    to "Step 3" in **3GPP TR 38.901, Section 7.7.1**.
+
+                :angleScaling: The :ref:`Angle Scaling <AngleScaling>` parameters. If specified, it must be a tuple of
+                    2 numpy arrays.
                     
-                    The first item specifies the angle scaling mean values. It is a
-                    1-D numpy array of 4 values corresponding to the *Azimuth of
-                    Departure*, *Azimuth of Arrival*, *Zenith of Departure*, and
-                    *Zenith of Arrival* angles.
+                    The first item specifies the mean values for angle scaling. It’s a 1-D NumPy array containing 
+                    four values for: the *Azimuth angle of Departure*, *Azimuth angle of Arrival*, *Zenith angle of 
+                    Departure*, and *Zenith angle of Arrival*.
                     
-                    The second item specifies the RMS angle spread values. It is a
-                    1-D numpy array of 4 values corresponding to the *Azimuth of
-                    Departure*, *Azimuth of Arrival*, *Zenith of Departure*, and
-                    *Zenith of Arrival* angles. If this is set to ``None`` (the
-                    default), the *Angle Scaling* is disabled. For more information
-                    please see :ref:`Angle Scaling <AngleScaling>` below.
+                    The second item specifies the RMS angle spread values. It is a 1-D numpy array containing four RMS 
+                    values for: the *Azimuth angle of Departure*, *Azimuth angle of Arrival*, *Zenith angle of 
+                    Departure*, and *Zenith angle of Arrival*. For more information, please refer to 
+                    :ref:`Angle Scaling <AngleScaling>` below.
                     
-                    If this is set to ``None`` (the default), the *Angle Scaling*
-                    is disabled.
+                    If this value is set to ``None`` (the default), the *Angle Scaling* is disabled.
                     
-                :pathDelays: Use this to customize or override the path delays which
-                    by default are set based on the CDL channel model as defined in
-                    **3GPP TR 38.901**. You don't need to specify this parameter for
-                    most use cases. See :ref:`Customizing CDL Model <CustomizingCDL>`
-                    below for more information.
+                :pathDelays: Use this parameter to customize or override the default path delays, which are set 
+                    based on the CDL channel model as defined in **3GPP TR 38.901**. In most use cases, you don’t 
+                    need to specify this parameter. For more information, see 
+                    :ref:`Customizing CDL Model <CustomizingCDL>` below.
                 
-                :pathPowers: Use this to customize or override the path powers which
-                    by default are set based on the CDL channel model as defined in
-                    **3GPP TR 38.901**. You don't need to specify this parameter for
-                    most use cases. See :ref:`Customizing CDL Model <CustomizingCDL>`
-                    below for more information.
+                :pathPowers: Use this parameter to customize or override the path power settings, which are set by 
+                    default based on the CDL channel model as defined in **3GPP TR 38.901**. You don’t need to specify 
+                    this parameter for most use cases. For more information, refer to 
+                    :ref:`Customizing CDL Model <CustomizingCDL>` below.
 
-                :aods: Use this to customize or override the Azimuth of Departure angles
-                    which by default are set based on the CDL channel model as defined
-                    in **3GPP TR 38.901**. You don't need to specify this parameter for
-                    most use cases. See :ref:`Customizing CDL Model <CustomizingCDL>`
-                    below for more information.
+                :aods: Use this parameter to customize or override the Azimuth angles of Departure, which are set 
+                    by default based on the CDL channel model as defined in **3GPP TR 38.901**. You don’t need to 
+                    specify this parameter for most use cases. For more information, see 
+                    :ref:`Customizing CDL Model <CustomizingCDL>` below.
 
-                :aoas: Use this to customize or override the Azimuth of Arrival angles
-                    which by default are set based on the CDL channel model as defined
-                    in **3GPP TR 38.901**. You don't need to specify this parameter for
-                    most use cases. See :ref:`Customizing CDL Model <CustomizingCDL>`
-                    below for more information.
-
-                :zods: Use this to customize or override the Zenith of Departure angles
-                    which by default are set based on the CDL channel model as defined
-                    in **3GPP TR 38.901**. You don't need to specify this parameter for
-                    most use cases. See :ref:`Customizing CDL Model <CustomizingCDL>`
-                    below for more information.
-
-                :zoas: Use this to customize or override the Zenith of Arrival angles
-                    which by default are set based on the CDL channel model as defined
-                    in **3GPP TR 38.901**. You don't need to specify this parameter for
-                    most use cases. See :ref:`Customizing CDL Model <CustomizingCDL>`
-                    below for more information.
-
-                :angleSpreads: Use this to customize or override the RMS Angle spread
-                    (in degrees) which is used to normalized angles. This a list of 4
-                    values corresponding to the *Azimuth of Departure*, *Azimuth of
-                    Arrival*, *Zenith of Departure*, and *Zenith of Arrival* angles.
-                    These values by default are set based on the CDL channel model as
-                    defined in **3GPP TR 38.901**. You don't need to specify this
-                    parameter for most use cases. See
-                    :ref:`Customizing CDL Model <CustomizingCDL>` below for more
-                    information.
+                :aoas: Use this parameter to customize or override the Azimuth angles of Arrival, which are set by 
+                    default based on the CDL channel model as defined in **3GPP TR 38.901**. You don’t need to specify
+                    this parameter for most use cases. For more information, see 
+                    :ref:`Customizing CDL Model <CustomizingCDL>` below.
                     
-                    Please note that this should not be confused with angle spread
-                    values used for angle scaling.
+                :zods: Use this parameter to customize or override the Zenith angles of Departure, which are set 
+                    by default based on the CDL channel model as defined in **3GPP TR 38.901**. You don’t need to 
+                    specify this parameter for most use cases. For more information, see 
+                    :ref:`Customizing CDL Model <CustomizingCDL>` below.
+                    
+                :zoas: Use this parameter to customize or override the Zenith angles of Arrival, which are set by 
+                    default based on the CDL channel model as defined in **3GPP TR 38.901**. You don’t need to specify
+                    this parameter for most use cases. For more information, see 
+                    :ref:`Customizing CDL Model <CustomizingCDL>` below.
+                    
+                :angleSpreads: Use this parameter to customize or override the RMS Angle spread (in degrees) used to 
+                    normalize angles. This parameter specifies four values corresponding to the *Azimuth angle of 
+                    Departure*, *Azimuth angle of Arrival*, *Zenith angle of Departure*, and *Zenith angle of Arrival*.
+                    By default, these values are set based on the CDL channel model as defined in **3GPP TR 38.901**. 
+                    You don’t need to specify this parameter for most use cases. For more information, see 
+                    :ref:`Customizing CDL Model <CustomizingCDL>` below.
+                    
+                    Please note that this should not be confused with angle spread values used for angle scaling (See
+                    ``angleScaling`` above).
         
-                :hasLos: Use this to customize or override the ``hasLos`` property of
-                    this channel model which by default is set based on the CDL channel
-                    model as defined in **3GPP TR 38.901**. You don't need to specify
-                    this parameter for most use cases. See
-                    :ref:`Customizing CDL Model <CustomizingCDL>` below for more
-                    information.
+                :hasLos: Use this parameter to customize or override the ``hasLos`` property of this channel model. 
+                    By default, this property is set based on the CDL channel model as defined in **3GPP TR 38.901**. 
+                    You don’t need to specify this parameter for most use cases. For more information, see 
+                    :ref:`Customizing CDL Model <CustomizingCDL>` below.
                     
-                :kFactorLos: Use this when customizing the CDL model. This is the K-Factor
-                    ratio (in dB) for the LOS cluster (1st cluster). You don't need to specify
-                    this parameter for most use cases. See
-                    :ref:`Customizing CDL Model <CustomizingCDL>` below for more
-                    information. When customizing the CDL model, this value by default is set
-                    to the difference of path powers (in dB) for the first and second clusters.
+                :kFactorLos: Use this parameter when customizing the CDL model. It represents the K-Factor ratio 
+                    (in dB) for the LOS (Line of Sight) cluster (the first cluster). You don’t need to specify this 
+                    parameter for most use cases. For more information, refer to 
+                    :ref:`Customizing CDL Model <CustomizingCDL>` below. By default, when customizing the CDL model, 
+                    this value is set to the difference in path powers (in dB) between the first and second clusters.
+
+
+        .. Note:: All angle values provided to this class are in degrees. However, internally, the class uses 
+            radian values for all calculations. Therefore, when you access any of the angle values, such as ``aods``,
+            ``aoas``, ``zods``, and ``zoas``, remember that they are in radians.
 
 
         **Other Properties:**
         
-        All of the parameters mentioned above are directly available. Please also refer to
-        the :py:class:`~neoradium.channel.ChannelBase` class for a list of inherited
-        properties. Here is a list of additional properties specific to this class.
+        All of the parameters mentioned above are directly available. Here is a list of additional properties:
         
-            :nrNt: A tuple of the form ``(nr,nt)``, where ``nr`` and ``nt`` are the
-                number receiver and transmitter antenna elements correspondingly.
-            
-            :rayCoupling: This property is used internally for ray coupling. See **Step 2
-                in 3GPP TR 38.901 Section 7.7.1** for more details.
-                
-            :initialPhases: The random initial phases used when creating channel gains.
-                See **Step 10 in 3GPP TR 38.901 Section 7.5**  for more details.
-
-        Note
-        ----
-        All of the angle values are provided to this class in degrees. Internally, this
-        class uses radian values for all the calculations. So, when you access any of the
-        angle values such as ``aods``, ``aoas``, ``zods``, and ``zoas``, remember that
-        they are in radians.
+            :coherenceTime: The `Coherence time <https://en.wikipedia.org/wiki/Coherence_time_(communications_systems)>`_
+                of the channel model in seconds. This is calculated based on the ``dopplerShift`` parameter.
+            :sampleRate: The sample rate used by this channel model. For 3GPP standard, this is set to 30,720,000 
+                samples per second.
+            :nrNt: A tuple of the form ``(nr,nt)``, where ``nr`` and ``nt`` are the number of receiver and transmitter
+                antennas elements correspondingly.
+            :rayCoupling: This property is used internally for ray coupling. See **Step 2 in 3GPP TR 38.901, Section
+                7.7.1** for more details.
+            :initialPhases: The random initial phases used when creating channel gains. See **Step 10 in 3GPP 
+                TR 38.901, Section 7.5**  for more details.
 
 
         .. _AngleScaling:
         
         **Angle Scaling:**
 
-        If ``angleScaling`` is set to ``None``, the angle scaling is disabled.
-        Otherwise, angle scaling is applied to all angles of arrival and departure
-        for all clusters according to **3GPP TR 38.901 Section 7.7.5.1 and Annex A**.
+        If ``angleScaling`` is set to ``None``, angle scaling is disabled. Otherwise, it is applied to all angles of 
+        arrival and departure for all clusters, as per **3GPP TR 38.901, Section 7.7.5.1 and Annex A**.
 
 
         .. _CustomizingCDL:
@@ -341,15 +362,13 @@ class CdlChannel(ChannelBase):
 
         There are two different ways to customize the CDL model:
         
-        a) You can choose one of the predefined CDL profiles (A, B, C, D, or E) and then
-           modify the parameters of the model by passing in additional information. For
-           example you can choose CDL-B model and then pass your own path delays to
-           override the path delays specified in the standard.
+        a) You can select one of the predefined CDL profiles (A, B, C, D, or E) and then modify the model’s parameters 
+           by providing additional information. For instance, you can choose the CDL-B model and override the standard
+           path delays by specifying your own path delays.
            
-        b) You can also create your own model completely from scratch. You first pass
-           ``None`` for the ``profile`` parameter and then specify all channel model
-           parameters. Please note that you **must** specify at least the following
-           parameters in this case:
+        b) You can also create your own model entirely from scratch. Initially, pass ``None`` for the ``profile`` 
+           parameter and then specify all the channel model parameters. Please note that in this case, you 
+           **must** specify at least the following parameters:
            
                 * pathDelays
                 * pathPowers
@@ -364,31 +383,44 @@ class CdlChannel(ChannelBase):
                 * angleSpreads (defaults to [4.0, 10.0, 2.0, 2.0] if not specified)
                 * kFactorLos (defaults to ``pathPowers[0]-pathPowers[1]``)
            
-           Also note that if your channel model contains a LOS cluster, it **must** be
-           the first cluster in the lists and the ``hasLos`` parameter should be set
-           to ``True``.
+           Also note that if your channel model contains a LOS cluster, it **must** be the first cluster in the lists, 
+           and the ``hasLos`` parameter should be set to ``True``.
         """
-        super().__init__(**kwargs)
-        self.profile = profile                                # Can be 'A', 'B', 'C', 'D', or 'E'. None -> Custom model
+        super().__init__(bwp, **kwargs)
+        self.profile = profile                              # Can be 'A', 'B', 'C', 'D', or 'E'. None -> Custom model
         if self.profile is not None:
-            if self.profile not in "ABCDE":    raise ValueError("Unsupported CDL profile '%s'!"%(self.profile))
-                                
-        self.ueDirAZ = toRadian(kwargs.get('ueDirAZ', [0,90]))  # Direction of UE. [Azimuth, Zenith] in degrees (Use radians internally)
+            if self.profile not in "ABCDE":    raise ValueError(f"Unsupported CDL profile '{self.profile}'!")
 
-        self.txAntenna = kwargs.get('txAntenna', None)          # Transmitter AntennaArray object (AntennaPanel or AntennaArray object)
-        self.rxAntenna = kwargs.get('rxAntenna', None)          # Receiver AntennaArray object (AntennaPanel or AntennaArray object)
+        self.delaySpread = kwargs.get('delaySpread', 30)    # Default: 30ns
+        if type(self.delaySpread)==str:
+            # See TR38.901 - Table 7.7.3-1
+            strToDelaySpread = {"VeryShort": 10, "Short": 30, "Nominal": 100, "Long": 300, "VeryLong": 1000}
+            if self.delaySpread not in strToDelaySpread:
+                raise ValueError("'delaySpread' must be a number or one of 'VeryShort', 'Short', 'Nominal', 'Long', "+
+                                 "or 'VeryLong'")
+            self.delaySpread = strToDelaySpread[self.delaySpread]
 
-        # Orientation of TX and RX antenna arrays.
-        # NOTE: To point an RX/TX antena to LOS angles of arrival/departure use: 𝛼=aoa[0]/aod[0], 𝛃=zoa[0]/zod[0]-90° 𝛄=0
-        # TODO: For LOS cases (and even for NLOS cases), it may be better to set the default rxOrientation to [180, 0, 0]. Limited
-        #       experoments show that the pair [0,0,0] with [180,0,0] (for tx/rx) generally works better. Using [180,0,0] with [0,0,0]
-        #       seems to work the worst (Antenna poining away from eachother)
-        self.txOrientation = toRadian(kwargs.get('txOrientation', [0,0,0])) # Orientation of TX antenna array (alpha, beta, gamma) - degrees
-        self.rxOrientation = toRadian(kwargs.get('rxOrientation', [0,0,0])) # Orientation of RX antenna array (alpha, beta, gamma) - degrees
+        self.ueDirAZ = toRadian(kwargs.get('ueDirAZ', [0,90]))      # Direction of UE. [Azimuth, Zenith] in degrees
+
+        self.txAntenna = kwargs.get('txAntenna', AntennaElement())  # Transmitter AntennaArray/AntennaPanel object
+        self.rxAntenna = kwargs.get('rxAntenna', AntennaElement())  # Receiver AntennaArray/AntennaPanel object
+
+        # Orientation of TX and RX antenna arrays (alpha, beta, gamma) - degrees
+        # NOTE1: To point an RX/TX antenna to LOS angles of arrival/departure use:
+        #           𝛼=aoa[0]/aod[0], 𝛃=zoa[0]/zod[0]-90°, 𝛄=0
+        # Note2: Based on some experiments, it was decided to change the default orientation of RX antenna to
+        #        [180,0,0] instead of the original [0,0,0]. See the notebook "CdlBearingAngles.ipynb" in
+        #        the "OtherExperiments" folder for more information.
+        self.txOrientation = toRadian(kwargs.get('txOrientation', [0,0,0]))     # Orientation of TX antenna array
+        self.rxOrientation = toRadian(kwargs.get('rxOrientation', [180,0,0]))   # Orientation of RX antenna array
         
-        # Angle Scaling according to TR38.901 - 7.5.1 and TR38.901 - Annex A
-        #  - To disable, set both 'angleScaling' to None (This is the default)
-        #  - To enable, provide 2 lists of 4 desired values for aods, aoas, zods, zoas respectively for the mean and spread used for scaling.
+        # K-factor scaling: (See the function "applyKFactorScaling" in the base class)
+        self.kFactor = kwargs.get('kFactor', None)  # The K-factor for scaling in dB. 'None' disables K-factor scaling
+        
+        # Angle Scaling according to TR38.901 - 7.7.5.1 and TR38.901 - Annex A
+        #  - To disable, set 'angleScaling' to None (This is the default)
+        #  - To enable, provide 2 lists of 4 desired values for aods, aoas, zods, zoas respectively for the
+        #    mean and spread used for scaling.
         self.angleScaling = kwargs.get('angleScaling', None)
         if self.angleScaling is not None:
             assertMsg = "'angleScaling' must be a tuple of two lists of length 4!"
@@ -404,17 +436,19 @@ class CdlChannel(ChannelBase):
         def getCdlValue(x):
             return None if self.profile is None else np.float64(clusterInfo[self.profile])[:,x]
         
-        self.pathDelays = kwargs.get('pathDelays', getCdlValue(0))  # Normalized Path Delays. The actual delays are set in the "scaleDelays"
+        self.pathDelays = kwargs.get('pathDelays', getCdlValue(0))  # Normalized Path Delays. See "scaleDelays"
         self.pathPowers = kwargs.get('pathPowers', getCdlValue(1))  # Path Powers in db
 
         # Note: We use radians internally
-        self.aods = toRadian(kwargs.get('aods', getCdlValue(2)))    # Azimuth Angles of departure in degrees
-        self.aoas = toRadian(kwargs.get('aoas', getCdlValue(3)))    # Azimuth Angles of arrival in degrees
-        self.zods = toRadian(kwargs.get('zods', getCdlValue(4)))    # Zenith Angles of departure in degrees
-        self.zoas = toRadian(kwargs.get('zoas', getCdlValue(5)))    # Zenith Angles of arrival in degrees
+        self.aods = toRadian(kwargs.get('aods', getCdlValue(2)))    # Azimuth angles of departure (in degrees)
+        self.aoas = toRadian(kwargs.get('aoas', getCdlValue(3)))    # Azimuth angles of arrival (in degrees)
+        self.zods = toRadian(kwargs.get('zods', getCdlValue(4)))    # Zenith angles of departure (in degrees)
+        self.zoas = toRadian(kwargs.get('zoas', getCdlValue(5)))    # Zenith angles of arrival (in degrees)
 
-        self.hasLos = kwargs.get('hasLos', False if self.profile is None else (self.profile in "DE")) # True if cluster is a line of sight cluster
-        self.xPolPower = kwargs.get('xPolPower', 10.0 if self.profile is None else perClusterParams[self.profile][1]) # CrossPolarization Power in db
+        self.hasLos = kwargs.get('hasLos', False if self.profile is None else (self.profile in "DE"))
+        
+        # Cross-polarization Power in dB
+        self.xPolPower = kwargs.get('xPolPower', 10.0 if self.profile is None else perClusterParams[self.profile][1])
         
         if self.pathDelays is None: raise ValueError("'pathDelays' is not specified for the custom CDL model!")
         if self.pathPowers is None: raise ValueError("'pathPowers' is not specified for the custom CDL model!")
@@ -428,17 +462,18 @@ class CdlChannel(ChannelBase):
              (len(self.pathDelays)!=len(self.zods)) or
              (len(self.pathDelays)!=len(self.zoas)) ): raise ValueError("Cluster information must have the same size!")
 
-        # Note that there is at most one LOS cluster and that is assumed to be the first cluster.
-        self.kFactorLos = kwargs.get('kFactorLos', (self.pathPowers[0]-self.pathPowers[1]) if self.hasLos else None)    # K-Factor of the first cluster in db
+        # Note that there is at most one LOS cluster and that is assumed to be the first cluster. This is the K-Factor
+        # of the first cluster in dB
+        self.kFactorLos = kwargs.get('kFactorLos', (self.pathPowers[0]-self.pathPowers[1]) if self.hasLos else None)
         if self.profile is not None:
             self.scaleDelays()
             if self.kFactor is not None:    self.applyKFactorScaling()
         elif self.hasLos:
             # For custom models with LOS path, we split the first path into LOS and NLOS
             # Also note that it is assumed the custom values for powers and delays do not need angle and K-Factor scaling
-            k1st = 10**(self.kFactorLos/10.0)
-            p1st = 10**(self.pathPowers[0]/10.0)
-            pathPowers1st = -10*np.log10(p1st + p1st/k1st)
+            k1st = toLinear(self.kFactorLos)
+            p1st = toLinear(self.pathPowers[0])
+            pathPowers1st = -toDb(p1st + p1st/k1st)
             self.pathPowers = np.concatenate( ([pathPowers1st, pathPowers1st-self.kFactorLos], self.pathPowers[1:]))
             self.pathDelays = np.concatenate(([self.pathDelays[0]], self.pathDelays))
             self.aods = np.concatenate(([self.aods[0]], self.aods))
@@ -447,136 +482,169 @@ class CdlChannel(ChannelBase):
             self.zoas = np.concatenate(([self.zoas[0]], self.zoas))
 
         # RMS angle spreads for aods, aoas, zods, zoas respectively.
-        # This is the main angle spread not to be confused with the 'angleSpread' used for angle scaling.
+        # This is the main angle spread not to be confused with the one used for angle scaling.
         angleSpreadsDefault = [4.0, 10.0, 2.0, 2.0] if self.profile is None else perClusterParams[self.profile][0]
-        self.angleSpreads = toRadian(kwargs.get('angleSpreads', angleSpreadsDefault))     # The angle spreads applied to normalized angles in degrees
         
-        n, m = len(self.aods) - (1 if self.hasLos else 0), 20
+        # The angle spreads applied to normalized angles in degrees
+        self.angleSpreads = toRadian(kwargs.get('angleSpreads', angleSpreadsDefault))
+        
+        n, m = len(self.aods) - (1 if self.hasLos else 0), 20   # n clusters, m rays per cluster
         
         # Note:
-        # The rayCoupling and initialPhases do not need to be specified. These are set randomly. The capability to specify
-        # them is not documented and may be removed later.
+        # The rayCoupling and initialPhases do not need to be specified. These are set randomly. The capability to
+        # specify them is not documented and may be removed later.
         self.rayCoupling = kwargs.get('rayCoupling', None)                  # Ray Coupling values - Not documented
         self.randomRayCoupling = True
         if self.rayCoupling is not None:
             self.randomRayCoupling = False
             self.rayCoupling = np.int32(self.rayCoupling)
             if self.rayCoupling.shape != (3,n,m):
-                raise ValueError("Invalide \"rayCoupling\" shape! Must be %s but it is %s"%(str((3,n,m)), str(self.rayCoupling.shape)))
+                raise ValueError(f"Invalid 'rayCoupling' shape! Must be {(3,n,m)} but it is {self.rayCoupling.shape}")
             if np.any(self.rayCoupling>=m) or np.any(self.rayCoupling<0):
-                raise ValueError("\"rayCoupling\" values must be between 0 and %d (inclusive)!"%(m))
+                raise ValueError(f"'rayCoupling' values must be between 0 and {m} (inclusive)!")
 
-        self.initialPhases = toRadian(kwargs.get('initialPhases', None))    # Initial Phases in degrees (Using radians internally) - Not documented
+        self.initialPhases = toRadian(kwargs.get('initialPhases', None))    # Initial phases in degrees - Not documented
         self.randomInitialPhases = True
         if self.initialPhases is not None:
             self.randomInitialPhases = False
             self.initialPhases = np.float64(self.initialPhases)
             if self.initialPhases.shape != (2,2,n,m):
-                raise ValueError("Invalide \"initialPhases\" shape! Must be %s but it is %s"%(str((2,2,n,m)), str(self.initialPhases.shape)))
+                raise ValueError(f"Invalid 'initialPhases' shape! Must be {(2,2,n,m)} but it is {self.initialPhases.shape}")
             if np.any(self.initialPhases<-np.pi) or np.any(self.initialPhases>np.pi):
-                raise ValueError("\"initialPhases\" values must be between -𝛑 and 𝛑!")
+                raise ValueError("'initialPhases' values must be between -𝛑 and 𝛑!")
 
-        # Channel Filter Info:
-        self.channelFilter = self.makeFilter()  # makeFilter is defined in the base class.
         self.restart()
         
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def __repr__(self):     return self.print(getStr=True)
     def print(self, indent=0, title=None, getStr=False):
         r"""
-        Prints the properties of this channel model object. It first calls
-        the base class :py:meth:`~neoradium.channel.ChannelBase.print` and
-        then adds the information specific to :py:class:`~neoradium.cdl.CdlChannel`
-        class.
+        Prints the properties of this CDL channel model object.
 
         Parameters
         ----------
-        indent : int (default: 0)
+        indent : int
             The number of indentation characters.
             
-        title : str or None (default: None)
-            If specified, it is used as a title for the printed information.
+        title : str or None
+            If specified, it serves as the title for the printed information. If ``None`` (the default), an 
+            automatic title is generated based on the channel model parameters.
 
-        getStr : Boolean (default: False)
-            If ``True``, it returns the information in a text string instead
-            of printing the information.
+        getStr : Boolean
+            If ``True``, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns
-            the information in a text string. Otherwise, nothing is returned.
+            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string.
+            Otherwise, nothing is returned.
         """
-        if title is None:   title = "Customized CDL Channel Properties:" if self.profile is None else "CDL-%s Channel Properties:"%(self.profile)
-        repStr = super().print(indent, title, True)
-        repStr += indent*' ' + "  ueDirAZ: %s°, %s°\n"%(str(int(np.round(toDegrees(self.ueDirAZ[0])))), str(int(np.round(toDegrees(self.ueDirAZ[1])))))
-        
+        if title is None:
+            if self.profile is None:    title = "Customized CDL Channel Properties:"
+            else:                       title = f"CDL-{self.profile} Channel Properties:"
+
+        repStr = "\n" if indent==0 else ""
+        repStr += indent*' ' + title + "\n"
+        repStr += indent*' ' + f"  carrierFreq:          {freqStr(self.carrierFreq)}\n"
+        repStr += indent*' ' + f"  normalizeGains:       {str(self.normalizeGains)}\n"
+        repStr += indent*' ' + f"  normalizeOutput:      {str(self.normalizeOutput)}\n"
+        repStr += indent*' ' + f"  txDir:                {self.txDir}\n"
+        repStr += indent*' ' + f"  filterLen:            {self.filterLen} samples\n"
+        repStr += indent*' ' + f"  delayQuantSize:       {self.delayQuantSize}\n"
+        repStr += indent*' ' + f"  stopBandAtten:        {self.stopBandAtten} dB\n"
+        repStr += indent*' ' + f"  dopplerShift:         {freqStr(self.dopplerShift)}\n"
+        repStr += indent*' ' + f"  coherenceTime:        {self.coherenceTime*1000:.3f} milliseconds\n"
+
+        repStr += indent*' ' + f"  delaySpread:          {self.delaySpread} ns\n"
+        repStr += indent*' ' + f"  ueDirAZ:              {np.round(toDegrees(self.ueDirAZ[0]))}°, " + \
+                                                       f"{np.round(toDegrees(self.ueDirAZ[1]))}°\n"
+
         if self.angleScaling is not None:
             repStr += indent*' ' + "  Angle Scaling:\n"
-            repStr += indent*' ' + "    Means: %s°\n"%("° ".join(str(int(np.round(toDegrees(angle)))) for angle in self.scalingAngleMeans ))
-            repStr += indent*' ' + "    RMS Spreads: %s°\n"%("° ".join(str(int(np.round(toDegrees(angle)))) for angle in self.scalingAngleSpreads ))
+            repStr += indent*' ' + "    Means:               %s°\n"%("° ".join(str(int(np.round(toDegrees(angle))))
+                                                                             for angle in self.scalingAngleMeans ))
+            repStr += indent*' ' + "    RMS Spreads:         %s°\n"%("° ".join(str(int(np.round(toDegrees(angle))))
+                                                                           for angle in self.scalingAngleSpreads ))
 
-        repStr += getMultiLineStr("pathDelays (ns)", self.pathDelays, indent, "%6f", 6, numPerLine=10)
-        repStr += getMultiLineStr("pathPowers (db)", self.pathPowers, indent, "%6f", 6, numPerLine=10)
-        repStr += getMultiLineStr("AODs (Degree)", np.round(toDegrees(self.aods)), indent, "%4d", 4, numPerLine=15)
-        repStr += getMultiLineStr("AOAs (Degree)", np.round(toDegrees(self.aoas)), indent, "%4d", 4, numPerLine=15)
-        repStr += getMultiLineStr("ZODs (Degree)", np.round(toDegrees(self.zods)), indent, "%4d", 4, numPerLine=15)
-        repStr += getMultiLineStr("ZOAs (Degree)", np.round(toDegrees(self.zoas)), indent, "%4d", 4, numPerLine=15)
-        repStr += indent*' ' + "  hasLOS: %s\n"%(str(self.hasLos))
-        repStr += indent*' ' + "  Cross Pol. Power: %s db\n"%(str(self.xPolPower))
+        repStr += indent*' ' + f"  Cross Pol. Power:     {self.xPolPower} dB\n"
         if self.profile is None and self.hasLos:
-            repStr += indent*' ' + "  K-Factor for LOS path: %s db\n"%(str(self.kFactorLos))
-        repStr += indent*' ' + "  angleSpreads: %s°\n"%("° ".join(str(int(np.round(toDegrees(angle)))) for angle in self.angleSpreads ))
+            repStr += indent*' ' + f"  K-Factor:             {self.kFactorLos} dB\n"
+        repStr += indent*' ' + "  angleSpreads:         %s°\n"%("° ".join(str(int(np.round(toDegrees(angle))))
+                                                                             for angle in self.angleSpreads ))
         
         repStr += self.txAntenna.print(indent+2, "TX Antenna:", True)
-        if not np.any(self.txOrientation):
-            repStr += indent*' ' + "  TX Antenna Orientation (𝛼,𝛃,𝛄): %s°\n"%("° ".join(str(int(np.round(toDegrees(angle)))) for angle in self.txOrientation ))
+        if np.any(self.txOrientation):
+            repStr += indent*' ' + "    Orientation (𝛼,𝛃,𝛄): %s°\n"%("° ".join(str(int(np.round(toDegrees(a))))
+                                                                                 for a in self.txOrientation ))
         
         repStr += self.rxAntenna.print(indent+2, "RX Antenna:", True)
-        if not np.any(self.rxOrientation):
-            repStr += indent*' ' + "  RX Antenna Orientation (𝛼,𝛃,𝛄): %s°\n"%("° ".join(str(int(np.round(toDegrees(angle)))) for angle in self.rxOrientation ))
+        if np.any(self.rxOrientation):
+            repStr += indent*' ' + "    Orientation (𝛼,𝛃,𝛄): %s°\n"%("° ".join(str(int(np.round(toDegrees(a))))
+                                                                                 for a in self.rxOrientation ))
 
-        repStr += self.channelFilter.print(indent+2, "Channel Filter:", True)
+        repStr += indent*' ' + f"  hasLOS:               {self.hasLos}\n"
+        if self.hasLos:
+            repStr += indent*' ' + "  LOS Path:\n"
+            repStr += indent*' ' + f"    Delay (ns):         {self.pathDelays[0]:.5f}\n"
+            repStr += indent*' ' + f"    Power (dB):         {self.pathPowers[0]:.5f}\n"
+            repStr += indent*' ' + f"    AOD (Deg):          {int(self.aods[0])}\n"
+            repStr += indent*' ' + f"    AOA (Deg):          {int(self.aoas[0])}\n"
+            repStr += indent*' ' + f"    ZOD (Deg):          {int(self.zods[0])}\n"
+            repStr += indent*' ' + f"    ZOA (Deg):          {int(self.zoas[0])}\n"
+        o = 1 if self.hasLos else 0
+        repStr += indent*' ' + f"  NLOS Paths ({len(self.pathDelays)-o}):\n"
+        repStr += getMultiLineStr("  Delays (ns)       ", self.pathDelays[o:], indent, "%-5f", 5, numPerLine=12)
+        repStr += getMultiLineStr("  Powers (dB)       ", self.pathPowers[o:], indent, "%-5f", 5, numPerLine=12)
+        repStr += getMultiLineStr("  AODs (Deg)        ", np.round(toDegrees(self.aods[o:])), indent, "%-4d", 4, numPerLine=12)
+        repStr += getMultiLineStr("  AOAs (Deg)        ", np.round(toDegrees(self.aoas[o:])), indent, "%-4d", 4, numPerLine=12)
+        repStr += getMultiLineStr("  ZODs (Deg)        ", np.round(toDegrees(self.zods[o:])), indent, "%-4d", 4, numPerLine=12)
+        repStr += getMultiLineStr("  ZOAs (Deg)        ", np.round(toDegrees(self.zoas[o:])), indent, "%-4d", 4, numPerLine=12)
 
         if getStr: return repStr
         print(repStr)
 
-    # ************************************************************************************************************************************************
-    def restart(self, restartRanGen=False):
+    # ******************************************************************************************************************
+    def restart(self, restartRanGen=False, applyToBwp=True):
         r"""
-        This method first calls the base class :py:meth:`~neoradium.channel.ChannelBase.restart`
-        and then re-initializes the ray coupling and initial phases randomly.
+        This method first re-initializes the random object if a ``seed`` was provided to this channel model and the 
+        ``restartRanGen`` parameter is set to ``True``. It then randomly re-initializes the ray coupling and initial 
+        phases and calls the base class :py:meth:`~neoradium.channelmodel.ChannelModel.restart`.
 
         Parameters
         ----------
-        restartRanGen : Boolean (default: False)
-            If a ``seed`` was not provided to this channel model, this parameter
-            is ignored. Otherwise, if ``restartRanGen`` is set to ``True``, this
-            channel model's random generator is reset and if ``restartRanGen`` is
-            ``False`` (default), the random generator is not reset. This means
-            if ``restartRanGen`` is ``False``, calling this function starts a new
-            sequence of channel instances which are different from the sequence when
-            the channel was instantiated.
+        restartRanGen : Boolean
+            If a ``seed`` was not provided to this channel model, this parameter is ignored. Otherwise, if 
+            ``restartRanGen`` is set to ``True``, this channel model's random generator is reset and if 
+            ``restartRanGen`` is ``False`` (default), the random generator is not reset. This means if 
+            ``restartRanGen`` is ``False``, calling this function starts a new sequence of channel instances, 
+            which differs from the sequence when the channel was instantiated.
+
+        applyToBwp : Boolean
+            If set to `True` (the default), this function restarts the :py:class:`~neoradium.carrier.BandwidthPart` 
+            associated with this channel model. Otherwise, the :py:class:`~neoradium.carrier.BandwidthPart` state 
+            remains unchanged.
         """
-        super().restart(restartRanGen)
+        if (self.seed is not None) and restartRanGen: self.rangen = random.getGenerator(self.seed)
         if self.randomRayCoupling:      self.rayCoupling = self.getRandomRayCoupling()
         if self.randomInitialPhases:    self.initialPhases = self.getRandomInitialPhases()
-        
-    # ************************************************************************************************************************************************
+        super().restart(restartRanGen, applyToBwp)
+
+    # ******************************************************************************************************************
     @property           # This property is already documented above in the __init__ function.
     def nrNt(self):     return (self.rxAntenna.getNumElements(), self.txAntenna.getNumElements())
 
-    # ************************************************************************************************************************************************
-    def scaleDelays(self):                      # Not documented
-        self.pathDelays *= self.delaySpread     # Path delays in nanoseconds (See TR38.901 - Sec. 7.7.3 Scaling of delays)
+    # ******************************************************************************************************************
+    def scaleDelays(self):                  # Not documented
+        self.pathDelays *= self.delaySpread # Path delays in nanoseconds (See TR38.901 - Sec. 7.7.3, Scaling of delays)
             
-    # ************************************************************************************************************************************************
-    def getChannelGains(self, channelTimes):        # Not documented (See the documentation of "getPathGains" in the base class)
-        gains = self.getNLOSgains(channelTimes)                                                 # Shape: nc x nr x nt x numNLOS
-        if self.hasLos: gains = np.concatenate((self.getLOSgains(channelTimes), gains), axis=3) # Shape: nc x nr x nt x (numNLOS+1)
-        return gains                                                                            # Shape: nc x nr x nt x np
+    # ******************************************************************************************************************
+    def getPathGains(self):                 # Not documented (See "getPathGains" in the base class)
+        gains = self.getNLOSgains()                                         # Shape: nc x nr x nt x numNLOS
+        if self.hasLos:
+            gains = np.concatenate((self.getLOSgains(), gains), axis=3)     # Shape: nc x nr x nt x (numNLOS+1)
+        return gains                                                        # Shape: nc x nr x nt x np
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def wrapAngles(self, angles, how):              # Not documented
         # This function is used to handle the correct wrapping of the angles. Four types
         # of wrapping is handled as follows:
@@ -600,20 +668,20 @@ class CdlChannel(ChannelBase):
             
         assert False, "Don't know how to wrap with \"%s\"!"%(how)
 
-    # ************************************************************************************************************************************************
-    def getLOSgains(self, channelTimes):        # Not documented
-        # This function calculates the gain for the LOS cluster. It must be called only if
-        # current channel model contains LOS clusters.
+    # ******************************************************************************************************************
+    def getLOSgains(self):                          # Not documented
+        # This function calculates the gain for the LOS cluster. It must be called only if current channel model
+        # contains LOS clusters.
         assert self.hasLos, "'getLOS' function was called for a profile that does not contain LOS information!"
         
-        # STEP-1 (See Step-1 in TR38.901 - 7.7.1) ----------------------------------------------------------------------------------------------------
-        # Generate departure and arrival angles. These are all 1x1 matrixes (one cluster, one ray).
+        # STEP-1 (See Step-1 in TR38.901 - 7.7.1) ----------------------------------------------------------------------
+        # Generate departure and arrival angles. These are all 1x1 matrices (one cluster, one ray).
         # Note: No need to use "rayOffsets" for LOS case.
         phiD = self.aods[0:1].reshape(1,1)      # Shape: 1 x 1
         phiA = self.aoas[0:1].reshape(1,1)      # Shape: 1 x 1
         thetaD = self.zods[0:1].reshape(1,1)    # Shape: 1 x 1
         thetaA = self.zoas[0:1].reshape(1,1)    # Shape: 1 x 1
-        pN = 10.0**(self.pathPowers[0]/10.0)    # Shape: Scaler     (Also converted from db to linear)
+        pN = toLinear(self.pathPowers[0])       # Shape: Scalar
 
         if self.angleScaling is not None:
             # Need to do angle scaling:
@@ -625,31 +693,31 @@ class CdlChannel(ChannelBase):
         thetaA = self.wrapAngles(thetaA, "0,180")
 
         nr, nt = self.nrNt
-        # STEP-2 (See Step-2 in TR38.901 - 7.7.1) ----------------------------------------------------------------------------------------------------
+        # STEP-2 (See Step-2 in TR38.901 - 7.7.1) ----------------------------------------------------------------------
         # No random coupling is needed for LOS case because there is only one cluster and one ray
         
-        # STEP-3 (See Step-3 in TR38.901 - 7.7.1) ----------------------------------------------------------------------------------------------------
-        # Generate the cross polarization power ratios:
-        kappa = 10.0**(self.xPolPower/10.0)
+        # STEP-3 (See Step-3 in TR38.901 - 7.7.1) ----------------------------------------------------------------------
+        # Generate the cross-polarization power ratios:
+        # "Kappa" is not needed for LOS case. The polarization matrix is fixed.
 
-        # STEP-4 (See Step-4 in TR38.901 - 7.7.1) ----------------------------------------------------------------------------------------------------
+        # STEP-4 (See Step-4 in TR38.901 - 7.7.1) ----------------------------------------------------------------------
         # Draw initial random phases (See Step-10 in TR38.901 - 7.5)
-        # No Initial phases needed for LOS case. The polarization matrix is fixed
+        # No initial phases are needed for LOS case. The polarization matrix is fixed
         
         # Get the TX field part and TX location part in TR38.901 - Eq. 7.5-29
-        fieldTx, locTx = self.txAntenna.getElementsFields(thetaD, phiD, self.txOrientation)  # Shapes: "nt x 2 x 1 x 1" and "nt x 1 x 1"
+        fieldTx, locTx = self.txAntenna.getElementsFields(thetaD, phiD, self.txOrientation)# nt x 2 x 1 x 1 & nt x 1 x 1
 
         # Get the RX field part and RX location part in TR38.901 - Eq. 7.5-29
-        fieldRx, locRx = self.rxAntenna.getElementsFields(thetaA, phiA, self.rxOrientation)  # Shapes: "nr x 2 x n x m" and "nr x n x m"
+        fieldRx, locRx = self.rxAntenna.getElementsFields(thetaA, phiA, self.rxOrientation)# nr x 2 x 1 x 1 & nr x 1 x 1
 
         # Get the polarization matrix part in TR38.901 - Eq. 7.5-29
-        polMat = np.float64([[1,0],[0,-1]])                                                         # Shape:  2 x 2
+        polMat = np.float64([[1,0],[0,-1]])                                                 # Shape:  2 x 2
         
         # Get the doppler term in TR38.901 - Eq. 7.5-29
-        doppler = self.getDopplerFactor(channelTimes, thetaA, phiA)                                 # Shape:  nc
+        doppler = self.getDopplerFactor(thetaA, phiA)                                       # Shape:  nc
 
-        # Now that we have built all parts of TR38.901 - Eq. 7.5-29, we need to combine all of them together. Here are shapes of different parts
-        # of TR38.901 - Eq. 7.5-29  complex tensor. (Squeezing out the 1 x 1 parts)
+        # Now that we have built all parts of TR38.901 - Eq. 7.5-29, we need to combine all of them together. Here are
+        # shapes of different parts of TR38.901 - Eq. 7.5-29  complex tensor. (Squeezing out the 1 x 1 parts)
         #       fieldRx: nr x 2
         #       polMat:  2 x 2
         #       fieldTx: nt x 2
@@ -659,20 +727,21 @@ class CdlChannel(ChannelBase):
         # The output will be a "nr x nt x t x 1"
         
         # First fieldRx x polMat x fieldTx
-        hLOS = ((fieldRx.reshape(-1,1,2,1) * polMat.reshape(1,1,2,2)).sum(2).reshape(-1,1,2)*fieldTx.reshape(1, -1, 2)).sum(2)  # Shape: nr x nt
+        hLOS = ((fieldRx.reshape(-1,1,2,1) * polMat.reshape(1,1,2,2)).sum(2).reshape(-1,1,2) * \
+                 fieldTx.reshape(1, -1, 2)).sum(2)                                          # Shape: nr x nt
         # Now apply location factors
-        hLOS = hLOS * locRx.reshape(-1, 1) * locTx.reshape(1, -1)                                                               # Shape: nr x nt
-        # Applying the doppler:
-        hLOS = hLOS.reshape(1,nr,nt) * doppler.reshape(-1,1,1)                                                                  # Shape: nc x nr x nt
+        hLOS = hLOS * locRx.reshape(-1, 1) * locTx.reshape(1, -1)                           # Shape: nr x nt
+        # Applying the doppler
+        hLOS = hLOS.reshape(1,nr,nt) * doppler.reshape(-1,1,1)                              # Shape: nc x nr x nt
         # Apply the scaling
-        hLOS *= np.sqrt(pN)                                                                                                     # Shape: nc x nr x nt
-        return hLOS.reshape(-1, nr, nt, 1)                                                                                      # Shape: nc x nr x nt x 1
+        hLOS *= np.sqrt(pN)                                                                 # Shape: nc x nr x nt
+        return hLOS.reshape(-1, nr, nt, 1)                                                  # Shape: nc x nr x nt x 1
         
-    # ************************************************************************************************************************************************
-    def getNLOSgains(self, channelTimes):       # Not documented
+    # ******************************************************************************************************************
+    def getNLOSgains(self):                         # Not documented
         # This function calculates the gains for all NLOS clusters.
         
-        # STEP-1 (See Step-1 in TR38.901 - 7.7.1) ----------------------------------------------------------------------------------------------------
+        # STEP-1 (See Step-1 in TR38.901 - 7.7.1) ----------------------------------------------------------------------
         # Generate departure and arrival angles
         offset = 1 if self.hasLos else 0
         cASD, cASA, cZSD, cZSA = self.angleSpreads
@@ -680,7 +749,7 @@ class CdlChannel(ChannelBase):
         phiA   = self.aoas[offset:].reshape(-1,1) + cASA*np.float64(rayOffsets)     # Shape: n x m
         thetaD = self.zods[offset:].reshape(-1,1) + cZSD*np.float64(rayOffsets)     # Shape: n x m
         thetaA = self.zoas[offset:].reshape(-1,1) + cZSA*np.float64(rayOffsets)     # Shape: n x m
-        pN = 10.0**(self.pathPowers[offset:]/10.0)                                  # Shape: n     (linear power values)
+        pN = toLinear(self.pathPowers[offset:])                                     # Shape: n
         
         if self.angleScaling is not None:
             # Need to do angle scaling:
@@ -694,65 +763,67 @@ class CdlChannel(ChannelBase):
         n, m = phiD.shape
         nr, nt = self.nrNt
 
-        # STEP-2 (See Step-2 in TR38.901 - 7.7.1) ----------------------------------------------------------------------------------------------------
+        # STEP-2 (See Step-2 in TR38.901 - 7.7.1) ----------------------------------------------------------------------
         # Random coupling of rays within clusters
         phiD, phiA, thetaD, thetaA = self.shuffleRays(phiD, phiA, thetaD, thetaA)
 
-        # STEP-3 (See Step-3 in TR38.901 - 7.7.1) ----------------------------------------------------------------------------------------------------
-        # Generate the cross polarization power ratios:
-        kappa = 10.0**(self.xPolPower/10.0)
+        # STEP-3 (See Step-3 in TR38.901 - 7.7.1) ----------------------------------------------------------------------
+        # Generate the cross-polarization power ratios:
+        kappa = toLinear(self.xPolPower)    # See Eq. 7.7-0b in Step-3 of TR38.901 - 7.7.1
 
-        # STEP-4 (See Step-4 in TR38.901 - 7.7.1) ----------------------------------------------------------------------------------------------------
+        # STEP-4 (See Step-4 in TR38.901 - 7.7.1) ----------------------------------------------------------------------
         # Draw initial random phases (See Step-10 in TR38.901 - 7.5)
         phiInit = self.initialPhases        # Uniform between -𝛑,𝛑. Shape: 2 x 2 x n x m
 
         # Get the TX field part and TX location part in TR38.901 - Eq. 7.5-22
-        fieldTx, locTx = self.txAntenna.getElementsFields(thetaD, phiD, self.txOrientation)  # Shapes: "nt x 2 x n x m" and "nt x n x m"
+        fieldTx, locTx = self.txAntenna.getElementsFields(thetaD, phiD, self.txOrientation)# nt x 2 x n x m & nt x n x m
 
         # Get the RX field part and RX location part in TR38.901 - Eq. 7.5-22
-        fieldRx, locRx = self.rxAntenna.getElementsFields(thetaA, phiA, self.rxOrientation)  # Shapes: "nr x 2 x n x m" and "nr x n x m"
+        fieldRx, locRx = self.rxAntenna.getElementsFields(thetaA, phiA, self.rxOrientation)# nr x 2 x n x m & nr x n x m
 
         # Get the polarization matrix part in TR38.901 - Eq. 7.5-22
-        polMat = np.exp(1j*phiInit) * np.sqrt([[1, 1/kappa], [1/kappa, 1]]).reshape(2,2,1,1)        # Shape:  2 x 2 x n x m
+        polMat = np.exp(1j*phiInit) * np.sqrt([[1, 1/kappa], [1/kappa, 1]]).reshape(2,2,1,1)    # Shape:  2 x 2 x n x m
 
         # Get the doppler term in TR38.901 - Eq. 7.5-22
-        doppler = self.getDopplerFactor(channelTimes, thetaA, phiA)                                 # Shape:  nc x n x m
+        doppler = self.getDopplerFactor(thetaA, phiA)                                           # Shape:  nc x n x m
 
-        # Now that we have built all parts of TR38.901 - Eq. 7.5-22, we need to combine all of them together. Here are shapes of different parts
-        # of TR38.901 - Eq. 7.5-22  complex tensor.
+        # Now that we have built all parts of TR38.901 - Eq. 7.5-22, we need to combine all of them together. Here
+        # are shapes of different parts of TR38.901 - Eq. 7.5-22  complex tensor.
         #       fieldRx: nr x 2 x n x m
         #       polMat:  2 x 2 x n x m
         #       fieldTx: nt x 2 x n x m
         #       locRx:   nr x n x m
         #       locTx:   nt x n x m
         #       doppler: t x n x m
-        # The output will be a "nr x nt x t x n"
+        # The output will be an "nr x nt x t x n"
         
         # First fieldRx x polMat x fieldTx
-        hNLOS = ((fieldRx.reshape(-1,1,2,1,n,m) * polMat.reshape(1,1,2,2,n,m)).sum(2).reshape(-1,1,2,n,m)*fieldTx).sum(2)   # Shape: nr x nt x n x m
+        hNLOS = ((fieldRx.reshape(-1,1,2,1,n,m) * polMat.reshape(1,1,2,2,n,m)).sum(2).reshape(-1,1,2,n,m) * \
+                 fieldTx).sum(2)                                                    # Shape: nr x nt x n x m
         # Now apply location factors
-        hNLOS = hNLOS * locRx.reshape(-1, 1, n, m) * locTx.reshape(1, -1, n, m)                                             # Shape: nr x nt x n x m
+        hNLOS = hNLOS * locRx.reshape(-1, 1, n, m) * locTx.reshape(1, -1, n, m)     # Shape: nr x nt x n x m
         # Applying the doppler:
-        hNLOS = hNLOS.reshape(1,nr,nt,n,m) * doppler.reshape(-1,1,1,n, m)                                                   # Shape: nc x nr x nt x n x m
+        hNLOS = hNLOS.reshape(1,nr,nt,n,m) * doppler.reshape(-1,1,1,n, m)           # Shape: nc x nr x nt x n x m
         # Now sum over m (Combining rays in each cluster)
-        hNLOS = hNLOS.sum(4)                                                                                                # Shape: nc x nr x nt x n
+        hNLOS = hNLOS.sum(4)                                                        # Shape: nc x nr x nt x n
         # Apply the scaling
         hNLOS *= np.sqrt(pN/m).reshape(1,1,1,-1)
-        return hNLOS
+        return hNLOS                                                                # Shape: nc x nr x nt x n
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def getRandomRayCoupling(self):             # Not documented
-        # This function randomly creates the rayCoupling values (See Step-2 in TR38.901 - section 7.7.1)
+        # This function randomly creates the ray-coupling values (See Step-2 in TR38.901, Section 7.7.1)
         n, m = len(self.aods) - (1 if self.hasLos else 0), 20
-        return np.int32([ [self.rangen.choice(range(m), size=m, replace=False) for _ in range(n)] for _ in range(3) ])  # Shape: 3 x n x m
+        return np.int32([ [self.rangen.choice(range(m), size=m, replace=False)
+                                for _ in range(n)] for _ in range(3) ])             # Shape: 3 x n x m
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def getRandomInitialPhases(self):
         # Draw initial random phases (See Step-10 in TR38.901 - 7.5)
         n, m = len(self.aods) - (1 if self.hasLos else 0), 20
         return 2*np.pi * self.rangen.random(size=(2,2,n,m)) - np.pi     # Uniform between -𝛑,𝛑. Shape: 2 x 2 x n x m
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     @classmethod
     def getMatlabRandomInit(cls, profile, seed):       # Not documented
         # This is a helper class method that can be used to create random ray coupling and initial phases to
@@ -784,7 +855,7 @@ class CdlChannel(ChannelBase):
         coupling[1] = coupling[1][(rows, coupling[2])]
         return phiInit, coupling
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def shuffleRays(self, phiD, phiA, thetaD, thetaA):              # Not documented
         # This function shuffles the rays in the clusters randomly using the rayCoupling parameter.
         n, m = phiD.shape
@@ -796,11 +867,12 @@ class CdlChannel(ChannelBase):
         thetaD  = thetaD[ (rowIndexes, self.rayCoupling[2]) ]
         return phiD, phiA, thetaD, thetaA
 
-    # ************************************************************************************************************************************************
-    def getDopplerFactor(self, channelTimes, theta, phi):           # Not documented
+    # ******************************************************************************************************************
+    def getDopplerFactor(self, theta, phi):           # Not documented
         # This function calculates the doppler term in TR38.901 - Eq. 7.5-22
         vPhi, vTheta = self.ueDirAZ         # Direction (angles) of UE movement in phi and theta in radians
-        # Simplifying : d = speed/wavelen. Instead of using vBar and v, we use dBar and doppler and remove the lambda in the denuminator.
+        # Simplifying : d = speed/wavelen. Instead of using vBar and v, we use dBar and doppler and remove the lambda
+        # in the denuminator.
         # The following is the adapted version of TR38.901 - Eq. 7.5-25
         dBar = self.dopplerShift * np.array([ np.sin(vTheta) * np.cos(vPhi),
                                               np.sin(vTheta) * np.sin(vPhi),
@@ -811,11 +883,12 @@ class CdlChannel(ChannelBase):
                             sinTheta * np.sin(phi),
                             np.cos(theta) ])
 
-        return np.exp(2j * np.pi * channelTimes.reshape(-1,1,1) * (rHatRx*dBar.reshape(3,1,1)).sum(0))  # Shape:  nc x n x m
+        chanTimes = self.chanGainSamples/self.sampleRate
+        return np.exp(2j * np.pi * chanTimes.reshape(-1,1,1) * (rHatRx*dBar.reshape(3,1,1)).sum(0)) # Shape: nc x n x m
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def applyAngleScaling(self, phiD, phiA, thetaD, thetaA, p):     # Not documented
-        # This function applies the Angle Scaling according to 3GPP TR 38.901 Section 7.7.5.1 and Annex A.
+        # This function applies the Angle Scaling according to 3GPP TR 38.901, Section 7.7.5.1 and Annex A.
         assert self.angleScaling is not None
         n,m = phiA.shape
 
@@ -825,8 +898,8 @@ class CdlChannel(ChannelBase):
         
         # Calculate Model mean and spread: (See TR38.901 - Annex A)
         def getModelMeanAndSpread(angles):
-            weightedSum = (np.exp(1j*angles)*p.reshape(-1,1)).sum()/m     # This is the numinator of the fraction in TR38.901 - Eq. A-1
-            angularSpread = np.sqrt(-2*np.log(np.abs(weightedSum/(p.sum()))))       # This is the 'AS' as defined in TR38.901 - Eq. A-1
+            weightedSum = (np.exp(1j*angles)*p.reshape(-1,1)).sum()/m  # Numinator of the fraction in TR38.901 - Eq. A-1
+            angularSpread = np.sqrt(-2*np.log(np.abs(weightedSum/(p.sum()))))   # The 'AS' defined in TR38.901 - Eq. A-1
             meanAngle = np.angle(weightedSum)
             return meanAngle, angularSpread
             
@@ -849,9 +922,204 @@ class CdlChannel(ChannelBase):
         scaledThetaA = transformAngles(thetaA, asThetaA, maThetaA, asThetaAmodel, maThetaAmodel)
 
         # Wrapping the angles. See the note near the end of TR38.901 - Section 7.7.5.1
-        scaledPhiD = self.wrapAngles(scaledPhiD, "0,360")               # Wrap azimuth angles around to be within [0, 360] degrees
-        scaledPhiA = self.wrapAngles(scaledPhiA, "0,360")               # Wrap azimuth angles around to be within [0, 360] degrees
-        scaledThetaD = self.wrapAngles(scaledThetaD, "Clip-0,180")      # Clip zenith angles to be within [0, 180] degrees
-        scaledThetaA = self.wrapAngles(scaledThetaA, "Clip-0,180")      # Clip zenith angles to be within [0, 180] degrees
+        scaledPhiD = self.wrapAngles(scaledPhiD, "0,360")   # Wrap azimuth angles around to be within [0, 360] degrees
+        scaledPhiA = self.wrapAngles(scaledPhiA, "0,360")   # Wrap azimuth angles around to be within [0, 360] degrees
+        scaledThetaD = self.wrapAngles(scaledThetaD, "Clip-0,180")  # Clip zenith angles to be within [0, 180] degrees
+        scaledThetaA = self.wrapAngles(scaledThetaA, "Clip-0,180")  # Clip zenith angles to be within [0, 180] degrees
 
         return scaledPhiD, scaledPhiA, scaledThetaD, scaledThetaA
+
+    # ******************************************************************************************************************
+    @classmethod
+    def getChanGen(cls, numChannels, bwp, profiles="ABCDE", delaySpread=(10,500),
+                   ueSpeed=(10,70), ueDir=(0,360), **kwargs):
+        r"""
+        Returns a generator object that can generate CDL channel matrices based on the given parameters and criteria.
+
+        Refer to the notebook :doc:`../Playground/Notebooks/Channels/CdlChannelDataset` for an example of 
+        using this method.
+        
+        Parameters
+        ----------
+        numChannels: int 
+            The number of channel matrices generated by the returned generator.
+            
+        bwp : :py:class:`~neoradium.carrier.BandwidthPart` 
+            The bandwidth part object used by the returned generator to construct channel matrices.
+
+        profiles: str        
+            A string containing a combination of upper case letters 'A', 'B', 'C', 'D', and 'E'. For example the
+            sting "ACE", means the CDL profiles 'A', 'C', and 'E' are considered when creating the channel matrices.
+            The default is "ABCDE", which means all CDL profiles are included.
+
+        delaySpread: float, tuple, or list
+            Specifies the delay spread in nanoseconds. It can be one of the following:
+            
+                * If it is a tuple of the form ``(dsMin, dsMax)``, a random value is uniformly sampled between 
+                  ``dsMin`` and ``dsMax`` for each channel matrix.
+                  
+                * If it is a list of the form [:math:`d_1`, :math:`d_2`, ..., :math:`d_n`], for each channel matrix a 
+                  random delay spread is picked from those specified in the list.
+                  
+                * If it is a single number, then the same delay spread is used for all channel matrices. 
+            
+            The default is ``(10,500)``.
+
+        ueSpeed: float, tuple, or list
+            Specifies the speed of the UE in meters per second. It can be one of the following:
+            
+                * If it is a tuple of the form ``(speedMin, speedMax)``, a random value is uniformly sampled between 
+                  ``speedMin`` and ``speedMax`` for each channel matrix.
+                  
+                * If it is a list of the form [:math:`s_1`, :math:`s_2`, ..., :math:`s_n`], for each channel matrix a 
+                  random speed is picked from those specified in the list.
+                  
+                * If it is a single number, then the same UE speed is used for all channel matrices.
+            
+            The default is ``(0,20)``.
+              
+        ueDir: float, tuple, or list
+            Specifies the direction of UE movement in the X-Y plane as an angle in degrees. It can be one 
+            of the following:
+            
+                * If it is a tuple of the form ``(dirMin, dirMax)``, a random value is uniformly sampled between 
+                  ``dirMin`` and ``dirMax`` for each channel matrix.
+                  
+                * If it is a list of the form [:math:`a_1`, :math:`a_2`, ..., :math:`a_n`], for each channel matrix a 
+                  random UE direction is picked from those specified in the list.
+                  
+                * If it is a single number, then the same UE direction is used for all channel matrices. 
+            
+            The default is ``(0, 360)``.
+                   
+        kwargs : dict
+            Here is a list of additional optional parameters that can be used to further customize the calculation 
+            of the channel matrices:
+            
+                :normalizeGains: If the default value of ``True`` is used, the path gains are normalized.
+                    
+                :normalizeOutput: If the default value of ``True`` is used, the gains are normalized based on the 
+                    number of receive antennas.
+
+                :filterLen: The length of the channel filter. The default is 16 sample.
+                
+                :delayQuantSize: The size of the delay fraction quantization for the channel filter. The default is 64.
+                
+                :stopBandAtten: The stop-band attenuation value (in dB) used by the channel filter. The default 
+                    is 80 dB.
+                
+                :txAntenna: The transmitter antenna, which is an instance of either the 
+                    :py:class:`neoradium.antenna.AntennaPanel` or :py:class:`neoradium.antenna.AntennaArray` class. 
+                    By default, it is a single antenna in a 1x1 antenna panel with vertical polarization.
+                
+                :rxAntenna: The receiver antenna which is an instance of either the 
+                    :py:class:`neoradium.antenna.AntennaPanel` or :py:class:`neoradium.antenna.AntennaArray` class. 
+                    By default, it is a single antenna in a 1x1 antenna panel with vertical polarization.
+                    
+                :txOrientation: The orientation of the transmitter antenna. This is a list of 3 angle values in degrees
+                    for the *bearing* angle :math:`\alpha`, *downtilt* angle :math:`\beta`, and *slant* angle 
+                    :math:`\gamma`. The default is [0,0,0]. Please refer to **3GPP TR 38.901, Section 7.1.3** for more
+                    information.
+
+                :rxOrientation: The orientation of the receiver antenna. This is a list of 3 angle values in degrees 
+                    for the *bearing* angle :math:`\alpha`, *downtilt* angle :math:`\beta`, and *slant* angle 
+                    :math:`\gamma`. The default is [0,0,0]. Please refer to **3GPP TR 38.901, Section 7.1.3** for more
+                    information.
+
+                :seed: The seed used to generate CDL channel matrices. The default value is ``None``, indicating 
+                    that this channel model uses the **NeoRadium**’s :doc:`global random generator <./Random>`. In
+                    this case the results are not reproducible.
+                    
+                :carrierFreq: The carrier frequency of the CDL channel model in Hz. The default is 3.5 GHz.
+                
+                :kFactor: The K-Factor (in dB) used for scaling. The default is ``None``. If not specified 
+                    (``kFactor=None``), K-factor scaling is disabled.
+
+                :xPolPower: The cross-polarization Power in dB. The default is 10db. For more details please refer 
+                    to "Step 3" in **3GPP TR 38.901, Section 7.7.1**.
+
+                :angleScaling: The :ref:`Angle Scaling <AngleScaling>` parameters. If specified, it must be a tuple of
+                    2 numpy arrays.
+                    
+                    The first item specifies the mean values for angle scaling. It’s a 1-D NumPy array containing 
+                    four values for: the *Azimuth angle of Departure*, *Azimuth angle of Arrival*, *Zenith angle of 
+                    Departure*, and *Zenith angle of Arrival*.
+                    
+                    The second item specifies the RMS angle spread values. It is a 1-D numpy array containing four RMS 
+                    values for: the *Azimuth angle of Departure*, *Azimuth angle of Arrival*, *Zenith angle of 
+                    Departure*, and *Zenith angle of Arrival*. For more information, please refer to 
+                    :ref:`Angle Scaling <AngleScaling>`.
+                    
+                    If this value is set to ``None`` (the default), the *Angle Scaling* is disabled.
+                    
+        Returns
+        -------
+        ``ChanGen``, a generator object that is used to generate channel matrices.
+        
+        
+        **Example:**
+                       
+        .. code-block:: python
+        
+            # First create a carrier object with 25 PRBs and 15 kHz subcarrier spacing
+            carrier = Carrier(startRb=0, numRbs=25, spacing=15)
+
+            # Now create the generator
+            chanGen = CdlChannel.getChanGen(1000, carrier.curBwp,       # Number of channels and bandwidth part
+                                            profiles="ABCDE",           # Randomly pick a CDL profile
+                                            delaySpread=(10,500),       # Uniformly sample between 10 and 500 ns
+                                            ueSpeed=(5,20),             # Uniformly sample between 5 and 20 m/s
+                                            ueDir=[45, 135, 225, 315],  # Randomly pick one of these UE directions
+                                            carrierFreq=4e9,            # Carrier frequency
+                                            txAntenna=AntennaPanel([2,4], polarization="x"),  # 16 TX antennas
+                                            rxAntenna=AntennaPanel([1,2], polarization="x"),  # 4 RX antennas
+                                            seed=123)
+
+            # Create the channel matrices
+            allChannels = np.stack([chan for chan in chanGen])  
+            print(f"Shape of 'allChannels': {allChannels.shape}")       # Prints (1000, 14, 300, 4, 16)       
+        """
+        seed = kwargs.pop("seed", None)
+        carrierFreq = kwargs.get("carrierFreq", 3.5e9)
+        class ChanGen:
+            def __init__(self): self.reset()
+            def __iter__(self): return self
+            def __next__(self):
+                if self.cur >= numChannels: raise StopIteration
+                # Create a CDL channel and get the channel matrix
+                chanMat = CdlChannel(bwp, str(self.profiles[self.cur]),
+                                     delaySpread=self.delaySpreads[self.cur],
+                                     dopplerShift=self.dopplerShifts[self.cur],
+                                     ueDirAZ=[self.ueDirs[self.cur], 90],
+                                     seed=self.chanSeeds[self.cur],
+                                     **kwargs).getChannelMatrix()
+                self.cur += 1
+                return chanMat
+                    
+            def reset(self):
+                rangen = random if seed is None else random.getGenerator(seed)  # The random number generator
+                self.cur = 0
+
+                self.profiles = rangen.choice(list(profiles), size=numChannels) # Pick a profile for each channel matrix
+
+                # Get a speed (in m/s) for each channel matrix
+                if type(ueSpeed)==tuple:        speeds = rangen.uniform(*ueSpeed, numChannels)
+                elif type(ueSpeed)==list:       speeds = rangen.choice(np.float32(ueSpeed), numChannels)
+                else:                           speeds = np.float32(numChannels*[ueSpeed])
+                # Calculate the doppler shift based on the speed and carrier frequency
+                self.dopplerShifts = speeds * carrierFreq/299792458
+
+                # Get a UE direction of movement for each channel matrix
+                if type(ueDir)==tuple:          self.ueDirs = rangen.uniform(*ueDir, numChannels)*np.pi/180
+                elif type(ueDir)==list:         self.ueDirs = rangen.choice(np.float32(ueDir), numChannels)*np.pi/180
+                else:                           self.ueDirs = np.float32(numChannels*[ueDir])*np.pi/180
+            
+                # Get a delay spread for each channel matrix
+                if type(delaySpread)==tuple:    self.delaySpreads = rangen.uniform(*delaySpread, numChannels)
+                elif type(delaySpread)==list:   self.delaySpreads = rangen.choice(np.float32(delaySpread), numChannels)
+                else:                           self.delaySpreads = np.float32(numChannels*[delaySpread])
+
+                # Get a seed for each channel matrix
+                self.chanSeeds = rangen.integers(10,1000, size=numChannels)
+                    
+        return ChanGen()

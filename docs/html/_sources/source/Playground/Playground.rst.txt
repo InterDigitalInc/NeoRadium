@@ -1,6 +1,6 @@
 Playground
 ==========
-The following pages explain by example how different APIs are used and show more details of **NeoRadium**'s capabilities. The code in the following pages are available in the ``Playgrounds`` directory. You can open them in jupyter notebook and "play" with them.
+The following pages illustrate how various APIs are utilized and provide more detailed information about **NeoRadium**’s capabilities. The code presented in these pages is available in the ``Playgrounds`` directory. You can open them in a Jupyter notebook and interact with them.
 
 Antenna
 -------
@@ -11,13 +11,30 @@ Antenna
         Notebooks/Antenna/AntennaPanel.ipynb
         Notebooks/Antenna/AntennaArray.ipynb
 
-Channels
---------
+Stochastic Channel Models
+-------------------------
     .. toctree::
         :maxdepth: 1
 
         Notebooks/Channels/ChannelMatrix.ipynb
         Notebooks/Channels/cdlTiming.ipynb
+        Notebooks/Channels/TdlChannel.ipynb
+        Notebooks/Channels/CdlChannelDataset.ipynb
+
+Trajectory-based Channel Model
+------------------------------
+    .. toctree::
+        :maxdepth: 1
+
+        Notebooks/RayTracing/DeepMimo.ipynb
+        Notebooks/RayTracing/TrajChannel.ipynb
+        Notebooks/RayTracing/TrajEndToEnd.ipynb
+        Notebooks/RayTracing/TrajChannelAnim.ipynb
+        Notebooks/RayTracing/ChannelGeneration.ipynb
+        Notebooks/RayTracing/ChannelSequences.ipynb
+        Notebooks/RayTracing/AnimatedBER.ipynb
+        Notebooks/RayTracing/AnimatedCN.ipynb
+
 
 Channel State Information Reference Signals (CSI-RS)
 ----------------------------------------------------
@@ -55,8 +72,8 @@ A Deep Learning Case Study
         Notebooks/MLChEst/MLChestTrainTorch.ipynb
         Notebooks/MLChEst/MLChestEvaluateTorch.ipynb
 
-Comparing with Matlab 5G Toolbox
---------------------------------
+Comparing with Matlab
+---------------------
 
 Antenna
 """""""

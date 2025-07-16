@@ -1,0 +1,460 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Working with DeepMIMO Scenarios &mdash; NeoRadium 0.3.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=eea1f72d" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Using the Trajectory-based Channel Model" href="TrajChannel.html" />
+    <link rel="prev" title="Creating random CDL channels for a dataset" href="../Channels/CdlChannelDataset.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.3.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Working with DeepMIMO Scenarios</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Creating-Random-Trajectory">Creating Random Trajectory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Interactively-trajectory-generation">Interactively trajectory generation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="TrajChannel.html">Using the Trajectory-based Channel Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajEndToEnd.html">An end-to-end PDSCH Simulation with Trajectory-based Channel Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajChannelAnim.html">Animating Trajectories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ChannelGeneration.html">Creating random MIMO Channel Matrices from a DeepMimo Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ChannelSequences.html">Creating temporally and spatially consistent sequences of channel matrices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AnimatedBER.html">Studying Bit Error Rate changes while moving along a trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AnimatedCN.html">Studying channel condition number while moving along a trajectory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with Matlab</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.3.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Working with DeepMIMO Scenarios</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/RayTracing/DeepMimo.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Working-with-DeepMIMO-Scenarios">
+<h1>Working with DeepMIMO Scenarios<a class="headerlink" href="#Working-with-DeepMIMO-Scenarios" title="Link to this heading"></a></h1>
+<p><strong>NeoRadium</strong>’s <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData">DeepMimoData</a> class can be used with <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenarios to generate trajectories of user movements within a ray-tracing environment. By employing the <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/Channels.html#neoradium.trajchannel.TrjChannel">TrjChannel</a> class, designed as a trajectory-based channel model, you can
+construct sequences of channels that adhere to temporal and spatial consistency, based on the provided trajectory.</p>
+<p>This notebook shows how to:</p>
+<ul class="simple">
+<li><p>Use the <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData">DeepMimoData</a> class to open a <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario</p></li>
+<li><p>Use its visialization method to draw the scenario map</p></li>
+<li><p>Create randomly generated trajectories</p></li>
+<li><p>Create your own trajectories interactively on the scenario map</p></li>
+<li><p>Draw the generated trajectory on the map</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeepMimoData</span><span class="p">,</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">random</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace this with the folder on your computer where you store DeepMIMO scenarios</span>
+<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">&quot;/data/RayTracing/DeepMIMO/Scenarios/V4/&quot;</span>
+<span class="n">DeepMimoData</span><span class="o">.</span><span class="n">setScenariosPath</span><span class="p">(</span><span class="n">dataFolder</span><span class="p">)</span>
+
+<span class="c1"># Get information about a scenario:</span>
+<span class="n">DeepMimoData</span><span class="o">.</span><span class="n">showScenarioInfo</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Scenario:          asu_campus_3p5
+File Version:      4.0.0a3
+Carrier Frequency: 3.5 GHz
+Data Folder:       /Users/shahab/data/RayTracing/DeepMIMO/Scenarios/V4/asu_campus_3p5/
+
+UE Grids: (1)
+  rx_grid: ID:0, Num UEs:131,931, xRange:-225.55..184.45, yRange:-160.17..159.83
+
+Base Stations: (1)
+  BS: ID:1, Position:(166.00,104.00,22.00)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using the above information we create a DeepMimoData object for user grid 0 and base station 1:</span>
+<span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">deepMimoData</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+DeepMimoData Properties:
+  Scenario:                   asu_campus_3p5
+  Version:                    4.0.0a3
+  UE Grid:                    rx_grid
+  Grid Size:                  411 x 321
+  Base Station:               BS (at [166. 104.  22.])
+  Total Grid Points:          131,931
+  UE Spacing:                 [1. 1.]
+  UE bounds (xyMin, xyMax)    [-225.55 -160.17], [184.45 159.83]
+  UE Height:                  1.50
+  Carrier Frequency:          3.5 GHz
+  Num. paths (Min, Avg, Max): 0, 6.21, 10
+  Num. total blockage:        46774
+  LOS percentage:             19.71%
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Draw a map of the scenario showing the Line-Of-Sight (LOS) vs Non-Line-Of-Sight (NLOS) communication</span>
+<span class="c1"># between the UEs and the base station.</span>
+<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">)</span>  <span class="c1"># Also try &quot;1stPathDelays&quot; or &quot;1stPathPowers&quot;</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 742.518x471.734 with 1 Axes&gt;,
+ &lt;Axes: title={&#39;center&#39;: &#39;Map of LOS/NLOS paths&#39;}, xlabel=&#39;X&#39;, ylabel=&#39;Y&#39;&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_RayTracing_DeepMimo_4_1.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_DeepMimo_4_1.png" />
+</div>
+</div>
+<section id="Creating-Random-Trajectory">
+<h2>Creating Random Trajectory<a class="headerlink" href="#Creating-Random-Trajectory" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let&#39;s create a random trajectory:</span>
+<span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>     <span class="c1"># Remark this out if you want new random trajectories on each run.</span>
+
+<span class="c1"># The points on a trajectory are determined by the timing of slots within 3GPP subframes, which are</span>
+<span class="c1"># governed by a specific numerology. The “getRandomTrajectory” function utilizes a BandwidthPart object</span>
+<span class="c1"># to extract the necessary timing information. Therefore, let’s first create the Carrier and BandwidthPart</span>
+<span class="c1"># objects.</span>
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span> <span class="c1"># Carrier with 25 Resource Blocks, 15KHz subcarrier spacing</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>                                <span class="c1"># The only bandwidth part in the carrier</span>
+
+<span class="c1"># We need to specify the bounding box of the trajectory. Here we select a wide area</span>
+<span class="c1"># from the map that has both LOS and NLOS points:</span>
+<span class="n">xyBounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">210</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="mi">100</span><span class="p">]])</span>    <span class="c1"># [[minX, minY], [maxX, maxY]]</span>
+<span class="n">segLen</span> <span class="o">=</span> <span class="mi">5</span>                                        <span class="c1"># The number of grid points on the shortest segment</span>
+
+<span class="n">trajectory</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">getRandomTrajectory</span><span class="p">(</span><span class="n">xyBounds</span><span class="p">,</span> <span class="n">segLen</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span>
+                                              <span class="n">trajLen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>            <span class="c1"># Number of grid points on trajectory</span>
+                                              <span class="n">speedMps</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>           <span class="c1"># Speed in mps (Walking)</span>
+<span class="c1"># Print the trajectory information:</span>
+<span class="n">trajectory</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+
+<span class="c1"># Draw the Map with the trajectory:</span>
+<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Trajectory Properties:
+  start (x,y,z):         (-164.55, 39.83, 1.50)
+  No. of points:         203482
+  curIdx:                0 (0.00%)
+  curSpeed:              [0.85 0.85 0.  ]
+  Total distance:        244.15 meters
+  Total time:            203.481 seconds
+  Average Speed:         1.200 mps
+  Carrier Frequency:     3.5 GHz
+  Paths (Min, Avg, Max): 3, 8.87, 10
+  Totally blocked:       0
+  LOS percentage:        27.38%
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 742.518x471.734 with 1 Axes&gt;,
+ &lt;Axes: title={&#39;center&#39;: &#39;Map of LOS/NLOS paths&#39;}, xlabel=&#39;X&#39;, ylabel=&#39;Y&#39;&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_RayTracing_DeepMimo_6_2.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_DeepMimo_6_2.png" />
+</div>
+</div>
+</section>
+<section id="Interactively-trajectory-generation">
+<h2>Interactively trajectory generation<a class="headerlink" href="#Interactively-trajectory-generation" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can also define your own trajectory interactively by selecting points on the map. The function</span>
+<span class="c1"># “interactiveTrajPoints” can be used to obtain a list of points on the map representing the trajectory.</span>
+<span class="c1"># This function opens a new window displaying the current scenario’s map, and you can click on the points</span>
+<span class="c1"># of the trajectory one by one. Use left-click to select new points and right-click to undo last point.</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">interactiveTrajPoints</span><span class="p">(</span><span class="n">mapType</span><span class="o">=</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Selected Points:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">points</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running the interactive map for &#39;asu_campus_3p5&#39;...
+Done. 32 points selected.
+Selected Points:
+ [[-2.08244352e+02 -1.02666732e+02]
+ [-2.13703861e+02 -2.53236924e+01]
+ [-2.09154271e+02  1.97172539e+01]
+ [-2.00055090e+02  4.24652066e+01]
+ [-1.80036891e+02  5.88437325e+01]
+ [-1.43185208e+02  7.38573813e+01]
+ [-1.04058729e+02  8.20466442e+01]
+ [-5.49231514e+01  8.38664805e+01]
+ [ 1.26894117e-01  8.43214395e+01]
+ [ 5.83616530e+01  8.20466442e+01]
+ [ 1.07042272e+02  7.43123403e+01]
+ [ 1.46623709e+02  5.61139782e+01]
+ [ 1.60272481e+02  2.29019673e+01]
+ [ 1.62092317e+02 -1.25848389e+01]
+ [ 1.56632809e+02 -5.30761947e+01]
+ [ 1.45713791e+02 -9.22026733e+01]
+ [ 1.17961289e+02 -1.23594848e+02]
+ [ 8.11096057e+01 -1.34058906e+02]
+ [ 4.47128814e+01 -1.33603947e+02]
+ [-1.35218775e+01 -1.27234520e+02]
+ [-6.17475372e+01 -1.04031609e+02]
+ [-6.44772915e+01 -9.12927552e+01]
+ [-5.40132333e+01 -5.80807443e+01]
+ [-5.12834789e+01 -3.39679144e+01]
+ [-6.26574553e+01 -1.48596342e+01]
+ [-6.58421687e+01  5.61352322e+00]
+ [-5.44681923e+01  1.60775815e+01]
+ [-1.07921232e+01  1.15279909e+01]
+ [ 1.33207067e+01  3.79368701e+00]
+ [ 3.56137003e+01 -1.84993066e+01]
+ [ 3.74335365e+01 -5.44410719e+01]
+ [ 3.33389050e+01 -1.01756813e+02]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now create a trajectory using the selected points:</span>
+<span class="n">trajectory</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">trajectoryFromPoints</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">speedMps</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+<span class="c1"># Print the trajectory information:</span>
+<span class="n">trajectory</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+
+<span class="c1"># Draw the Map with the trajectory:</span>
+<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Trajectory Properties:
+  start:                       -208.55  -102.17    1.50
+  No. of points:               89407
+  curIdx:                      0 (0.00%)
+  curSpeed:                    [ 0.   14.08  0.  ]
+  Total distance:              1257.01 meters
+  Total time:                  89.406 seconds
+  Average Speed:               14.060 mps
+  Carrier Frequency:           3.5 GHz
+  Num. paths (Min, Avg, Max):  3, 9.10, 10
+  Num. totally blocked points: 0
+  LOS percentage:              43.25%
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&lt;Figure size 742.518x471.734 with 1 Axes&gt;,
+ &lt;Axes: title={&#39;center&#39;: &#39;Map of LOS/NLOS paths&#39;}, xlabel=&#39;X&#39;, ylabel=&#39;Y&#39;&gt;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_RayTracing_DeepMimo_9_2.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_DeepMimo_9_2.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../Channels/CdlChannelDataset.html" class="btn btn-neutral float-left" title="Creating random CDL channels for a dataset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="TrajChannel.html" class="btn btn-neutral float-right" title="Using the Trajectory-based Channel Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

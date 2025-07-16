@@ -2,16 +2,15 @@
 """
 The CSI Feedback implementation.
 """
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 # Revision History:
 # Date Changed  By                      Description
-# ------------  --------------------    --------------------------------------------------------------------------------------------------------------
-# 06/05/2023    Shahab Hamidi-Rad       First version of the file.
-# 12/01/2023    Shahab Hamidi-Rad       Completed the documentation
-# ****************************************************************************************************************************************************
+# ------------  --------------------    --------------------------------------------------------------------------------
+# 06/05/2024    Shahab Hamidi-Rad       First version of the file.
+# **********************************************************************************************************************
 import numpy as np
 
-# ****************************************************************************************************************************************************
+# **********************************************************************************************************************
 # This implementation is based on:
 #   TS 38.214 V17.0.0 (2021-12)
 # Also see:
@@ -19,7 +18,7 @@ import numpy as np
 #   The book: 5G NR The next generation wireless access technology, Sections 8.2, 11.2,
 
 
-# Star with: (See hDLPMISelect.m)
+# Start with: (See hDLPMISelect.m)
 #    1) getCodebook function
 #    2) computeSINRPerRE function
 
@@ -77,23 +76,102 @@ cxy = [[0,  0,   0,   0],       #  0
        [14, 91,  364, 1001],    #  14
        [15, 105, 455, 1365]]    #  15
 
-# ****************************************************************************************************************************************************
+cqiTables = [None, # There is no table 0
+             # TS 38.214, Table 5.2.2.1-2: 4-bit CQI Table 1
+             # modulation  codeRate*1024   efficiency   CQI index
+             [[None,       None,           None],       # 0: (Out of Range)
+             [ 'QPSK',     78,             0.1523],     # 1
+             [ 'QPSK',     120,            0.2344],     # 2
+             [ 'QPSK',     193,            0.3770],     # 3
+             [ 'QPSK',     308,            0.6016],     # 4
+             [ 'QPSK',     449,            0.8770],     # 5
+             [ 'QPSK',     602,            1.1758],     # 6
+             [ '16QAM',    378,            1.4766],     # 7
+             [ '16QAM',    490,            1.9141],     # 8
+             [ '16QAM',    616,            2.4063],     # 9
+             [ '64QAM',    466,            2.7305],     # 10
+             [ '64QAM',    567,            3.3223],     # 11
+             [ '64QAM',    666,            3.9023],     # 12
+             [ '64QAM',    772,            4.5234],     # 13
+             [ '64QAM',    873,            5.1152],     # 14
+             [ '64QAM',    948,            5.5547]],    # 15
+
+             # TS 38.214, Table 5.2.2.1-3: 4-bit CQI Table 2
+             # modulation  codeRate*1024   efficiency   CQI index
+             [[None,       None,           None],       # 0: (Out of Range)
+             [ 'QPSK',     78,             0.1523],     # 1
+             [ 'QPSK',     193,            0.3770],     # 2
+             [ 'QPSK',     449,            0.8770],     # 3
+             [ '16QAM',    378,            1.4766],     # 4
+             [ '16QAM',    490,            1.9141],     # 5
+             [ '16QAM',    616,            2.4063],     # 6
+             [ '64QAM',    466,            2.7305],     # 7
+             [ '64QAM',    567,            3.3223],     # 8
+             [ '64QAM',    666,            3.9023],     # 9
+             [ '64QAM',    772,            4.5234],     # 10
+             [ '64QAM',    873,            5.1152],     # 11
+             [ '256QAM',   711,            5.5547],     # 12
+             [ '256QAM',   797,            6.2266],     # 13
+             [ '256QAM',   885,            6.9141],     # 14
+             [ '256QAM',   948,            7.4063]],    # 15
+             
+             # TS 38.214, Table 5.2.2.1-4: 4-bit CQI Table 3
+             # modulation  codeRate*1024   efficiency   CQI index
+             [[None,       None,           None],       # 0: (Out of Range)
+             [ 'QPSK',      30,            0.0586],     # 1
+             [ 'QPSK',      50,            0.0977],     # 2
+             [ 'QPSK',      78,            0.1523],     # 3
+             [ 'QPSK',      120,           0.2344],     # 4
+             [ 'QPSK',      193,           0.3770],     # 5
+             [ 'QPSK',      308,           0.6016],     # 6
+             [ 'QPSK',      449,           0.8770],     # 7
+             [ 'QPSK',      602,           1.1758],     # 8
+             [ '16QAM',     378,           1.4766],     # 9
+             [ '16QAM',     490,           1.9141],     # 10
+             [ '16QAM',     616,           2.4063],     # 11
+             [ '64QAM',     466,           2.7305],     # 12
+             [ '64QAM',     567,           3.3223],     # 13
+             [ '64QAM',     666,           3.9023],     # 14
+             [ '64QAM',     772,           4.5234]],    # 15
+             
+             # TS 38.214, Table 5.2.2.1-5: 4-bit CQI Table 4
+             # modulation  codeRate*1024   efficiency   CQI index
+             [[None,       None,           None],       # 0: (Out of Range)
+             [ 'QPSK',     78,             0.1523],     # 1
+             [ 'QPSK',     193,            0.377],      # 2
+             [ 'QPSK',     449,            0.877],      # 3
+             [ '16QAM',    378,            1.4766],     # 4
+             [ '16QAM',    616,            2.4063],     # 5
+             [ '64QAM',    567,            3.3223],     # 6
+             [ '64QAM',    666,            3.9023],     # 7
+             [ '64QAM',    772,            4.5234],     # 8
+             [ '64QAM',    873,            5.1152],     # 9
+             [ '256QAM',   711,            5.5547],     # 10
+             [ '256QAM',   797,            6.2266],     # 11
+             [ '256QAM',   885,            6.9141],     # 12
+             [ '256QAM',   948,            7.4063],     # 13
+             [ '1024QAM',  853,            8.3301],     # 14
+             [ '1024QAM',  948,            9.2578]]]    # 15
+
+cqiTableBLERs = [None, 0.1, 0.1, 0.1, 0.00001, 0.1]     # See TS 38.214, Section 5.2.2.1
+
+# **********************************************************************************************************************
 class CsiReport:  # CSI-ReportConfig
-    # ************************************************************************************************************************************************
-    def __init__(self, **kwargs):
+    # ******************************************************************************************************************
+    def __init__(self, csiRsConfig, **kwargs):
             
         self.reportId = kwargs.get('id', 0)
-        self.bwp = kwargs.get('bwp', None)
         
         # This is the same CSI-RS config as the one used for channel estimation. It must not have any ZP resources.
-        self.csiRsConfig = kwargs.get('csiRsConfig', None)
-        if self.csiRsConfig is None:                raise ValueError( "`csiRsConfig` must be specified." )
-        for csiRsSet in self.csiRsConfig.csiRsSetList:
-            if csiRsSet.csiType=="ZP":              raise ValueError( "`ZP` resources are not allowed in 'csiRsConfig'." )
+        self.csiRsConfig = csiRsConfig
+        self.bwp = self.csiRsConfig.bwp             # Get the bandwidth part info from the CsiRsConfig object
+        for csiRsSet in self.csiRsConfig.csiRsSetList:  # Make sure there are no ZP resources
+            if csiRsSet.csiType=="ZP":  raise ValueError( "`ZP` resources are not allowed in 'csiRsConfig'." )
         
-        self.measurementRes = kwargs.get('measurementRes', [])      # (resourcesForChannelMeasurement) -> A list of CsiRsConfig classes
-        self.interfereResIm = kwargs.get('interfereResIm', [])      # (csi-IM-ResourcesForInterference) -> A list of CsiRsConfig classes
-        self.interfereResNzp = kwargs.get('interfereResNzp', [])    # (csi-IM-ResourcesForInterference) -> A list of CsiRsConfig classes
+        # These are lists of CsiRsConfig objects
+        self.measurementRes = kwargs.get('measurementRes', [])      # resourcesForChannelMeasurement
+        self.interfereResIm = kwargs.get('interfereResIm', [])      # csi-IM-ResourcesForInterference
+        self.interfereResNzp = kwargs.get('interfereResNzp', [])    # csi-IM-ResourcesForInterference
 
         self.reportType = kwargs.get('reportType', "Periodic")      # higher layer parameter "reportConfigType"
         validateRange(self.reportType, ["Periodic", "SpOnPUCCH", "SpOnPUSCH", "Aperiodic"])
@@ -101,21 +179,32 @@ class CsiReport:  # CSI-ReportConfig
         self.offset = kwargs.get('offset', 0)                       # Used for Periodic, SpOnPUCCH, and SpOnPUSCH cases
 
         if self.reportType in ["Periodic", "SpOnPUCCH"]:    validateRange(self.period, [5, 10, 20, 40, 80, 160, 320])
-        elif self.reportType == "SpOnPUSCH":                validateRange(self.period, [4, 5, 8, 10, 16, 20, 32, 40, 80, 160, 320])
+        elif self.reportType == "SpOnPUSCH":    validateRange(self.period, [4, 5, 8, 10, 16, 20, 32, 40, 80, 160, 320])
         validateRange(self.offset, (0,self.period-1))
 
-        # quantity (reportQuantity) indicates what to measure. The type of quatities can be CSI-related or L1-RSRP-related
-        # See 5.2.1.4.2:
-        # 'none', 'cri-RI-PMI-CQI ', 'cri-RI-i1', 'cri-RI-i1-CQI', 'cri-RI-CQI', 'cri-RSRP', 'cri-SINR', 'ssb-Index-RSRP', 'ssb-Index-SINR',
-        # 'cri-RI-LI-PMI-CQI', 'cri-RSRP-Index', 'ssb-Index-RSRP-Index', 'cri-SINR-Index', 'ssb-Index-SINR-Index' or 'tdcp'.
+        # quantity (reportQuantity) indicates what to measure. The type of quatities can be CSI-related
+        # or L1-RSRP-related See 5.2.1.4.2:
+        #   'none', 'cri-RI-PMI-CQI ', 'cri-RI-i1', 'cri-RI-i1-CQI', 'cri-RI-CQI', 'cri-RSRP', 'cri-SINR',
+        #   'ssb-Index-RSRP', 'ssb-Index-SINR', 'cri-RI-LI-PMI-CQI', 'cri-RSRP-Index', 'ssb-Index-RSRP-Index',
+        #   'cri-SINR-Index', 'ssb-Index-SINR-Index' or 'tdcp'.
+        # CRI: CSI-RS Resource Indicator
         self.quantity = kwargs.get('quantity', 'CriRiPmiCqi')   # See 3GPP TS 38.214, Section 5.2.1.4
-        validateRange(self.quantity,
-                      ['CriRiPmiCqi', 'CriRiLiPmiCqi', 'CriRiI1', 'CriRiCqi', 'CriRiI1Cqi', 'CriRsrp', 'SsbRIdxRsrp', 'CriSinr', 'SsbIdxSinr'])
+        validateRange(self.quantity, ['CriRiPmiCqi', 'CriRiLiPmiCqi', 'CriRiI1', 'CriRiCqi', 'CriRiI1Cqi',
+                                      'CriRsrp', 'SsbRIdxRsrp', 'CriSinr', 'SsbIdxSinr'])
+
+        # See section 5.2.1.4.2 for more about the following quantity values:
+        # cri-RI-i1 ->     Wideband PMI and typeI-SinglePanel
+        # cri-RI-i1-CQI -> Wideband PMI and typeI-SinglePanel and use random i2 for CQI
+        # cri-RI-CQI ->    
+
+
+
 
         # This enables/disables the group beam based reporting. If enabled, UE shall report different CRI or SSBRI for
-        # each report setting in a single report, otherwise, UE shall report in a single reporting instance two different
-        # CRI or SSBRI for each report setting, where CSI-RS and/or SSB resources can be received simultaneously by the UE
-        # either with a single spatial domain receive filter, or with multiple simultaneous spatial domain receive filters.
+        # each report setting in a single report, otherwise, UE shall report in a single reporting instance two
+        # different CRI or SSBRI for each report setting, where CSI-RS and/or SSB resources can be received
+        # simultaneously by the UE either with a single spatial domain receive filter, or with multiple simultaneous
+        # spatial domain receive filters.
         self.groupBeams = kwargs.get('groupBeams', True)
         noOfRepRS = kwargs.get('noOfRepRS', 1) # (nrofReportedRS) Ignored when 'groupBeams' is True
         if not self.groupBeams:     validateRange(self.noOfRepRS, (1,4))
@@ -135,13 +224,15 @@ class CsiReport:  # CSI-ReportConfig
                 raise ValueError("The antenna configuration is missing! (A 'txAntenna' or n1/n2 values must be specified)")
             if self.ng is None: self.ng = 1     # Set ng to 1 when it is not used
         else:
-            if self.txAntenna.__class__.__name__ == 'AntennaPanel':
+#            if self.txAntenna.__class__.__name__ == 'AntennaPanel':
+            if isinstance(self.txAntenna, AntennaPanel):
                 self.ng = 1
                 if self.codebookType == 'Type1MP':
                     raise ValueError("Single-Panel 'txAntenna' is configured with Multi-Panel 'codebookType' (Type1MP)!")
                 self.n2, self.n1 = self.txAntenna.shape
                 
-            elif self.txAntenna.__class__.__name__ == 'AntennaArray':
+#            elif self.txAntenna.__class__.__name__ == 'AntennaArray':
+            elif isinstance(self.txAntenna, AntennaArray):
                 self.ng = np.prod(self.txAntenna.shape)
                 if (self.ng>1) and (self.codebookType == 'Type1SP'):
                     raise ValueError("Multi-Panel 'txAntenna' is configured with Single-Panel 'codebookType' (Type1SP)!")
@@ -151,13 +242,16 @@ class CsiReport:  # CSI-ReportConfig
                 raise ValueError("Unsupported antenna class '%s'!"%(self.txAntenna.__class__.__name__))
 
         if self.codebookType in ['Type1SP', 'Type2']:
-            if "%d-%d"%(self.n1,self.n2) not in ["1-1","2-1","2-2","4-1","3-2","6-1","4-2","8-1","4-3","6-2","12-1","4-4","8-2","16-1"]:
+            validN1N2Combs = ["1-1","2-1","2-2","4-1","3-2","6-1","4-2","8-1","4-3","6-2","12-1","4-4","8-2","16-1"]
+            if "%d-%d"%(self.n1,self.n2) not in validN1N2Combs:
                 raise ValueError("Invalid N1-N2 combination %d-%d. See TS 38.214, Table 5.2.2.2.1-2"%(self.n1,self.n2))
         elif self.codebookType == 'Type1MP':
-            if "%d-%d-%d"%(self.ng,self.n1,self.n2) not in ["2-2-1", "2-4-1", "4-2-1", "2-2-2", "2-8-1", "4-4-1", "2-4-2", "4-2-2"]:
+            validNgN1N2Combs = ["2-2-1", "2-4-1", "4-2-1", "2-2-2", "2-8-1", "4-4-1", "2-4-2", "4-2-2"]
+            if "%d-%d-%d"%(self.ng,self.n1,self.n2) not in validNgN1N2Combs:
                 raise ValueError("Invalid Ng-N1-N2 combination %d-%d-%d. See TS 38.214, Table 5.2.2.2.2-1"%(self.ng,self.n1,self.n2))
 
-        if self.codebookType in ['Type1SP', 'Type1MP']:     # 'codebookMode' is only used when codebookType is 'Type1SP' or 'Type1MP'
+        # 'codebookMode' is only used when codebookType is 'Type1SP' or 'Type1MP'
+        if self.codebookType in ['Type1SP', 'Type1MP']:
             self.codebookMode = kwargs.get('codebookMode', 1)
             if self.ng==4:  validateRange(self.codebookMode, 1, " when Ng is 4")    # TS 38.214, Sec. 5.2.2.2.2
             else:           validateRange(self.codebookMode, [1,2])
@@ -200,21 +294,97 @@ class CsiReport:  # CSI-ReportConfig
             self.subbandAmp = kwargs.get('subbandAmp', False)       # See subbandAmplitude
 
         # The size of Precoding RB groups (PRGs). See 3GPP TS 38.214, Section 5.1.2.3
-        self.prgSize = kwargs.get('prgSize', 0)     # 0 means 'Wideband' which means a single precoding is used for all PRBs
-        if self.prgSize not in [0,2,4]:                             raise ValueError("'prgSize' must be 0 (Wideband), 2, or 4)")
+        # If this is provided, it will be used instead of subbandSizePmi below.
+        # 0 means 'Wideband' which means a single precoding is used for all PRBs
+        # This is the higher layer parameter "pdsch-BundleSizeForCSI" mentioned in 3GPP TS 38.214, Section 5.2.1.4.2
+        self.prgSize = kwargs.get('prgSize', None)
+        if self.prgSize is not None:
+            if self.prgSize not in [0,2,4]:             raise ValueError("'prgSize' must be 0 (Wideband), 2, or 4)")
 
         # subbandSize: See 3GPP TS 38.214, Table 5.2.1.4-2
-        subbandSizeValues = [0]
         if self.bwp.numRbs<24:      subbandSizeValues = [0]      # No subbands if BWP size is less than 24
         elif self.bwp.numRbs<73:    subbandSizeValues = [4, 8]
         elif self.bwp.numRbs<145:   subbandSizeValues = [8, 16]
         else:                       subbandSizeValues = [16, 32]
-        self.subbandSize = kwargs.get('subbandSize', subbandSizeValues[0])
-        validateRange(self.subbandSize, subbandSizeValues)
-        
+        subbandSize = kwargs.get('subbandSize', subbandSizeValues[0])
+        validateRange(subbandSize, subbandSizeValues)
+        self.subbandSizePmi = kwargs.get('subbandSizePmi', subbandSize)
+        self.subbandSizeCqi = kwargs.get('subbandSizeCqi', subbandSize)
+        validateRange(self.subbandSizePmi, subbandSizeValues)
+        validateRange(self.subbandSizeCqi, subbandSizeValues)
+
+        # See 3GPP TS 38.214, Section 5.2.2.1 for the cqi-table values:
+        #   1 -> 'table1'     -> Table 5.2.2.1-2   Error Prob: 0.1
+        #   2 -> 'table2'     -> Table 5.2.2.1-3   Error Prob: 0.1
+        #   3 -> 'table3'     -> Table 5.2.2.1-4   Error Prob: 0.00001
+        #   4 -> 'table4-r17' -> Table 5.2.2.1-5   Error Prob: 0.1
         self.cqiTable = kwargs.get('cqiTable', 1)
-        validateRange(self.cqiTable, [1,2,3])
-    
+        validateRange(self.cqiTable, [1,2,3,4])
+
+
+    # ******************************************************************************************************************
+    def __repr__(self):     return self.print(getStr=True)
+    def print(self, indent=0, title=None, getStr=False):
+        r"""
+        Prints the properties of this CsiReport object.
+
+        Parameters
+        ----------
+        indent : int
+            The number of indentation characters.
+            
+        title : str or None
+            If specified, it is used as a title for the printed information. If ``None`` (default), the text
+            "CSI Report Properties:" is used for the title.
+
+        getStr : Boolean
+            If ``True``, returns a text string instead of printing it.
+
+        Returns
+        -------
+        None or str
+            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            Otherwise, nothing is returned.
+        """
+        if title is None:   title = "CSI Report Properties:"
+        repStr = "\n" if indent==0 else ""
+        repStr += indent*' ' + title + "\n"
+        repStr += indent*' ' + f"  Report ID:            {self.reportId}\n"
+        repStr += indent*' ' + f"  Report Type:          {self.reportType}\n"
+        repStr += indent*' ' + f"  codebookType:         {self.codebookType}\n"
+        if self.codebookType in ['Type1SP', 'Type1MP']:
+            repStr += indent*' ' + f"  codebookMode:         {self.codebookMode}\n"
+        if self.reportType in ["Periodic", "SpOnPUCCH", "SpOnPUSCH"]:
+            repStr += indent*' ' + f"  period:               {self.period}\n"
+            repStr += indent*' ' + f"  offset:               {self.offset}\n"
+        repStr += indent*' ' + f"  quantity:             {self.quantity}\n"
+        repStr += indent*' ' + f"  groupBeams:           {self.groupBeams}\n"
+        if not self.groupBeams:
+            repStr += indent*' ' + f"  noOfRepRS:            {self.noOfRepRS}\n"
+        repStr += indent*' ' + f"  Ng x N1 x N2:         {self.ng} x {self.n1} x {self.n2}\n"
+        if self.codebookType in ['Type1SP', 'Type1MP']:
+            repStr += indent*' ' + f"  o1 x o2:              {self.o1} x {self.o2}\n"
+        repStr += indent*' ' + f"  numPorts:             {self.numPorts}\n"
+        repStr += indent*' ' + f"  cbSubsetRestriction:  {self.cbSubsetRestriction}\n"
+        repStr += indent*' ' + f"  cbSubsetRestrictionI2:{self.cbSubsetRestrictionI2}\n"
+        repStr += indent*' ' + f"  cbRiRestriction:      {self.cbRiRestriction}\n"
+
+        if self.codebookType=='Type2':
+            repStr += indent*' ' + f"  numBeams:             {self.numBeams}\n"
+            repStr += indent*' ' + f"  pskSize:              {self.pskSize}\n"
+            repStr += indent*' ' + f"  subbandAmp:           {self.subbandAmp}\n"
+
+        repStr += indent*' ' + f"  prgSize:              {self.prgSize}\n"
+        repStr += indent*' ' + f"  subbandSizePmi:       {self.subbandSizePmi}\n"
+        repStr += indent*' ' + f"  subbandSizeCqi:       {self.subbandSizeCqi}\n"
+        repStr += indent*' ' + f"  cqiTable:             {self.cqiTable}\n"
+
+        if getStr: return repStr
+        print(repStr)
+
+    def getEffectiveSINR(self):
+        pass
+
 #    # ************************************************************************************************************************************************
 #    def getAllowedRanks(self, numRxAntenna):
 #        if self.codebookType == 'Type1SP':      numPorts = min(self.csiRsConfig.numPorts, numRxAntenna, 8)
@@ -232,9 +402,9 @@ class CsiReport:  # CSI-ReportConfig
 #        
 #        for rank in allowedRanks:
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def removeNeighbors(self, idx):
-        # idx is the 2D indexes (port removed). It is a tuple (x, y).
+        # idx is the 2D indices (port removed). It is a tuple (x, y).
         # We have a CSI-RS RE at symbol x[i], and subcarrier y[i].
         # We want to use only one RE for a set of Neighboring REs (i.e. the ones in the same CDM group)
         bmp = np.ones((idx[0].max()+3,idx[1].max()+3),dtype=np.int8)*2
@@ -246,15 +416,15 @@ class CsiReport:  # CSI-ReportConfig
         x,y = np.where(bmp==1)
         return (x-1,y-1)
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def getSINR(self, h, w, noiseVar):
         # h: L x K x Nr x Nt  or n x Nr x Nt
         # w: Ncb x Nt x Nl   (Note that Nl<= min(Nr,Nt)) (Ncb: codebook size)
         # Returns Ncb x n x nl
         h = h.reshape(-1, h.shape[-2], h.shape[-1])          # n x Nr x Nt   (n=L*K if h is 4D)
         heff = np.matmul(h[None,:,:,:],w[:,None,:,:],axes=[(2,3),(2,3),(2,3)])       # Ncb x n x Nr x Nl
-        u, s, vH = np.linalg.svd(heff, full_matrices=False)  # Ncb x n x Nr x Nl , Ncb x n x Nl, Ncb x n x Nl x Nl
-        noisyInvS = 1/(np.square(s)+noiseVar)                # n x Nl
+        u, s, vH = np.linalg.svd(heff, full_matrices=True)  # Ncb x n x Nr x Nl , Ncb x n x Nl, Ncb x n x Nl x Nl
+        noisyInvS = 1/(np.square(np.abs(s))+noiseVar)                # Ncb x n x Nl
         # Calculating (V . noisyInvS . VH) is the same as:
         #  1) expanding dimensions of 'noisyInvS',  n x Nl =>                  Ncb x n x Nl x 1
         #  2) calculating V.VH witch is the same square of magnitude of V      Ncb x n x Nl x Nl
@@ -263,57 +433,134 @@ class CsiReport:  # CSI-ReportConfig
         gamma = 1/(noiseVar*(noisyInvS[:,:,:,None] * np.square(np.abs(vH))).sum(2)) - 1
         return gamma.real         # Ncb x n x Nl
         
-    # ************************************************************************************************************************************************
-    def getPmi(self, channel, numLayers, noiseVar):
+    # ******************************************************************************************************************
+    def subbands(self, sbSize):
+        rb = self.bwp.startRb
+        endRb = rb + self.bwp.numRbs
+        sb = 0
+        while rb < endRb:
+            # calculate rbsInSb: the number of RBs in this subband
+            if sb==0:                   rbsInSb = sbSize - (rb % sbSize)
+            elif (rb+sbSize)>endRb:     rbsInSb = endRb % sbSize
+            else:                       rbsInSb = sbSize
+
+            yield rbsInSb
+            rb, sb = rb+rbsInSb, sb+1
+
+    # ******************************************************************************************************************
+    def bestPmiForRank(self, channel, numLayers, noiseVar):
         csiRsGrid = self.bwp.createGrid(self.numPorts)
         self.csiRsConfig.populateGrid(csiRsGrid)
-        csiRsIndexes = grid.getReIndexes("CSIRS_NZP")               # A tuple of (ports, symbols, subcarriers)
-        p0Idx = np.where(csiRsIndexes[0]==0)[0]                     # Indexes in the csiRsIndexes corresponding to port 0
-        csiRsIndexesP0 = (idxes[1][p1Idxes], idxes[2][p1Idxes])     # A tuple of (symbols, subcarriers) corresponding to port 0
-        csiRsIndexesP0 = self.removeNeighbors(csiRsIndexesP0)       # keeps only one of the Neighboring REs from the ones in the same CDM group
-        hAtCsiRs = hActual[csiRsIndexesP0]                          # The channel values at the CSI-RS REs ->   Shape: numREs x Nr x Nt
+        csiRsIndexes = csiRsGrid.getReIndexes("CSIRS_NZP")      # A tuple of (ports, symbols, subcarriers)
+        p0Idx = np.where(csiRsIndexes[0]==0)[0]                 # Indexes in the csiRsIndexes corresponding to port 0
+        csiRsIndexesP0 = (csiRsIndexes[1][p0Idx], csiRsIndexes[2][p0Idx]) # A tuple of (symbols, subcarriers) for to port 0
+        csiRsIndexesP0 = self.removeNeighbors(csiRsIndexesP0)   # keeps only one of the Neighboring REs in a CDM group
+        hAtCsiRs = channel[csiRsIndexesP0]              # Channel values at the CSI-RS REs -> Shape: numREs x Nr x Nt
 
+        # Now get the codebook and calcualte the precoded SINR for each RE in each layer and each codebook entry
         cbIndexes, codebook = self.getCodebook(numLayers)           # Shape: Ncb x numPorts x numLayers
         sinrValues = self.getSINR(hAtCsiRs, codebook, noiseVar)     # Shape: Ncb x numREs x numLayers
 
-        # First find best precoder for the whole bandwidth (Wideband precoder). The 'i1' PMI indexes are the same for
-        # all subbands. 'i2' can be different for each subband. If there is only one subband (=wideband), then there is a single 'i2' which
-        # is the one for wideband.
-        sumSinrs = sinrValues.sum((1,2))                            # Sum all numREs and numLayers ->           Shape: Ncb
-        maxSinrIdx = sumSinrs.argmax()                              # Index of the max SINR corresponding to the best wideband precoder
+        # First find best precoder for the whole bandwidth (Wideband precoder). The 'i1' PMI indices are the same for
+        # all subbands. 'i2' can be different for each subband. If there is only one subband (=wideband), then there
+        # is a single 'i2' which is the one for wideband.
+        sumSinrs = sinrValues.sum((1,2))            # Sum over all numREs and numLayers one SINR per codebook entry
+        maxSinrIdx = sumSinrs.argmax()              # Index of the max SINR corresponding to the best wideband precoder
 
-        i1, i2 = cbIndexes[maxSinrIdx]                              # Wideband PMI indexes (i1 and i2)
-        w = [ codebook[maxSinrIdx] ]                                # The wideband precoding Matrix
-        pmi = [i1, [i2]]
+        widebandI1, widebandI2 = cbIndexes[maxSinrIdx]      # Wideband PMI indices (i1 and i2)
+        widebandW = [ codebook[maxSinrIdx] ]                # The wideband precoding Matrix
 
-        if self.subbandSize > 0:                                    # We have numSubbands≠1 subbands
-            # Now we need to find best i2 and w for each subband
-            numSubbands = self.bwp.numRbs//self.subbandSize         # number of subbands
-            if (numSubbands*self.subbandSize) != self.bwp.numRbs:   ValueError( "BWP size must be a multiple of 'subbandSize'.")
+        # Getting the subband size used in the rest of this function:
+        # If prgSize is not provided, use 0 (wideband) if BWP is smaller than 24 PRB or subbandSizePmi otherwise
+        # Otherwise use prgSize (Regardless of BWP size)
+        if self.prgSize is None:    sbSize = self.subbandSizePmi if self.bwp.numRbs>=24 else 0
+        else:                       sbSize = self.prgSize
+        if sbSize == 0:                             # If Wideband PMI is requested, we are done
+            return [widebandI1, [widebandI2]], [ widebandW ], [ sinrValues[maxSinrIdx] ]
+        
+        # Now find an i2 and a precoder for each subband (i1 is the same for all)
+        reIndexes = csiRsIndexesP0[1]
+        
+        # Indices of codebook entries with i1 = widebandI1:
+        i1CodebookIndexes = [i for i, cbIdx in enumerate(cbIndexes) if np.all(cbIdx[0]==widebandI1)]
+
+        subbandI2s, subbandWs, sbReSinr = [], [], []
+        rb = 0
+        for sb, rbsInSb in enumerate(self.subbands(sbSize)):
+            # Indexes to the indices of REs in 'reIndexes' that are in this subband
+            sbReIndexes = np.where( (reIndexes>=(rb*12)) & (reIndexes<(rb+rbsInSb)*12) )[0]
+            if sbReIndexes.size == 0:
+                raise ValueError(f"Invalid CSI-RS config. Subband {sb} does not have any CSI-RS REs!")
+
+            # All SINR values for the CSI-RS REs in this subband for all precoders in the codebook
+            sbSinrValues = sinrValues[:,sbReIndexes,:]              # Shape: Ncb x numSbREs x numLayers
             
-            reIndexes = csiRsIndexesP0[1]
-            i2 = []                                                 # We have 'numSubbands' i2 indexes one for each subband
-            w = []                                                  # We have 'numSubbands' precoders one for each subband
-            
-            # Indexes of precoders in the codebook where their i1 index is the same as the wideband i1 calculated above
-            i1CodebookIndexes = [i for i in len(cbIndexes) if np.all(cbIndexes[i][0]==i1)]
+            # All SINR values for the CSI-RS REs in this subband for the precoders in the codebook wiht i1 = widebandI1
+            i1SbSinrValues = sbSinrValues[i1CodebookIndexes,:,:]    # Shape: NcbI1 x numSbREs x numLayers
 
-            for sb in range(numSubbands):
-                sbReIndexes = np.where( (reIndexes>=(sb*12)) & (reIndexes<(sb+self.subbandSize)*12) )[0]    # 1D array of indexes in this subband
-                sbSinrValues = sinrValues[:,sbReIndexes,:]              # SINR values for REs in this subband   Shape: Ncb x numSbREs x numLayers
-                i1SbSinrValues = sbSinrValues[i1CodebookIndexes,:,:]    # SINR for this subband and i1Codebook  Shape: NcbI1 x numSbREs x numLayers
-                i1SbSumSinrs = i1SbSinrValues.sum((1,2))                # Sum all subband REs and layers        Shape: NcbI1
-                i1SbMaxSinrIdx = i1SbSumSinrs.argmax()                  # Index of best precoder in the i1Codebook for this subband
-                sbMaxSinrIdx = i1CodebookIndexes[i1SbMaxSinrIdx]        # Index of best precoder in the codebook for this subband
-                sbi1, sbi2 = cbIndexes[sbMaxSinrIdx]                    # Subband i2
-                i2 += [ sbi2 ]                                          # Save the i2 for this subband
-                w  += [ codebook[ sbMaxSinrIdx ] ]                      # Save the precoder for this subband
+            # Sum over REs and Layers => One SINR per codebook entry wiht i1 = widebandI1:
+            i1SbSumSinrs = i1SbSinrValues.sum((1,2))                # Shape: NcbI1
 
-            pmi = [i1, i2]
-            
-        return pmi, w
+            # Indexes of best precoder for this subband in i1CodebookIndexes
+            i1SbMaxSinrIdx = i1SbSumSinrs.argmax()
 
-    # ************************************************************************************************************************************************
+            # Indices of the best precoder for this subband in the codebook
+            sbMaxSinrIdx = i1CodebookIndexes[i1SbMaxSinrIdx]
+
+            subbandI2s += [ cbIndexes[ sbMaxSinrIdx ][1] ]
+            subbandWs  += [ codebook[sbMaxSinrIdx] ]
+            sbReSinr   += [ i1SbSinrValues[i1SbMaxSinrIdx] ] # Subband SINRs per RE & Layer, Shape: numSbREs x numLayers
+            rb += rbsInSb
+                
+        return [widebandI1, subbandI2s], subbandWs, sbReSinr
+
+    # ******************************************************************************************************************
+    def getBestRank(self, channel, noiseVar):
+        l, k, nr, nt = channel.shape
+        if nt != self.numPorts:
+            raise ValueError("The given numver of transmit antenna from channel must mach the number of ports!")
+        if self.codebookType == 'Type1SP':    maxRank = min(nr, nt, 8)
+        elif self.codebookType == 'Type1MP':  maxRank = min(nr, 4)
+        elif self.codebookType == 'Type2':    maxRank = min(nr, 2)
+
+        # The leftmost bit in cbRiRestriction is for rank 1, bit value of 0 means the rank is restricted
+        ranks = [r for r in range(1,maxRank+1) if self.cbRiRestriction[-r]=='1']
+
+        bestSinr, bestRank, bestPmim, bestSbReSinr = -100000, 0, None, None
+        for rank in ranks:
+            pmi, ws, sbReSinr = self.bestPmiForRank(channel, rank, noiseVar)
+            sbSinr = np.float64([sinr.mean(0) for sinr in sbReSinr])    # Subband SINRs, Shape: numSb x numLayers
+            layerSinr = sbSinr.mean(0)*rank                             # SINR for each layer, Shape: numLayers
+            rankSinr = layerSinr.sum()
+            if rankSinr > bestSinr:   bestSinr, bestRank, bestPmi, bestSbReSinr = rankSinr, rank, pmi, sbReSinr
+
+        return bestRank, bestPmi, bestSbReSinr
+    
+    # ******************************************************************************************************************
+    def getCqiToPmiIdxes(self, pmiSbSize):
+        cqiSizes = [self.bwp.numRbs] if self.subbandSizeCqi==0 else [s for s in self.subbands(self.subbandSizeCqi)]
+        pmiSizes = [self.bwp.numRbs] if pmiSbSize==0 else [s for s in self.subbands(pmiSbSize)]
+        
+        cqiPmiIdxes = [[] for _ in cqiSizes]
+        pmi = 0
+        sumPmiSize = pmiSizes[0]
+        sumCqiSize = 0
+        for cqi,cqiSize in enumerate(cqiSizes):
+            cqiPmiIdxes[cqi] += [pmi]
+            sumCqiSize += cqiSize
+            while 1:
+                if sumPmiSize==sumCqiSize:
+                    pmi += 1
+                    if pmi<len(pmiSizes): sumPmiSize = pmiSizes[pmi]
+                    sumCqiSize = 0
+                    break
+                if sumPmiSize>sumCqiSize:   break
+                sumPmiSize += pmiSizes[pmi]
+                pmi+=1
+                cqiPmiIdxes[cqi] += [pmi]
+        return cqiPmiIdxes
+
+    # ******************************************************************************************************************
     def getCodebook(self, numLayers):
         indexes = []
         codebook = []
@@ -329,14 +576,14 @@ class CsiReport:  # CSI-ReportConfig
             codebook += [ self.getType1MpPrecoder(numLayers, i1, i2) ]
         return indexes, np.array(codebook)
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def v(self, l, m, tilde=False):
         if tilde in [True, '~']:    ul = np.exp( 4j*np.pi* l *np.arange(self.n1//2)/(self.n1*self.o1) )     # Shape: N1//2
         else:                       ul = np.exp( 2j*np.pi* l *np.arange(self.n1)/(self.n1*self.o1) )        # Shape: N1
         um = np.exp( 2j*np.pi* m *np.arange(self.n2)/(self.n2*self.o2) )                                    # Shape: N2
         return np.outer(ul, um)                                                                             # Shape: N1 x N2 or N1//2 x N2
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def getCombs(self, *argv):
         # Returns 2d numpy array. Each row is one combination. The i'th element loops through possible values 2^i times.
         lists = []
@@ -347,30 +594,32 @@ class CsiReport:  # CSI-ReportConfig
         lists = [lists[1]] + [lists[0]] + lists[2:]
         n = len(lists)
         a = list(range(n-1,1,-1)) + [0,1]
-        return np.array(np.meshgrid(*lists)).T.reshape(-1,n)[:,a]
-        
-    # ************************************************************************************************************************************************
+        return np.int32(np.meshgrid(*lists)).T.reshape(-1,n)[:,a].tolist()
+
+    # ******************************************************************************************************************
     def type1SpIndexes(self, numLayers):
         bb1, bb2 = self.n1*self.o1, self.n2*self.o2     # B1, B2 number of beams (horizontal and vertical)
         
-        if self.quantity=='CriRiI1Cqi': subsetRestrictionI2 = self.cbSubsetRestrictionI2    # See typeI-SinglePanel-codebookSubsetRestriction-i2
-        else:                           subsetRestrictionI2 = 16*'1'
+        if self.quantity=='CriRiI1Cqi':
+            subsetRestrictionI2 = self.cbSubsetRestrictionI2    # See typeI-SinglePanel-codebookSubsetRestriction-i2
+        else:
+            subsetRestrictionI2 = 16*'1'
         
         context = " with %d layers, CB Mode %d, %dx%d Ant"%(numLayers, self.codebookMode, self.n1, self.n2)
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if self.numPorts == 2:          # See TS 38.214, Table 5.2.2.2.1-1
             # Note that in this case "self.cbSubsetRestriction" is "twoTX-CodebookSubsetRestriction" in the spec.
             validateRange(numLayers, [1,2], " when 'numPorts' is 2")
             if numLayers == 1:          n1, pmiAllowed = 4, self.cbSubsetRestriction[-4:]   # 1st Column, Bits 0,1,2,3 (From right/end/lsb)
             elif numLayers == 2:        n1, pmiAllowed = 2, self.cbSubsetRestriction[-6:-4] # 2nd Column, Bits 4 and 5 (From right/end/lsb)
 
-            # In this case 'i1' is a single scaler integer. In all other cases it is a list of 2 or 3 values.
+            # In this case 'i1' is a single Scalar integer. In all other cases it is a list of 2 or 3 values.
             for i1 in range(4):
                 if pmiAllowed[i1]:
                     yield [i1,0,0], 0
                     
-        # ..................................................................................................................................
+        # ..............................................................................................................
         elif numLayers == 1:                                                # See TS 38.214, Table 5.2.2.2.1-5
             if self.codebookMode==1:
                 combs = self.getCombs(bb1, bb2, 4)                          # 1st Table
@@ -396,7 +645,7 @@ class CsiReport:  # CSI-ReportConfig
             else:
                 raise ValueError( "Unsupported case" + context + "!" )
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         elif numLayers == 2:                                                # See TS 38.214, Table 5.2.2.2.1-6
             i13Len = 2 if (self.n1==2 and self.n2==1) else 4                # See TS 38.214, Table 5.2.2.2.1-3
             if self.codebookMode==1:
@@ -423,7 +672,7 @@ class CsiReport:  # CSI-ReportConfig
             else:
                 raise ValueError( "Unsupported case" + context + "!" )
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         elif numLayers in [3,4]:                                                        # See TS 38.214, Tables 5.2.2.2.1-7 and Table 5.2.2.2.1-8
             if self.numPorts>=16:               i13Len = 4                              # This is from 2nd table of 5.2.2.2.1-7/5.2.2.2.1-8
             elif (self.n1==2 and self.n2==1):   i13Len = 1                              # This is from Table 5.2.2.2.1-4
@@ -444,7 +693,7 @@ class CsiReport:  # CSI-ReportConfig
                 if subsetRestrictionI2[ i2 ]=='0':                          continue
                 yield [i11,i12,i13], i2
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         elif numLayers in [5, 6]:                                                       # See TS 38.214, Tables 5.2.2.2.1-9 and 5.2.2.2.1-10
             if self.n2>1:                       combs = self.getCombs(bb1, bb2, 2)      # 1st row
             elif (self.n1>2) and (self.n2==1):  combs = self.getCombs(bb1, 1, 2)        # 2nd row
@@ -456,7 +705,7 @@ class CsiReport:  # CSI-ReportConfig
                 if subsetRestrictionI2[ i2 ]=='0':                          continue
                 yield [i11,i12,0], i2
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         elif numLayers in [7,8]:                                                        # See TS 38.214, Tables 5.2.2.2.1-11 and 5.2.2.2.1-12
             if (self.n1==4) and (self.n2==1):   combs = self.getCombs(bb1//2, 1, 2)     # 1st row
             elif (self.n1>4) and (self.n2==1):  combs = self.getCombs(bb1, 1, 2)        # 2nd row
@@ -472,7 +721,7 @@ class CsiReport:  # CSI-ReportConfig
         else:
             raise ValueError( "Unsupported number of layers %d! (codebookType: Type1SP)"%(self.numLayers) )
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def getType1SpPrecoder(self, numLayers, i1=0, i2=0):
         # See TS 38.214, Section 5.2.2.2.1
         # i1 can be a number, [i11,i12] or [i11,i12,i13]
@@ -484,9 +733,9 @@ class CsiReport:  # CSI-ReportConfig
         if not ( (type(i1) in [tuple, list]) and (len(i1)==3) ):    raise ValueError( "'i1' must be a tuple or list of length 3!" )
         i11,i12,i13 = i1
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if self.numPorts == 2:  # See TS 38.214, Table 5.2.2.2.1-1
-            # In this case only 'i11' is used (a single scaler integer)
+            # In this case only 'i11' is used (a single Scalar integer)
             if numLayers == 1:
                 validateRange(i11, (0,3), context)
                 codebook = np.array([ [[1], [1]], [[1], [1j]], [[1], [-1]], [[1], [-1j]] ])/np.sqrt(2)      # Shape: 4, 2, 1
@@ -500,7 +749,7 @@ class CsiReport:  # CSI-ReportConfig
             raise ValueError( "'numLayers' must be 1 or 2 when 'numPorts' is 2!" )
             
         # Now handling all the cases with more than 2 ports:
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 1:
             # Note: i13 is not used
             if self.codebookMode==1:                                    # See TS 38.214, Table 5.2.2.2.1-5 (1st Table)
@@ -530,7 +779,7 @@ class CsiReport:  # CSI-ReportConfig
             phi = np.exp( 1j*np.pi*n/2 )
             return np.concatenate([vlm, phi*vlm])/np.sqrt(self.numPorts)        # Shape: 2N1 x N2
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 2:
             i13Len = 2 if (self.n1==2 and self.n2==1) else 4    # From Table 5.2.2.2.1-3
             validateRange(i13, (0,i13Len-1), context)
@@ -607,7 +856,7 @@ class CsiReport:  # CSI-ReportConfig
                 if (self.n1==3) and (self.n2==2):       return (2*self.o1, 0)
             raise ValueError( "Unsupported N1/N2 combination (i1,3=%d, N1=%d, N2=%d)!"%(i13, self.n1,self.n2))
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 3:
             validateRange(i12, (0, bb2-1),    context)
             validateRange(i13, (0, i13Len-1), context)
@@ -634,7 +883,7 @@ class CsiReport:  # CSI-ReportConfig
                                         np.concatenate([phi*vtlm,       phi*vtlm,        -phi*vtlm      ], axis=-1),
                                         np.concatenate([theta*phi*vtlm, -theta*phi*vtlm, -theta*phi*vtlm], axis=-1) ])/np.sqrt(3*self.numPorts)
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 4:
             if not ( (type(i1) in [tuple, list]) and (len(i1)==3) ):    raiseError( "'i1' must be a tuple or list of length three!" )
             i11,i12,i13 = i1
@@ -664,7 +913,7 @@ class CsiReport:  # CSI-ReportConfig
                                         np.concatenate([theta*phi*vtlm, -theta*phi*vtlm, -theta*phi*vtlm, theta*phi*vtlm], axis=-1)
                                       ])/np.sqrt(4*self.numPorts)
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 5:                                              # See TS 38.214, Table 5.2.2.2.1-9
             validateRange(i11, (0, bb1-1), context)
             validateRange(i2,  [0,1],      context)
@@ -687,7 +936,7 @@ class CsiReport:  # CSI-ReportConfig
             return np.concatenate([ np.concatenate([vlm,     vlm,      vlmp, vlmp,  vlms], axis=-1),
                                     np.concatenate([phi*vlm, -phi*vlm, vlmp, -vlmp, vlms], axis=-1) ])/np.sqrt(5*self.numPorts)
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if self.numLayers == 6:                                         # See TS 38.214, Table 5.2.2.2.1-10
             validateRange(i11, (0, bb1-1), context)
             validateRange(i2,  [0,1],      context)
@@ -710,7 +959,7 @@ class CsiReport:  # CSI-ReportConfig
             return np.concatenate([ np.concatenate([vlm,     vlm,      vlmp,     vlmp,      vlms, vlms ], axis=-1),
                                     np.concatenate([phi*vlm, -phi*vlm, phi*vlmp, -phi*vlmp, vlms, -vlms], axis=-1) ])/np.sqrt(6*self.numPorts)
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 7:                                              # See TS 38.214, Table 5.2.2.2.1-11
             validateRange(i2,    [0,1],      context)
             phi = np.exp( 1j*np.pi*i2/2 )       # n=i2
@@ -748,7 +997,7 @@ class CsiReport:  # CSI-ReportConfig
             return np.concatenate([ np.concatenate([vlm,     vlm,      vlm1,     vlm2, vlm2,  vlm3, vlm3 ], axis=-1),
                                     np.concatenate([phi*vlm, -phi*vlm, phi*vlm1, vlm2, -vlm2, vlm3, -vlm3], axis=-1) ])/np.sqrt(7*self.numPorts)
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 8:                                              # See TS 38.214, Table 5.2.2.2.1-12
             validateRange(i2, [0,1], context)
             phi = np.exp( 1j*np.pi*i2/2 )       # n=i2
@@ -788,14 +1037,14 @@ class CsiReport:  # CSI-ReportConfig
             
         raise ValueError( "Unsupported number of layers %d! (codebookType: Type1SP)"%(self.numLayers) )
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def type1MpIndexes(self, numLayers):
         bb1, bb2 = self.n1*self.o1, self.n2*self.o2     # B1, B2 number of beams (horizontal and vertical)
         if self.numPorts<8:         raise ValueError( "Need at least 8 ports for Codebook Type 1 Multi-Panel!")
 
         context = " with %d layers, CB Mode %d, %dx%d Ant"%(numLayers, self.codebookMode, self.n1, self.n2)
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 1:                                                              # TS 38.214, Table 5.2.2.2.2-3
             if self.codebookMode==1:                                                    # 1st Table
                 validateRange(self.ng, [2,4], context)
@@ -818,7 +1067,7 @@ class CsiReport:  # CSI-ReportConfig
                     if self.cbSubsetRestriction[ bb2*l+m ]=='0':        continue        # See "bitmap parameter ng-n1-n2" in Sec. 5.2.2.2.2
                     yield [i11, i12, 0, [i141, i142]], [i20, i21, i22]
         
-        # ..................................................................................................................................
+        # ..............................................................................................................
         elif numLayers in [2,3,4]:                                                      # TS 38.214, Tables 5.2.2.2.2-4, 5.2.2.2.2-5, 5.2.2.2.2-6
             # For 'i13Len', See TS 38.214, Table 5.2.2.2.2-2
             if numLayers==2:                        i13Len = 2 if (self.n1==2 and self.n2==1) else 4    # From Table 5.2.2.2.1-3
@@ -847,11 +1096,11 @@ class CsiReport:  # CSI-ReportConfig
                     if self.cbSubsetRestriction[ bb2*l+m ]=='0':        continue        # See "bitmap parameter ng-n1-n2" in Sec. 5.2.2.2.2
                     yield [i11, i12, i13, [i141, i142]], [i20, i21, i22]
 
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def getType1MpPrecoder(self, numLayers, i1=0, i2=0):
         # See TS 38.214, Section 5.2.2.2.2
         # i1 can be a number, [i11,i12,i14] (when numLayers=1) or [i11,i12,i13,i14] (when numLayers∈{2,3,4})
-        # When codebookMode=1, i14 can be the scaler i141 (when ng=2) or [i141, i142, i143] (when ng=4)
+        # When codebookMode=1, i14 can be the Scalar i141 (when ng=2) or [i141, i142, i143] (when ng=4)
         # When codebookMode=2, i14 is [i141, i142] and i2 is [i20, i21, i22]
         if self.numPorts<8:         raise ValueError( "Need at least 8 ports for Codebook Type 1 Multi-Panel!")
         bb1, bb2 = self.n1*self.o1, self.n2*self.o2     # B1, B2 number of beams (horizontal and vertical)
@@ -863,7 +1112,7 @@ class CsiReport:  # CSI-ReportConfig
         if not (type(i14) in [tuple, list]):    raise ValueError( "'i14' must be a tuple or list!" )
         if not (type(i2) in [tuple, list]):     raise ValueError( "'i2' must be a tuple or list!" )
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         def w(col,l,m,p,n):
             # This calculates: w^(col,ng,codebookMode)_(l,m,p,n)
             s = 1 if col==1 else -1                         # The sign used based on column
@@ -884,14 +1133,14 @@ class CsiReport:  # CSI-ReportConfig
             # p = [p1, p2], n = [n0, n1, n2]
             p1, p2 = p
             n0, n1, n2 = n
-            phiN0 = np.exp( 1j*np.pi*n0/2 )           # A scaler
+            phiN0 = np.exp( 1j*np.pi*n0/2 )           # A Scalar
             aP1 = np.exp( 1j*np.pi*(p1/2 + 1/4) )
-            aP2 = np.exp( 1j*np.pi*(p2/2 + 1/4) )     # A scaler
+            aP2 = np.exp( 1j*np.pi*(p2/2 + 1/4) )     # A Scalar
             bN1 = np.exp( 1j*np.pi*(n1/2 - 1/4) )
             bN2 = np.exp( 1j*np.pi*(n2/2 - 1/4) )
             return np.concatenate([vlm, s*phiN0*vlm, aP1*bN1*vlm, s*aP2*bN2*vlm], axis=-1)/np.sqrt(self.numPorts)
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 1:
             # Note that i13 is not used.
             validateRange(i11, (0,bb1-1), context)
@@ -926,7 +1175,7 @@ class CsiReport:  # CSI-ReportConfig
             l, m, p, n = i11, i12, i14, i2
             return w(1, l, m, p, n)
         
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 2:
             validateRange(i11, (0,bb1-1), context)
             validateRange(i12, (0,bb2-1), context)
@@ -1002,7 +1251,7 @@ class CsiReport:  # CSI-ReportConfig
                 if (self.n1==4) and (self.n2==2):       return (2*self.o1, 0)
             assert False
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 3:
             validateRange(i11, (0,bb1-1), context)
             validateRange(i12, (0,bb2-1), context)
@@ -1039,7 +1288,7 @@ class CsiReport:  # CSI-ReportConfig
             l, lp, m, mp, p, n = i11, i11+k1, i12, i12+k2, i14, i2
             return np.concatenate([ w(1, l,  m,  p, n),  w(1, lp, mp, p, n),  w(2, l,  m,  p, n) ], axis=-1)/np.sqrt(3)
 
-        # ..................................................................................................................................
+        # ..............................................................................................................
         if numLayers == 4:
             validateRange(i11, (0,bb1-1), context)
             validateRange(i12, (0,bb2-1), context)
@@ -1078,7 +1327,7 @@ class CsiReport:  # CSI-ReportConfig
         
         raise ValueError( "Unsupported number of layers %d! (codebookType: Type1MP)"%(self.numLayers) )
         
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def getType2n12(self, i12):
         # See TS 38.214, Section 5.2.2.2.3
         s = 0
@@ -1097,7 +1346,7 @@ class CsiReport:  # CSI-ReportConfig
             n2 += [ (n-n1[-1])//self.N1 ]
         return np.int32(n1), np.int32(n2)
         
-    # ************************************************************************************************************************************************
+    # ******************************************************************************************************************
     def getType2I12(self, n1, n2):
         n1n2 = self.n1*self.n2
         n = self.n1*n2 + n1

@@ -1,25 +1,25 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Physical Channels &mdash; NeoRadium 0.2.0 Documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/neoradium.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <title>Physical Channels &mdash; NeoRadium 0.3.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=eea1f72d" />
+
   
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.2.0
+            NeoRadium 0.3.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -87,6 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 </ul>
 
         </div>
@@ -95,7 +96,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.2.0</a>
+          <a href="../../index.html">NeoRadium 0.3.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -114,61 +115,54 @@
            <div itemprop="articleBody">
              
   <section id="physical-channels">
-<h1>Physical Channels<a class="headerlink" href="#physical-channels" title="Permalink to this heading"></a></h1>
+<h1>Physical Channels<a class="headerlink" href="#physical-channels" title="Link to this heading"></a></h1>
 <section id="module-neoradium.pdsch">
-<span id="physical-downlink-shared-channel"></span><h2>Physical Downlink Shared Channel<a class="headerlink" href="#module-neoradium.pdsch" title="Permalink to this heading"></a></h2>
-<p>The module <code class="docutils literal notranslate"><span class="pre">pdsch.py</span></code> implements the <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> class which encapsulates
-Physical Downlink Shared Channel. It is a downlink channel that deliver user data
-from gNB to UE. PDSCH occupies a grid of Resource Blocks (RBs) within a slot. Usually
-one or more OFDM symbols are used for PDCCH and the remaining resources are available
-for PDSCH.</p>
-<p>The gNB schedules PDSCH resources for UEs based on their channel quality, data
-requirements, and fairness considerations. PDSCH uses LDPC (Low-Density Parity-Check)
-coding to provide forward error correction, enhancing the robustness of data
-transmission over the wireless channel.</p>
-<p>In MIMO (Multiple Input Multiple Output) systems, a PDSCH is distributed among
-multiple layers. PDSCH includes Demodulation Reference Signals (<a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a>)
-to assist the UE in channel estimation and demodulation, ensuring accurate data
-reception. It may also include Phase Tracking Reference Signals (<a class="reference internal" href="RefSig.html#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a>)
-which enables suppression of phase noise and common phase error, particularly
-important at high carrier frequencies such as millimeter wave.</p>
+<span id="physical-downlink-shared-channel"></span><h2>Physical Downlink Shared Channel<a class="headerlink" href="#module-neoradium.pdsch" title="Link to this heading"></a></h2>
+<p>The module <code class="docutils literal notranslate"><span class="pre">pdsch.py</span></code> implements the <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> class which encapsulates the Physical Downlink Shared Channel.
+It is a downlink channel that delivers user data from gNB to UE. PDSCH occupies a grid of Resource Blocks (RBs) within
+a slot. Usually, one or more OFDM symbols are used by the PDCCH, and the remaining resources are available for the
+PDSCH.</p>
+<p>The gNB schedules PDSCH resources for UEs based on their channel quality, data requirements, and fairness
+considerations. PDSCH uses LDPC (Low-Density Parity-Check) coding to provide forward error correction, enhancing the
+robustness of data transmission over the wireless channel.</p>
+<p>In Multiple Input, Multiple Output (MIMO) systems, a PDSCH is distributed among multiple layers. PDSCH includes
+Demodulation Reference Signals (<a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a>) to assist the UE in channel estimation and
+demodulation, ensuring accurate data reception. It may also include Phase Tracking Reference Signals
+(<a class="reference internal" href="RefSig.html#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a>) which enable suppression of phase noise and common phase error, particularly
+important at high carrier frequencies such as millimeter-wave bands.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.pdsch.</span></span><span class="sig-name descname"><span class="pre">PDSCH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH" title="Permalink to this definition"></a></dt>
-<dd><p>This class encapsulates the configuration and functionality of a Physical Downlink
-Shared Channel (PDSCH) which delivers user data transmitted from gNB to UE.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.pdsch.</span></span><span class="sig-name descname"><span class="pre">PDSCH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH" title="Link to this definition"></a></dt>
+<dd><p>This class encapsulates the configuration and functionality of a Physical Downlink Shared Channel (PDSCH), that
+delivers user data transmitted from gNB to UE.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bwp</strong> (<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>) – The <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object that represents
-the resources used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> for transmission of user data
-from gNB to UE.</p></li>
+<li><p><strong>bwp</strong> (<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>) – The <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object that represents the resources used by this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> for transmission of user data from gNB to UE.</p></li>
 <li><p><strong>kwargs</strong> (<em>dict</em>) – <p>A set of optional arguments.</p>
 <blockquote>
 <div><dl class="field-list">
 <dt class="field-odd">mappingType<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The mapping type used by this PDSCH and its associated
-<a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object. It is a text string that
-can be either <code class="docutils literal notranslate"><span class="pre">'A'</span></code> or <code class="docutils literal notranslate"><span class="pre">'B'</span></code>. The default is <code class="docutils literal notranslate"><span class="pre">'A'</span></code>.</p>
-<p>In mapping type <code class="docutils literal notranslate"><span class="pre">'A'</span></code>, the first DMRS OFDM symbol index is 2 or 3
-and DMRS is mapped relative to the start of slot boundary, regardless
-of where in the slot the actual data transmission starts. The user data
-in this case usually occupies most of the slot.</p>
-<p>In mapping type <code class="docutils literal notranslate"><span class="pre">'B'</span></code>, the first DMRS OFDM symbol is the first OFDM
-symbol of the data allocation, that is, the DMRS location is not given
-relative to the slot boundary but relative to where the user data is
-located. The user data in this case usually occupies a small fraction
+<a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object. It is a text string that can be either <code class="docutils literal notranslate"><span class="pre">'A'</span></code> or
+<code class="docutils literal notranslate"><span class="pre">'B'</span></code>. The default is <code class="docutils literal notranslate"><span class="pre">'A'</span></code>.</p>
+<p>In mapping type <code class="docutils literal notranslate"><span class="pre">'A'</span></code>, the first DMRS OFDM symbol index is 2 or 3 and DMRS is mapped relative
+to the start of slot boundary, regardless of where in the slot the actual data transmission
+starts. The user data in this case usually occupies most of the slot.</p>
+<p>In mapping type <code class="docutils literal notranslate"><span class="pre">'B'</span></code>, the first DMRS OFDM symbol is the first OFDM symbol of the data
+allocation, that is, the DMRS location is not given relative to the slot boundary but relative
+to where the user data is located. The user data in this case usually occupies a small fraction
 of the slot to support very low latency.</p>
 </dd>
 <dt class="field-even">numLayers<span class="colon">:</span></dt>
-<dd class="field-even"><p>The number of transmission layers for this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.
-It must be an integer between 1 and 8, with 1 being the default.</p>
+<dd class="field-even"><p>The number of transmission layers for this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. It must be an integer
+from 1 to 8, with 1 as the default.</p>
 </dd>
 <dt class="field-odd">modulation<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A text string or a tuple or list of 2 text strings specifying
-the modulation scheme used for data transmitted in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>
-based on <strong>3GPP TR 38.211, Table 7.3.1.2-1</strong>. The default is <code class="docutils literal notranslate"><span class="pre">'16QAM'</span></code>.
-Here is a list of supported Modulation Schemes:</p>
+<dd class="field-odd"><p>A text string or a tuple or list of 2 text strings specifying the modulation scheme
+used for data transmitted in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> based on <strong>3GPP TR 38.211, Table 7.3.1.2-1</strong>.
+The default is <code class="docutils literal notranslate"><span class="pre">'16QAM'</span></code>. Here is a list of supported modulation schemes:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Modulation Scheme</p></th>
@@ -196,13 +190,11 @@ Here is a list of supported Modulation Schemes:</p>
 </tr>
 </tbody>
 </table>
-<p>If <code class="docutils literal notranslate"><span class="pre">modulation</span></code> is a text string, and there are two code-words in this
-<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>, the same modulation scheme is used for both code-words.
-If there are two code-words in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>, and you want to use
-different modulation schemes for the two code-words, then you can specify
-two different modulation schemes in a tuple or list of text strings. For
-example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using &quot;QPSK&quot; for the first code-word and &quot;16QAM&quot; for the second code-word</span>
+<p>If <code class="docutils literal notranslate"><span class="pre">modulation</span></code> is a text string and there are two codewords in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>, the
+same modulation scheme is used for both codewords. If there are two codewords in this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>, and you want to use different modulation schemes for the two codewords, you
+can specify two different modulation schemes in a tuple or list of text strings. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using &quot;QPSK&quot; for the first codeword and &quot;16QAM&quot; for the second codeword</span>
 <span class="n">modulation</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;QPSK&quot;</span><span class="p">,</span> <span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -210,28 +202,25 @@ example:</p>
 <a class="reference internal" href="Modulation.html#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a> objects.</p>
 </dd>
 <dt class="field-even">reservedRbSets<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of <code class="xref py py-class docutils literal notranslate"><span class="pre">ReservedRbSet</span></code> objects
-that are used to reserve the specified resource blocks (RBs) at the
-specified OFDM symbols based on the patterns defined in the
-<code class="xref py py-class docutils literal notranslate"><span class="pre">ReservedRbSet</span></code> objects. The default is an
-empty list which means no reserved RBs.</p>
+<dd class="field-even"><p>A list of <code class="xref py py-class docutils literal notranslate"><span class="pre">ReservedRbSet</span></code> objects that are used to
+reserve the specified resource blocks (RBs) at the specified OFDM symbols based on the patterns
+defined in the <code class="xref py py-class docutils literal notranslate"><span class="pre">ReservedRbSet</span></code> objects. The default is an empty list
+which means no reserved RBs.</p>
 </dd>
 <dt class="field-odd">reservedReMap<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The map of additional reserved resource elements (REs)
-as a 3D list of the form <code class="docutils literal notranslate"><span class="pre">portNo</span> <span class="pre">x</span> <span class="pre">symNo</span> <span class="pre">x</span> <span class="pre">reNo</span></code>. The default is an
-empty list which means no reserved REs. The following additional rules
-makes configuring reserved REs both easy and flexible.</p>
+<dd class="field-odd"><p>The map of additional reserved resource elements (REs) as a 3D list of the form
+<code class="docutils literal notranslate"><span class="pre">portNo</span> <span class="pre">x</span> <span class="pre">symNo</span> <span class="pre">x</span> <span class="pre">reNo</span></code>. The default is an empty list which means no reserved REs. The
+following additional rules makes configuring reserved REs both easy and flexible.</p>
 <ul>
-<li><p>If <code class="docutils literal notranslate"><span class="pre">reservedReMap</span></code> has data for only one port, it means that the
-map is the same for all ports.</p></li>
-<li><p>If in a port, the reserved REs are given only for a single symbol,
-it is assumed the same REs are reserved in all symbols.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">reservedReMap</span></code> has data for only one port, it means that the map is the same for all ports.</p></li>
+<li><p>If in a port, the reserved REs are given only for a single symbol, it is assumed the same REs
+are reserved in all symbols.</p></li>
 </ul>
 <p>Here are some examples:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># REs 5, 17, and 29 are reserved on all ports and all symbols</span>
 <span class="n">reservedReMap</span> <span class="o">=</span> <span class="p">[[[</span><span class="mi">5</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">29</span><span class="p">]]]</span>
 
-<span class="c1"># REs 5, 17, and 29 are reserved on all ports on OFDM symbol 2 only</span>
+<span class="c1"># REs 5, 17, and 29 are reserved on all ports for OFDM symbol 2 only</span>
 <span class="n">reservedReMap</span> <span class="o">=</span> <span class="p">[[</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">29</span><span class="p">],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span> <span class="p">]]</span>
 
 <span class="c1"># REs 5, 17, and 29 are reserved on all symbols of port index 1 (assuming we have 3 ports)</span>
@@ -240,51 +229,47 @@ it is assumed the same REs are reserved in all symbols.</p></li>
 </div>
 </dd>
 <dt class="field-even">sliv<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Start and Length Indicator Value</em>. If specified, it is used to determine
-the start and length of consecutive OFDM symbols used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>
-based on <strong>3GPP TS 38.214, Section 5.1.2.1</strong>. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. See
-<a class="reference internal" href="#specifyingsyms"><span class="std std-ref">Specifying the OFDM symbols</span></a> below for more information.</p>
-</dd>
-<dt class="field-odd">symStart<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The index of the first OFDM symbol used for this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. The
-default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. See <a class="reference internal" href="#specifyingsyms"><span class="std std-ref">Specifying the OFDM symbols</span></a>
+<dd class="field-even"><p><em>Start and Length Indicator Value</em>. If specified, it is used to determine the start and
+length of consecutive OFDM symbols used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> based on <strong>3GPP TS 38.214,
+Section 5.1.2.1</strong>. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. See <a class="reference internal" href="#specifyingsyms"><span class="std std-ref">Specifying the OFDM symbols</span></a>
 below for more information.</p>
 </dd>
+<dt class="field-odd">symStart<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The index of the first OFDM symbol used for this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+See <a class="reference internal" href="#specifyingsyms"><span class="std std-ref">Specifying the OFDM symbols</span></a> below for more information.</p>
+</dd>
 <dt class="field-even">symLen<span class="colon">:</span></dt>
-<dd class="field-even"><p>The number of consecutive OFDM symbols used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>
-starting at <code class="docutils literal notranslate"><span class="pre">symStart</span></code>. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. See
-<a class="reference internal" href="#specifyingsyms"><span class="std std-ref">Specifying the OFDM symbols</span></a> below for more information.</p>
+<dd class="field-even"><p>The number of consecutive OFDM symbols used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> starting at
+<code class="docutils literal notranslate"><span class="pre">symStart</span></code>. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. See <a class="reference internal" href="#specifyingsyms"><span class="std std-ref">Specifying the OFDM symbols</span></a>
+below for more information.</p>
 </dd>
 <dt class="field-odd">symSet<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of OFDM symbol indexes that are used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.
-See <a class="reference internal" href="#specifyingsyms"><span class="std std-ref">Specifying the OFDM symbols</span></a> below for more
-information.</p>
+<dd class="field-odd"><p>A list of OFDM symbol indices that are used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. See
+<a class="reference internal" href="#specifyingsyms"><span class="std std-ref">Specifying the OFDM symbols</span></a> below for more information.</p>
 </dd>
 <dt class="field-even">prbSet<span class="colon">:</span></dt>
-<dd class="field-even"><p>The list of physical resource blocks (PRBs) used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.
-The default is all the RBs in the <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>
-object <code class="docutils literal notranslate"><span class="pre">bwp</span></code></p>
+<dd class="field-even"><p>The list of physical resource blocks (PRBs) used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. The default is
+all the RBs in the <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object <code class="docutils literal notranslate"><span class="pre">bwp</span></code>.</p>
 </dd>
 <dt class="field-odd">interleavingBundleSize<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The bundle size of interleaving process. It can be one
-of 0 (default), 2, or 4. The value 0 means interleaving is disabled (default).
-See <strong>3GPP TS 38.211, Section 7.3.1.6</strong> for more information.</p>
+<dd class="field-odd"><p>The bundle size of interleaving process. It can be one of 0 (default), 2,
+or 4. The value 0 means interleaving is disabled (default). See <strong>3GPP TS 38.211, Section 7.3.1.6</strong>
+for more information.</p>
 </dd>
 <dt class="field-even">rnti<span class="colon">:</span></dt>
-<dd class="field-even"><p>The <em>Radio Network Temporary Identifier</em>. The default is 1. It is used with
-<code class="docutils literal notranslate"><span class="pre">nID</span></code> below to initialize a <em>golden sequence</em> used for the scrambling process.
-See <strong>3GPP TS 38.211, Section 7.3.1.1</strong> for more information.</p>
+<dd class="field-even"><p>The <em>Radio Network Temporary Identifier</em>. The default is 1. It is used with <code class="docutils literal notranslate"><span class="pre">nID</span></code> below to
+initialize a <em>golden sequence</em> used for the scrambling process. See <strong>3GPP TS 38.211,
+Section 7.3.1.1</strong> for more information.</p>
 </dd>
 <dt class="field-odd">nID<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The <em>scrambling identity</em>. The default is 1. It is used with <code class="docutils literal notranslate"><span class="pre">rnti</span></code> to
-initialize a <em>golden sequence</em> used for the scrambling process. See <strong>3GPP
-TS 38.211, Section 7.3.1.1</strong> for more information.</p>
+<dd class="field-odd"><p>The <em>scrambling identity</em>. The default is 1. It is used with <code class="docutils literal notranslate"><span class="pre">rnti</span></code> to initialize a <em>golden
+sequence</em> used for the scrambling process. See <strong>3GPP TS 38.211, Section 7.3.1.1</strong> for more
+information.</p>
 </dd>
 <dt class="field-even">prgSize<span class="colon">:</span></dt>
-<dd class="field-even"><p>The size of Precoding RB Groups (PRGs). It can be one of 0 (default), 2,
-or 4. The value 0 means <em>Wideband Precoding</em> which means the same precoding
-is used for the whole bandwidth of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. See <strong>3GPP TS 38.214,
-Section 5.1.2.3</strong> for more information.</p>
+<dd class="field-even"><p>The size of Precoding RB Groups (PRGs). It can be one of 0 (default), 2, or 4. The value 0
+means <em>Wideband Precoding</em> which means the same precoding is used for the whole bandwidth of
+this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. See <strong>3GPP TS 38.214, Section 5.1.2.3</strong> for more information.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -296,82 +281,78 @@ Section 5.1.2.3</strong> for more information.</p>
 <blockquote>
 <div><p>You can specify the OFDM symbols used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> in different ways:</p>
 <ul class="simple">
-<li><p>If <code class="docutils literal notranslate"><span class="pre">sliv</span></code> is specified, it is used to determine the start and length of consecutive
-OFDM symbols used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> based on <strong>3GPP TS 38.214, Section 5.1.2.1</strong>.
-In this case, the parameters <code class="docutils literal notranslate"><span class="pre">symStart</span></code>, <code class="docutils literal notranslate"><span class="pre">symLen</span></code>, and <code class="docutils literal notranslate"><span class="pre">symSet</span></code> are ignored.</p></li>
-<li><p>If <code class="docutils literal notranslate"><span class="pre">sliv</span></code> is not specified and both <code class="docutils literal notranslate"><span class="pre">symStart</span></code> and <code class="docutils literal notranslate"><span class="pre">symLen</span></code> are specified,
-they are used to determine the OFDM symbols used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. In
-this case the parameter <code class="docutils literal notranslate"><span class="pre">symSet</span></code> is ignored.</p></li>
-<li><p>If <code class="docutils literal notranslate"><span class="pre">sliv</span></code>, <code class="docutils literal notranslate"><span class="pre">symStart</span></code>, and <code class="docutils literal notranslate"><span class="pre">symLen</span></code> are not specified but <code class="docutils literal notranslate"><span class="pre">symSet</span></code> is
-specified, it is used to determine the OFDM symbols used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.</p></li>
-<li><p>If neither of <code class="docutils literal notranslate"><span class="pre">sliv</span></code>, <code class="docutils literal notranslate"><span class="pre">symStart</span></code>, <code class="docutils literal notranslate"><span class="pre">symLen</span></code>, and <code class="docutils literal notranslate"><span class="pre">symSet</span></code> are specified,
-the OFDM symbols are automatically assigned based on <code class="docutils literal notranslate"><span class="pre">mappingType</span></code> and <code class="docutils literal notranslate"><span class="pre">cpType</span></code>
-parameter of the <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object <code class="docutils literal notranslate"><span class="pre">bwp</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">sliv</span></code> is specified, it is used to determine the start and length of consecutive OFDM symbols used
+by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> based on <strong>3GPP TS 38.214, Section 5.1.2.1</strong>. In this case, the parameters
+<code class="docutils literal notranslate"><span class="pre">symStart</span></code>, <code class="docutils literal notranslate"><span class="pre">symLen</span></code>, and <code class="docutils literal notranslate"><span class="pre">symSet</span></code> are ignored.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">sliv</span></code> is not specified and both <code class="docutils literal notranslate"><span class="pre">symStart</span></code> and <code class="docutils literal notranslate"><span class="pre">symLen</span></code> are specified, they are used to
+determine the OFDM symbols used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. In this case the parameter <code class="docutils literal notranslate"><span class="pre">symSet</span></code> is
+ignored.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">sliv</span></code>, <code class="docutils literal notranslate"><span class="pre">symStart</span></code>, and <code class="docutils literal notranslate"><span class="pre">symLen</span></code> are not specified but <code class="docutils literal notranslate"><span class="pre">symSet</span></code> is specified, it is used to
+determine the OFDM symbols used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.</p></li>
+<li><p>If neither of <code class="docutils literal notranslate"><span class="pre">sliv</span></code>, <code class="docutils literal notranslate"><span class="pre">symStart</span></code>, <code class="docutils literal notranslate"><span class="pre">symLen</span></code>, and <code class="docutils literal notranslate"><span class="pre">symSet</span></code> are specified, the OFDM symbols are
+automatically assigned based on <code class="docutils literal notranslate"><span class="pre">mappingType</span></code> and <code class="docutils literal notranslate"><span class="pre">cpType</span></code> parameter of the
+<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object <code class="docutils literal notranslate"><span class="pre">bwp</span></code>.</p></li>
 </ul>
 </div></blockquote>
 <p><strong>Other Properties:</strong></p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">numCW<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of code-words derived from the <code class="docutils literal notranslate"><span class="pre">numLayers</span></code> parameter. It is
-either 1 or 2.</p>
+<dd class="field-odd"><p>The number of codewords derived from the <code class="docutils literal notranslate"><span class="pre">numLayers</span></code> parameter. It is either 1 or 2.</p>
 </dd>
 <dt class="field-even">modems<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of one or two (depending on <code class="docutils literal notranslate"><span class="pre">numCW</span></code>) <a class="reference internal" href="Modulation.html#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a>
-object(s) used internally for modulation/demodulation of the code-words.</p>
+<dd class="field-even"><p>A list of one or two (depending on <code class="docutils literal notranslate"><span class="pre">numCW</span></code>) <a class="reference internal" href="Modulation.html#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a> object(s)
+used internally for modulation/demodulation of the codewords.</p>
 </dd>
 <dt class="field-odd">dmrs<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.
-You can use <a class="reference internal" href="#neoradium.pdsch.PDSCH.setDMRS" title="neoradium.pdsch.PDSCH.setDMRS"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setDMRS()</span></code></a> method to set the <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object
-associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.</p>
+<dd class="field-odd"><p>The <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. You can use
+<a class="reference internal" href="#neoradium.pdsch.PDSCH.setDMRS" title="neoradium.pdsch.PDSCH.setDMRS"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setDMRS()</span></code></a> method to set the <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object associated with this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.</p>
 </dd>
 <dt class="field-even">portSet<span class="colon">:</span></dt>
 <dd class="field-even"><p>The list of ports used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> and its associated
-<a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object. By default, this is set to the number
-of layers specified by <code class="docutils literal notranslate"><span class="pre">numLayers</span></code>. This can be changed by the
-<a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> configuration.</p>
+<a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object. By default, this is set to the number of layers specified by
+<code class="docutils literal notranslate"><span class="pre">numLayers</span></code>. This can be changed by the <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> configuration.</p>
 </dd>
 <dt class="field-odd">slotNo<span class="colon">:</span></dt>
-<dd class="field-odd"><p>This returns the <code class="docutils literal notranslate"><span class="pre">slotNo</span></code> property of the <a class="reference internal" href="Carrier.html#neoradium.carrier.Carrier" title="neoradium.carrier.Carrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Carrier</span></code></a>
-object containing <code class="docutils literal notranslate"><span class="pre">bwp</span></code>.</p>
+<dd class="field-odd"><p>This returns the <code class="docutils literal notranslate"><span class="pre">slotNo</span></code> property of the <a class="reference internal" href="Carrier.html#neoradium.carrier.Carrier" title="neoradium.carrier.Carrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Carrier</span></code></a> object
+containing <code class="docutils literal notranslate"><span class="pre">bwp</span></code>.</p>
 </dd>
 <dt class="field-even">frameNo<span class="colon">:</span></dt>
-<dd class="field-even"><p>This returns the <code class="docutils literal notranslate"><span class="pre">frameNo</span></code> property of the <a class="reference internal" href="Carrier.html#neoradium.carrier.Carrier" title="neoradium.carrier.Carrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Carrier</span></code></a>
-object containing <code class="docutils literal notranslate"><span class="pre">bwp</span></code>.</p>
+<dd class="field-even"><p>This returns the <code class="docutils literal notranslate"><span class="pre">frameNo</span></code> property of the <a class="reference internal" href="Carrier.html#neoradium.carrier.Carrier" title="neoradium.carrier.Carrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Carrier</span></code></a> object
+containing <code class="docutils literal notranslate"><span class="pre">bwp</span></code>.</p>
 </dd>
 <dt class="field-odd">slotNoInFrame<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This returns the <code class="docutils literal notranslate"><span class="pre">slotNoInFrame</span></code> property of the
 <a class="reference internal" href="Carrier.html#neoradium.carrier.Carrier" title="neoradium.carrier.Carrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Carrier</span></code></a> object containing <code class="docutils literal notranslate"><span class="pre">bwp</span></code>.</p>
 </dd>
 <dt class="field-even">slotMap<span class="colon">:</span></dt>
-<dd class="field-even"><p>This is the map of resource blocks used for each OFDM symbol in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>
-in the form of a 2D list (A list of lists). Each element in the list corresponds to one
-OFDM symbol. If an OFDM symbol has no resource blocks allocation in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>,
-its corresponding element is an empty list. Otherwise, it is a list of indexes of all
-resource blocks used in that OFDM symbol in the order they should be allocated (based on
-the interleaving process). Note that the reserved resource blocks specified by
-<code class="docutils literal notranslate"><span class="pre">reservedRbSets</span></code> above are <strong>not</strong> included in the <code class="docutils literal notranslate"><span class="pre">slotMap</span></code>.</p>
+<dd class="field-even"><p>This is the map of resource blocks used for each OFDM symbol in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> in the
+form of a 2D list (A list of lists). Each element in the list corresponds to one OFDM symbol. If an
+OFDM symbol has no resource blocks allocation in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>, its corresponding element is
+an empty list. Otherwise, it is a list of indices of all resource blocks used in that OFDM symbol in
+the order they should be allocated (based on the interleaving process). Note that the reserved
+resource blocks specified by <code class="docutils literal notranslate"><span class="pre">reservedRbSets</span></code> above are <strong>not</strong> included in the <code class="docutils literal notranslate"><span class="pre">slotMap</span></code>.</p>
 </dd>
 </dl>
 </div></blockquote>
-<p>The notebook <a class="reference internal" href="../Playground/Notebooks/PDSCH/PDSCH-endToEnd.html"><span class="doc">PDSCH end-to-end communication</span></a> shows how to create an
-end-to-end pipeline of PDSCH communication.</p>
+<p>The notebook <a class="reference internal" href="../Playground/Notebooks/PDSCH/PDSCH-endToEnd.html"><span class="doc">PDSCH end-to-end communication</span></a> shows how to create an end-to-end pipeline of
+PDSCH communication.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.print">
-<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PDSCH</span> <span class="pre">Properties:'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.print" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PDSCH</span> <span class="pre">Properties:'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.print" title="Link to this definition"></a></dt>
 <dd><p>Prints the properties of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>indent</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em><em> (</em><em>default: None</em><em>)</em>) – If specified, it is used as a title for the printed information.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, it returns the information in a text string instead
-of printing the information.</p></li>
+<li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – If specified, it is used as a title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns
-the information in a text string. Otherwise, nothing is returned.</p>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns the information in a text string.
+Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None or str</p>
@@ -381,56 +362,48 @@ the information in a text string. Otherwise, nothing is returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.setDMRS">
-<span class="sig-name descname"><span class="pre">setDMRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.setDMRS" title="Permalink to this definition"></a></dt>
-<dd><p>Creates and initializes a <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object
-associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> object.</p>
+<span class="sig-name descname"><span class="pre">setDMRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.setDMRS" title="Link to this definition"></a></dt>
+<dd><p>Creates and initializes a <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – A dictionary of parameters passed directly to the constructor
-of the <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> class. Please refer to
-this class for a list of parameters that can be used to configure
-DMRS.</p>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – A dictionary of parameters passed directly to the constructor of the <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a>
+class. Please refer to this class for a list of parameters that can be used to configure DMRS.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.setPTRS">
-<span class="sig-name descname"><span class="pre">setPTRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.setPTRS" title="Permalink to this definition"></a></dt>
-<dd><p>Creates and initializes a <a class="reference internal" href="RefSig.html#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> object
-associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> object. Please note that you
-<strong>must</strong> first use the <a class="reference internal" href="#neoradium.pdsch.PDSCH.setDMRS" title="neoradium.pdsch.PDSCH.setDMRS"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setDMRS()</span></code></a> function to initialize the
+<span class="sig-name descname"><span class="pre">setPTRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.setPTRS" title="Link to this definition"></a></dt>
+<dd><p>Creates and initializes a <a class="reference internal" href="RefSig.html#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> object associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>
+object. Please note that you <strong>must</strong> first use the <a class="reference internal" href="#neoradium.pdsch.PDSCH.setDMRS" title="neoradium.pdsch.PDSCH.setDMRS"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setDMRS()</span></code></a> function to initialize the
 <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object before calling this function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – A dictionary of parameters passed directly to the constructor
-of the <a class="reference internal" href="RefSig.html#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> class. Please refer to
-this class for a list of parameters that can be used to configure
-PTRS.</p>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – A dictionary of parameters passed directly to the constructor of the <a class="reference internal" href="RefSig.html#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a>
+class. Please refer to this class for a list of parameters that can be used to configure PTRS.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.getGrid">
-<span class="sig-name descname"><span class="pre">getGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">useReDesc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getGrid" title="Permalink to this definition"></a></dt>
-<dd><p>Creates a <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object for this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>
-and a populates it with the configured <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> and
-<a class="reference internal" href="RefSig.html#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> reference signals. It also marks all
-the resources corresponding to the <code class="docutils literal notranslate"><span class="pre">reservedRbSets</span></code> and <code class="docutils literal notranslate"><span class="pre">reservedReMap</span></code>
-parameters as reserved in the newly created resource grid.</p>
-<p>The returned resource grid contains all reference signals and is ready to be
-populated with the user data (See <a class="reference internal" href="#neoradium.pdsch.PDSCH.populateGrid" title="neoradium.pdsch.PDSCH.populateGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">populateGrid()</span></code></a> method).</p>
+<span class="sig-name descname"><span class="pre">getGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">useReDesc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getGrid" title="Link to this definition"></a></dt>
+<dd><p>Creates a <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object for this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> and a populates it with the
+configured <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> and <a class="reference internal" href="RefSig.html#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> reference signals. It also
+marks all the resources corresponding to the <code class="docutils literal notranslate"><span class="pre">reservedRbSets</span></code> and <code class="docutils literal notranslate"><span class="pre">reservedReMap</span></code> parameters as reserved
+in the newly created resource grid.</p>
+<p>The returned resource grid contains all reference signals and is ready to be populated with the user data (See
+<a class="reference internal" href="#neoradium.pdsch.PDSCH.populateGrid" title="neoradium.pdsch.PDSCH.populateGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">populateGrid()</span></code></a> method).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>useReDesc</strong> (<em>Boolean</em><em> (</em><em>default: False</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the resource grid will also include additional
-fields that describe the content of each resource element (RE). This
-can be used during the debugging to make sure the resources are
-allocated correctly.</p>
+<dd class="field-odd"><p><strong>useReDesc</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the resource grid will also include additional fields that describe the content of each
+resource element (RE). This can be used during the debugging to make sure the resources are allocated
+correctly.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object representing the resource
-grid for this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> pre-populated with reference signals.</p>
+<dd class="field-even"><p>A <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object representing the resource grid for this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>
+pre-populated with reference signals.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a></p>
@@ -440,51 +413,46 @@ grid for this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title=
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.getReIndexes">
-<span class="sig-name descname"><span class="pre">getReIndexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reTypeStr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getReIndexes" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the indexes of all resource elements of the specified resource
-grid that are allocated for this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> with the content type
-specified by the <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>.</p>
-<p>This is similar to the <a class="reference internal" href="Grid.html#neoradium.grid.Grid.getReIndexes" title="neoradium.grid.Grid.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getReIndexes()</span></code></a> of
-the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class with two main differences:</p>
+<span class="sig-name descname"><span class="pre">getReIndexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reTypeStr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getReIndexes" title="Link to this definition"></a></dt>
+<dd><p>Returns the indices of all resource elements of the specified resource grid that are allocated for this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> with the content type specified by the <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>.</p>
+<p>This is similar to the <a class="reference internal" href="Grid.html#neoradium.grid.Grid.getReIndexes" title="neoradium.grid.Grid.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getReIndexes()</span></code></a> of the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>
+class with two main differences:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>This function considers only the resource elements in <code class="docutils literal notranslate"><span class="pre">grid</span></code> that
-are assigned to this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.</p></li>
-<li><p>The indexes are ordered based on the interleaving configuration
-given by <code class="docutils literal notranslate"><span class="pre">interleavingBundleSize</span></code> according to <strong>3GPP TS 38.214,
-Section 5.1.4.1</strong>.</p></li>
+<li><p>This function considers only the resource elements in <code class="docutils literal notranslate"><span class="pre">grid</span></code> that are assigned to this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.</p></li>
+<li><p>The indices are ordered based on the interleaving configuration given by <code class="docutils literal notranslate"><span class="pre">interleavingBundleSize</span></code>
+according to <strong>3GPP TS 38.214, Section 5.1.4.1</strong>.</p></li>
 </ul>
 </div></blockquote>
-<p>For example, the following code first gets the indexes of all DMRS values
-in <code class="docutils literal notranslate"><span class="pre">myPdsch</span></code> and uses the returned indexes to retrieve the DMRS values.</p>
+<p>For example, the following code first gets the indices of all DMRS values in <code class="docutils literal notranslate"><span class="pre">myPdsch</span></code> and uses the
+returned indices to retrieve the DMRS values.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">myGrid</span> <span class="o">=</span> <span class="n">myPdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span>
-<span class="n">dmrsIdx</span> <span class="o">=</span> <span class="n">myPdsch</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="n">myGrid</span><span class="p">,</span> <span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>  <span class="c1"># Get the indexes of all DMRS values</span>
+<span class="n">dmrsIdx</span> <span class="o">=</span> <span class="n">myPdsch</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="n">myGrid</span><span class="p">,</span> <span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>  <span class="c1"># Get the indices of all DMRS values</span>
 <span class="n">dmrsValues</span> <span class="o">=</span> <span class="n">myGrid</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span>                    <span class="c1"># Get all DMRS values as a 1-D array.</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The resource grid associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. This can be
-obtained using the <a class="reference internal" href="#neoradium.pdsch.PDSCH.getGrid" title="neoradium.pdsch.PDSCH.getGrid"><code class="xref py py-class docutils literal notranslate"><span class="pre">getGrid</span></code></a> function for example.</p></li>
-<li><p><strong>reTypeStr</strong> (<em>str</em>) – <p>The content type of the desired resource elements in <code class="docutils literal notranslate"><span class="pre">grid</span></code> that are
-used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. Here is a list of values that can be
-used:</p>
+<li><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The resource grid associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. This can be obtained using the
+<a class="reference internal" href="#neoradium.pdsch.PDSCH.getGrid" title="neoradium.pdsch.PDSCH.getGrid"><code class="xref py py-class docutils literal notranslate"><span class="pre">getGrid</span></code></a> function for example.</p></li>
+<li><p><strong>reTypeStr</strong> (<em>str</em>) – <p>The content type of the desired resource elements in <code class="docutils literal notranslate"><span class="pre">grid</span></code> that are used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.
+Here is a list of values that can be used:</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">”UNASSIGNED”<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The <em>un-assigned</em> resource elements.</p>
 </dd>
 <dt class="field-even">”RESERVED”<span class="colon">:</span></dt>
-<dd class="field-even"><p>The reserved resource elements. This includes the REs
-reserved by <code class="docutils literal notranslate"><span class="pre">reservedRbSets</span></code> or <code class="docutils literal notranslate"><span class="pre">reservedReMap</span></code> parameters
-of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.</p>
+<dd class="field-even"><p>The reserved resource elements. This includes the REs reserved by <code class="docutils literal notranslate"><span class="pre">reservedRbSets</span></code>
+or <code class="docutils literal notranslate"><span class="pre">reservedReMap</span></code> parameters of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.</p>
 </dd>
 <dt class="field-odd">”NO_DATA”<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The resource elements that should not contain any data.
-For example when the corresponding REs in a different layer is
-used for transmission of data for a different UE. (See <code class="docutils literal notranslate"><span class="pre">otherCdmGroups</span></code>
-parameter of <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> class)</p>
+<dd class="field-odd"><p>The resource elements that should not contain any data. For example when the corresponding
+REs in a different layer is used for transmission of data for a different UE. (See
+<code class="docutils literal notranslate"><span class="pre">otherCdmGroups</span></code> parameter of <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> class)</p>
 </dd>
 <dt class="field-even">”DMRS”<span class="colon">:</span></dt>
 <dd class="field-even"><p>The resource elements used for <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a>.</p>
@@ -493,28 +461,26 @@ parameter of <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS
 <dd class="field-odd"><p>The resource elements used for <a class="reference internal" href="RefSig.html#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a>.</p>
 </dd>
 <dt class="field-even">”CSIRS_NZP”<span class="colon">:</span></dt>
-<dd class="field-even"><p>The resource elements used for Zero-Power (ZP) CSI-RS
-(See <a class="reference internal" href="RefSig.html#module-neoradium.csirs" title="neoradium.csirs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">csirs</span></code></a>).</p>
+<dd class="field-even"><p>The resource elements used for Zero-Power (ZP) CSI-RS (See <a class="reference internal" href="RefSig.html#module-neoradium.csirs" title="neoradium.csirs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">csirs</span></code></a>).</p>
 </dd>
 <dt class="field-odd">”CSIRS_ZP”<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The resource elements used for Non-Zero-Power (NZP) CSI-RS
-(See <a class="reference internal" href="RefSig.html#module-neoradium.csirs" title="neoradium.csirs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">csirs</span></code></a>).</p>
+<dd class="field-odd"><p>The resource elements used for Non-Zero-Power (NZP) CSI-RS (See <a class="reference internal" href="RefSig.html#module-neoradium.csirs" title="neoradium.csirs"><code class="xref py py-mod docutils literal notranslate"><span class="pre">csirs</span></code></a>).</p>
 </dd>
 <dt class="field-even">”PDSCH”<span class="colon">:</span></dt>
-<dd class="field-even"><p>The resource elements used for user data in a Physical Downlink
-Shared Channel (<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>)</p>
+<dd class="field-even"><p>The resource elements used for user data in a Physical Downlink Shared Channel
+(<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>)</p>
 </dd>
 <dt class="field-odd">”PDCCH”<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The resource elements used for user data in a Physical Downlink
-Control Channel (<code class="xref py py-class docutils literal notranslate"><span class="pre">PDCCH</span></code>)</p>
+<dd class="field-odd"><p>The resource elements used for user data in a Physical Downlink Control Channel
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">PDCCH</span></code>)</p>
 </dd>
 <dt class="field-even">”PUSCH”<span class="colon">:</span></dt>
-<dd class="field-even"><p>The resource elements used for user data in a Physical Uplink
-Shared Channel (<code class="xref py py-class docutils literal notranslate"><span class="pre">PUSCH</span></code>)</p>
+<dd class="field-even"><p>The resource elements used for user data in a Physical Uplink Shared Channel
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">PUSCH</span></code>)</p>
 </dd>
 <dt class="field-odd">”PUCCH”<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The resource elements used for user data in a Physical Uplink
-Control Channel (<code class="xref py py-class docutils literal notranslate"><span class="pre">PUCCH</span></code>)</p>
+<dd class="field-odd"><p>The resource elements used for user data in a Physical Uplink Control Channel
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">PUCCH</span></code>)</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -522,9 +488,8 @@ Control Channel (<code class="xref py py-class docutils literal notranslate"><sp
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A tuple of three 1-D numpy arrays specifying a list of locations in
-<code class="docutils literal notranslate"><span class="pre">grid</span></code>. This value can be used directly to access REs at the specified
-locations. (See the above example)</p>
+<dd class="field-even"><p>A tuple of three 1-D numpy arrays specifying a list of locations in <code class="docutils literal notranslate"><span class="pre">grid</span></code>. This value can be used
+directly to access the REs at the specified locations. (see example above)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>3-tuple</p>
@@ -534,20 +499,17 @@ locations. (See the above example)</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.getNumREsFromIndexes">
-<span class="sig-name descname"><span class="pre">getNumREsFromIndexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indexes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getNumREsFromIndexes" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the number of resource elements included in <code class="docutils literal notranslate"><span class="pre">indexes</span></code> for each
-code-word. The returned value is a list of one or two integers depending
-on number of code-words (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>).</p>
+<span class="sig-name descname"><span class="pre">getNumREsFromIndexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indexes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getNumREsFromIndexes" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of resource elements included in <code class="docutils literal notranslate"><span class="pre">indexes</span></code> for each codeword. The returned value is a
+list of one or two integers depending on number of codewords (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>indexes</strong> (<em>3-tuple</em>) – A tuple of 3 lists specifying locations of a set of resource elements
-in the resource grid. For example this can be obtained using the
-<a class="reference internal" href="#neoradium.pdsch.PDSCH.getReIndexes" title="neoradium.pdsch.PDSCH.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getReIndexes()</span></code></a> function.</p>
+<dd class="field-odd"><p><strong>indexes</strong> (<em>3-tuple</em>) – A tuple of 3 lists specifying locations of a set of resource elements in the resource grid. For example
+this can be obtained using the <a class="reference internal" href="#neoradium.pdsch.PDSCH.getReIndexes" title="neoradium.pdsch.PDSCH.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getReIndexes()</span></code></a> function.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of one or two integers depending on number of code-words (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>),
-indicating the number of resource elements (REs) included in <code class="docutils literal notranslate"><span class="pre">indexes</span></code>
-for each code-word.</p>
+<dd class="field-even"><p>A list of one or two integers depending on the number of codewords (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>), indicating the number of
+resource elements (REs) included in <code class="docutils literal notranslate"><span class="pre">indexes</span></code> for each codeword.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -557,30 +519,27 @@ for each code-word.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.getBitSizes">
-<span class="sig-name descname"><span class="pre">getBitSizes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reTypeStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'UNASSIGNED'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getBitSizes" title="Permalink to this definition"></a></dt>
-<dd><p>Returns total number of bits corresponding to the resource elements
-in <code class="docutils literal notranslate"><span class="pre">grid</span></code> assigned to this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> with content type
-specified by <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> for each code-word. The returned value is a
-list of one or two integers depending on number of code-words (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>).</p>
-<p>The default value of <code class="docutils literal notranslate"><span class="pre">reTypeStr=&quot;UNASSIGNED&quot;</span></code> is for a common use case
-where we want to get total number of bits available in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>
-for user data after setting aside the REs for DMRS, PTRS, and the reserved
-resources.</p>
+<span class="sig-name descname"><span class="pre">getBitSizes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reTypeStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'UNASSIGNED'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getBitSizes" title="Link to this definition"></a></dt>
+<dd><p>Returns total number of bits corresponding to the resource elements in <code class="docutils literal notranslate"><span class="pre">grid</span></code> assigned to this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> with content type specified by <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> for each codeword. The returned value is a
+list of one or two integers depending on the number of codewords (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>).</p>
+<p>The default value of <code class="docutils literal notranslate"><span class="pre">reTypeStr=&quot;UNASSIGNED&quot;</span></code> is for a common use case where we want to get total number
+of bits available in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> for user data after setting aside the REs for DMRS, PTRS, and
+the reserved resources.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Grid()</span></code></a>) – The resource grid associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. This can be
-obtained using the <a class="reference internal" href="#neoradium.pdsch.PDSCH.getGrid" title="neoradium.pdsch.PDSCH.getGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getGrid()</span></code></a> function for example.</p></li>
-<li><p><strong>reTypeStr</strong> (<em>str</em><em> (</em><em>default: &quot;UNASSIGNED&quot;</em><em>)</em>) – The content type of the desired resource elements used to count the
-returned number of bits. The default values of <code class="docutils literal notranslate"><span class="pre">&quot;UNASSIGNED&quot;</span></code> causes
-this function to return total number of (unassigned) bits that are
-available for user data. Please refer to the <a class="reference internal" href="#neoradium.pdsch.PDSCH.getReIndexes" title="neoradium.pdsch.PDSCH.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getReIndexes()</span></code></a>
-function for a list of values that can used for <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>.</p></li>
+<li><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Grid()</span></code></a>) – The resource grid associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. This can be obtained using the
+<a class="reference internal" href="#neoradium.pdsch.PDSCH.getGrid" title="neoradium.pdsch.PDSCH.getGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getGrid()</span></code></a> function for example.</p></li>
+<li><p><strong>reTypeStr</strong> (<em>str</em>) – The content type of the desired resource elements used to count the returned number of bits. The default
+values of <code class="docutils literal notranslate"><span class="pre">&quot;UNASSIGNED&quot;</span></code> causes this function to return total number of (unassigned) bits that are
+available for user data. Please refer to the <a class="reference internal" href="#neoradium.pdsch.PDSCH.getReIndexes" title="neoradium.pdsch.PDSCH.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getReIndexes()</span></code></a> function for a list of values that
+can used for <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of one or two integers depending on number of code-words (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>),
-indicating the number of bits allocated for <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> for each code-word.</p>
+<dd class="field-even"><p>A list of one or two integers depending on the number of codewords (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>), indicating the number of
+bits allocated for <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> for each codeword.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -590,70 +549,60 @@ indicating the number of bits allocated for <code class="docutils literal notran
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.populateGrid">
-<span class="sig-name descname"><span class="pre">populateGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.populateGrid" title="Permalink to this definition"></a></dt>
-<dd><p><em>Populates</em> the resource grid specified by <code class="docutils literal notranslate"><span class="pre">grid</span></code> with the user data
-provided in <code class="docutils literal notranslate"><span class="pre">bits</span></code>.</p>
+<span class="sig-name descname"><span class="pre">populateGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.populateGrid" title="Link to this definition"></a></dt>
+<dd><p><em>Populates</em> the resource grid specified by <code class="docutils literal notranslate"><span class="pre">grid</span></code> with the user data provided in <code class="docutils literal notranslate"><span class="pre">bits</span></code>.</p>
 <p>This function performs the following operations:</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">Scrambling<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Scrambling of the specified <code class="docutils literal notranslate"><span class="pre">bits</span></code> using the <code class="docutils literal notranslate"><span class="pre">rnti</span></code> and <code class="docutils literal notranslate"><span class="pre">nID</span></code>
-properties of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. These properties are used to initialize
-a <em>golden sequence</em> which is then used for the scrambling process according to
-<strong>3GPP TS 38.211, Section 7.3.1.1</strong>. The data bits for each code-word are
-scrambled separately.</p>
+<dd class="field-odd"><p>Scrambling of the specified <code class="docutils literal notranslate"><span class="pre">bits</span></code> using the <code class="docutils literal notranslate"><span class="pre">rnti</span></code> and <code class="docutils literal notranslate"><span class="pre">nID</span></code> properties of this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. These properties are used to initialize a <em>golden sequence</em> which is then used
+for the scrambling process according to <strong>3GPP TS 38.211, Section 7.3.1.1</strong>. The data bits for each
+codeword are scrambled separately.</p>
 </dd>
 <dt class="field-even">Modulation<span class="colon">:</span></dt>
-<dd class="field-even"><p>Converting the scrambled binary data stream into complex symbols for
-each resource elements assigned for user data. The modulation process is
-performed by the <a class="reference internal" href="Modulation.html#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a> objects in the
-<code class="docutils literal notranslate"><span class="pre">modems</span></code> list of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. The modulation for each
-code-word is performed separately by its own dedicated
+<dd class="field-even"><p>Converting the scrambled binary data stream into complex symbols for each resource elements
+assigned for user data. The modulation process is performed by the
+<a class="reference internal" href="Modulation.html#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a> objects in the <code class="docutils literal notranslate"><span class="pre">modems</span></code> list of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. The
+modulation for each codeword is performed separately by its own dedicated
 <a class="reference internal" href="Modulation.html#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a> object.</p>
 </dd>
 <dt class="field-odd">Layer Mapping<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Distributing the modulated complex symbols across one or more
-transmission layers of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> according to <strong>3GPP TS 38.211,
-Section 7.3.1.3</strong>.</p>
+<dd class="field-odd"><p>Distributing the modulated complex symbols across one or more transmission layers of this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> according to <strong>3GPP TS 38.211, Section 7.3.1.3</strong>.</p>
 </dd>
 <dt class="field-even">Interleaving<span class="colon">:</span></dt>
-<dd class="field-even"><p>Converting Virtual Resource Blocks (VRBs) to Physical Resource
-Blocks (PRBs). If enabled, the resources are re-ordered based on the interleaving
-configuration given by <code class="docutils literal notranslate"><span class="pre">interleavingBundleSize</span></code> according to <strong>3GPP TS 38.214,
-Section 5.1.4.1</strong>.</p>
+<dd class="field-even"><p>Converting Virtual Resource Blocks (VRBs) to Physical Resource Blocks (PRBs). If enabled,
+the resources are re-ordered based on the interleaving configuration given by <code class="docutils literal notranslate"><span class="pre">interleavingBundleSize</span></code>
+according to <strong>3GPP TS 38.214, Section 5.1.4.1</strong>.</p>
 </dd>
 </dl>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object that gets populated with the user
-data bits.</p></li>
-<li><p><strong>bits</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, or </em><em>None</em><em> (</em><em>default: None</em><em>)</em>) – <p>Specifies the user data bits that are used to populate the specified resource
-grid. It can be one of the following:</p>
+<li><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object that gets populated with the user data bits.</p></li>
+<li><p><strong>bits</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, or </em><em>None</em>) – <p>Specifies the user data bits that are used to populate the specified resource grid. It can be one of the
+following:</p>
 <dl class="field-list simple">
 <dt class="field-odd">tuple of numpy arrays<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Depending on the number of code-words (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>), the
-tuple can have one or two 1D numpy arrays of bits each specifying the user
-data bits for each code-word.</p>
+<dd class="field-odd"><p>Depending on the number of codewords (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>), the tuple can have one or two
+1D numpy arrays of bits each specifying the user data bits for each codeword.</p>
 </dd>
 <dt class="field-even">numpy array<span class="colon">:</span></dt>
-<dd class="field-even"><p>A one or two dimensional numpy array. It is a 1D array, only if
-we have one code-word and the given numpy array is used for the single
-code-word. The 2D numpy array can be used for one or two code-word cases.
-The first dimension of the numpy array in this case should match the number
-of code-words (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>).</p>
+<dd class="field-even"><p>A one or two dimensional numpy array. It is a 1D array, only if we have one codeword and the
+given numpy array is used for the single codeword. The 2D numpy array can be used for one or two
+codeword cases. The first dimension of the numpy array in this case should match the number
+of codewords (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>).</p>
 </dd>
 <dt class="field-odd">list of numpy arrays<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Depending on the number of code-words (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>), the
-list can have one or two 1D numpy arrays of bits each specifying the user
-data bits for each code-word.</p>
+<dd class="field-odd"><p>Depending on the number of codewords (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>), the list can have one or two 1D
+numpy arrays of bits each specifying the user data bits for each codeword.</p>
 </dd>
 <dt class="field-even">None<span class="colon">:</span></dt>
-<dd class="field-even"><p>If this is None, <code class="docutils literal notranslate"><span class="pre">grid</span></code> data is not updated. This is used for the (rare)
-case where we only want to update the resource element descriptions in the
-<code class="docutils literal notranslate"><span class="pre">grid</span></code> object. See the <code class="docutils literal notranslate"><span class="pre">useReDesc</span></code> parameter of the
-<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class for more information.</p>
+<dd class="field-even"><p>If this is None, <code class="docutils literal notranslate"><span class="pre">grid</span></code> data is not updated. This is used for the (rare) case where we only want
+to update the resource element descriptions in the <code class="docutils literal notranslate"><span class="pre">grid</span></code> object. See the <code class="docutils literal notranslate"><span class="pre">useReDesc</span></code> parameter
+of the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class for more information.</p>
 </dd>
 </dl>
 </p></li>
@@ -664,69 +613,56 @@ case where we only want to update the resource element descriptions in the
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.getLLRsFromGrid">
-<span class="sig-name descname"><span class="pre">getLLRsFromGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxGrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdschIndexes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llrScales</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getLLRsFromGrid" title="Permalink to this definition"></a></dt>
-<dd><p>This method is used at the receiving side where the Log-likelihood-Ratios
-(LLRs) are extracted from the received resource grid <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code>. This is
-in some sense the opposite of the <a class="reference internal" href="#neoradium.pdsch.PDSCH.populateGrid" title="neoradium.pdsch.PDSCH.populateGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">populateGrid()</span></code></a> method since it
-does the following:</p>
+<span class="sig-name descname"><span class="pre">getLLRsFromGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxGrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdschIndexes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llrScales</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getLLRsFromGrid" title="Link to this definition"></a></dt>
+<dd><p>This method is used at the receiving side where the Log-likelihood-Ratios (LLRs) are extracted from the
+received resource grid <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code>. This is in some sense the opposite of the <a class="reference internal" href="#neoradium.pdsch.PDSCH.populateGrid" title="neoradium.pdsch.PDSCH.populateGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">populateGrid()</span></code></a> method
+since it does the following:</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">Deinterleaving<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Converting Physical Resource Blocks (PRBs) to Virtual Resource
-Blocks (VRBs). If enabled, the resources are re-ordered based on the interleaving
-configuration given by <code class="docutils literal notranslate"><span class="pre">interleavingBundleSize</span></code> according to <strong>3GPP TS 38.214,
-Section 5.1.4.1</strong> so get the data in its original order.</p>
+<dd class="field-odd"><p>Converting Physical Resource Blocks (PRBs) to Virtual Resource Blocks (VRBs). If enabled,
+the resources are re-ordered based on the interleaving configuration given by <code class="docutils literal notranslate"><span class="pre">interleavingBundleSize</span></code>
+according to <strong>3GPP TS 38.214, Section 5.1.4.1</strong> so get the data in its original order.</p>
 </dd>
 <dt class="field-even">Layer Demapping<span class="colon">:</span></dt>
-<dd class="field-even"><p>Extracting the modulated complex symbols for each code-word from
-different layers of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> according to <strong>3GPP TS 38.211,
-Section 7.3.1.3</strong>.</p>
+<dd class="field-even"><p>Extracting the modulated complex symbols for each codeword from different layers of this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> according to <strong>3GPP TS 38.211, Section 7.3.1.3</strong>.</p>
 </dd>
 <dt class="field-odd">Demodulation<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Converting complex symbols to Log-likelihood-Ratios (LLRs) using
-the <a class="reference internal" href="Modulation.html#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a> objects in the <code class="docutils literal notranslate"><span class="pre">modems</span></code> list
-of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. The demodulation for each code-word is performed
-separately by its own dedicated <a class="reference internal" href="Modulation.html#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a> object.
-This produces one or two sets of LLRs for each code-word.</p>
+<dd class="field-odd"><p>Converting complex symbols to Log-likelihood-Ratios (LLRs) using the
+<a class="reference internal" href="Modulation.html#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a> objects in the <code class="docutils literal notranslate"><span class="pre">modems</span></code> list of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. The
+demodulation for each codeword is performed separately by its own dedicated
+<a class="reference internal" href="Modulation.html#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a> object. This produces one or two sets of LLRs for each codeword.</p>
 </dd>
 <dt class="field-even">Descrambling<span class="colon">:</span></dt>
-<dd class="field-even"><p>The descrambling of the demodulated LLRs using the <code class="docutils literal notranslate"><span class="pre">rnti</span></code> and <code class="docutils literal notranslate"><span class="pre">nID</span></code>
-properties of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. These properties are used to initialize
-a <em>golden sequence</em> which is then used for the descrambling process according to
-<strong>3GPP TS 38.211, Section 7.3.1.1</strong>. The LLRs for each code-word are descrambled
-separately.</p>
+<dd class="field-even"><p>The descrambling of the demodulated LLRs using the <code class="docutils literal notranslate"><span class="pre">rnti</span></code> and <code class="docutils literal notranslate"><span class="pre">nID</span></code> properties of this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. These properties are used to initialize a <em>golden sequence</em> which is then used for
+the descrambling process according to <strong>3GPP TS 38.211, Section 7.3.1.1</strong>. The LLRs for each codeword
+are descrambled separately.</p>
 </dd>
 </dl>
 </div></blockquote>
-<p>This function returns a list of one or two numpy arrays representing the LLRs
-for each code-word.</p>
+<p>This function returns a list of one or two numpy arrays representing the LLRs for each codeword.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rxGrid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The equalized received resource grid associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.
-Usually this is the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object obtained after
-equalization in the receiver pipeline (See the
+<li><p><strong>rxGrid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The equalized received resource grid associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. Usually this is the
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object obtained after equalization in the receiver pipeline (See the
 <a class="reference internal" href="Grid.html#neoradium.grid.Grid.equalize" title="neoradium.grid.Grid.equalize"><code class="xref py py-meth docutils literal notranslate"><span class="pre">equalize()</span></code></a> function).</p></li>
-<li><p><strong>pdschIndexes</strong> (<em>3-tuple</em>) – A tuple of 3 lists specifying locations of the set of resource elements
-in <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code> that are assigned to the user data. The function
-<a class="reference internal" href="#neoradium.pdsch.PDSCH.getReIndexes" title="neoradium.pdsch.PDSCH.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getReIndexes()</span></code></a> is usually used to obtain this.</p></li>
-<li><p><strong>llrScales</strong> (<em>3-D numpy array</em>) – The Log-Likelihood Ratios (LLR) scaling factors which are used
-by demodulating process when extracting Log-Likelihood Ratios (LLRs)
-from the equalized resource grid. The shape of this array <strong>must</strong>
-be the same shape as <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code>.</p></li>
-<li><p><strong>noiseVar</strong> (<em>float</em><em> or </em><em>None</em><em> (</em><em>default: None</em><em>)</em>) – The variance of the Additive White Gaussian Noise (AWGN) present in
-the received resource grid. If this is not provided (<code class="docutils literal notranslate"><span class="pre">noiseVar=None</span></code>),
-This function uses the <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of the <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code> object.</p></li>
-<li><p><strong>useMax</strong> (<em>Boolean</em><em> (</em><em>default: True</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the
-calculation of the LLR values. This is faster but uses an
-approximation and is slightly less accurate than the actual Log
-Likelihood method which uses logarithm and exponential functions.
-If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the slower more accurate method is used.</p></li>
+<li><p><strong>pdschIndexes</strong> (<em>3-tuple</em>) – A tuple of 3 lists specifying locations of the set of resource elements in <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code> that are assigned
+to the user data. The function <a class="reference internal" href="#neoradium.pdsch.PDSCH.getReIndexes" title="neoradium.pdsch.PDSCH.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getReIndexes()</span></code></a> is typically used to obtain this.</p></li>
+<li><p><strong>llrScales</strong> (<em>3-D numpy array</em>) – The Log-Likelihood Ratios (LLR) scaling factors which are used by demodulating process when extracting
+Log-Likelihood Ratios (LLRs) from the equalized resource grid. The shape of this array <strong>must</strong> be the
+same shape as <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code>.</p></li>
+<li><p><strong>noiseVar</strong> (<em>float</em><em> or </em><em>None</em>) – The variance of the Additive White Gaussian Noise (AWGN) present in the received resource grid. If this
+is not provided (<code class="docutils literal notranslate"><span class="pre">noiseVar=None</span></code>), This function uses the <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of the <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code> object.</p></li>
+<li><p><strong>useMax</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the calculation of the LLR values. This is
+faster but uses an approximation and is slightly less accurate than the actual Log Likelihood method
+which uses logarithm and exponential functions. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the slower more accurate method is used.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of one or two numpy arrays each representing the LLRs for each
-code-word.</p>
+<dd class="field-even"><p>A list of one or two numpy arrays each representing the LLRs for each codeword.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -736,38 +672,31 @@ code-word.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.getHardBitsFromGrid">
-<span class="sig-name descname"><span class="pre">getHardBitsFromGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxGrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdschIndexes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llrScales</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getHardBitsFromGrid" title="Permalink to this definition"></a></dt>
-<dd><p>This method first calls the <a class="reference internal" href="#neoradium.pdsch.PDSCH.getLLRsFromGrid" title="neoradium.pdsch.PDSCH.getLLRsFromGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getLLRsFromGrid()</span></code></a> function above and
-then uses hard-decisions on the returned LLRs to get the output user bits.</p>
-<p>This can be used when there is no channel coding in the communication
-pipeline. It returns a list of one or two numpy arrays of bits for each
-code-word.</p>
+<span class="sig-name descname"><span class="pre">getHardBitsFromGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxGrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdschIndexes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llrScales</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getHardBitsFromGrid" title="Link to this definition"></a></dt>
+<dd><p>This method first calls the <a class="reference internal" href="#neoradium.pdsch.PDSCH.getLLRsFromGrid" title="neoradium.pdsch.PDSCH.getLLRsFromGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getLLRsFromGrid()</span></code></a> function above and then uses hard-decisions on the
+returned LLRs to get the output user bits.</p>
+<p>This can be used when there is no channel coding in the communication pipeline. It returns a list of one or
+two numpy arrays of bits for each codeword.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rxGrid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The equalized received resource grid associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.
-Usually this is the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object obtained after
-equalization in the receiver pipeline (See the
+<li><p><strong>rxGrid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The equalized received resource grid associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. Usually this is the
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object obtained after equalization in the receiver pipeline (See the
 <a class="reference internal" href="Grid.html#neoradium.grid.Grid.equalize" title="neoradium.grid.Grid.equalize"><code class="xref py py-meth docutils literal notranslate"><span class="pre">equalize()</span></code></a> function).</p></li>
-<li><p><strong>pdschIndexes</strong> (<em>3-tuple</em>) – A tuple of 3 lists specifying locations of the set of resource elements
-in <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code> that are assigned to the user data. The function
-<a class="reference internal" href="#neoradium.pdsch.PDSCH.getReIndexes" title="neoradium.pdsch.PDSCH.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getReIndexes()</span></code></a> is usually used to obtain this.</p></li>
-<li><p><strong>llrScales</strong> (<em>3-D numpy array</em>) – The Log-Likelihood Ratios (LLR) scaling factors which are used
-by demodulating process when extracting Log-Likelihood Ratios (LLRs)
-from the equalized resource grid. The shape of this array <strong>must</strong>
-be the same shape as <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code>.</p></li>
-<li><p><strong>noiseVar</strong> (<em>float</em><em> or </em><em>None</em><em> (</em><em>default: None</em><em>)</em>) – The variance of the Additive White Gaussian Noise (AWGN) present in
-the received resource grid. If this is not provided (<code class="docutils literal notranslate"><span class="pre">noiseVar=None</span></code>),
-This function uses the <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of the <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code> object.</p></li>
-<li><p><strong>useMax</strong> (<em>Boolean</em><em> (</em><em>default: True</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the
-calculation of the LLR values. This is faster but uses an
-approximation and is slightly less accurate than the actual Log
-Likelihood method which uses logarithm and exponential functions.
-If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the slower more accurate method is used.</p></li>
+<li><p><strong>pdschIndexes</strong> (<em>3-tuple</em>) – A tuple of 3 lists specifying locations of the set of resource elements in <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code> that are assigned
+to the user data. The function <a class="reference internal" href="#neoradium.pdsch.PDSCH.getReIndexes" title="neoradium.pdsch.PDSCH.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getReIndexes()</span></code></a> is typically used to obtain this.</p></li>
+<li><p><strong>llrScales</strong> (<em>3-D numpy array</em>) – The Log-Likelihood Ratios (LLR) scaling factors which are used by demodulating process when extracting
+Log-Likelihood Ratios (LLRs) from the equalized resource grid. The shape of this array <strong>must</strong> be the
+same shape as <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code>.</p></li>
+<li><p><strong>noiseVar</strong> (<em>float</em><em> or </em><em>None</em>) – The variance of the Additive White Gaussian Noise (AWGN) present in the received resource grid. If this
+is not provided (<code class="docutils literal notranslate"><span class="pre">noiseVar=None</span></code>), This function uses the <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of the <code class="docutils literal notranslate"><span class="pre">rxGrid</span></code> object.</p></li>
+<li><p><strong>useMax</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the calculation of the LLR values. This
+is faster but uses an approximation and is slightly less accurate than the actual Log Likelihood method
+which uses logarithm and exponential functions. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the slower more accurate method is used.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of one or two numpy arrays of bits for each code-word.</p>
+<dd class="field-even"><p>A list of one or two numpy arrays of bits for each codeword.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -777,11 +706,10 @@ If <code class="docutils literal notranslate"><span class="pre">False</span></co
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.getDataSymbols">
-<span class="sig-name descname"><span class="pre">getDataSymbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getDataSymbols" title="Permalink to this definition"></a></dt>
-<dd><p>This is a helper function that returns the modulated complex symbols
-for all user data in <code class="docutils literal notranslate"><span class="pre">grid</span></code> for this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> object. The
-following code shows 2 different ways to do this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting the indexes of user data in &quot;grid&quot; and then using them to get &quot;dataSymbols1&quot;:</span>
+<span class="sig-name descname"><span class="pre">getDataSymbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getDataSymbols" title="Link to this definition"></a></dt>
+<dd><p>This is a helper function that returns the modulated complex symbols for all user data in <code class="docutils literal notranslate"><span class="pre">grid</span></code> for this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> object. The following code shows two different ways to do this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting the indices of user data in &quot;grid&quot; and then using them to get &quot;dataSymbols1&quot;:</span>
 <span class="n">dataReIndexes</span> <span class="o">=</span> <span class="n">myPdsch</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">&quot;PDSCH&quot;</span><span class="p">)</span>
 <span class="n">dataSymbols1</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span> <span class="n">dataReIndexes</span> <span class="p">]</span>
 
@@ -793,12 +721,10 @@ following code shows 2 different ways to do this:</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The resource grid associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> containing
-the user data.</p>
+<dd class="field-odd"><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The resource grid associated with this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> containing the user data.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A 1D numpy array of modulated complex symbols corresponding to
-the user data in <code class="docutils literal notranslate"><span class="pre">grid</span></code>.</p>
+<dd class="field-even"><p>A 1D numpy array of modulated complex symbols corresponding to the user data in <code class="docutils literal notranslate"><span class="pre">grid</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Numpy array</p>
@@ -808,60 +734,48 @@ the user data in <code class="docutils literal notranslate"><span class="pre">gr
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.getPrecodingMatrix">
-<span class="sig-name descname"><span class="pre">getPrecodingMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channelMatrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getPrecodingMatrix" title="Permalink to this definition"></a></dt>
-<dd><p>This function calculates the precoding matrix that can be applied to
-a resource grid. This function supports <em>Precoding RB groups (PRGs)</em>
-which means different precoding matrixes could be applied to different
-groups of subcarriers in the resource grid. See <strong>3GPP TS 38.214,
-Section 5.1.2.3</strong> for more details. The <code class="docutils literal notranslate"><span class="pre">prgSize</span></code> property of
-<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> determines what type of precoding matrix is returned
-by this function:</p>
+<span class="sig-name descname"><span class="pre">getPrecodingMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channelMatrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getPrecodingMatrix" title="Link to this definition"></a></dt>
+<dd><p>This function calculates the precoding matrix that can be applied to a resource grid. This function supports
+<em>Precoding RB groups (PRGs)</em> which means different precoding matrices could be applied to different groups
+of subcarriers in the resource grid. See <strong>3GPP TS 38.214, Section 5.1.2.3</strong> for more details. The <code class="docutils literal notranslate"><span class="pre">prgSize</span></code>
+property of <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> determines what type of precoding matrix is returned by this function:</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">Wideband<span class="colon">:</span></dt>
-<dd class="field-odd"><p>If <code class="docutils literal notranslate"><span class="pre">prgSize</span></code> is set to zero, a single <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code>, matrix
-is returned where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antenna and
-<code class="docutils literal notranslate"><span class="pre">Nl</span></code> is the number of layers in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. In this
-case the same precoding is applied to all subcarriers of the resource
-grid.</p>
+<dd class="field-odd"><p>If <code class="docutils literal notranslate"><span class="pre">prgSize</span></code> is set to zero, a single <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code>, matrix is returned where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the
+number of transmitter antenna and <code class="docutils literal notranslate"><span class="pre">Nl</span></code> is the number of layers in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. In this
+case the same precoding is applied to all subcarriers of the resource grid.</p>
 </dd>
 <dt class="field-even">Using PRGs<span class="colon">:</span></dt>
-<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">prgSize</span></code> is set to 2 or 4, a list of tuples of the
-form (<code class="docutils literal notranslate"><span class="pre">groupRBs</span></code>, <code class="docutils literal notranslate"><span class="pre">groupF</span></code>) is returned. For each entry in the list,
-the <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code> precoding matrix <code class="docutils literal notranslate"><span class="pre">groupF</span></code> is applied to all
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">prgSize</span></code> is set to 2 or 4, a list of tuples of the form (<code class="docutils literal notranslate"><span class="pre">groupRBs</span></code>, <code class="docutils literal notranslate"><span class="pre">groupF</span></code>)
+is returned. For each entry in the list, the <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code> precoding matrix <code class="docutils literal notranslate"><span class="pre">groupF</span></code> is applied to all
 subcarriers of the resource blocks listed in <code class="docutils literal notranslate"><span class="pre">groupRBs</span></code>.</p>
 </dd>
 </dl>
 </div></blockquote>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>It is assumed that the <code class="docutils literal notranslate"><span class="pre">channelMatrix</span></code> is obtained based on the
-same <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object as the one used
-by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.</p>
+<p>It is assumed that the <code class="docutils literal notranslate"><span class="pre">channelMatrix</span></code> is obtained based on the same
+<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object as the one used by this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channelMatrix</strong> (<em>Numpy array</em>) – An <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> complex numpy array representing the channel matrix.
-It can be the actual channel matrix obtained directly from a channel model
-using the <a class="reference internal" href="Channels.html#neoradium.channel.ChannelBase.getChannelMatrix" title="neoradium.channel.ChannelBase.getChannelMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getChannelMatrix()</span></code></a> method
-(perfect estimation), or an estimated channel matrix obtained using the
-<a class="reference internal" href="Grid.html#neoradium.grid.Grid.estimateChannelLS" title="neoradium.grid.Grid.estimateChannelLS"><code class="xref py py-meth docutils literal notranslate"><span class="pre">estimateChannelLS()</span></code></a> method.</p>
+<dd class="field-odd"><p><strong>channelMatrix</strong> (<em>Numpy array</em>) – An <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> complex numpy array representing the channel matrix. It can be the actual channel
+matrix obtained directly from a channel model using the
+<a class="reference internal" href="Channels.html#neoradium.channelmodel.ChannelModel.getChannelMatrix" title="neoradium.channelmodel.ChannelModel.getChannelMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getChannelMatrix()</span></code></a> method (perfect estimation), or an
+estimated channel matrix obtained using the <a class="reference internal" href="Grid.html#neoradium.grid.Grid.estimateChannelLS" title="neoradium.grid.Grid.estimateChannelLS"><code class="xref py py-meth docutils literal notranslate"><span class="pre">estimateChannelLS()</span></code></a> method.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p>Depending on the <code class="docutils literal notranslate"><span class="pre">prgSize</span></code> property of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>, the returned
-value can be:</p>
+<dd class="field-even"><p><p>Depending on the <code class="docutils literal notranslate"><span class="pre">prgSize</span></code> property of this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>, the returned value can be:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Numpy Array<span class="colon">:</span></dt>
-<dd class="field-odd"><p>If <code class="docutils literal notranslate"><span class="pre">prgSize</span></code> is set to zero, a single <em>Wideband</em> <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code>,
-matrix is returned where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antenna and
-<code class="docutils literal notranslate"><span class="pre">Nl</span></code> is the number of layers in this <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. In this case
-the same precoding is applied to all subcarriers of the resource
-grid.</p>
+<dd class="field-odd"><p>If <code class="docutils literal notranslate"><span class="pre">prgSize</span></code> is set to zero, a single <em>Wideband</em> <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code>, matrix is returned where
+<code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antenna and <code class="docutils literal notranslate"><span class="pre">Nl</span></code> is the number of layers in this
+<a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>. In this case the same precoding is applied to all subcarriers of the resource grid.</p>
 </dd>
 <dt class="field-even">list of tuples<span class="colon">:</span></dt>
-<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">prgSize</span></code> is set to 2 or 4, a list of tuples of the
-form (<code class="docutils literal notranslate"><span class="pre">groupRBs</span></code>, <code class="docutils literal notranslate"><span class="pre">groupF</span></code>) is returned. For each entry in the list,
-the <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code> precoding matrix <code class="docutils literal notranslate"><span class="pre">groupF</span></code> is applied to all
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">prgSize</span></code> is set to 2 or 4, a list of tuples of the form (<code class="docutils literal notranslate"><span class="pre">groupRBs</span></code>, <code class="docutils literal notranslate"><span class="pre">groupF</span></code>)
+is returned. For each entry in the list, the <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code> precoding matrix <code class="docutils literal notranslate"><span class="pre">groupF</span></code> is applied to all
 subcarriers of the resource blocks listed in <code class="docutils literal notranslate"><span class="pre">groupRBs</span></code>.</p>
 </dd>
 </dl>
@@ -875,30 +789,26 @@ subcarriers of the resource blocks listed in <code class="docutils literal notra
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.pdsch.PDSCH.getTxBlockSize">
-<span class="sig-name descname"><span class="pre">getTxBlockSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">codeRates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xOverhead</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaleFactor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getTxBlockSize" title="Permalink to this definition"></a></dt>
-<dd><p>This function calculates the transport block size based on the desired
-code rate (<code class="docutils literal notranslate"><span class="pre">codeRates</span></code>), the number of additional overhead resource
-elements (<code class="docutils literal notranslate"><span class="pre">xOverhead</span></code>), and the scaling factor (<code class="docutils literal notranslate"><span class="pre">scaleFactor</span></code>). It
-returns a list of one or two integer values specifying the size of
-transport blocks for each code-word. This implementation is based on <strong>3GPP
-TS 38.214, Section 5.1.3.2</strong>.</p>
+<span class="sig-name descname"><span class="pre">getTxBlockSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">codeRates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xOverhead</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaleFactor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getTxBlockSize" title="Link to this definition"></a></dt>
+<dd><p>This function calculates the transport block size based on the desired code rate (<code class="docutils literal notranslate"><span class="pre">codeRates</span></code>), the number
+of additional overhead resource elements (<code class="docutils literal notranslate"><span class="pre">xOverhead</span></code>), and the scaling factor (<code class="docutils literal notranslate"><span class="pre">scaleFactor</span></code>). It returns
+a list of one or two integer values specifying the size of transport blocks for each codeword. This
+implementation is based on <strong>3GPP TS 38.214, Section 5.1.3.2</strong>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>codeRates</strong> (<em>float</em><em>, </em><em>list</em><em>, </em><em>numpy array</em><em>, or </em><em>tuple</em>) – If <code class="docutils literal notranslate"><span class="pre">codeRates</span></code> is a float value, it specifies the same code-rate
-for all code-words. If it is a list, numpy array, or tuple, it should
-contain one or two code-rate values for each code-word. This is the
+<li><p><strong>codeRates</strong> (<em>float</em><em>, </em><em>list</em><em>, </em><em>numpy array</em><em>, or </em><em>tuple</em>) – If <code class="docutils literal notranslate"><span class="pre">codeRates</span></code> is a float value, it specifies the same code-rate for all codewords. If it is a list,
+numpy array, or tuple, it should contain one or two code-rate values for each codeword. This is the
 value <span class="math notranslate nohighlight">\(R\)</span> in <strong>3GPP TS 38.214, Section 5.1.3.2</strong>.</p></li>
-<li><p><strong>xOverhead</strong> (<em>int</em><em> (</em><em>default: 0</em><em>)</em>) – The number of additional <em>overhead</em> resource elements (REs) that should
-be considered when calculating the transport block size. This is the
-value <span class="math notranslate nohighlight">\(N^{PRB}_{oh}\)</span> in <strong>3GPP TS 38.214, Section 5.1.3.2</strong>.</p></li>
-<li><p><strong>scaleFactor</strong> (<em>float</em><em> (</em><em>default: 1.0</em><em>)</em>) – The scaling factor which <strong>must</strong> be one of: 0.25, 0.5, or 1.0. This
-is the value <span class="math notranslate nohighlight">\(S\)</span> in <strong>3GPP TS 38.214, Table 5.1.3.2-2</strong>.</p></li>
+<li><p><strong>xOverhead</strong> (<em>int</em>) – The number of additional <em>overhead</em> resource elements (REs) that should be considered when calculating
+the transport block size. This is the value <span class="math notranslate nohighlight">\(N^{PRB}_{oh}\)</span> in <strong>3GPP TS 38.214, Section 5.1.3.2</strong>.</p></li>
+<li><p><strong>scaleFactor</strong> (<em>float</em>) – The scaling factor, which <strong>must</strong> be one of: 0.25, 0.5, or 1.0. This is the value <span class="math notranslate nohighlight">\(S\)</span> in
+<strong>3GPP TS 38.214, Table 5.1.3.2-2</strong>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of one or two integers depending on number of code-words (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>),
-indicating the transport block size for each code-word.</p>
+<dd class="field-even"><p>A list of one or two integers depending on the number of codewords (<code class="docutils literal notranslate"><span class="pre">numCW</span></code>), indicating the transport
+block size for each codeword.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -922,7 +832,7 @@ indicating the transport block size for each code-word.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, InterDigital, Inc. All Rights Reserved.</p>
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
