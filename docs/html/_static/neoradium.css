@@ -1,3 +1,7 @@
 .wy-nav-content {
     max-width: none;
 }
+
+.red {
+    color: red;
+}

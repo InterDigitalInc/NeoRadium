@@ -9,7 +9,7 @@
   <title>Channel Models &mdash; NeoRadium 0.3.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=eea1f72d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=73ab78ac" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
@@ -490,12 +490,16 @@ in degrees. The default value is [0, 90], which indicates movement along the x-a
 version, the base station is assumed to be stationary.</p>
 </dd>
 <dt class="field-even">txAntenna<span class="colon">:</span></dt>
-<dd class="field-even"><p>The transmitter antenna. This should be an instance of
-<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class.</p>
+<dd class="field-even"><p>The transmitter antenna, which is an instance of
+<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>, <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>,
+or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class. If not specified, a single antenna element is
+automatically created by default.</p>
 </dd>
 <dt class="field-odd">rxAntenna<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The receiver antenna. This should be an instance of
-<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class.</p>
+<dd class="field-odd"><p>The receiver antenna, which is an instance of
+<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>, <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>,
+or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class. If not specified, a single antenna element is
+automatically created by default.</p>
 </dd>
 <dt class="field-even">txOrientation<span class="colon">:</span></dt>
 <dd class="field-even"><p>The orientation of the transmitter antenna. This is a list of three angle values in
@@ -1595,12 +1599,16 @@ ray-tracing are used.</p>
 <dd class="field-even"><p>The Stop-band attenuation value (in dB) used by the channel filter. The default is 80dB.</p>
 </dd>
 <dt class="field-odd">txAntenna<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The transmitter antenna, which is an instance of <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>
-or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class.</p>
+<dd class="field-odd"><p>The transmitter antenna, which is an instance of
+<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>, <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>,
+or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class. If not specified, a single antenna element is
+automatically created by default.</p>
 </dd>
 <dt class="field-even">rxAntenna<span class="colon">:</span></dt>
-<dd class="field-even"><p>The receiver antenna, which is an instance of <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> or
-<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class.</p>
+<dd class="field-even"><p>The receiver antenna, which is an instance of
+<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>, <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>,
+or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class. If not specified, a single antenna element is
+automatically created by default.</p>
 </dd>
 <dt class="field-odd">txOrientation<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The orientation of transmitter antenna. This is a list of 3 angle values in degrees for
