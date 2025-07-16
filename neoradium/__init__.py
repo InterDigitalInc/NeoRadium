@@ -7,7 +7,6 @@ from .polar import PolarEncoder, PolarDecoder
 from .ldpc import LdpcEncoder, LdpcDecoder
 from .carrier import Carrier
 from .csirs import CsiRsConfig, CsiRsSet, CsiRs
-from .csifeedback import CsiReport
 from .cdl import CdlChannel
 from .tdl import TdlChannel
 from .trjchan import TrjChannel, Trajectory
