@@ -21,7 +21,7 @@ transmitted, a PTRS is always associated with one DMRS port.
 # **********************************************************************************************************************
 import numpy as np
 
-from . import Modem
+from .modulation import Modem
 from .utils import goldSequence, toLinear
 
 # This implementation is based on:

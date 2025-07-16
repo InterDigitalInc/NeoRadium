@@ -36,6 +36,8 @@ import matplotlib.patches as patches
 from .utils import polarInterpolate, interpolate, herm, toLinear, toDb
 from .random import random
 from .waveform import Waveform
+from .csirs import CsiRsConfig
+from .dmrs import DMRS
 
 # **********************************************************************************************************************
 class Grid:
