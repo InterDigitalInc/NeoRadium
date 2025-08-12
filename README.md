@@ -22,6 +22,6 @@ month = jul,
 title = {{NeoRadium}},
 url = {https://github.com/InterDigitalInc/NeoRadium},
 version = {0.3.1},
-year = {2015}
+year = {2025}
 }
 ```
