@@ -313,7 +313,7 @@ class CsiRs:
     def getDefaultKmap(self):                                       # Not documented
         # Based on the number of ports returns a valid frequency map that can be used as default.
         return {
-                1: '000000001000' if self.density==3 else '1000',   # k0=3                  (Row 1 or 2)
+                1: '1000' if self.density==3 else '000000001000',   # k0=3                  (Row 1 or 2)
                 2: '001000',                                        # k0=3                  (Row 3)
                 4: '010',                                           # k0=4                  (Row 4)
                 8: '010100',                                        # k0,k1=4,8             (Row 7 or 8)
@@ -329,7 +329,7 @@ class CsiRs:
         # Given the number of ports, the frequency map, density, and CDM Size, this function finds the correct row
         # in 3GPP TS 38.211 Table 7.4.1.5.3-1. See TS 38.211 V17.0.0 (2021-12), Section 7.4.1.5.3 for more info"
         validNumKs, validLens = {
-                                    1: ([1],[12]) if self.density==3 else ([1],[4]),
+                                    1: ([1],[4]) if self.density==3 else ([1],[12]),
                                     2: ([1],[6]),
                                     4: ([1],[3,6]),
                                     8: ([2,4],[6]),
