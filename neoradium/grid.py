@@ -23,10 +23,14 @@ including:
 # Date Changed  By                      Description
 # ------------  --------------------    --------------------------------------------------------------------------------
 # 06/05/2023    Shahab Hamidi-Rad       First version of the file.
-# 12/08/2023    Shahab Hamidi-Rad       Completed the documentation
+# 12/08/2023    Shahab Hamidi-Rad       Completed the documentation.
+# 10/13/2025    Shahab Hamidi-Rad       * Added the calculation of noise power based on the signal power and SNR. See
+#                                         the new 'getNoiseStd' and 'getRePower' functions and the updates to the
+#                                         'addNoise' function.
+#                                       * Added the 'clone' function.
 # **********************************************************************************************************************
 import numpy as np
-import scipy.io
+import os, scipy.io
 from scipy.interpolate import RBFInterpolator, interp1d
 
 import matplotlib.pyplot as plt
@@ -100,7 +104,7 @@ class Grid:
             :RX_DATA: The content type used for the received resource grid. (Created by the OFDM demodulation process)
         
         useReDesc : Boolean
-            If ``True``, the resource grid will also include additional fields that describe the content of each
+            If `True`, the resource grid will also include additional fields that describe the content of each
             resource element (RE). This can be used during the debugging to make sure the resources are allocated
             correctly.
             
@@ -202,12 +206,12 @@ class Grid:
             If specified, it is used as a title for the printed information.
 
         getStr: Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string.
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string.
             Otherwise, nothing is returned.
         """
         if title is None:   title = "Resource Grid Properties:"
@@ -225,6 +229,22 @@ class Grid:
         repStr += self.bwp.print(indent+2, "Bandwidth Part:", True)
         if getStr: return repStr
         print(repStr)
+
+    # ******************************************************************************************************************
+    def clone(self):
+        r"""
+        Creates a copy of this resource grid object.
+
+        Returns
+        -------
+        :py:class:`Grid`
+            A copy of this resource grid object.
+        """
+        grid = Grid(self.bwp, self.numPlanes, self.defaultReType, (self.reDesc is not None), self.numSlots)
+        grid.grid = np.copy(self.grid)
+        grid.reTypeIds = np.copy(self.reTypeIds)
+        grid.noiseVar = self.noiseVar
+        return grid
 
     # ******************************************************************************************************************
     @classmethod
@@ -360,7 +380,7 @@ class Grid:
         Parameters
         ----------
         reTypeStr: str or None
-            If ``reTypeStr`` is ``None``, the default content type of this resource grid is used as the key. For 
+            If ``reTypeStr`` is `None`, the default content type of this resource grid is used as the key. For 
             example if this resource grid was created with ``contents="PDSCH"``, then the indices of all resource 
             elements with content type "PDSCH" are returned.
             
@@ -391,7 +411,7 @@ class Grid:
         Returns
         -------
         3-tuple
-            A tuple of three 1-D numpy arrays specifying a list of locations in the resource grid. This value can be
+            A tuple of three 1-D NumPy arrays specifying a list of locations in the resource grid. This value can be
             used directly to access REs at the specified locations. (See the above example)
         """
         if reTypeStr is None:   reTypeStr = self.retIdToName[self.defaultReType]
@@ -416,7 +436,7 @@ class Grid:
         Parameters
         ----------
         reTypeStr: str or None
-            If ``reTypeStr`` is ``None``, the default content type of this resource grid is used as the key. For
+            If ``reTypeStr`` is `None`, the default content type of this resource grid is used as the key. For
             example, if this resource grid was created with ``contents="PDSCH"``, then the values of all resource
             elements with content type "PDSCH" are returned.
             
@@ -426,8 +446,8 @@ class Grid:
                     
         Returns
         -------
-        1-D numpy array
-            A 1-D complex numpy array containing the values for all REs with the content type specified by
+        1-D NumPy array
+            A 1-D complex NumPy array containing the values for all REs with the content type specified by
             ``reTypeStr``.
         """
         return self.grid[self.getReIndexes(reTypeStr)]
@@ -441,7 +461,7 @@ class Grid:
 
         Parameters
         ----------
-        f: numpy array or list of tuples
+        f: NumPy array or list of tuples
             This function supports two types of precoding:
         
             :Wideband: ``f`` is an ``Nt x Nl`` matrix where ``Nt`` is the number of transmitter antennas and ``Nl``
@@ -475,7 +495,7 @@ class Grid:
         else:
             # f is a 2D matrix of shape Nt x Nl
             if type(f) != np.ndarray:
-                raise ValueError("'f' must be a 2D numpy array or a list of tuples.")
+                raise ValueError("'f' must be a 2D NumPy array or a list of tuples.")
             if f.shape[1] != self.numLayers:
                 raise ValueError("The last dimension of 'f' (%d) must match the first dimension of the grid (%d)"%
                                  (f.shape[-1],self.shape[0]))
@@ -487,7 +507,7 @@ class Grid:
         precodedGrid = Grid(self.bwp, f.shape[0], self.defaultReType)   # Precoded Grid Shape: Nt x L x K
         precodedGrid.grid = np.matmul(f, self.grid, axes=axes)
         
-        newReTypeIds = self.reTypeIds[0]
+        newReTypeIds = self.reTypeIds[0].copy()
         for p in range(1,self.numPlanes):
             diffIdx = np.where( self.reTypeIds[p] != self.reTypeIds[0] )
             if len(diffIdx[0])>0:
@@ -618,8 +638,8 @@ class Grid:
 
         Parameters
         ----------
-        hf: 4-D complex numpy array
-            This is an ``L x K x Nr x Nl`` numpy array representing the estimated channel matrix, where ``L`` is
+        hf: 4-D complex NumPy array
+            This is an ``L x K x Nr x Nl`` NumPy array representing the estimated channel matrix, where ``L`` is
             the number of OFDM symbols, ``K`` is the number of subcarriers, ``Nr`` is the number of receiver antennas,
             and ``Nl`` is the number of layers.
             
@@ -636,7 +656,7 @@ class Grid:
             The equalized grid object of shape ``Nl x L x K`` where ``Nl`` is the number of layers, ``L`` is the
             number of OFDM symbols, and ``K`` is the number of subcarriers.
             
-        llrScales: 3-D numpy array
+        llrScales: 3-D NumPy array
             The Log-Likelihood Ratios (LLR) scaling factors which are used by the demodulation process when extracting
             Log-Likelihood Ratios (LLRs) from the equalized resource grid. The shape of this array is ``Nl x L x K``
             which is similar to ``eqGrid`` above.
@@ -724,7 +744,6 @@ class Grid:
         # visible.
         # Here self is the rxGrid
         # rsInfo can be a "CsiRsConfig" object or a "DMRS" object
-#        if rsInfo.__class__.__name__ == "CsiRsConfig":
         if isinstance(rsInfo, CsiRsConfig):
             csiRsConfig = rsInfo
             lCdm, kCdm = {1: (1,1), 2: (1,2), 4: (2,2), 8:(4,2) }[csiRsConfig.csiRsSetList[0].csiRsList[0].cdmSize]
@@ -732,12 +751,11 @@ class Grid:
             csiRsConfig.populateGrid(rsGrid)
             rsIndexes = rsGrid.getReIndexes("CSIRS_NZP")
 
-#        elif rsInfo.__class__.__name__ == "DMRS":
         elif isinstance(rsInfo, DMRS):
             # For the case of DMRS, the returned channel (Heff) includes the effect of precoding. If 'V' is the
             # precoding matrix, we have y = H.V.x + n. This function returns Heff = H.V.
             dmrs = rsInfo
-            lCdm, kCdm = dmrs.symbols, dmrs.configType
+            lCdm, kCdm = dmrs.symbols, (4 if dmrs.enhanced else 2)
             rsGrid = self.bwp.createGrid( len(dmrs.pxxch.portSet) )
             dmrs.populateGrid(rsGrid)
             rsIndexes = rsGrid.getReIndexes("DMRS")
@@ -876,7 +894,7 @@ class Grid:
 
             h_p = \frac {Y_p} P  \qquad \qquad \qquad \text{(element-wise division)}
 
-        2) If ``meanCdm`` is ``True``, the :math:`h_p` values in each CDM group are averaged which results in a new
+        2) If ``meanCdm`` is `True`, the :math:`h_p` values in each CDM group are averaged which results in a new
         smaller set of :math:`h_p` values located at centers of CDM groups.
         
         3) Frequency interpolation along subcarriers is applied to :math:`h_p` values at all OFDM symbols containing 
@@ -891,20 +909,20 @@ class Grid:
 
         Parameters
         ----------
-        rsInfo: :py:class:`~neoradium.csirs.CsiRsConfig` or :py:class:`~neoradium.pdsch.DMRS`
+        rsInfo: :py:class:`~neoradium.csirs.CsiRsConfig` or :py:class:`~neoradium.dmrs.DMRS`
             This object contain reference signal information for the channel estimation. If it is a 
             :py:class:`~neoradium.csirs.CsiRsConfig` object, the channel matrix is estimated based on the CSI-RS
             signals which does not include the precoding effect.
             
-            If this is a :py:class:`~neoradium.pdsch.DMRS` object, the channel matrix is estimated based on the 
+            If this is a :py:class:`~neoradium.dmrs.DMRS` object, the channel matrix is estimated based on the 
             demodulation reference signals which includes the precoding effect.
             
         meanCdm: Boolean
-            If ``True``, the :math:`h_p` values at pilot locations for each CDM group are averaged before applying 
+            If `True`, the :math:`h_p` values at pilot locations for each CDM group are averaged before applying 
             subcarrier interpolation. Otherwise interpolation is applied directly on the :math:`h_p` values.
             
         polarInt: Boolean
-            If ``True``, the interpolation along the subcarriers is applied in polar coordinates. This means all
+            If `True`, the interpolation along the subcarriers is applied in polar coordinates. This means all
             :math:`h_p` values are converted to the polar coordinates and then the type of interpolation specified by
             ``kernel`` is applied to magnitudes and angles of these values. The results are then converted back to the
             cartesian coordinates. Otherwise (default), the interpolation is applied in the cartesian coordinates.
@@ -942,12 +960,12 @@ class Grid:
             
         Returns
         -------
-        hEst: a 4-D complex numpy array
-            If ``rsInfo`` is a :py:class:`~neoradium.csirs.CsiRsConfig` object, an ``L x K x Nr x Nt`` complex numpy
+        hEst: a 4-D complex NumPy array
+            If ``rsInfo`` is a :py:class:`~neoradium.csirs.CsiRsConfig` object, an ``L x K x Nr x Nt`` complex NumPy
             array is returned where ``L`` is the number of OFDM symbols, ``K`` is the number of subcarriers, ``Nr`` is
             the number of receiver antennas, and ``Nt`` is the number of transmitter antennas.
             
-            If ``rsInfo`` is a :py:class:`~neoradium.pdsch.DMRS` object, an ``L x K x Nr x Nl`` complex numpy array
+            If ``rsInfo`` is a :py:class:`~neoradium.dmrs.DMRS` object, an ``L x K x Nr x Nl`` complex NumPy array
             is returned where ``L`` is the number of OFDM symbols, ``K`` is the number of subcarriers, ``Nr`` is
             the number of receiver antennas, and ``Nl`` is the number of layers.
             
@@ -973,8 +991,8 @@ class Grid:
         
         Parameters
         ----------
-        channelMatrix: 4-D complex numpy array
-            This is an ``L x K x Nr x Nt`` numpy array representing the estimated channel matrix, where ``L`` is the
+        channelMatrix: 4-D complex NumPy array
+            This is an ``L x K x Nr x Nt`` NumPy array representing the estimated channel matrix, where ``L`` is the
             number of OFDM symbols, ``K`` is the number of subcarriers, ``Nr`` is the number of receiver antennas,
             and ``Nt`` is the number of transmitter antennas.
                         
@@ -1000,56 +1018,142 @@ class Grid:
         return grid
 
     # ******************************************************************************************************************
+    def getRePower(self):
+        # Returns the average RE power across the entire grid (over one slot, the full bandwidth, and all ports).
+        # This corresponds to S_{RE} as defined in:
+        # https://www.mathworks.com/help/5g/ug/snr-definition-used-in-link-simulations.html
+        return (self.grid.var()/(self.bwp.nFFT**2)).item()
+
+    # ******************************************************************************************************************
+    def getNoiseStd(self, snr):
+        r"""
+        This function calculates the noise standard deviation for the given signal-to-noise ratio (SNR). It first 
+        calculates the average received signal power per resource element (RE) and then uses it, along with the given 
+        SNR, to calculate the noise power. The returned standard deviation can be used directly by the 
+        :py:meth:`~Grid.addNoise` method using the ``noiseStd`` argument.
+
+        Parameters
+        ----------
+        snr : float
+            The signal-to-noise ratio in linear scale (not in dB).
+        
+        Returns
+        -------
+        float
+            The noise standard deviation.
+        """
+        # See equation 7 in the page "SNR, signal and noise power calculations" in the "Implementation Notes" slides
+        return np.sqrt(self.grid.var()/snr)
+
+    # ******************************************************************************************************************
     def addNoise(self, **kwargs):
         r"""
-        Adds Additive White Gaussian Noise (AWGN) to this resource grid based on the given noise properties. The
-        *noisy* grid is then returned in a new :py:class:`Grid` object. The ``noiseVar`` property of the returned grid
-        contains the variance of the noise applied by this function.
+        Adds Additive White Gaussian Noise (AWGN) to this resource grid based on the specified noise properties.
+        The *noisy* grid is returned as a new :py:class:`Grid` object. The ``noiseVar`` property of the returned
+        grid contains the variance of the noise applied by this function.
+
+        If you already have a noise signal in a NumPy array, you can use the ``noise`` parameter of this function
+        to apply it directly to this resource grid:
+
+        .. code-block:: python
+            :caption: Example
+
+            myNoise = random.awgn(rxGrid.shape, 0.1)    # Create AWGN with σ = 0.1
+            rxGrid.addNoise(noise=myNoise)
         
+        If you know the variance or standard deviation of the noise, you can use them directly by setting the
+        arguments ``noiseStd`` and ``noiseVar`` respectively:
+
+        .. code-block:: python
+            :caption: Example
+
+            rxGrid.addNoise(noiseStd=0.1)       # Same result as above
+            rxGrid.addNoise(noiseVar=0.01)      # Same result as above
+
+        If you have a signal-to-noise ratio (SNR), there are two approaches for adding noise to the received
+        resource grid:
+
+        **Matlab Approach:**
+
+        In this case, it is assumed that the received signal power is normalized to 
+        :math:`\frac{1}{N_r}`, where :math:`N_r` is the number of receiver antennas. Please note that when
+        channel models such as CDL, TDL, or trajectory-based models are used in the communication
+        pipeline, this assumption is not always valid. Support for this approach is included only to allow 
+        comparison with Matlab.
+
+        .. math::
+
+            \sigma^2_{AWGN} = \frac{1}{N_r \cdot 10^{\frac{SNR_{dB}}{10}}}
+
+        .. code-block:: python
+            :caption: Example
+
+            rxWaveform.addNoise(snrDb=mySnrDb, useRxPower=False)
+                
+        **Using RX Power:**
+
+        In this case, the function first calculates the average received signal power per resource 
+        element (RE) and uses it, along with the given signal-to-noise ratio, to calculate the noise power.
+
+        .. math::
+
+            \sigma^2_{AWGN} = \frac{\sigma^2_{RX}}{10^{\frac{SNR_{dB}}{10}}}
+
+        .. code-block:: python
+            :caption: Example
+
+            rxWaveform.addNoise(snrDb=mySnrDb, useRxPower=True)
+
+        Please refer to the notebook :doc:`../Playground/Notebooks/Others/SnrCalculations` for 
+        a complete analysis of how NeoRadium calculates and applies noise power for a given signal-to-noise ratio.
+
         Parameters
         ----------
         kwargs: dict
-            One of the following parameters **must** be specified. They specify how the noise signal is generated.
+            The amount of noise must be specified by one of the parameters ``noise``, ``noiseStd``, ``noiseVar``, or
+            ``snrDb``.
             
-            :noise: A numpy array with the same shape as this :py:class:`Grid` object containing the noise information.
-                If the noise information is provided by ``noise`` it is added directly to the grid. In this case all
-                other parameters are ignored.
-            
-            :noiseStd: The standard deviation of the noise. An AWGN complex noise signal is generated with zero-mean
-                and the specified standard deviation. If ``noiseStd`` is specified, ``noiseVar`` and ``snrDb`` values
-                below are ignored.
+            :noise: NumPy array with the same shape as this :py:class:`Grid` object containing the noise values.
+                If ``noise`` is provided, it is added directly to the grid and all other parameters are ignored.
 
-            :noiseVar: The variance of the noise. An AWGN complex noise signal is generated with zero-mean and the
-                specified variance. If ``noiseVar`` is specified, the value of ``snrDb`` is ignored.
+            :noiseStd: The standard deviation of the noise. AWGN complex noise is generated with zero mean
+                and the specified standard deviation. If ``noiseStd`` is specified, ``noiseVar`` and ``snrDb`` 
+                are ignored.
 
-            :snrDb: The signal to noise ratio in dB. First the noise variance is calculated using the given SNR value
-                and then an AWGN complex noise signal is generated with zero-mean and the calculated variance. This
-                function uses the following formula to calculate the noise variance :math:`\sigma^2_{AWGN}` from
-                :math:`snrDb`:
-                
-                .. math::
+            :noiseVar: The variance of the noise. AWGN complex noise is generated with zero mean
+                and the specified variance. If ``noiseVar`` is specified, the ``snrDb`` value is ignored.
 
-                    \sigma^2_{AWGN} = \frac 1 {N_r.10^{\frac {snrDb} {10}}}
+            :snrDb: The signal-to-noise ratio in decibels (dB). The noise standard deviation is calculated using
+                the given SNR value and the ``useRxPower`` parameter. Then, AWGN complex noise is generated 
+                with zero mean and the calculated standard deviation.
 
-                where :math:`N_r` is the number of receiver antennas.
-                
-            :ranGen: If provided, it is used as the random generator
-                for the AWGN generation. Otherwise, **NeoRadium**'s :doc:`global random generator <./Random>` is used.
+            :useRxPower: If `True`, this function first calculates the average received signal power per resource 
+                element (RE) and uses it, along with the given signal-to-noise ratio, to compute the noise power. 
+                Otherwise, it is assumed that the received signal power is normalized to :math:`\frac{1}{N_r}` (Matlab 
+                approach), where :math:`N_r` is the number of receiver antennas.
+
+                .. note::
+                    Currently, the default value of ``useRxPower`` is `False` (Matlab approach) for backward
+                    compatibility. However, in future releases, this may change to `True`. To ensure 
+                    forward-compatible code, explicitly set this parameter instead of relying on the default.
+
+            :ranGen: If provided, this random generator is used for AWGN generation. Otherwise, **NeoRadium**'s
+                :doc:`global random generator <./Random>` is used.
 
         Returns
         -------
         :py:class:`Grid`
-            A new grid object containing the *noisy* version of this grid. The ``noiseVar`` property of the returned
-            grid contains the variance of the noise applied by this function.
+            A new grid object containing the *noisy* version of this grid. The ``noiseVar`` property of the
+            returned grid contains the variance of the noise applied by this function.
         """
         noise = kwargs.get('noise', None)
         if noise is not None:
             if self.shape != noise.shape:
-                raise ValueError("Shape Mismatch: Grid: %s vs Noise: %s"%(str(self.shape), str(noise.shape)))
+                raise ValueError(f"Shape Mismatch: Grid: {self.shape} vs Noise: {noise.shape}")
             grid = Grid(self.bwp, numPlanes=self.shape[0], numSlots=self.numSlots)
             grid.grid = self.grid + noise
             grid.reTypeIds = self.reTypeIds.copy()
-            grid.noiseVar = noiseStd*noiseStd
+            grid.noiseVar = noise.var()
             return grid
         
         ranGen = kwargs.get('ranGen', random)       # The Random Generator
@@ -1069,7 +1173,14 @@ class Grid:
         snrDb = kwargs.get('snrDb', None)
         if snrDb is not None:
             # SNR is the average SNR per RE per RX antenna
+            # Using 'False' as default value of 'useRxPower' for backward compatibility. This may change in
+            # future releases.
+            useRxPower = kwargs.get('useRxPower', False)
             snr = toLinear(snrDb)
+            if useRxPower:
+                # This is the correct method. We use the actual received signal power to calculate the Noise Varriance
+                return self.addNoise(noiseStd=self.getNoiseStd(snr), ranGen=ranGen)
+            # This is similar to Matlab: Assuming RxPower = 1/nr (Which is not always the case)
             noiseVar = 1/(snr * self.shape[0])  # Note: self.shape[0] is the number of RX antennas
             return self.addNoise(noiseStd=np.sqrt(noiseVar), ranGen=ranGen)
 
@@ -1133,3 +1244,4 @@ class Grid:
                     [self.retIdToName[dataType] for dataType in usedDataTypes],
                     loc='lower left', ncol=len(usedDataTypes), bbox_to_anchor=(0, -0.3), fontsize=12)
             plt.show()
+

@@ -18,6 +18,7 @@ transmitted, a PTRS is always associated with one DMRS port.
 # 07/18/2023    Shahab Hamidi-Rad       First version of the file.
 # 12/26/2023    Shahab Hamidi-Rad       Completed the documentation.
 # 06/27/2025    Shahab Hamidi-Rad       Updated the documentation.
+# 10/21/2025    Shahab Hamidi-Rad       Added support for enhanced DMRS (3GPP TS 38.211, section 7.4.1.1.2).
 # **********************************************************************************************************************
 import numpy as np
 
@@ -132,7 +133,53 @@ ptrsRefREs = [[],   # See 3GPP TS 38.211. Table 7.4.1.2.2-1
                         [5,  10, 11, 4]         # Port 1005
               ]
              ]
-    
+
+dmrsWs = [# Config Type 1 (3GPP TS 38.211 V18.1.0, Table 7.4.1.1.2-1)
+          #        Wf           Wt        p
+          [([1,  1,  1,  1], [1,  1]),  # 1000
+           ([1, -1,  1, -1], [1,  1]),  # 1001
+           ([1,  1,  1,  1], [1,  1]),  # 1002
+           ([1, -1,  1, -1], [1,  1]),  # 1003
+           ([1,  1,  1,  1], [1, -1]),  # 1004
+           ([1, -1,  1, -1], [1, -1]),  # 1005
+           ([1,  1,  1,  1], [1, -1]),  # 1006
+           ([1, -1,  1, -1], [1, -1]),  # 1007
+           ([1,  1, -1, -1], [1,  1]),  # 1008
+           ([1, -1, -1,  1], [1,  1]),  # 1009
+           ([1,  1, -1, -1], [1,  1]),  # 1010
+           ([1, -1, -1,  1], [1,  1]),  # 1011
+           ([1,  1, -1, -1], [1, -1]),  # 1012
+           ([1, -1, -1,  1], [1, -1]),  # 1013
+           ([1,  1, -1, -1], [1, -1]),  # 1014
+           ([1, -1, -1,  1], [1, -1])], # 1015
+          # Config Type 2 (3GPP TS 38.211 V18.1.0, Table 7.4.1.1.2-2)
+          #        Wf           Wt        p
+          [([1,  1,  1,  1], [1,  1]),  # 0
+           ([1, -1,  1, -1], [1,  1]),  # 1
+           ([1,  1,  1,  1], [1,  1]),  # 2
+           ([1, -1,  1, -1], [1,  1]),  # 3
+           ([1,  1,  1,  1], [1,  1]),  # 4
+           ([1, -1,  1, -1], [1,  1]),  # 5
+           ([1,  1,  1,  1], [1, -1]),  # 6
+           ([1, -1,  1, -1], [1, -1]),  # 7
+           ([1,  1,  1,  1], [1, -1]),  # 8
+           ([1, -1,  1, -1], [1, -1]),  # 9
+           ([1,  1,  1,  1], [1, -1]),  # 10
+           ([1, -1,  1, -1], [1, -1]),  # 11
+           ([1,  1, -1, -1], [1,  1]),  # 12
+           ([1, -1, -1,  1], [1,  1]),  # 13
+           ([1,  1, -1, -1], [1,  1]),  # 14
+           ([1, -1, -1,  1], [1,  1]),  # 15
+           ([1,  1, -1, -1], [1,  1]),  # 16
+           ([1, -1, -1,  1], [1,  1]),  # 17
+           ([1,  1, -1, -1], [1, -1]),  # 18
+           ([1, -1, -1,  1], [1, -1]),  # 19
+           ([1,  1, -1, -1], [1, -1]),  # 20
+           ([1, -1, -1,  1], [1, -1]),  # 21
+           ([1,  1, -1, -1], [1, -1]),  # 22
+           ([1, -1, -1,  1], [1, -1])]  # 23
+         ]
+
 # **********************************************************************************************************************
 class DMRS:
     r"""
@@ -162,6 +209,10 @@ class DMRS:
                     the minimum resource element group in frequency domain is one RE. In Configuration type 2, the 
                     minimum resource element group in frequency domain is two consecutive REs.
                     
+                :enhanced: This boolean parameter indicates whether the enhanced DMRS, as introduced in 3GPP release 18, 
+                    should be used. This parameter is equivalent to the ``enhanced-dmrs-Type`` as explained in 
+                    **3GPP TS 38.211, section 7.4.1.1.2**. The default value is `False`.
+                    
                 :symbols: The number of OFDM symbols used with each group of DMRS REs. It can be 1 (*Single*) or 
                     2 (*Double*). The default is *Single*.
 
@@ -188,10 +239,10 @@ class DMRS:
                     and nIDs[1] are explained in **3GPP TS 38.211, Section 7.4.1.1.1** (*scramblingID0*, 
                     *scramblingID1*).
                     
-                :sameSeq: A boolean value set to ``True`` by default. If ``True``, the same binary sequence is created
+                :sameSeq: A boolean value set to `True` by default. If `True`, the same binary sequence is created
                     for all CDM Groups. Otherwise the sequences for different CDM Groups are initialized differently. 
-                    This corresponds to the parameter setting ``dmrs-Downlink`` in **3GPP TS 38.211, 
-                    Section 7.4.1.1.1**.
+                    This is related to the parameter setting ``dmrs-Downlink`` in **3GPP TS 38.211, 
+                    Section 7.4.1.1.1**. ``sameSeq=True`` means ``dmrs-Downlink`` is not provided.
 
                 :epreRatioDb: The ratio of PXXCH energy per resource element (EPRE) to DMRS EPRE in dB. If not 
                     specified, **3GPP TS 38.214, Table 4.1-1** is used to set this parameter.
@@ -202,13 +253,13 @@ class DMRS:
             :cdmGroups: A list of CDM groups used by this DMRS. This property is set based on the ``portSet`` and 
                 ``configType`` parameters.
 
-            :symSet: A numpy array containing the indices of the OFDM symbols used by this DMRS.
+            :symSet: A NumPy array containing the indices of the OFDM symbols used by this DMRS.
             
-            :ptrs: The :py:class:`PTRS` object associated with this DMRS object or ``None`` if PTRS is not configured.
+            :ptrs: The :py:class:`PTRS` object associated with this DMRS object or `None` if PTRS is not configured.
                 
-            :ptrsEnabled: A boolean read-only property. If ``True`` it means PTRS is enabled, and therefore the ``ptrs``
-                property above should not be ``None``. Otherwise PTRS is disabled and the ``ptrs`` property above
-                should be set to ``None``.
+            :ptrsEnabled: A boolean read-only property. If `True` it means PTRS is enabled, and therefore the ``ptrs``
+                property above should not be `None`. Otherwise PTRS is disabled and the ``ptrs`` property above
+                should be set to `None`.
                 
         The notebook :doc:`../Playground/Notebooks/DMRS/DMRS` shows some examples of configuring DMRS.
         """
@@ -220,6 +271,8 @@ class DMRS:
         
         self.configType = kwargs.get('configType', 1)               # DMRS Configuration Type (1 or 2)
         if self.configType not in [1,2]:    raise ValueError("Invalid DMRS 'configType' value! (It must be 1 or 2)")
+
+        self.enhanced = kwargs.get('enhanced', False)               # enhanced-dmrs-Type
 
         self.symbols = kwargs.get('symbols', 1)                     # DMRS symbols 1->Single, 2->Double
         if self.symbols not in [1,2]:       raise ValueError("Invalid DMRS 'symbols' value! (It must be 1 or 2)")
@@ -236,7 +289,7 @@ class DMRS:
         elif self.additionalPos not in [0,1]:
             raise ValueError("Invalid 'additionalPos' value! (It must be 0 or 1 for 2-symbol DMRS)")
 
-        ports = kwargs.get('portSet', list(range(pxxch.numLayers)))   # If not specified, use numLayers
+        ports = kwargs.get('portSet', self.pxxch.portSet)           # If not specified, use the pxxch portSet
         if len(ports) != pxxch.numLayers:
             raise ValueError("The number of ports in 'portSet' must match the number of layers (%d)"%(pxxch.numLayers))
         # See TS 38.211 V17.0.0 (2021-12), Table 7.4.1.1.2-5 for the valid range of port numbers
@@ -281,8 +334,9 @@ class DMRS:
         
         self.sameSeq = kwargs.get('sameSeq', True)  # If True, the same binary sequence is created for all CDM
                                                     # Groups. Otherwise the sequences for different CDM Groups are
-                                                    # initialized differently. This is the parameter "dmrs-Downlink"
-                                                    # in 3GPP TS 38.211 V17.0.0 (2021-12), Section 7.4.1.1.1
+                                                    # initialized differently. This is the opposite of the parameter
+                                                    # "dmrs-Downlink" in 3GPP TS 38.211 V17.0.0 (2021-12),
+                                                    # Section 7.4.1.1.1
         lBar, self.symSet = self.getSymSet()
         
         # The ratio of PXXCH EPRE to DM-RS EPRE (EPRE: Energy Per RE)
@@ -311,12 +365,12 @@ class DMRS:
             If specified, it is used as a title for the printed information.
 
         getStr: Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         repStr = "\n" if indent==0 else ""
@@ -436,17 +490,17 @@ class DMRS:
         
         # DMRS Beta: See TS 38.214 V17.0.0 (2021-12), Section 4.1
         dmrsBeta = toLinear(-self.epreRatioDb/2)
-        
+        maxKprime = 4 if self.enhanced else 2
         dmrsAndNoDataREs = []
         for p,portNo in enumerate(self.pxxch.portSet):
             portDmrsREs = dmrsREs + self.deltaShifts[p]
-            cdmGroup = self.cdmGroups[p]
-            # See TS 38.211 V17.0.0 (2021-12), Tables 7.4.1.1.2-1 and 7.4.1.1.2-2
-            wf = [1,-1] if portNo%2 else [1,1]
-            wt = [1,-1] if portNo//([4,6][self.configType-1]) else [1,1]
+            cdmGroup = self.cdmGroups[p]                      # 𝝀
+            wf, wt = dmrsWs[self.configType-1][portNo%100]
             
             for li,l in enumerate(self.symSet):
                 if self.sameSeq:
+                    # Same sequence is used for all CDM groups. This means the higher-layer parameter dmrs-Downlink
+                    # in the DMRS-DownlinkConfig IE is NOT provided.
                     nCSIDlambda = self.scID
                     lambdaBar = 0
                 else:
@@ -468,14 +522,14 @@ class DMRS:
                 lPrime = 0 if self.symbols==1 else li%2                     # See 3GPP TS 38.211 Table 7.4.1.1.2-5
                 for ri,dmrsRB in enumerate(slotMap[l]):
                     for reIdx,re in enumerate(portDmrsREs):
-                        kPrime = reIdx%2
+                        kPrime = reIdx % maxKprime
                         k = 12*dmrsRB + re
                         symIdx = dmrsRB * nREs + reIdx
                         curReType = grid.reTypeAt(p,l,k)
-                        if curReType=="RESERVED":  continue
-                        assert curReType=="UNASSIGNED", \
-                          "Assigning DMRS to the RE(%d,%d,%d) which is already allocated for \"%s\"!"%(p,l,k, curReType)
-                        
+                        if curReType=="RESERVED": continue
+                        if curReType not in ["UNASSIGNED", "DMRS"]:
+                            raise ValueError(f"Trying to allocate the RE at ({p},{l},{k}) for DMRS," +
+                                             f"while it is currently allocated for \"{curReType}\"!")
                         grid[p,l,k] = (dmrsBeta * wf[kPrime] * wt[lPrime] * rawSymbols[symIdx], "DMRS")
                         if grid.reDesc is not None:
                             grid.reDesc[p,l,k] = "DMRS,%s"%('+' if wf[kPrime]*wt[lPrime]>0 else '-')
@@ -524,16 +578,16 @@ class PTRS:
             A set of optional arguments.
 
                 :mcsi: A list of 3 values for ``ptrs-MCS1``, ``ptrs-MCS2``, and ``ptrs-MCS3`` in **3GPP TS 38.214, 
-                    table 5.1.6.3-1** or ``None`` (default). This is used with ``iMCS`` and ``nRBi`` to determine time
+                    table 5.1.6.3-1** or `None` (default). This is used with ``iMCS`` and ``nRBi`` to determine time
                     and frequency density of the PTRS signals. See :ref:`Specifying Time and Frequency
                     density <TimeFreqDensity>` below for more information.
                     
-                :iMCS: The value from **3GPP TS 38.214 tables 5.1.3.1-1 to 5.1.3.1-4** or ``None`` (default). This is
+                :iMCS: The value from **3GPP TS 38.214 tables 5.1.3.1-1 to 5.1.3.1-4** or `None` (default). This is
                     used with ``mcsi`` and ``nRBi`` to determine time and frequency density of the PTRS signals. See
                     :ref:`Specifying Time and Frequency density <TimeFreqDensity>` below for more information.
 
                 :nRBi: A list of 2 values for ``nRB0`` and ``nRB1`` in **3GPP TS 38.214, table 5.1.6.3-2** or 
-                    ``None`` (default). This is used with ``mcsi`` and ``iMCS`` to determine time and frequency
+                    `None` (default). This is used with ``mcsi`` and ``iMCS`` to determine time and frequency
                     density of the PTRS signals. See :ref:`Specifying Time and Frequency density <TimeFreqDensity>`
                     below for more information.
 
@@ -567,11 +621,11 @@ class PTRS:
                     information based on **3GPP TS 38.214, Tables 5.1.6.3-1 and 5.1.6.3-2**.
                     
                 :Direct Setting: In this method, the values ``timeDensity`` and ``freqDensity`` are provided directly.
-                    In this case, all of the values ``mcsi``, ``iMCS``, and ``nRBi`` must be set to ``None`` (default).
+                    In this case, all of the values ``mcsi``, ``iMCS``, and ``nRBi`` must be set to `None` (default).
 
         **Other Properties:**
         
-            :symSet: A numpy array containing the indices of the OFDM symbols used by this :py:class:`PTRS`.
+            :symSet: A NumPy array containing the indices of the OFDM symbols used by this :py:class:`PTRS`.
 
         The notebook :doc:`../Playground/Notebooks/DMRS/PTRS` shows some examples of configuring PTRS.
         """
@@ -653,12 +707,12 @@ class PTRS:
             If specified, it is used as a title for the printed information.
 
         getStr: Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         repStr = "\n" if indent==0 else ""
@@ -734,9 +788,10 @@ class PTRS:
                 for kc in range(k0, numREs, 12*self.freqDensity):
                     k = rbs[kc//12]*12+kc%12
                     curReType = grid.reTypeAt(p,l,k)
-                    if curReType=="RESERVED":  continue
-                    assert curReType=="UNASSIGNED", \
-                        "Assigning PTRS to the RE(%d,%d,%d) which is already allocated for \"%s\"!"%(p,l,k, curReType)
+                    if curReType in ["DMRS", "CSIRS_ZP", "CSIRS_NZP", "RESERVED"]: continue
+                    if curReType not in ["UNASSIGNED", "PTRS"]:
+                        raise ValueError(f"Trying to allocate the RE at ({p},{l},{k}) for PTRS," +
+                                         f"while it is currently allocated for \"{curReType}\"!")
                     grid[p,l,k] = (beta * self.dmrsL0Values[portNo][k], "PTRS")
                     if grid.reDesc is not None:     grid.reDesc[p,l,k] = "PTRS"
 

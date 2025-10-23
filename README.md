@@ -21,7 +21,7 @@ author = {Hamidi-Rad, Shahab},
 month = jul,
 title = {{NeoRadium}},
 url = {https://github.com/InterDigitalInc/NeoRadium},
-version = {0.3.1},
+version = {0.4.0},
 year = {2025}
 }
 ```

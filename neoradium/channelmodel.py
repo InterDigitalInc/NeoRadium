@@ -46,10 +46,10 @@ class ChannelModel:
         kwargs : dict
             A set of optional arguments.
 
-                :normalizeGains: A boolean flag. The default value is ``True``, indicating that the path gains 
+                :normalizeGains: A boolean flag. The default value is `True`, indicating that the path gains 
                     are normalized before they are applied to the signals.
                     
-                :normalizeOutput: A boolean flag. The default value is ``True``, indicating that the gains are 
+                :normalizeOutput: A boolean flag. The default value is `True`, indicating that the gains are 
                     normalized based on the number of receive antennas.
                     
                 :txDir: A string that represents the transmission direction, which can be either “Downlink” or 
@@ -62,7 +62,7 @@ class ChannelModel:
                 :stopBandAtten: The Stop-band attenuation value (in dB) used by the channel filter. The default is 80dB.
                 
                 :seed: The seed used by the random functions in the channel model. Setting this to a fixed value ensures
-                    that the channel model generates repeatable results. The default value is ``None``, indicating 
+                    that the channel model generates repeatable results. The default value is `None`, indicating 
                     that this channel model uses the **NeoRadium**’s :doc:`global random number generator <./Random>`.
                     
                 :dopplerShift: The maximum Doppler shift in Hertz. The default value is 40 Hertz, which corresponds to
@@ -121,16 +121,16 @@ class ChannelModel:
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If ``None`` (default), the text
+            If specified, it is used as a title for the printed information. If `None` (default), the text
             "Channel Model Properties:" is used for the title.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = "Channel Model Properties:"
@@ -157,9 +157,9 @@ class ChannelModel:
         ----------
         restartRanGen : Boolean
             If a ``seed`` was not provided to this channel model, this parameter is ignored. Otherwise, if 
-            ``restartRanGen`` is set to ``True``, the random number generator of this channel model is reset. If 
-            ``restartRanGen`` is ``False`` (the default), the random number generator is not reset. This means that 
-            if ``restartRanGen`` is ``False``, for stochastic channel models, calling this function starts a new 
+            ``restartRanGen`` is set to `True`, the random number generator of this channel model is reset. If 
+            ``restartRanGen`` is `False` (the default), the random number generator is not reset. This means that 
+            if ``restartRanGen`` is `False`, for stochastic channel models, calling this function starts a new 
             sequence of channel instances, which differs from the sequence when the channel was instantiated.
             
         applyToBwp : Boolean
@@ -242,7 +242,7 @@ class ChannelModel:
             where ``Nr`` represents the number of receive antennas, ``L`` denotes the number of OFDM symbols, and 
             ``K`` is the number of subcarriers in the resource grid.
         """
-        channelMatrix = self.getChannelMatrix(grid.bwp)
+        channelMatrix = self.getChannelMatrix()
         return grid.applyChannel(channelMatrix)
 
     # ******************************************************************************************************************
@@ -369,7 +369,7 @@ class ChannelModel:
 
         Returns
         -------
-        4-D complex numpy array
+        4-D complex NumPy array
             A 4-D complex NumPy array with dimensions ``L x K x Nr x Nt``, where ``L`` represents the number of 
             OFDM symbols, ``K`` denotes the number of subcarriers, ``Nr`` is the number of receive antennas, and 
             ``Nt`` indicates the number of transmit antennas.
@@ -458,8 +458,8 @@ class ChannelModel:
 
         Returns
         -------
-        4-D complex numpy array
-            The path gains as a numpy array of shape ``L x Nr x Nt x Np``.
+        4-D complex NumPy array
+            The path gains as a NumPy array of shape ``L x Nr x Nt x Np``.
         """
         pathGains = self.getPathGains()                                 # nc x nr x nt x pp
         if self.normalizeOutput:

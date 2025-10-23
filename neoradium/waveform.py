@@ -11,6 +11,9 @@ method of the :py:class:`~neoradium.grid.Grid` class for more information.
 # ------------  --------------------    --------------------------------------------------------------------------------
 # 06/05/2023    Shahab Hamidi-Rad       First version of the file.
 # 12/23/2023    Shahab Hamidi-Rad       Completed the documentation
+# 10/13/2025    Shahab Hamidi-Rad       * Added the calculation of noise power based on the signal power and SNR. See
+#                                         the new 'getNoiseStd' and 'getRePower' functions and the updates to the
+#                                         'addNoise' function.
 # **********************************************************************************************************************
 
 import numpy as np
@@ -35,8 +38,8 @@ class Waveform:
         r"""
         Parameters
         ----------
-        waveform : 2D complex numpy array
-            A ``P x Ns`` 2D complex numpy array representing a set of time-domain signals of length ``Ns`` for each
+        waveform : 2D complex NumPy array
+            A ``P x Ns`` 2D complex NumPy array representing a set of time-domain signals of length ``Ns`` for each
             one of ``P`` antenna elements. The value ``P`` is equal to ``Nt``, the number of transmitter antennas when
             this is a transmitted signal, and equal to ``Nr``, the number of receiver antennas when this is a received 
             signal.
@@ -49,7 +52,7 @@ class Waveform:
 
         **Other Read-Only Properties:**
         
-            :shape: Returns the shape of the 2-dimensional waveform numpy array.
+            :shape: Returns the shape of the 2-dimensional waveform NumPy array.
             :numPorts: The number of transmitter or receiver antennas (``P``) for this waveform.
             :length: The length of the time-domain signal in number of samples (``Ns``).
         """
@@ -82,12 +85,12 @@ class Waveform:
             If specified, it is used as a title for the printed information.
 
         getStr: Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = "Waveform Properties:"
@@ -101,46 +104,145 @@ class Waveform:
         print(repStr)
 
     # ******************************************************************************************************************
+    def getRePower(self, bwp):
+        # This function calculates the average received signal power per resource element.
+        # Remove the CP samples from the waveform and then calculate the average RE power.
+        cpOffsetRatio = 0.5
+        symLens = bwp.getSymLens()[:-1]                         # getSymLens returns symbolsPerSlot+1 values
+        cpLens = symLens-bwp.nFFT                               # symbolsPerSlot values
+        cpStarts = np.cumsum(np.append(0,symLens[:-1]))         # symbolsPerSlot values
+        fftStarts = np.int32(np.round(cpLens * cpOffsetRatio))  # FFT start offset from the cpStarts
+        idx = (cpLens[:,None] - fftStarts[:,None] + np.arange(bwp.nFFT))%bwp.nFFT + fftStarts[:,None] + cpStarts[:,None]
+        fftWaveform = self.waveform[ :, idx ]
+        return fftWaveform.var().item()/(12*bwp.numRbs)
+
+    # ******************************************************************************************************************
+    def getNoiseStd(self, snr, bwp):
+        r"""
+        This function calculates the noise standard deviation for the given signal-to-noise ratio. It first calculates
+        the average received signal power per resource element (RE) and then uses it, along with the given 
+        signal-to-noise ratio, to calculate the noise power. The returned standard deviation can be used directly 
+        by the :py:meth:`~Waveform.addNoise` method using the ``noiseStd`` argument.
+
+        Parameters
+        ----------
+        snr : float
+            The signal-to-noise ratio in the linear form (not dB).
+        
+        bwp : :py:class:`~neoradium.carrier.BandwidthPart`
+            The bandwidth part object used to create the waveform.
+            
+        Returns
+        -------
+        float
+            The noise standard deviation.
+        """
+        # See equation 11 (the 2nd part) in the page "SNR, signal and noise power calculations" in
+        # the "Implementation Notes" slides
+        return np.sqrt(self.getRePower(bwp)*bwp.nFFT/snr)
+
+    # ******************************************************************************************************************
     def addNoise(self, **kwargs):
         r"""
         Adds Additive White Gaussian Noise (AWGN) to this waveform based on the given noise properties. The *noisy*
         waveform is then returned in a new :py:class:`Waveform` object.
         
-        This is to some extent similar to the :py:meth:`~neoradium.grid.Grid.addNoise` method of the 
-        :py:class:`~neoradium.grid.Grid` class which applies noise in the frequency domain.
+        This is similar to the :py:meth:`~neoradium.grid.Grid.addNoise` method of the :py:class:`~neoradium.grid.Grid`
+        class, which applies noise in the frequency domain.
         
+        If you have the noise signal in a numpy array, you can use the ``noise`` parameter of this function to apply it
+        to this waveform:
+        
+        .. code-block:: python
+            :caption: Example
+            
+            myNoise = random.awgn(rxWaveform.shape, 0.1)    # Create AWGN with σ = 0.1
+            rxWaveform.addNoise(noise=myNoise)
+            
+        If you know the variance or standard deviation of the noise, then you can use them directly by setting the
+        arguments ``noiseStd`` and ``noiseVar`` respectively.
+        
+        .. code-block:: python
+            :caption: Example
+
+            rxWaveform.addNoise(noiseStd=0.1)       # Same results as above
+            rxWaveform.addNoise(noiseVar=0.01)      # Same results as above
+        
+        If you have a signal-to-noise ratio, there are two different approaches to adding noise to the received 
+        waveform.
+        
+        **Matlab Approach:** 
+        
+            In this case, it is assumed that the received signal power is normalized to 
+            :math:`\frac 1 {N_r}` where :math:`N_r` is the number of receiver antenna. Please note that when
+            channel models such as CDL, TDL, or trajectory based channel models are used in the communication
+            pipleline, this assumption is not always true. Support for this approach is included only to allow 
+            comparison with Matlab.
+            
+            .. math::
+
+                \sigma^2_{AWGN} = \frac 1 {N_r.nFFT.10^{\frac {snrDb} {10}}}
+
+            where :math:`nFFT` is the FFT size derived from the given :py:class:`~neoradium.carrier.BandwidthPart`
+            object.
+
+            .. code-block:: python
+                :caption: Example
+    
+                rxWaveform.addNoise(snrDb=mySnrDb, bwp=bwp, useRxPower=False)
+                
+        **Using RX Power:** 
+        
+            In this case, this function first calculates the average received signal power per resource 
+            element (RE), and uses it, along with the given signal-to-noise ratio to calculate the noise power. 
+
+            .. math::
+
+                \sigma^2_{AWGN} = \frac {\sigma^2_{RX}} {nFFT.10^{\frac {snrDb} {10}}}
+    
+            .. code-block:: python
+                :caption: Example
+                
+                rxWaveform.addNoise(snrDb=mySnrDb, bwp=bwp, useRxPower=True)
+
+        Please refer to the notebook :doc:`../Playground/Notebooks/Others/SnrCalculations` for 
+        a complete analysis of how NeoRadium calculates and applies noise power for a given signal-to-noise ratio.
+
         Parameters
         ----------
         kwargs: dict
-            One of the following parameters, which specify how the noise signal is generated, **must** be specified.
+            One of the following methods of specifying the noise **must** be specified.
             
-            :noise: A numpy array with the same shape as this :py:class:`Waveform` object containing the noise
+            :noise: A NumPy array with the same shape as this :py:class:`Waveform` object containing the noise
                 information. If the noise information is provided by ``noise``, it is added directly to the waveform. In
                 this case all other parameters are ignored.
             
             :noiseStd: The standard deviation of the noise. An AWGN complex noise signal is generated with zero mean
-                and the specified standard deviation. If ``noiseStd`` is specified, ``noiseVar``, ``snrDb``, and 
-                ``nFFT`` values below are ignored.
+                and the specified standard deviation. If ``noiseStd`` is specified, ``noiseVar`` and ``snrDb``
+                are ignored.
 
             :noiseVar: The variance of the noise. An AWGN complex noise signal is generated with zero mean and the
-                specified variance. If ``noiseVar`` is specified, the values of ``snrDb`` and ``nFFT`` are ignored.
+                specified variance. If ``noiseVar`` is specified, the value of ``snrDb`` is ignored.
 
-            :snrDb: The signal to noise ratio in dB. First the noise variance is calculated using the given SNR 
-                value and the ``nFFT`` value. Then an AWGN complex noise signal is generated with zero mean and
-                the calculated variance. Please note that if an SNR value is used to specify the amount of noise, the
-                value of ``nFFT`` should also be provided.
+            :snrDb: The signal-to-noise ratio in dB. First the noise standard deviation is calculated using the given 
+                SNR value and the ``bwp`` and ``useRxPower`` parameters. Then an AWGN complex noise signal is generated 
+                with zero mean and the calculated standard deviation. Please note that if an SNR value is used to 
+                specify the amount of noise, then a :py:class:`~neoradium.carrier.BandwidthPart` object also needs to 
+                be provided.
                 
-            :nFFT: This is only used if ``snrDb`` is specified. It is the length of Fast Fourier Transform that is 
-                applied to the signals for time/frequency domain conversion. This value is usually available from the
-                :py:class:`~neoradium.carrier.BandwidthPart` object being used for the transmission. This function 
-                uses the following formula to calculate the noise variance :math:`\sigma^2_{AWGN}` from :math:`snrDb`
-                and :math:`nFFT` values:
+            :bwp: :py:class:`~neoradium.carrier.BandwidthPart`
+                The bandwidth part object used to extract the FFT information. This is only used if ``snrDb`` is 
+                used to specify the amount of noise.
+
+            :useRxPower: Boolean
+                If `True`, this function first calculates the average received signal power per resource element (RE),
+                and uses it with the given signal-to-noise ratio to calculate the noise power. Otherwise, it is assumed
+                that the received signal power is normalized to :math:`\frac 1 {N_r}` where :math:`N_r` is the number
+                of receiver antenna (Matlab Approach).
                 
-                .. math::
-
-                    \sigma^2_{AWGN} = \frac 1 {N_r.nFFT.10^{\frac {snrDb} {10}}}
-
-                where :math:`N_r` is the number of receiver antennas.
+                .. Note:: Currently the default value of ``useRxPower`` is `False` (Matlab approach) for backward 
+                    compatibility. However, in future releases this may be changed to `True`. To ensure 
+                    forward-compatible code, explicitly set this parameter instead of relying on the default. 
 
             :ranGen: If provided, it is used as the random generator
                 for the AWGN generation. Otherwise, if this is not specified, **NeoRadium**'s :doc:`global random
@@ -171,10 +273,19 @@ class Waveform:
         snrDb = kwargs.get('snrDb', None)
         if snrDb is not None:
             # SNR is the average SNR per RE per RX antenna
+            # Using 'False' as default value of 'useRxPower' for backward compatibility. This may change in
+            # future releases.
+            useRxPower = kwargs.get('useRxPower', False)
+            bwp = kwargs.get('bwp', None)
             snr = toLinear(snrDb)
-            nFFT = kwargs.get('nFFT', None)
-            if nFFT is None:
-                raise ValueError("When using SNR, you must also specify the FFT size!")
+            if useRxPower and (bwp is not None):
+                # This is the correct method. We use the actual received signal power to calculate the Noise Variance
+                return self.addNoise(noiseStd=self.getNoiseStd(snr, bwp), ranGen=ranGen)
+
+            if bwp is not None: nFFT = bwp.nFFT
+            else:               nFFT = kwargs.get('nFFT', None)
+            if nFFT is None:    raise ValueError("When using SNR, you must also specify the FFT size!")
+            # This is similar to Matlab: Assuming RxPower = 1/nr (Which is not always the case)
             noiseVar = 1/(snr * self.numPorts * nFFT)  # Note: It is assumed that numPorts is the number of RX antennas
             return self.addNoise(noiseStd=np.sqrt(noiseVar), ranGen=ranGen)
 

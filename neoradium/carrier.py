@@ -167,16 +167,16 @@ class BandwidthPart:
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If ``None`` (default), the text
+            If specified, it is used as a title for the printed information. If `None` (default), the text
             "Bandwidth Part Properties:" is used for the title.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns
+            If the ``getStr`` parameter is `True`, then this function returns
             the information in a text string. Otherwise, nothing is returned.
         """
         if title is None:   title = "Bandwidth Part Properties:"
@@ -227,7 +227,7 @@ class BandwidthPart:
             :py:class:`~neoradium.grid.Grid` class for more information.
             
         useReDesc : Boolean
-            If ``True``, the resource grid created will also include additional
+            If `True`, the resource grid created will also include additional
             fields that describe the content of each resource element (RE). This
             can be used during the debugging to make sure the resources are
             allocated correctly. See the :py:class:`~neoradium.grid.Grid` class
@@ -301,7 +301,7 @@ class BandwidthPart:
 
         Returns
         -------
-        numpy array
+        NumPy array
             An array containing the symbol lengths for all the symbols in the current slot, plus the first symbol of 
             the next slot. Therefore, the length of the returned array is ``symbolsPerSlot+1``.
         """
@@ -409,16 +409,16 @@ class Carrier:
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If ``None`` (default), the text
+            If specified, it is used as a title for the printed information. If `None` (default), the text
             "Carrier Properties:" is used for the title.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = "Carrier Properties:"

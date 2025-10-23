@@ -66,7 +66,7 @@ class AntennaBase:
 
     # ******************************************************************************************************************
     def anglesToNumpy(self, angle, minAngle=None, maxAngle=None):
-        # Converts/creates a numpy array of angle values based on the given arguments
+        # Converts/creates a NumPy array of angle values based on the given arguments
         if angle is None:               angle = np.arange(minAngle,maxAngle)
         if type(angle) == np.ndarray:   return angle
         if type(angle) == list:         return np.float64(angle)
@@ -112,16 +112,16 @@ class AntennaBase:
         
         Parameters
         ----------
-        theta : numpy array
+        theta : NumPy array
             A 1-D array of zenith angles in degrees. (between 0 and 180)
             
-        phi: numpy array
+        phi: NumPy array
             A 1-D array of azimuth angles in degrees. (between -180 and 180)
             
         Returns
         -------
-        Numpy Array
-            A 3-D complex numpy array containing steering vectors for every combination of `theta` and `phi`. The 
+        NumPy Array
+            A 3-D complex NumPy array containing steering vectors for every combination of `theta` and `phi`. The 
             shape of the output is (numElements, numTheta, numPhi).
         """
         if self.isElement:  raise ValueError("'getSteeringVector' should not be called on 'AntennaElement' objects!")
@@ -144,8 +144,8 @@ class AntennaBase:
 
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the fields.
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the fields.
 
             If this is a tuple, the values are assumed to specify the range of values used for zenith angles 
             (in degrees)
@@ -154,8 +154,8 @@ class AntennaBase:
 
             If this is None, the fields are calculated for all zenith angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the fields.
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the fields.
 
             If this is a tuple, the values are assumed to specify the range of values used for azimuth angles 
             (in degrees)
@@ -167,8 +167,8 @@ class AntennaBase:
 
         Returns
         -------
-        Numpy Array
-            A 3-D complex numpy array containing steering vectors for each combination of ``theta`` and ``phi``. The 
+        NumPy Array
+            A 3-D complex NumPy array containing steering vectors for each combination of ``theta`` and ``phi``. The 
             shape of the output is (numElements x numTheta x numPhi)
         """
         # Only used to calculate directivity. We are interested in the power pattern, so we ignore polarization here.
@@ -195,8 +195,8 @@ class AntennaBase:
         
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the fields.
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the fields.
 
             If this is a tuple, the values are assumed to specify the range of values used for zenith angles
             (in degrees)
@@ -206,8 +206,8 @@ class AntennaBase:
 
             If this is None, the fields are calculated for all zenith angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the fields.
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the fields.
 
             If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
             (in degrees)
@@ -217,19 +217,19 @@ class AntennaBase:
 
             If this is None, the fields are calculated for all azimuth angles between -180 and 180 degrees.
 
-        weights: numpy array
+        weights: NumPy array
             A vector of weights to be applied to the field values. The weights can be used to steer the beams to the
-            desired direction. If this is ``None``, the field pattern is returned without any beamforming.
+            desired direction. If this is `None`, the field pattern is returned without any beamforming.
 
         Returns
         -------
-        2 Numpy Arrays
+        2 NumPy Arrays
             * **arrayFieldV**:
-                A numpy array of shape (numTheta x numPhi) containing the field values with vertical 
+                A NumPy array of shape (numTheta x numPhi) containing the field values with vertical 
                 polarization at the directions specified by ``theta`` and ``phi``.
 
             * **arrayFieldH**:
-                A numpy array of shape (numTheta x numPhi) containing the field values with horizontal
+                A NumPy array of shape (numTheta x numPhi) containing the field values with horizontal
                 polarization at the directions specified by ``theta`` and ``phi``.
         """
         theta = self.anglesToNumpy(theta,0,180)
@@ -279,8 +279,8 @@ class AntennaBase:
 
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the fields.
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the fields.
 
             If this is a tuple, the values are assumed to specify the range of values used for zenith angles
             (in degrees)
@@ -289,8 +289,8 @@ class AntennaBase:
 
             If this is None, the fields are calculated for all zenith angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the fields.
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the fields.
 
             If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
             (in degrees)
@@ -300,14 +300,14 @@ class AntennaBase:
 
             If this is None, the fields are calculated for all azimuth angles between -180 and 180 degrees.
 
-        weights: numpy array
+        weights: NumPy array
             A vector of weights to be applied to the field values. The weights can be used to steer the beams to the 
-            desired direction. If this is ``None``, the field pattern is returned without any beamforming.
+            desired direction. If this is `None`, the field pattern is returned without any beamforming.
 
         Returns
         -------
-        Numpy Array
-            A numpy array of shape (numTheta x numPhi) containing the field values at the directions specified by
+        NumPy Array
+            A NumPy array of shape (numTheta x numPhi) containing the field values at the directions specified by
             ``theta`` and ``phi``.
         """
         arrayFieldV, arrayFieldH = self.getPolarizedFields(theta, phi, weights) # Shapes: nTheta x nPhi (squeezed)
@@ -321,8 +321,8 @@ class AntennaBase:
 
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the 
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the 
             field powers.
 
             If this is a tuple, the values are assumed to specify the range of values used for zenith angles
@@ -333,8 +333,8 @@ class AntennaBase:
 
             If this is None, the field powers are calculated for all zenith angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the 
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the 
             field powers.
 
             If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
@@ -345,14 +345,14 @@ class AntennaBase:
 
             If this is None, the field powers are calculated for all azimuth angles between -180 and 180 degrees.
 
-        weights: numpy array
+        weights: NumPy array
             A vector of weights to be applied to the field values. The weights can be used to steer the beams to the 
-            desired direction. If this is ``None``, the field pattern is returned without any beamforming.
+            desired direction. If this is `None`, the field pattern is returned without any beamforming.
 
         Returns
         -------
-        Numpy Array
-            A numpy array of shape (numElements x numTheta x numPhi) containing the field powers at the directions
+        NumPy Array
+            A NumPy array of shape (numElements x numTheta x numPhi) containing the field powers at the directions
             specified by ``theta`` and ``phi``.
         """
         arrayField = self.getField(theta, phi, weights)         # Shape: nTheta x nPhi (squeezed)
@@ -368,8 +368,8 @@ class AntennaBase:
 
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles
             (in degrees) used to calculate the field powers.
 
             If this is a tuple, the values are assumed to specify the range
@@ -381,8 +381,8 @@ class AntennaBase:
             If this is None, the field powers are calculated for all zenith
             angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles
             (in degrees) used to calculate the field powers.
 
             If this is a tuple, the values are assumed to specify the range
@@ -394,15 +394,15 @@ class AntennaBase:
             If this is None, the field powers are calculated for all azimuth
             angles between -180 and 180 degrees.
 
-        weights: numpy array
+        weights: NumPy array
             A vector of weights to be applied to the field values. The weights
             can be used to steer the beams to the desired direction. If this is
-            ``None``, the field pattern is returned without any beamforming.
+            `None`, the field pattern is returned without any beamforming.
 
         Returns
         -------
-        Numpy Array
-            A numpy array of shape (numElements x numTheta x numPhi) containing
+        NumPy Array
+            A NumPy array of shape (numElements x numTheta x numPhi) containing
             the field powers in dB at the directions specified by ``theta`` and ``phi``.
         """
         power = self.getPowerPattern(theta, phi, weights)                   # Shape: nTheta x nPhi (squeezed)
@@ -458,8 +458,8 @@ class AntennaBase:
 
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the
             directivity.
 
             If this is a tuple, the values are assumed to specify the range of values used for zenith angles
@@ -470,8 +470,8 @@ class AntennaBase:
 
             If this is None, the directivity is calculated for all zenith angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the
             directivity.
 
             If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
@@ -482,14 +482,14 @@ class AntennaBase:
 
             If this is None, the directivity is calculated for all azimuth angles between -180 and 180 degrees.
 
-        weights: numpy array
+        weights: NumPy array
             A vector of weights to be applied to the field values. The weights can be used to steer the beams to the
-            desired direction. If this is ``None``, the field pattern is returned without any beamforming.
+            desired direction. If this is `None`, the field pattern is returned without any beamforming.
 
         Returns
         -------
-        Numpy Array
-            A numpy array of shape (numElements x numTheta x numPhi) containing the directivity in dbi at the 
+        NumPy Array
+            A NumPy array of shape (numElements x numTheta x numPhi) containing the directivity in dbi at the 
             directions specified by ``theta`` and ``phi``.
         """
         # Directivity:
@@ -546,8 +546,8 @@ class AntennaBase:
         
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles (in degrees) used to visualize the 
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to visualize the 
             radiations.
 
             If this is a tuple, the values are assumed to specify the range of values used for zenith angles
@@ -558,8 +558,8 @@ class AntennaBase:
 
             If this is None, the radiations are visualized for all zenith angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to visualize the
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to visualize the
             radiations.
 
             If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
@@ -579,7 +579,7 @@ class AntennaBase:
                 * **Field**
             
         normalize: Boolean
-            If ``True`` (default) all the values are normalized before being plotted.
+            If `True` (default) all the values are normalized before being plotted.
 
         title: str
             The title to be used for the plot. If not specified, then this function creates a title based on the
@@ -594,8 +594,8 @@ class AntennaBase:
             
         Returns
         -------
-        Numpy Array
-            A numpy array containing the actual data used for the visualization.
+        NumPy Array
+            A NumPy array containing the actual data used for the visualization.
 
 
         **Plot Types:**
@@ -743,13 +743,13 @@ class AntennaBase:
                 
         Parameters
         ----------
-        orientation : list or numpy array
-            A list or numpy array containing the orientation angles :math:`\alpha` (bearing angle), :math:`\beta` 
+        orientation : list or NumPy array
+            A list or NumPy array containing the orientation angles :math:`\alpha` (bearing angle), :math:`\beta` 
             (downtilt angle), and :math:`\gamma` (slant angle) in radians.
 
         Returns
         -------
-        Numpy Array
+        NumPy Array
             A 3x3 rotation matrix that is used to transform the local coordinates to global coordinates.
         """
         if not np.any(orientation): return np.eye(3)            # If all zeros, return Identity
@@ -771,28 +771,28 @@ class AntennaBase:
 
         Parameters
         ----------
-        theta : numpy array
-            A 2-D numpy array containing the zenith angles (in radians) used to calculate the fields. This is an 
+        theta : NumPy array
+            A 2-D NumPy array containing the zenith angles (in radians) used to calculate the fields. This is an 
             ``n`` by ``m`` matrix where ``n`` is the number of clusters and ``m`` is the number of rays per cluster.
 
-        phi : numpy array
-            A 2-D numpy array containing the azimuth angles (in radians) used to calculate the fields. This is an 
+        phi : NumPy array
+            A 2-D NumPy array containing the azimuth angles (in radians) used to calculate the fields. This is an 
             ``n`` by ``m`` matrix where ``n`` is the number of clusters and ``m`` is the number of rays per cluster.
 
-        orientation : list or numpy array
-            A list or numpy array containing the orientation angles :math:`\alpha` (bearing angle), :math:`\beta` 
+        orientation : list or NumPy array
+            A list or NumPy array containing the orientation angles :math:`\alpha` (bearing angle), :math:`\beta` 
             (downtilt angle), and :math:`\gamma` (slant angle) in radians.
 
         Returns
         -------
-        2 Numpy Arrays
+        2 NumPy Arrays
             * **field**:
-                A numpy array of shape (numAntenna x 2 x n x m) containing the field information for each antenna 
+                A NumPy array of shape (numAntenna x 2 x n x m) containing the field information for each antenna 
                 element and each one of ``m`` rays in each one of ``n`` clusters. The second dimension (2) is used 
                 to separate the vertical and horizontal polarization.
 
             * **locFactor**:
-                A numpy array of shape (numAntenna x n x m) containing the location factor. For more information 
+                A NumPy array of shape (numAntenna x n x m) containing the location factor. For more information 
                 please refer to **3GPP TR 38.901 equations 7.5-28 and 7.5-28**.
         """
         # This is called by the channel models. theta and phi are n x m matrices of azimuth and zenith angles of
@@ -812,10 +812,10 @@ class AntennaBase:
 
         # Note: We are actually using inverse of r in the following. Since r is orthogonal, r[:,2] is the same
         # as inverse(r)[2:0]
-        # Local theta values. This is Eq. 7.1-7, written a little more efficient in numpy.
+        # Local theta values. This is Eq. 7.1-7, written a little more efficient in NumPy.
         thetaLocal = np.arccos( (r[:,2,None,None]*rhoHat).sum(0) )                              # Shape: 3 x n x m
         
-        # Local phi values, This is Eq. 7.1-8, written a little more efficient in numpy.
+        # Local phi values, This is Eq. 7.1-8, written a little more efficient in NumPy.
         phiLocal  = np.arctan2( (r[:,1,None,None]*rhoHat).sum(0),
                                 (r[:,0,None,None]*rhoHat).sum(0) )                              # Shape: 3 x n x m
         
@@ -936,16 +936,16 @@ class AntennaElement(AntennaBase):
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If ``None`` (default), the text
+            If specified, it is used as a title for the printed information. If `None` (default), the text
             "Antenna Element:" is used for the title.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = "Antenna Element:"
@@ -971,7 +971,7 @@ class AntennaElement(AntennaBase):
 
         Returns
         -------
-        Numpy array
+        NumPy array
             An array of 3 values (x, y, and z) specifying the position of this element in the :py:class:`AntennaArray`
             object.
         """
@@ -985,7 +985,7 @@ class AntennaElement(AntennaBase):
 
         Parameters
         ----------
-        position: list or numpy Array
+        position: list or NumPy Array
             A list of 3 values (x, y, and z) specifying the position to be used for the cloned 
             :py:class:`AntennaElement`.
                         
@@ -1046,8 +1046,8 @@ class AntennaElement(AntennaBase):
 
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the field
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the field
             powers.
 
             If this is a tuple, the values are assumed to specify the range of values used for zenith angles
@@ -1058,8 +1058,8 @@ class AntennaElement(AntennaBase):
 
             If this is None, the field powers are calculated for all zenith angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the field
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the field
             powers.
 
             If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
@@ -1072,10 +1072,10 @@ class AntennaElement(AntennaBase):
 
         Returns
         -------
-        Numpy Array
+        NumPy Array
             If ``theta`` and ``phi`` have the same shape, the returned value has the same shape as ``theta`` and 
             ``phi`` and contains the field powers in dB at the directions specified by ``theta`` and ``phi``. Otherwise,
-            a numpy array of shape (numTheta x numPhi) is returned, containing the field powers in dB at all 
+            a NumPy array of shape (numTheta x numPhi) is returned, containing the field powers in dB at all 
             combinations of ``theta`` and ``phi``.
         """
         theta = self.anglesToNumpy(theta,0,180)
@@ -1102,8 +1102,8 @@ class AntennaElement(AntennaBase):
 
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the field
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the field
             powers.
 
             If this is a tuple, the values are assumed to specify the range of values used for zenith angles
@@ -1114,8 +1114,8 @@ class AntennaElement(AntennaBase):
 
             If this is None, the field powers are calculated for all zenith angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the field
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the field
             powers.
 
             If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
@@ -1128,10 +1128,10 @@ class AntennaElement(AntennaBase):
 
         Returns
         -------
-        Numpy Array
+        NumPy Array
             If ``theta`` and ``phi`` have the same shape, the returned value has the same shape as ``theta`` and 
             ``phi`` and contains the field powers at the directions specified by ``theta`` and ``phi``. Otherwise,
-            a numpy array of shape (numTheta x numPhi) is returned, containing the field powers at all 
+            a NumPy array of shape (numTheta x numPhi) is returned, containing the field powers at all 
             combinations of ``theta`` and ``phi``.
         """
         return toLinear(self.getPowerPatternDb(theta, phi))
@@ -1146,8 +1146,8 @@ class AntennaElement(AntennaBase):
 
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the fields.
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the fields.
 
             If this is a tuple, the values are assumed to specify the range of values used for zenith angles
             (in degrees)
@@ -1156,8 +1156,8 @@ class AntennaElement(AntennaBase):
 
             If this is None, the fields are calculated for all zenith angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the fields.
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the fields.
 
             If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
             (in degrees)
@@ -1169,10 +1169,10 @@ class AntennaElement(AntennaBase):
 
         Returns
         -------
-        Numpy Array
+        NumPy Array
             If ``theta`` and ``phi`` have the same shape, the returned value has the same shape as ``theta`` and 
             ``phi`` and contains the electric field at the directions specified by ``theta`` and ``phi``. Otherwise,
-            a numpy array of shape (numTheta x numPhi) is returned, containing the electric field at all 
+            a NumPy array of shape (numTheta x numPhi) is returned, containing the electric field at all 
             combinations of ``theta`` and ``phi``.
         """
         # This assumes a polarization angle of 0 (pure vertical). In this case, the vertical (zenith) field=sqrt(power),
@@ -1188,8 +1188,8 @@ class AntennaElement(AntennaBase):
         
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the fields.
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the fields.
 
             If this is a tuple, the values are assumed to specify the range of values used for zenith angles
             (in degrees)
@@ -1198,8 +1198,8 @@ class AntennaElement(AntennaBase):
 
             If this is None, the fields are calculated for all zenith angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the fields.
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the fields.
 
             If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
             (in degrees)
@@ -1211,16 +1211,16 @@ class AntennaElement(AntennaBase):
 
         Returns
         -------
-        2 Numpy Arrays
+        2 NumPy Arrays
             If ``theta`` and ``phi`` have the same shape, the following returned values are also the same shape as
-            ``theta`` and ``phi``. Otherwise, two numpy arrays of shape (numTheta x numPhi) are returned.
+            ``theta`` and ``phi``. Otherwise, two NumPy arrays of shape (numTheta x numPhi) are returned.
 
             * **arrayFieldV**:
-                A numpy array containing the field values with vertical polarization at the directions specified by
+                A NumPy array containing the field values with vertical polarization at the directions specified by
                 ``theta`` and ``phi``.
 
             * **arrayFieldH**:
-                A numpy array containing the field values with horizontal polarization at the directions specified by
+                A NumPy array containing the field values with horizontal polarization at the directions specified by
                 ``theta`` and ``phi``.
         """
         field = self.getField(theta, phi)
@@ -1292,8 +1292,8 @@ class AntennaElement(AntennaBase):
 
         Parameters
         ----------
-        theta : list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the
+        theta : list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the
             directivity.
 
             If this is a tuple, the values are assumed to specify the range of values used for zenith angles
@@ -1304,8 +1304,8 @@ class AntennaElement(AntennaBase):
 
             If this is None, the directivity is calculated for all zenith angles between 0 and 180 degrees.
 
-        phi: list, tuple, numpy array, scalar, or None
-            If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the
+        phi: list, tuple, NumPy array, scalar, or None
+            If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the
             directivity.
 
             If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
@@ -1316,15 +1316,15 @@ class AntennaElement(AntennaBase):
 
             If this is None, the directivity is calculated for all azimuth angles between -180 and 180 degrees.
 
-        weights: numpy array
+        weights: NumPy array
             This parameter is ignored by the :py:class:`AntennaElement` objects.
 
         Returns
         -------
-        Numpy Array
+        NumPy Array
             If ``theta`` and ``phi`` have the same shape, the returned value has the same shape as ``theta`` and 
             ``phi`` and contains the directivity at the directions specified by ``theta`` and ``phi``. Otherwise,
-            a numpy array of shape (numTheta x numPhi) is returned, containing the directivity at all 
+            a NumPy array of shape (numTheta x numPhi) is returned, containing the directivity at all 
             combinations of ``theta`` and ``phi``.
         """
         theta = self.anglesToNumpy(theta,0,180)
@@ -1389,7 +1389,7 @@ class AntennaPanel(AntennaBase):
                     * If it is a 2-D array of :py:class:`AntennaElement` objects, the specified elements are used for 
                       the elements of this panel.
                       
-                    * If it is ``None``, then antenna elements of the panel are created using the default values.
+                    * If it is `None`, then antenna elements of the panel are created using the default values.
                     
                 :polarization: The polarization of antenna elements on this panel. The panel can be singly polarized
                     (P=1) or dually polarized (P=2). For singly polarized panels, the ``polarization`` can be either
@@ -1399,27 +1399,27 @@ class AntennaPanel(AntennaBase):
                     
                 :position: The position of the center point of this panel in the antenna array containing this panel.
                 
-                :array: The :py:class:`AntennaArray` object containing this antenna panel or ``None`` if this panel 
+                :array: The :py:class:`AntennaArray` object containing this antenna panel or `None` if this panel 
                     is not part of an antenna array.
                     
                 :matlabOrder: Current implementation of Matlab toolkit uses a different order for the elements in
                     a panel compared to the order specified in the 3-GPP standard (See **3GPP TR 38.901 - 
                     Section 7.3**). By default, this class uses the standard order (``matlabOrder=False``). If you need
-                    to compare your results with Matlab implementation, you can set this parameter to ``True``.
+                    to compare your results with Matlab implementation, you can set this parameter to `True`.
         """
         super().__init__(**kwargs)
         self.shape = np.int16(shape)                                # Number of antenna elements in columns and rows
-        if self.shape.shape != (2,):        raise ValueError("'shape' must be a list or numpy array of length 2.")
+        if self.shape.shape != (2,):        raise ValueError("'shape' must be a list or NumPy array of length 2.")
 
         self.spacing = np.float64(kwargs.get('spacing', [.5,.5]))   # [dv, dh] in multiples of wavelength.
-        if self.spacing.shape != (2,):      raise ValueError("'spacing' must be a list or numpy array of length 2.")
+        if self.spacing.shape != (2,):      raise ValueError("'spacing' must be a list or NumPy array of length 2.")
 
         self.polarization = kwargs.get('polarization', "|")         # Can be one of "|", "-", "+", or "x"
         if self.polarization not in "|-+x":
             raise ValueError("'polarization' must be one of \"|\", \"-\", \"+\", or \"x\".")
         
         self.position = np.float64(kwargs.get('position', [0,0,0])) # Position in the array
-        if self.position.shape != (3,):     raise ValueError("'position' must be a list or numpy array of length 3.")
+        if self.position.shape != (3,):     raise ValueError("'position' must be a list or NumPy array of length 3.")
             
         self.array = kwargs.get('array', None)                      # The owner AntennaArray
         if self.array is not None:
@@ -1474,16 +1474,16 @@ class AntennaPanel(AntennaBase):
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If ``None`` (default), the text
+            If specified, it is used as a title for the printed information. If `None` (default), the text
             "Antenna Panel:" is used for the title.
 
         getStr : Boolean 
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string.
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string.
             Otherwise, nothing is returned.
         """
         if title is None:   title = "Antenna Panel:"
@@ -1511,7 +1511,7 @@ class AntennaPanel(AntennaBase):
         
         Parameters
         ----------
-        position : list or numpy array
+        position : list or NumPy array
             The position of the center point of the cloned panel in the antenna array containing it.
             
         polarization : str
@@ -1591,7 +1591,7 @@ class AntennaPanel(AntennaBase):
 
         Returns
         -------
-        Numpy Array
+        NumPy Array
             An array of 3 values (x, y, and z) representing the position of the specified element. Note that the 
             values are in multiples of wavelength.
         """
@@ -1600,20 +1600,20 @@ class AntennaPanel(AntennaBase):
     # ******************************************************************************************************************
     def getAllPositions(self, polarization=True):
         r"""
-        Returns the positions of all elements in this panel as a 2-D numpy array.
+        Returns the positions of all elements in this panel as a 2-D NumPy array.
         
         Parameters
         ----------
         polarization : Boolean
-            If this is a dually polarized panel and this parameter is ``True``, the positions of all elements is
+            If this is a dually polarized panel and this parameter is `True`, the positions of all elements is
             returned. In this case, there will be repeated positions in the returned array as the 2 polarized pairs
             of elements have the same position. Otherwise, if ``polarization=False``, only one position is returned
             for a pair of polarized antenna elements. If this is a singly polarized panel, this parameter is ignored.
             
         Returns
         -------
-        Numpy Array
-            An ``n x 3`` numpy array containing the positions of all ``n`` elements in this panel.
+        NumPy Array
+            An ``n x 3`` NumPy array containing the positions of all ``n`` elements in this panel.
         """
         return np.float64([e.position for e in self.allElements(polarization)])
 
@@ -1635,7 +1635,7 @@ class AntennaPanel(AntennaBase):
             resulting image.
         
         zeroTicks : Boolean
-            If this is ``True``, the zero positions on both axes are indicated by additional "ticks" to show
+            If this is `True`, the zero positions on both axes are indicated by additional "ticks" to show
             the center of this panel. Otherwise the "ticks" on the horizontal and vertical axes are only at the
             locations of antenna elements.
             
@@ -1685,13 +1685,13 @@ class AntennaPanel(AntennaBase):
 
 
         By default, this function iterates through elements in the order specified in **3GPP TR 38.901 - Section
-        7.3**. If the parameter ``matlabOrder`` is set to ``True``, then the Matlab order is used. Please refer
+        7.3**. If the parameter ``matlabOrder`` is set to `True`, then the Matlab order is used. Please refer
         :py:class:`AntennaPanel` parameter documentation for more information about ``matlabOrder``.
         
         Parameters
         ----------
         polarization : Boolean
-            If this is a dually polarized panel and this parameter is ``True``, then all elements are included in
+            If this is a dually polarized panel and this parameter is `True`, then all elements are included in
             the iteration. Otherwise, if ``polarization=False``, only the first element of the polarized pair of
             elements at each position is included in the iteration. If this is a singly polarized panel, this
             parameter is ignored.
@@ -1755,15 +1755,15 @@ class AntennaArray(AntennaBase):
                     * If it is a 2-D array of :py:class:`AntennaPanel` objects, the specified panels are used for the
                       panels of this array.
                       
-                    * If it is ``None``, then antenna panels and elements of this array are created using the default
+                    * If it is `None`, then antenna panels and elements of this array are created using the default
                       values.
         """
         super().__init__(**kwargs)
         self.shape = np.int16(shape)    # Number of rows and columns of panels. ([M, N] in TR38.901-Section 7.3)
-        if self.shape.shape != (2,):        raise ValueError("'shape' must be a list or numpy array of length 2.")
+        if self.shape.shape != (2,):        raise ValueError("'shape' must be a list or NumPy array of length 2.")
 
         self.spacing = np.float64(kwargs.get('spacing', None))  # [dgV, dgH] in TR38.901-Section 7.3 in wavelength
-        if self.spacing.shape != (2,):      raise ValueError("'spacing' must be a list or numpy array of length 2.")
+        if self.spacing.shape != (2,):      raise ValueError("'spacing' must be a list or NumPy array of length 2.")
 
         self.panels = kwargs.get('panels', None)    # An array 2d shape[0]-by-shape[1] array of AntennaPanel objects
         if self.panels is None:
@@ -1809,16 +1809,16 @@ class AntennaArray(AntennaBase):
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If ``None`` (default), the text
+            If specified, it is used as a title for the printed information. If `None` (default), the text
             "Antenna Array:" is used for the title.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string.
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string.
             Otherwise, nothing is returned.
         """
         if title is None:   title = "Antenna Array:"
@@ -1896,7 +1896,7 @@ class AntennaArray(AntennaBase):
 
         Returns
         -------
-        Numpy Array
+        NumPy Array
             An array of 3 values (x, y, and z) representing the position of the specified element. Note that the
             values are in multiples of wavelength.
         """
@@ -1932,7 +1932,7 @@ class AntennaArray(AntennaBase):
         Parameters
         ----------
         polarization : Boolean
-            If the panels of this array are dually polarized and this parameter is ``True``, then all elements are
+            If the panels of this array are dually polarized and this parameter is `True`, then all elements are
             included in the iteration. Otherwise, if ``polarization=False``, only the first element of the polarized
             pair of elements at each position is included in the iteration. If the panels of this array are singly
             polarized, this parameter is ignored.
@@ -1959,20 +1959,20 @@ class AntennaArray(AntennaBase):
     # ******************************************************************************************************************
     def getAllPositions(self, polarization=True):
         r"""
-        Returns the positions of all elements in this array as a 2-D numpy array.
+        Returns the positions of all elements in this array as a 2-D NumPy array.
 
         Parameters
         ----------
         polarization : Boolean
-            If the panels of this array are dually polarized and this parameter is ``True``, then the positions of
+            If the panels of this array are dually polarized and this parameter is `True`, then the positions of
             all elements are returned. Otherwise, if ``polarization=False``, only the position of the first element
             of the polarized pair of elements at each position is returned. If the panels of this array are singly
             polarized, this parameter is ignored.
             
         Returns
         -------
-        Numpy Array
-            An ``n x 3`` numpy array containing the positions of all ``n`` elements in this array.
+        NumPy Array
+            An ``n x 3`` NumPy array containing the positions of all ``n`` elements in this array.
         """
         return np.float64([e.posInArray for e in self.allElements(polarization)])
 
@@ -1998,7 +1998,7 @@ class AntennaArray(AntennaBase):
             the resulting image.
         
         zeroTicks : Boolean
-            If this is ``True``, the zero positions on both axes are indicated by additional "ticks" to show
+            If this is `True`, the zero positions on both axes are indicated by additional "ticks" to show
             the center of this array. Otherwise the "ticks" on the horizontal and vertical axes are only at the
             locations of antenna elements.
             

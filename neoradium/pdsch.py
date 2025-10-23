@@ -232,14 +232,14 @@ class PDSCH:
                     
                 :sliv: *Start and Length Indicator Value*. If specified, it is used to determine the start and
                     length of consecutive OFDM symbols used by this :py:class:`PDSCH` based on **3GPP TS 38.214, 
-                    Section 5.1.2.1**. The default is ``None``. See :ref:`Specifying the OFDM symbols <SpecifyingSyms>`
+                    Section 5.1.2.1**. The default is `None`. See :ref:`Specifying the OFDM symbols <SpecifyingSyms>`
                     below for more information.
                     
-                :symStart: The index of the first OFDM symbol used for this :py:class:`PDSCH`. The default is ``None``.
+                :symStart: The index of the first OFDM symbol used for this :py:class:`PDSCH`. The default is `None`.
                     See :ref:`Specifying the OFDM symbols <SpecifyingSyms>` below for more information.
                     
                 :symLen: The number of consecutive OFDM symbols used by this :py:class:`PDSCH` starting at 
-                    ``symStart``. The default is ``None``. See :ref:`Specifying the OFDM symbols <SpecifyingSyms>`
+                    ``symStart``. The default is `None`. See :ref:`Specifying the OFDM symbols <SpecifyingSyms>`
                     below for more information.
                 
                 :symSet: A list of OFDM symbol indices that are used by this :py:class:`PDSCH`. See 
@@ -351,7 +351,7 @@ class PDSCH:
         for modStr in modulation:
             if modStr not in ['QPSK', '16QAM', '64QAM', '256QAM', '1024QAM']:
                 raise ValueError("Unsupported modulation \"%s\"!"%(modStr))
-        # Make a Modem object based on the modulation scheme for each code word
+        # Make a Modem object based on the modulation scheme for each codeword
         self.modems = [ Modem(modulation[0]) ]
         if self.numCW>1:  # Use the same Modem object if both modulations are the same
             self.modems += [ self.modems[0] if modulation[0]==modulation[1] else Modem(modulation[1]) ]
@@ -374,7 +374,12 @@ class PDSCH:
             self.symSet = np.uint32(kwargs.get('symSet', defaultSymSet))   # The set of symbols allocated
             self.symSet.sort()
 
-        self.prbSet = np.uint32(kwargs.get('prbSet', range(0, self.bwp.numRbs)))    # The set of PRBs allocated
+        # Note that this is actually a "vrbSet". If “interleavingBundleSize” is zero, then vrb and prb are the same.
+        # However, if it is nonzero, then the given set is used as the vrb set, which is mapped to a set of PRBs
+        # that may be outside the given vrb set. Interleaving scatters the resource blocks of this PDSCH across
+        # the entire BWP. If two PDSCH use different sets of RBs of a BWP, then their RBs are shuffled and mixed
+        # after interleaving. See the getVrbToPrbMapping function.
+        self.prbSet = np.uint32(kwargs.get('prbSet', range(0, self.bwp.numRbs)))    # The set of VRBs allocated
         self.prbSet.sort()
         
         if self.symSet[-1]>14 or self.symSet[0]<0:
@@ -435,12 +440,12 @@ class PDSCH:
             If specified, it is used as a title for the printed information.
 
         getStr: Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         repStr = "\n" if indent==0 else ""
@@ -513,7 +518,8 @@ class PDSCH:
             # available for that symbol with the order they should be assigned. Unscheduled symbols have an empty list.
             # See section 9.10 of the "5G NR" book
             # See TS 38.214 V17.0.0 (2021-12), Section 5.1.4.1
-            self._slotMap = [[] if sym not in self.symSet else list(prbIndexes) for sym in range(self.bwp.symbolsPerSlot)]
+            self._slotMap = [[] if sym not in self.symSet else prbIndexes.tolist()
+                                    for sym in range(self.bwp.symbolsPerSlot)]
             # Remove all reserved RBs
             for reservedRbSet in self.reservedRbSets:
                 self._slotMap = reservedRbSet.applyToMap(self._slotMap, self.slotNo, self.bwp.symbolsPerSlot)
@@ -550,7 +556,7 @@ class PDSCH:
         # virtual resource blocks and physical resource blocks based on TS 38.211, Section 7.3.1.6.
         # See also Fig. 9.12 in the "5G NR" book
         if self.interleavingBundleSize == 0:
-            return np.arange(self.bwp.numRbs)       # Interleaving is disabled => VRB ≡ PRB
+            return self.prbSet          # Interleaving is disabled => VRB ≡ PRB
         
         # First Bundle has L-(startRb%L) resource blocks (L: interleavingBundleSize)
         # Last Bundle has (self.bwp.start+self.bwp.numRbs)%L or L resource block if end of BWP is on bundle boundary
@@ -569,8 +575,8 @@ class PDSCH:
                                     for j in f for b in range(self.interleavingBundleSize) ] )
         prbIndexes = prbIndexes[deltaBundle0 : deltaBundle0+self.bwp.numRbs] - deltaBundle0
 
-        # Only use the prbs that are in the specified prbSet
-        prbIndexes = np.int32([i for i in prbIndexes if i in self.prbSet])
+        # Only use the prbs that are in this PDSCH's prbSet
+        prbIndexes = np.int32(prbIndexes)[self.prbSet]
         return prbIndexes
         
     # ******************************************************************************************************************
@@ -674,7 +680,7 @@ class PDSCH:
         Parameters
         ----------
         useReDesc : Boolean
-            If ``True``, the resource grid will also include additional fields that describe the content of each 
+            If `True`, the resource grid will also include additional fields that describe the content of each 
             resource element (RE). This can be used during the debugging to make sure the resources are allocated
             correctly.
 
@@ -684,22 +690,8 @@ class PDSCH:
             A :py:class:`~neoradium.grid.Grid` object representing the resource grid for this :py:class:`PDSCH`
             pre-populated with reference signals.
         """
-        # Create a grid and populate reserved and reference signals (Reserved, DMRS, PTRS, etc.)
-        # Note that the grid is created based on the size of BWP. The actual RBs used by this PDSCH is a subset of
-        # all RBs in the BWP.
-        grid = Grid(self.bwp, self.numLayers, "PDSCH", useReDesc)
-        
-        # Set all reserved RBs to RESERVED
-        for reservedRbSet in self.reservedRbSets:
-            reservedRbSet.populateGrid(grid)
-        
-        # Set all reserved REs to RESERVED
-        self.populateReservedREs(grid)
-
-        if self.dmrs is not None:
-            # Set the DMRS(and PTRS) values
-            self.dmrs.populateGrid(grid)
-        
+        grid = self.bwp.createGrid(self.numLayers, useReDesc)
+        self.allocateResources(grid)
         return grid
 
     # ******************************************************************************************************************
@@ -760,18 +752,18 @@ class PDSCH:
         Returns
         -------
         3-tuple
-            A tuple of three 1-D numpy arrays specifying a list of locations in ``grid``. This value can be used
+            A tuple of three 1-D NumPy arrays specifying a list of locations in ``grid``. This value can be used
             directly to access the REs at the specified locations. (see example above)
         """
         # This is similar to "Grid::getReIndexes" but only considers the REs for this PDSCH.
         indexes = [[], [], []]
-        for layer in range(self.numLayers):
+        for p in self.portSet:
             for sym, symRBs in enumerate(self.slotMap):
                 for rb in symRBs:
-                    idx = np.where(grid.reTypeIds[layer,sym,rb*12:rb*12+12] == grid.retNameToId[reTypeStr])[0]
+                    idx = np.where(grid.reTypeIds[p,sym,rb*12:rb*12+12] == grid.retNameToId[reTypeStr])[0]
                     count = len(idx)
                     if count>0:
-                        indexes[0] += count*[layer]
+                        indexes[0] += count*[p]
                         indexes[1] += count*[sym]
                         indexes[2] += (rb*12 + idx).tolist()
         return (np.int32(indexes[0]), np.int32(indexes[1]), np.int32(indexes[2]))
@@ -804,13 +796,13 @@ class PDSCH:
         return numREsInCw
 
     # ******************************************************************************************************************
-    def getBitSizes(self, grid, reTypeStr="UNASSIGNED"):
+    def getBitSizes(self, grid, reTypeStr="PDSCH"):
         r"""
         Returns total number of bits corresponding to the resource elements in ``grid`` assigned to this
         :py:class:`PDSCH` with content type specified by ``reTypeStr`` for each codeword. The returned value is a
         list of one or two integers depending on the number of codewords (``numCW``).
         
-        The default value of ``reTypeStr="UNASSIGNED"`` is for a common use case where we want to get total number
+        The default value of ``reTypeStr="PDSCH"`` is for a common use case where we want to get total number
         of bits available in this :py:class:`PDSCH` for user data after setting aside the REs for DMRS, PTRS, and
         the reserved resources.
 
@@ -822,7 +814,7 @@ class PDSCH:
 
         reTypeStr: str
             The content type of the desired resource elements used to count the returned number of bits. The default
-            values of ``"UNASSIGNED"`` causes this function to return total number of (unassigned) bits that are
+            values of ``"PDSCH"`` causes this function to return total number of (unassigned) bits that are
             available for user data. Please refer to the :py:meth:`getReIndexes` function for a list of values that
             can used for ``reTypeStr``.
 
@@ -836,6 +828,28 @@ class PDSCH:
         symbolsIndexes = self.getReIndexes(grid, reTypeStr)
         numREsInCw = self.getNumREsFromIndexes(symbolsIndexes)
         return [ numREsInCw[i] * self.modems[i].qm for i in range(self.numCW) ]
+
+    # ******************************************************************************************************************
+    def allocateResources(self, grid):
+        # Allocate resources for this PSDCH in the given resource grid.
+        for reservedRbSet in self.reservedRbSets:   reservedRbSet.populateGrid(grid) # Set all reserved RBs to RESERVED
+        self.populateReservedREs(grid)                                               # Set all reserved REs to RESERVED
+        if self.dmrs is not None:                   self.dmrs.populateGrid(grid)     # Set the DMRS/PTRS values
+
+        pdschIdx = []
+        for port in self.portSet:
+            for sym in self.symSet:
+                for prb in self.slotMap[sym]:
+                    for r in range(12):
+                        re = prb*12 + r
+                        curReType = grid.reTypeAt(port,sym,re)
+                        if curReType in ["DMRS", "CSIRS_ZP", "CSIRS_NZP", "RESERVED", "PTRS", "NO_DATA"]: continue
+                        if curReType not in ["UNASSIGNED", "PDSCH"]:
+                            raise ValueError(f"Trying to allocate the RE at ({port},{sym},{re}) for PDSCH," +
+                                             f"while it is currently allocated for \"{curReType}\"!")
+                        grid[port,sym,re] = (0, "PDSCH")
+                        pdschIdx += [ [port,sym,re] ]
+        self.dataIndices = tuple( np.int32(pdschIdx).T )
 
     # ******************************************************************************************************************
     def populateGrid(self, grid, bits=None):
@@ -867,20 +881,20 @@ class PDSCH:
         grid: :py:class:`~neoradium.grid.Grid`
             The :py:class:`~neoradium.grid.Grid` object that gets populated with the user data bits.
             
-        bits: list, tuple, numpy array, or None
+        bits: list, tuple, NumPy array, or None
             Specifies the user data bits that are used to populate the specified resource grid. It can be one of the
             following:
             
-            :tuple of numpy arrays: Depending on the number of codewords (``numCW``), the tuple can have one or two
-                1D numpy arrays of bits each specifying the user data bits for each codeword.
+            :tuple of NumPy arrays: Depending on the number of codewords (``numCW``), the tuple can have one or two
+                1D NumPy arrays of bits each specifying the user data bits for each codeword.
                 
-            :numpy array: A one or two dimensional numpy array. It is a 1D array, only if we have one codeword and the
-                given numpy array is used for the single codeword. The 2D numpy array can be used for one or two
-                codeword cases. The first dimension of the numpy array in this case should match the number
+            :NumPy array: A one or two dimensional NumPy array. It is a 1D array, only if we have one codeword and the
+                given NumPy array is used for the single codeword. The 2D NumPy array can be used for one or two
+                codeword cases. The first dimension of the NumPy array in this case should match the number
                 of codewords (``numCW``).
                 
-            :list of numpy arrays: Depending on the number of codewords (``numCW``), the list can have one or two 1D
-                numpy arrays of bits each specifying the user data bits for each codeword.
+            :list of NumPy arrays: Depending on the number of codewords (``numCW``), the list can have one or two 1D
+                NumPy arrays of bits each specifying the user data bits for each codeword.
                 
             :None: If this is None, ``grid`` data is not updated. This is used for the (rare) case where we only want
                 to update the resource element descriptions in the ``grid`` object. See the ``useReDesc`` parameter 
@@ -892,12 +906,10 @@ class PDSCH:
                 if bits.ndim==1:            bits = [bits]
                 else:                       bits = [ bits[i] for i in range(bits.shape[0]) ]
             elif type(bits)!=list:
-                raise ValueError("'bits' must be a numpy array, a tuple of numpy arrays, or a list of numpy arrays.")
+                raise ValueError("'bits' must be a NumPy array, a tuple of NumPy arrays, or a list of NumPy arrays.")
             if self.numCW!=len(bits):
-                raise ValueError("Number of codewords is %d but %d set(s) of bits are provided!"%(self.numCW, len(bits)))
+                raise ValueError(f"Number of codewords is {self.numCW} but {len(bits)} set(s) of bits are provided!")
 
-        dataReIndexes = self.getReIndexes(grid, "UNASSIGNED")
-        
         if bits is not None:
             symbols = []    # One item in the list for each codeword
             for cw in range(self.numCW):
@@ -905,17 +917,17 @@ class PDSCH:
                 symbols += [ self.modems[cw].modulate(scrambledBits) ]
             
             numREsInCw = [len(s) for s in symbols]
-            layerMappedIndexes = self.getLayerMapIndexes(dataReIndexes, numREsInCw)
+            layerMappedIndexes = self.getLayerMapIndexes(self.dataIndices, numREsInCw)
             for cw, layerMappedIndex in enumerate(layerMappedIndexes):
-                grid[ layerMappedIndex ] = symbols[cw]
+                grid[ layerMappedIndex ] = (symbols[cw], "PDSCH")
             
         if grid.reDesc is not None:
             if bits is None:
-                layerStarts = np.append([0], np.where(np.diff(dataReIndexes[0])==1)[0]+1)
-                numREsInCw = np.append(np.diff(layerStarts), [len(dataReIndexes[0])-layerStarts[-1]])
+                layerStarts = np.append([0], np.where(np.diff(self.dataIndices[0])==1)[0]+1)
+                numREsInCw = np.append(np.diff(layerStarts), [len(self.dataIndices[0])-layerStarts[-1]])
             else:
                 numREsInCw = [(len(bits[cw]) + self.modems[cw].qm - 1)//self.modems[cw].qm for cw in range(self.numCW)]
-            layerMappedIndexes = self.getLayerMapIndexes(dataReIndexes, numREsInCw)
+            layerMappedIndexes = self.getLayerMapIndexes(self.dataIndices, numREsInCw)
             for cw, layerMappedIndex in enumerate(layerMappedIndexes):
                 grid.reDesc[ layerMappedIndex ] = ["CW%d-%d"%(cw,i) for i in range(numREsInCw[cw])]
 
@@ -943,7 +955,7 @@ class PDSCH:
                 the descrambling process according to **3GPP TS 38.211, Section 7.3.1.1**. The LLRs for each codeword
                 are descrambled separately.
         
-        This function returns a list of one or two numpy arrays representing the LLRs for each codeword.
+        This function returns a list of one or two NumPy arrays representing the LLRs for each codeword.
 
         Parameters
         ----------
@@ -956,7 +968,7 @@ class PDSCH:
             A tuple of 3 lists specifying locations of the set of resource elements in ``rxGrid`` that are assigned 
             to the user data. The function :py:meth:`getReIndexes` is typically used to obtain this.
             
-        llrScales: 3-D numpy array
+        llrScales: 3-D NumPy array
             The Log-Likelihood Ratios (LLR) scaling factors which are used by demodulating process when extracting 
             Log-Likelihood Ratios (LLRs) from the equalized resource grid. The shape of this array **must** be the
             same shape as ``rxGrid``.
@@ -966,14 +978,14 @@ class PDSCH:
             is not provided (``noiseVar=None``), This function uses the ``noiseVar`` property of the ``rxGrid`` object.
             
         useMax : Boolean
-            If ``True``, this implementation uses the ``Max`` function in the calculation of the LLR values. This is
+            If `True`, this implementation uses the ``Max`` function in the calculation of the LLR values. This is
             faster but uses an approximation and is slightly less accurate than the actual Log Likelihood method 
-            which uses logarithm and exponential functions. If ``False``, the slower more accurate method is used.
+            which uses logarithm and exponential functions. If `False`, the slower more accurate method is used.
 
         Returns
         -------
         list
-            A list of one or two numpy arrays each representing the LLRs for each codeword.
+            A list of one or two NumPy arrays each representing the LLRs for each codeword.
         """
         # First get the layer-mapped indices from the pdschIndexes
         layerMappedIndexes = self.getLayerMapIndexes(pdschIndexes)
@@ -983,7 +995,7 @@ class PDSCH:
         
         llrs = []
         for cw in range(self.numCW):
-            demappedSymbols = rxGrid[ layerMappedIndexes[cw] ]              # The demapped symbols for this code word
+            demappedSymbols = rxGrid[ layerMappedIndexes[cw] ]              # The demapped symbols for this codeword
             cwLLRs = self.modems[cw].getLLRsFromSymbols(demappedSymbols, noiseVar, useMax)  # Demodulate symbols to LLRs
             cwLLRs = self.scrambleLLRs(cw, cwLLRs)                                          # Descramble the LLRs
             if llrScales is not None:
@@ -999,7 +1011,7 @@ class PDSCH:
         returned LLRs to get the output user bits.
         
         This can be used when there is no channel coding in the communication pipeline. It returns a list of one or
-        two numpy arrays of bits for each codeword.
+        two NumPy arrays of bits for each codeword.
 
         Parameters
         ----------
@@ -1012,7 +1024,7 @@ class PDSCH:
             A tuple of 3 lists specifying locations of the set of resource elements in ``rxGrid`` that are assigned
             to the user data. The function :py:meth:`getReIndexes` is typically used to obtain this.
             
-        llrScales: 3-D numpy array
+        llrScales: 3-D NumPy array
             The Log-Likelihood Ratios (LLR) scaling factors which are used by demodulating process when extracting 
             Log-Likelihood Ratios (LLRs) from the equalized resource grid. The shape of this array **must** be the
             same shape as ``rxGrid``.
@@ -1022,14 +1034,14 @@ class PDSCH:
             is not provided (``noiseVar=None``), This function uses the ``noiseVar`` property of the ``rxGrid`` object.
             
         useMax : Boolean
-            If ``True``, this implementation uses the ``Max`` function in the calculation of the LLR values. This
+            If `True`, this implementation uses the ``Max`` function in the calculation of the LLR values. This
             is faster but uses an approximation and is slightly less accurate than the actual Log Likelihood method 
-            which uses logarithm and exponential functions. If ``False``, the slower more accurate method is used.
+            which uses logarithm and exponential functions. If `False`, the slower more accurate method is used.
 
         Returns
         -------
         list
-            A list of one or two numpy arrays of bits for each codeword.
+            A list of one or two NumPy arrays of bits for each codeword.
         """
         llrs = self.getLLRsFromGrid(rxGrid, pdschIndexes, llrScales, noiseVar, useMax)
         return [ np.int8( llrs[cw]<0 ) for cw in range(self.numCW) ]
@@ -1059,11 +1071,10 @@ class PDSCH:
 
         Returns
         -------
-        Numpy array
-            A 1D numpy array of modulated complex symbols corresponding to the user data in ``grid``.
+        NumPy array
+            A 1D NumPy array of modulated complex symbols corresponding to the user data in ``grid``.
         """
-        dataReIndexes = self.getReIndexes(grid, "PDSCH")
-        return grid[ dataReIndexes ]
+        return grid[ self.dataIndices ]
             
     # ******************************************************************************************************************
     def getPrecodingMatrix(self, channelMatrix):
@@ -1086,18 +1097,18 @@ class PDSCH:
 
         Parameters
         ----------
-        channelMatrix: Numpy array
-            An ``L x K x Nr x Nt`` complex numpy array representing the channel matrix. It can be the actual channel 
+        channelMatrix: NumPy array
+            An ``L x K x Nr x Nt`` complex NumPy array representing the channel matrix. It can be the actual channel 
             matrix obtained directly from a channel model using the 
             :py:meth:`~neoradium.channelmodel.ChannelModel.getChannelMatrix` method (perfect estimation), or an 
             estimated channel matrix obtained using the :py:meth:`~neoradium.grid.Grid.estimateChannelLS` method.
 
         Returns
         -------
-        Numpy array or list of tuples
+        NumPy array or list of tuples
             Depending on the ``prgSize`` property of this :py:class:`PDSCH`, the returned value can be:
             
-            :Numpy Array: If ``prgSize`` is set to zero, a single *Wideband* ``Nt x Nl``, matrix is returned where
+            :NumPy Array: If ``prgSize`` is set to zero, a single *Wideband* ``Nt x Nl``, matrix is returned where
                 ``Nt`` is the number of transmitter antenna and ``Nl`` is the number of layers in this 
                 :py:class:`PDSCH`. In this case the same precoding is applied to all subcarriers of the resource grid.
             
@@ -1163,9 +1174,9 @@ class PDSCH:
         
         Parameters
         ----------
-        codeRates: float, list, numpy array, or tuple
-            If ``codeRates`` is a float value, it specifies the same code-rate for all codewords. If it is a list, 
-            numpy array, or tuple, it should contain one or two code-rate values for each codeword. This is the
+        codeRates: float, list, NumPy array, or tuple
+            If ``codeRates`` is a float value, it specifies the same code rate for all codewords. If it is a list, 
+            NumPy array, or tuple, it should contain one or two code rate values for each codeword. This is the
             value :math:`R` in **3GPP TS 38.214, Section 5.1.3.2**.
             
         xOverhead: int
@@ -1185,7 +1196,7 @@ class PDSCH:
         if type(codeRates) in [float, np.float32, np.float64]:  codeRates = [codeRates]
         elif type(codeRates) in [list, np.ndarray, tuple]:      codeRates = list(codeRates)
         else:
-            raise ValueError("'codeRates' must be a float value, or a list, tuple, or numpy array of 1 or 2 float values. ('%s' is not supported)"%(type(codeRates).__name__))
+            raise ValueError("'codeRates' must be a float value, or a list, tuple, or NumPy array of 1 or 2 float values. ('%s' is not supported)"%(type(codeRates).__name__))
         if len(codeRates)<self.numCW:           codeRates = self.numCW * codeRates
         codeRates = codeRates[:self.numCW]
 
@@ -1200,11 +1211,13 @@ class PDSCH:
         if npRE<=xOverhead:                     raise ValueError("'xOverhead' must be less than %d."%(npRE))
         npRE-=xOverhead
         numREs = min(156, npRE)*numPRBs
-
+        
+        cwLayers = [self.numLayers] if self.numCW==1 else [self.numLayers//2, self.numLayers-self.numLayers//2]
+        
         # Step 2:
         txBlockSize = []
         for c in range(self.numCW):
-            nInfo = scaleFactor * numREs * codeRates[c] * self.modems[c].qm * self.numLayers
+            nInfo = scaleFactor * numREs * codeRates[c] * self.modems[c].qm * cwLayers[c]
             if nInfo <= 3824:
                 # Step 3:
                 n = max(3, int(np.log2(nInfo))-6)

@@ -271,16 +271,16 @@ class CsiRs:
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If ``None`` (default), the text
+            If specified, it is used as a title for the printed information. If `None` (default), the text
             "CSI-RS Properties:" is used for the title.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = "CSI-RS Properties:"
@@ -441,7 +441,45 @@ class CsiRs:
                                         grid.reDesc[p,l,k] = "CSI-RS,ZP"
                                     else:
                                         grid.reDesc[p,l,k] = "CSI-RS,NZP,%s"%(self.csiType, '+' if wf*wt>0 else '-')
+
+
+    # ******************************************************************************************************************
+    def reserveGridResources(self, grid):                                   # Not documented
+        # This function marks the CSI-RS resource elements inside the given grid as "RESERVED", so that
+        # They are not allocated by PDSCH, DMRS, or other types of REs.
+        if self.anythingForCurSlot() == False:  return
         
+        _, _, _, klBarsStr, cdmGroupIndexes, kPrimes, lPrimes = csiRsLocations[ self.row ]
+        klBarStrs = klBarsStr.split(' ')
+        klBarPairs = []     # The pairs in the 5th column of "TS 38.211 V17.0.0 (2021-12), Table 7.4.1.5.3-1"
+        for klBarStr in klBarStrs:
+            k1st, kLast, lIndex, ll = [int(c) for c in klBarStr]
+            if k1st>kLast:  klBarPairs += [ (self.ks[0]+k1st, self.ls[lIndex]+ll) ]     # Special case in rows 1 and 4
+            else:           klBarPairs += [ (self.ks[kk], self.ls[lIndex]+ll) for kk in range(k1st, kLast+1)]
+
+        jkBarsForLBars = {}                         # Keys: lBar, Values: list of (j,kBar) pairs for the lBar
+        for j,(kBar,lBar) in enumerate(klBarPairs): # j, kBar, lBar as in TS 38.211 V17.0.0 (2021-12), Table 7.4.1.5.3-1
+            jkBarsForLBars[lBar] = jkBarsForLBars.get(lBar,[]) + [(j*(self.row!=1), kBar)]  # For first row, j = 0
+        
+        myReType = "CSIRS_ZP" if self.mySet.csiType == "ZP" else "CSIRS_NZP"
+        alpha = int(np.round(2*self.density) if self.numPorts>1 else self.density)  # Alpha is 1,2, or 3
+        for lBar, jkBars in jkBarsForLBars.items():
+            for lPrime in lPrimes:
+                l = lBar + lPrime
+                for n in range(self.startRb, self.startRb+self.numRbs):
+                    if (self.density<1) and (n%2==1):   continue    # Every other RB is populated when density is 0.5
+                    for j, kBar in jkBars:
+                        for kPrime in kPrimes:
+                            mPrime = int( np.floor(n*alpha) + kPrime + np.floor(kBar*self.density/12) )
+                            kCbr0 = 12*n + kBar + kPrime            # kCbr0 is the subcarrier index from CRB 0
+                            k = kCbr0 - 12*grid.startRb             # The subcarrier index in the grid
+                            for p in range(grid.shape[0]):
+                                curReType = grid.reTypeAt(p,l,k)
+                                assert curReType in ["UNASSIGNED", myReType], \
+                                        f"Trying to reserve the RE at ({p},{l},{k}) for {self.mySet.csiType} CSI-RS,"+\
+                                        f"which is currently allocated for \"{curReType}\"!"
+                                grid[p,l,k] = (0, myReType)
+
 # **********************************************************************************************************************
 class CsiRsSet:  # A CSI-RS Resource Set (contains several CSI-RS Resources)
     r"""
@@ -488,7 +526,7 @@ class CsiRsSet:  # A CSI-RS Resource Set (contains several CSI-RS Resources)
                     
                 :active: This boolean flag is used to *trigger* an ``'aperiodic'`` or *activate* a ``'semiPersistent'``
                     CSI-RS resource set. It is ignored if ``resourceType`` is set to ``'periodic'``. This is set to
-                    ``True`` by default. See :ref:`Time-Domain Configuration <TimeDomainConfig>` below for more
+                    `True` by default. See :ref:`Time-Domain Configuration <TimeDomainConfig>` below for more
                     information.
                     
                 :csiRsList: A list of :py:class:`CsiRs` objects contained in this CSI-RS resource set. If not 
@@ -529,7 +567,7 @@ class CsiRsSet:  # A CSI-RS Resource Set (contains several CSI-RS Resources)
             flag is a property of CSI-RS resource set)
             
         :aperiodic: In this case, there is no periodicity. The transmission of the CSI-RS can be *triggered* by
-            setting the ``active`` flag to ``True``. In practice this is signaled in the DCI message. All CSI-RS
+            setting the ``active`` flag to `True`. In practice this is signaled in the DCI message. All CSI-RS
             resources in the set are *triggered* together. (The ``active`` flag is a property of CSI-RS resource set)
             
         Please refer to **3GPP TS 38.211 section 7.4.1.5.3** for more details. See also 
@@ -595,16 +633,16 @@ class CsiRsSet:  # A CSI-RS Resource Set (contains several CSI-RS Resources)
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If ``None`` (default), the text
+            If specified, it is used as a title for the printed information. If `None` (default), the text
             "CSI-RS Resource Set Properties:" is used for the title.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = "CSI-RS Resource Set Properties:"
@@ -649,6 +687,12 @@ class CsiRsSet:  # A CSI-RS Resource Set (contains several CSI-RS Resources)
         if (self.resourceType in ['aperiodic','semiPersistent']) and (not self.active): return
         for csiRs in self.csiRsList: csiRs.populateGrid(grid)
         
+    # ******************************************************************************************************************
+    def reserveGridResources(self, grid):       # Not documented
+        # The method calls the "populateGrid" function of all CSI-RS resources.
+        if (self.resourceType in ['aperiodic','semiPersistent']) and (not self.active): return
+        for csiRs in self.csiRsList: csiRs.reserveGridResources(grid)
+
 # **********************************************************************************************************************
 class CsiRsConfig:  # CSI-RS Configuration (contains several CSI-RS Resource Sets)
     r"""
@@ -713,16 +757,16 @@ class CsiRsConfig:  # CSI-RS Configuration (contains several CSI-RS Resource Set
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If ``None`` (default), the text
+            If specified, it is used as a title for the printed information. If `None` (default), the text
             "CSI-RS Configuration:" is used for the title.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = "CSI-RS Configuration:"
@@ -809,6 +853,13 @@ class CsiRsConfig:  # CSI-RS Configuration (contains several CSI-RS Resource Set
         for csiRsSet in self.csiRsSetList:
             csiRsSet.populateGrid(grid)
 
+    # ******************************************************************************************************************
+    def reserveGridResources(self, grid):
+        if len(self.csiRsSetList)==0:
+            raise ValueError("Cannot populate the grid because this 'CsiRsConfig' object is empty!")
+        for csiRsSet in self.csiRsSetList:
+            csiRsSet.reserveGridResources(grid)
+    
     # ******************************************************************************************************************
     @property               # Not documented (Already documented above in the __init__ documentation)
     def numPorts(self): return max(csiRsSet.numPorts for csiRsSet in self.csiRsSetList)

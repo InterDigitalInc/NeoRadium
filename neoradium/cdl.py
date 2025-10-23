@@ -185,17 +185,17 @@ class CdlChannel(ChannelModel):
             The bandwidth part object used by the channel model to create channel matrices.
             
         profile : str or None
-            The CDL profile. It can be one of 'A', 'B', 'C', 'D', 'E', or ``None``. See **3GPP TR 38.90, Section 
-            7.7.1** for more information. Use ``None`` to indicate a customized version of CDL channel (See 
+            The CDL profile. It can be one of 'A', 'B', 'C', 'D', 'E', or `None`. See **3GPP TR 38.90, Section 
+            7.7.1** for more information. Use `None` to indicate a customized version of CDL channel (See 
             :ref:`Customizing CDL Model <CustomizingCDL>`).
 
         kwargs : dict
             Here’s a list of additional optional parameters that can be used to further customize this channel model:
 
-                :normalizeGains: A boolean flag. The default value is ``True``, indicating that the path gains 
+                :normalizeGains: A boolean flag. The default value is `True`, indicating that the path gains 
                     are normalized before they are applied to the signals.
                     
-                :normalizeOutput: A boolean flag. The default value is ``True``, indicating that the gains are 
+                :normalizeOutput: A boolean flag. The default value is `True`, indicating that the gains are 
                     normalized based on the number of receive antennas.
                     
                 :txDir: A string that represents the transmission direction, which can be either “Downlink” or 
@@ -208,7 +208,7 @@ class CdlChannel(ChannelModel):
                 :stopBandAtten: The stop-band attenuation (in dB) used by the channel filter. The default is 80 dB.
                 
                 :seed: The seed used by the random functions in the channel model. Setting this to a fixed value ensures
-                    that the channel model generates repeatable results. The default value is ``None``, indicating 
+                    that the channel model generates repeatable results. The default value is `None`, indicating 
                     that this channel model uses the **NeoRadium**’s :doc:`global random generator <./Random>`.
                     
                 :dopplerShift: The maximum Doppler shift in Hertz. The default value is 40 Hertz, which corresponds to
@@ -255,25 +255,25 @@ class CdlChannel(ChannelModel):
                     (math:`\gamma`). The default orientation is [180,0,0]. For more information, please refer to 
                     **3GPP TR 38.901, Section 7.1.3**.
 
-                :kFactor: The K-Factor (in dB) used for scaling. The default is ``None``. If not specified 
+                :kFactor: The K-Factor (in dB) used for scaling. The default is `None`. If not specified 
                     (``kFactor=None``), K-factor scaling is disabled.
 
                 :xPolPower: The cross-polarization Power in dB. The default is 10 dB. For more details please refer 
                     to "Step 3" in **3GPP TR 38.901, Section 7.7.1**.
 
                 :angleScaling: The :ref:`Angle Scaling <AngleScaling>` parameters. If specified, it must be a tuple of
-                    2 numpy arrays.
+                    2 NumPy arrays.
                     
                     The first item specifies the mean values for angle scaling. It’s a 1-D NumPy array containing 
                     four values for: the *Azimuth angle of Departure*, *Azimuth angle of Arrival*, *Zenith angle of 
                     Departure*, and *Zenith angle of Arrival*.
                     
-                    The second item specifies the RMS angle spread values. It is a 1-D numpy array containing four RMS 
+                    The second item specifies the RMS angle spread values. It is a 1-D NumPy array containing four RMS 
                     values for: the *Azimuth angle of Departure*, *Azimuth angle of Arrival*, *Zenith angle of 
                     Departure*, and *Zenith angle of Arrival*. For more information, please refer to 
                     :ref:`Angle Scaling <AngleScaling>` below.
                     
-                    If this value is set to ``None`` (the default), the *Angle Scaling* is disabled.
+                    If this value is set to `None` (the default), the *Angle Scaling* is disabled.
                     
                 :pathDelays: Use this parameter to customize or override the default path delays, which are set 
                     based on the CDL channel model as defined in **3GPP TR 38.901**. In most use cases, you don’t 
@@ -352,7 +352,7 @@ class CdlChannel(ChannelModel):
         
         **Angle Scaling:**
 
-        If ``angleScaling`` is set to ``None``, angle scaling is disabled. Otherwise, it is applied to all angles of 
+        If ``angleScaling`` is set to `None`, angle scaling is disabled. Otherwise, it is applied to all angles of 
         arrival and departure for all clusters, as per **3GPP TR 38.901, Section 7.7.5.1 and Annex A**.
 
 
@@ -366,7 +366,7 @@ class CdlChannel(ChannelModel):
            by providing additional information. For instance, you can choose the CDL-B model and override the standard
            path delays by specifying your own path delays.
            
-        b) You can also create your own model entirely from scratch. Initially, pass ``None`` for the ``profile`` 
+        b) You can also create your own model entirely from scratch. Initially, pass `None` for the ``profile`` 
            parameter and then specify all the channel model parameters. Please note that in this case, you 
            **must** specify at least the following parameters:
            
@@ -384,7 +384,7 @@ class CdlChannel(ChannelModel):
                 * kFactorLos (defaults to ``pathPowers[0]-pathPowers[1]``)
            
            Also note that if your channel model contains a LOS cluster, it **must** be the first cluster in the lists, 
-           and the ``hasLos`` parameter should be set to ``True``.
+           and the ``hasLos`` parameter should be set to `True`.
         """
         super().__init__(bwp, **kwargs)
         self.profile = profile                              # Can be 'A', 'B', 'C', 'D', or 'E'. None -> Custom model
@@ -527,16 +527,16 @@ class CdlChannel(ChannelModel):
             The number of indentation characters.
             
         title : str or None
-            If specified, it serves as the title for the printed information. If ``None`` (the default), an 
+            If specified, it serves as the title for the printed information. If `None` (the default), an 
             automatic title is generated based on the channel model parameters.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string.
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string.
             Otherwise, nothing is returned.
         """
         if title is None:
@@ -607,16 +607,16 @@ class CdlChannel(ChannelModel):
     def restart(self, restartRanGen=False, applyToBwp=True):
         r"""
         This method first re-initializes the random object if a ``seed`` was provided to this channel model and the 
-        ``restartRanGen`` parameter is set to ``True``. It then randomly re-initializes the ray coupling and initial 
+        ``restartRanGen`` parameter is set to `True`. It then randomly re-initializes the ray coupling and initial 
         phases and calls the base class :py:meth:`~neoradium.channelmodel.ChannelModel.restart`.
 
         Parameters
         ----------
         restartRanGen : Boolean
             If a ``seed`` was not provided to this channel model, this parameter is ignored. Otherwise, if 
-            ``restartRanGen`` is set to ``True``, this channel model's random generator is reset and if 
-            ``restartRanGen`` is ``False`` (default), the random generator is not reset. This means if 
-            ``restartRanGen`` is ``False``, calling this function starts a new sequence of channel instances, 
+            ``restartRanGen`` is set to `True`, this channel model's random generator is reset and if 
+            ``restartRanGen`` is `False` (default), the random generator is not reset. This means if 
+            ``restartRanGen`` is `False`, calling this function starts a new sequence of channel instances, 
             which differs from the sequence when the channel was instantiated.
 
         applyToBwp : Boolean
@@ -996,9 +996,9 @@ class CdlChannel(ChannelModel):
             Here is a list of additional optional parameters that can be used to further customize the calculation 
             of the channel matrices:
             
-                :normalizeGains: If the default value of ``True`` is used, the path gains are normalized.
+                :normalizeGains: If the default value of `True` is used, the path gains are normalized.
                     
-                :normalizeOutput: If the default value of ``True`` is used, the gains are normalized based on the 
+                :normalizeOutput: If the default value of `True` is used, the gains are normalized based on the 
                     number of receive antennas.
 
                 :filterLen: The length of the channel filter. The default is 16 sample.
@@ -1026,31 +1026,31 @@ class CdlChannel(ChannelModel):
                     :math:`\gamma`. The default is [0,0,0]. Please refer to **3GPP TR 38.901, Section 7.1.3** for more
                     information.
 
-                :seed: The seed used to generate CDL channel matrices. The default value is ``None``, indicating 
+                :seed: The seed used to generate CDL channel matrices. The default value is `None`, indicating 
                     that this channel model uses the **NeoRadium**’s :doc:`global random generator <./Random>`. In
                     this case the results are not reproducible.
                     
                 :carrierFreq: The carrier frequency of the CDL channel model in Hz. The default is 3.5 GHz.
                 
-                :kFactor: The K-Factor (in dB) used for scaling. The default is ``None``. If not specified 
+                :kFactor: The K-Factor (in dB) used for scaling. The default is `None`. If not specified 
                     (``kFactor=None``), K-factor scaling is disabled.
 
                 :xPolPower: The cross-polarization Power in dB. The default is 10db. For more details please refer 
                     to "Step 3" in **3GPP TR 38.901, Section 7.7.1**.
 
                 :angleScaling: The :ref:`Angle Scaling <AngleScaling>` parameters. If specified, it must be a tuple of
-                    2 numpy arrays.
+                    2 NumPy arrays.
                     
                     The first item specifies the mean values for angle scaling. It’s a 1-D NumPy array containing 
                     four values for: the *Azimuth angle of Departure*, *Azimuth angle of Arrival*, *Zenith angle of 
                     Departure*, and *Zenith angle of Arrival*.
                     
-                    The second item specifies the RMS angle spread values. It is a 1-D numpy array containing four RMS 
+                    The second item specifies the RMS angle spread values. It is a 1-D NumPy array containing four RMS 
                     values for: the *Azimuth angle of Departure*, *Azimuth angle of Arrival*, *Zenith angle of 
                     Departure*, and *Zenith angle of Arrival*. For more information, please refer to 
                     :ref:`Angle Scaling <AngleScaling>`.
                     
-                    If this value is set to ``None`` (the default), the *Angle Scaling* is disabled.
+                    If this value is set to `None` (the default), the *Angle Scaling* is disabled.
                     
         Returns
         -------
@@ -1087,18 +1087,22 @@ class CdlChannel(ChannelModel):
             def __next__(self):
                 if self.cur >= numChannels: raise StopIteration
                 # Create a CDL channel and get the channel matrix
-                chanMat = CdlChannel(bwp, str(self.profiles[self.cur]),
-                                     delaySpread=self.delaySpreads[self.cur],
-                                     dopplerShift=self.dopplerShifts[self.cur],
-                                     ueDirAZ=[self.ueDirs[self.cur], 90],
-                                     seed=self.chanSeeds[self.cur],
-                                     **kwargs).getChannelMatrix()
+                self.curChan = CdlChannel(bwp, str(self.profiles[self.cur]),
+                                          delaySpread=self.delaySpreads[self.cur],
+                                          dopplerShift=self.dopplerShifts[self.cur],
+                                          ueDirAZ=[self.ueDirs[self.cur], 90],
+                                          seed=self.chanSeeds[self.cur],
+                                          **kwargs)
                 self.cur += 1
-                return chanMat
-                    
+                return self.curChan.getChannelMatrix()
+                   
+            def __len__(self):
+                return len(self.chanSeeds)
+
             def reset(self):
                 rangen = random if seed is None else random.getGenerator(seed)  # The random number generator
                 self.cur = 0
+                self.curChan = None
 
                 self.profiles = rangen.choice(list(profiles), size=numChannels) # Pick a profile for each channel matrix
 

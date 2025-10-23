@@ -6,9 +6,9 @@ of the :py:class:`RanGen` class.
 
 The ``random`` object
 ---------------------
-The ``random`` object by default is initialized as a *Permuted Congruential Generator* based on Numpy's
+The ``random`` object by default is initialized as a *Permuted Congruential Generator* based on NumPy's
 `PCG64 <https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html>`_ class. It can be used to generate
-random numbers using the methods defined for Numpy's
+random numbers using the methods defined for NumPy's
 `Generator <https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator>`__ class such as
 `choice <https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.choice.html#numpy-random-generator-choice>`_
 or
@@ -39,7 +39,7 @@ In addition to the methods defined for the
 
 
     :awgn(shape, noiseStd): This method creates *Additive White Gaussian Noise*
-        with standard deviation specified by ``noiseStd``. The result will be a complex numpy array of shape ``shape``.
+        with standard deviation specified by ``noiseStd``. The result will be a complex NumPy array of shape ``shape``.
 
         .. code-block:: python
 
@@ -54,9 +54,9 @@ In addition to the methods defined for the
 Supported Random Generators
 ---------------------------
 Using the ``random`` object's :py:meth:`getGenerator` method you can create all types of random generators supported
-by Numpy. Here is a list of supported generators:
+by NumPy. Here is a list of supported generators:
 
-    :Default Random Generator: This is based on the numpy class
+    :Default Random Generator: This is based on the NumPy class
         `default_rng <https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.default_rng>`_, which
         internally uses the default bit generator (PCG64). The generator can be made deterministic by providing a
         ``seed`` value.
@@ -75,7 +75,7 @@ by Numpy. Here is a list of supported generators:
             array([0, 6, 5, 0, 9])
 
     :PCG64: Permuted Congruential Generator (64-bit, PCG64). This is currently
-        **NeoRadium**'s (and Python's) default bit generator object. It is based on Numpy's
+        **NeoRadium**'s (and Python's) default bit generator object. It is based on NumPy's
         `PCG64 <https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html>`_
         class. As you can see the results match those above because all use the same bit generator with the same seed.
 
@@ -87,7 +87,7 @@ by Numpy. Here is a list of supported generators:
             >>> myGen.integers(0,10,5)
             array([0, 6, 5, 0, 9])
             
-    :MT19937: Mersenne Twister. This is based on Numpy's
+    :MT19937: Mersenne Twister. This is based on NumPy's
         `MT19937 <https://numpy.org/doc/stable/reference/random/bit_generators/mt19937.html#mersenne-twister-mt19937>`_
         class. The generator can be made deterministic by providing a ``seed`` value.
        
@@ -99,7 +99,7 @@ by Numpy. Here is a list of supported generators:
             >>> myGen.integers(0,10,5)
             array([1, 8, 6, 8, 9])
 
-    :PCG64DXSM: Permuted Congruential Generator (64-bit, PCG64 DXSM). This is based on Numpy's
+    :PCG64DXSM: Permuted Congruential Generator (64-bit, PCG64 DXSM). This is based on NumPy's
         `PCG64DXSM <https://numpy.org/doc/stable/reference/random/bit_generators/pcg64dxsm.html#permuted-congruential-generator-64-bit-pcg64-dxsm>`_
         class. The generator can be made deterministic by providing a ``seed`` value.
         
@@ -112,7 +112,7 @@ by Numpy. Here is a list of supported generators:
             array([9, 7, 0, 9, 7])
 
 
-    :Philox: Philox Counter-based RNG. This is based on Numpy's
+    :Philox: Philox Counter-based RNG. This is based on NumPy's
         `Philox <https://numpy.org/doc/stable/reference/random/bit_generators/philox.html#philox-counter-based-rng>`_
         class. The generator can be made deterministic by providing a ``seed`` value.
 
@@ -125,7 +125,7 @@ by Numpy. Here is a list of supported generators:
             array([4, 0, 1, 6, 4])
 
 
-    :SFC64: SFC64 Small Fast Chaotic PRNG. This is based on Numpy's
+    :SFC64: SFC64 Small Fast Chaotic PRNG. This is based on NumPy's
         `SFC64 <https://numpy.org/doc/stable/reference/random/bit_generators/sfc64.html#sfc64-small-fast-chaotic-prng>`_
         class. The generator can be made deterministic by providing a ``seed`` value.
 
@@ -137,7 +137,7 @@ by Numpy. Here is a list of supported generators:
             >>> myGen.integers(0,10,5)
             array([0, 7, 8, 1, 8])
 
-    :RandomState: Python's legacy random generator. This is based on Numpy's
+    :RandomState: Python's legacy random generator. This is based on NumPy's
         `RandomState <https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState>`_
         class. The generator can be made deterministic by providing a ``seed`` value.
 
@@ -180,22 +180,27 @@ by Numpy. Here is a list of supported generators:
 # ------------  --------------------    --------------------------------------------------------------------------------
 # 07/18/2023    Shahab Hamidi-Rad       First version of the file.
 # 01/10/2024    Shahab Hamidi-Rad       Completed the documentation
+# 08/01/2025    Shahab Hamidi-Rad       - Some minor improvements to the RanGen class.
+#                                       - Added the "integers" function to NrGen1 for consistency.
+#                                       - Added the "randint" function to NrGen2 for consistency.
 # **********************************************************************************************************************
 import numpy as np
 
 # **********************************************************************************************************************
 class NrGen1(np.random.RandomState):                            # Not documented - Not called directly by the user
-    # NrGen1 is the same as Numpy's RandomState with one more method: "bits"
+    # NrGen1 is the same as NumPy's RandomState with one more method: "bits"
     def __init__(self, seed): super().__init__(seed)
-    def bits(self, size):       return self.randint(0,2,size,dtype=np.int8)
-    def awgn(self, shape, noiseStd):    return (self.normal(0, noiseStd, shape+(2,))*[1,1j]).sum(-1)/np.sqrt(2)
+    def integers(self, low, high=None, size=None, dtype=np.int64):  return self.randint(low, high, size, dtype)
+    def bits(self, size):            return self.randint(0,2,size,dtype=np.int8)
+    def awgn(self, shape, noiseStd): return (self.normal(0, noiseStd/np.sqrt(2), shape+(2,))*[1,1j]).sum(-1)
 
 # **********************************************************************************************************************
 class NrGen2(np.random.Generator):                              # Not documented - Not called directly by the user
-    # NrGen2 is the same as Numpy's Generator with one more method: "bits"
+    # NrGen2 is the same as NumPy's Generator with one more method: "bits"
     def __init__(self, bitGen): super().__init__(bitGen)
+    def randint(self, low, high=None, size=None, dtype=int):        return self.integers(low, high, size, dtype)
     def bits(self, size):               return self.integers(0,2,size,dtype=np.int8)
-    def awgn(self, shape, noiseStd):    return (self.normal(0, noiseStd, shape+(2,))*[1,1j]).sum(-1)/np.sqrt(2)
+    def awgn(self, shape, noiseStd):    return (self.normal(0, noiseStd/np.sqrt(2), shape+(2,))*[1,1j]).sum(-1)
 
 # **********************************************************************************************************************
 class RanGen:
@@ -204,8 +209,8 @@ class RanGen:
     ``random`` object. It is strongly recommended to use only **NeoRadium**'s ``random`` object for all random
     operations.
     """
-    def __init__(self):
-        self.generator = self.getGenerator()
+    def __init__(self, generator=None):
+        self.generator = self.getGenerator() if generator is None else generator
 
     # ******************************************************************************************************************
     def getGenerator(self, seed=None):
@@ -241,29 +246,27 @@ class RanGen:
                     `RandomState <https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState>`_
                     object, the returned random generator is based on ``RandomState``.
                     
-                :None: If ``seed`` is ``None`` (default), a default
+                :None: If ``seed`` is `None` (default), a default
                     `PCG64 <https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html>`_
                     bit generator is used without specifying the seed, which results
                     in an unpredictable random generator.
 
         Returns
         -------
-        Generator or RandomState
-            The returned random generator object is based on a **NeoRadium** internal class which is derived from
-            Numpy's `Generator <https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator>`__
+        RanGen
+            The returned :py:class:`RanGen` object is based on a **NeoRadium** internal class which is derived from
+            NumPy's `Generator <https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator>`__
             or `RandomState <https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState>`_
             class.
         """
         # See https://numpy.org/doc/stable/reference/random/index.html
-        if seed is None:
-            return NrGen2(np.random.PCG64())                        # Default: PCG64(None)   - Unpredictable
-        if issubclass(seed.__class__, np.random.BitGenerator):
-            return NrGen2(seed)                                     # A bit generator was given
-        if issubclass(seed.__class__, np.random.Generator):
-            return NrGen2(seed.bit_generator)                       # A random generator was given
-        if seed.__class__.__name__=='RandomState':
-            return NrGen1(seed.get_state()[1][0])                   # getting seed
-        return NrGen2(np.random.PCG64(seed))                        # Use PCG64(seed) - Reproducible results
+        if seed is None:                                gen = NrGen2(np.random.PCG64())       # PCG64, unpredictable
+        elif isinstance(seed, RanGen):                  return seed                           # Already a RanGen object
+        elif isinstance(seed, np.random.BitGenerator):  gen = NrGen2(seed)                    # bit generator object
+        elif isinstance(seed, np.random.Generator):     gen = NrGen2(seed.bit_generator)      # generator object
+        elif isinstance(seed, np.random.RandomState):   gen = NrGen1(seed.get_state()[1][0])  # getting seed
+        else:                                           gen = NrGen2(np.random.PCG64(seed))   # PCG64, predictable
+        return RanGen(gen)
 
     # ******************************************************************************************************************
     def __getattr__(self, attr):

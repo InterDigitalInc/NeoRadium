@@ -10,9 +10,11 @@ The module ``utils.py`` contains utility classes and functions used by other mod
 # 01/10/2024    Shahab Hamidi-Rad       Completed the documentation
 # **********************************************************************************************************************
 import numpy as np
-from .random import random
 from scipy.interpolate import RBFInterpolator, interp1d
+import warnings, functools
+warnings.simplefilter('once', DeprecationWarning)       # Print the Deprecation Warning only once
 
+from .random import random
 
 # **********************************************************************************************************************
 def toRadian(angle):    return (None if angle is None else np.float64(angle)*np.pi/180.0)
@@ -138,3 +140,26 @@ def makeComplexNoiseLike(x, **kwargs):                                  # Not do
         return makeComplexNoiseLike(x, noiseStd=np.sqrt(noiseVar))
 
     raise ValueError("You must specify one of 'snrDb', 'noiseVar', or 'noiseStd'!")
+
+# **********************************************************************************************************************
+def deprecated(replacement=None):
+    # A decorator to mark functions as deprecated. It will result in a warning being emitted when the
+    # function is used.
+    # Usage:
+    #   def new_add(a, b):
+    #       """The new, preferred function."""
+    #       return a + b
+    #
+    #   @deprecated(replacement="new_add")
+    #   def old_add(a, b):
+    #       """The old, deprecated function."""
+    #       return a + b
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            message = f"Call to deprecated function {func.__name__}."
+            if replacement:     message += f" Use {replacement} instead."
+            warnings.warn(message, category=DeprecationWarning, stacklevel=2)
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator

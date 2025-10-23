@@ -95,16 +95,16 @@ class Modem:
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If ``None`` (default), the text 
+            If specified, it is used as a title for the printed information. If `None` (default), the text 
             "Modem Properties:" is used for the title.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         repStr = "\n" if indent==0 else ""
@@ -143,13 +143,13 @@ class Modem:
 
         Parameters
         ----------
-        bitstreams : numpy array of bits
+        bitstreams : NumPy array of bits
             A 1-D (one code block) or 2-D (several code blocks) array of bits.
 
         Returns
         -------
-        Numpy array of complex values
-            Returns a 1-D or 2-D (depending on shape of ``bitstreams``) numpy complex array of modulated symbols.
+        NumPy array of complex values
+            Returns a 1-D or 2-D (depending on shape of ``bitstreams``) NumPy complex array of modulated symbols.
         """
         if bitstreams.ndim>1:
             return np.complex128( [ self.modulateOneBlock(bitstream) for bitstream in bitstreams] )
@@ -164,8 +164,8 @@ class Modem:
 
         Parameters
         ----------
-        symbols : 1-D or 2-D Complex numpy array
-            An ``m``x``n`` complex numpy array where ``m`` is the number of coded blocks and ``n`` is the length of
+        symbols : 1-D or 2-D Complex NumPy array
+            An ``m``x``n`` complex NumPy array where ``m`` is the number of coded blocks and ``n`` is the length of
             each code block. If it is a 1-D array, it means there is only one code block to demodulate.
             
         noiseVar : float
@@ -173,15 +173,15 @@ class Modem:
             simulation.
 
         useMax : Boolean
-            If ``True`` (the default), this implementation uses the ``Max`` function in the calculation of the LLR 
+            If `True` (the default), this implementation uses the ``Max`` function in the calculation of the LLR 
             values. This is faster but uses an approximation and is slightly less accurate than the actual Log 
-            Likelihood method which uses logarithm and exponential functions. If ``False``, the slower more accurate 
+            Likelihood method which uses logarithm and exponential functions. If `False`, the slower more accurate 
             method is used.
 
         Returns
         -------
-        Numpy array of floating point
-            A 1-D or 2-D numpy array of LLR values depending on the dimensionality of ``symbols``. In case of 2-D array,
+        NumPy array of floating point
+            A 1-D or 2-D NumPy array of LLR values depending on the dimensionality of ``symbols``. In case of 2-D array,
             the return value is an ``m``x``l`` array of LLR values where ``l= n * qm``. In case of 1-D array, the
             output is a 1-D array of ``l`` LLR values.
         """
@@ -212,8 +212,8 @@ class Modem:
 
         Parameters
         ----------
-        symbols : 2-D complex numpy array
-            A ``m``x``n`` complex numpy array where ``m`` is the number of coded blocks and ``n`` is the length of
+        symbols : 2-D complex NumPy array
+            A ``m``x``n`` complex NumPy array where ``m`` is the number of coded blocks and ``n`` is the length of
             each code block.
             
         noiseVar : float
@@ -221,13 +221,13 @@ class Modem:
             simulation.
 
         useMax : Boolean
-            If ``True``, this implementation uses the ``Max`` function in the calculation of the LLR values. This is
+            If `True`, this implementation uses the ``Max`` function in the calculation of the LLR values. This is
             faster but uses an approximation and is slightly less accurate than the actual Log Likelihood method which
-            uses logarithm and exponential functions. If ``False``, the slower more accurate method is used.
+            uses logarithm and exponential functions. If `False`, the slower more accurate method is used.
 
         Returns
         -------
-        Numpy array of bit values
+        NumPy array of bit values
             Returns a 2-D array of demodulated bits.
         """
         llrs = self.getLLRsFromSymbols(symbols, noiseVar, useMax)

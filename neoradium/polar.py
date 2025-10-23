@@ -149,46 +149,46 @@ class PolarBase(ChanCodeBase):
             A set of optional arguments depending on the ``dataType``:
 
                 :iBIL: Coded bits Interleaving flag. This is a boolean value that indicates whether coded bits
-                    interleaving is enabled (``True``) or disabled (``False``). By default ``iBIL=False``. This
+                    interleaving is enabled (`True`) or disabled (`False`). By default ``iBIL=False``. This
                     is the value :math:`I_{BIL}` in **3GPP TS 38.212, Section 5.4.1.3**. This parameter is ignored
-                    if the ``dataType`` is not ``None``. In this case, ``iBIL`` is set to ``True`` for 
-                    ``dataType="UCI"``, and ``False`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                    if the ``dataType`` is not `None`. In this case, ``iBIL`` is set to `True` for 
+                    ``dataType="UCI"``, and `False` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
 
                 :nMax: Max value of :math:`n` where :math:`N=2^n` is the length of the polar code. By default this
                     is set to 10 (which means :math:`N=1024`. This is the value :math:`N_{max}` in **3GPP TS 38.212,
-                    Section 5.3.1.2**. This parameter is ignored if the ``dataType`` is not ``None``. In this case,
+                    Section 5.3.1.2**. This parameter is ignored if the ``dataType`` is not `None`. In this case,
                     ``nMax=10`` when ``dataType="UCI"``, and ``nMax=9`` for ``dataType="DCI"`` and ``dataType="PBCH"``
                     cases.
 
                 :iIL: Input Interleaving flag. This is a boolean value that indicates whether input interleaving
-                    is enabled (``True``) or disabled (``False``). By default ``iIL=False``. This is the value
+                    is enabled (`True`) or disabled (`False`). By default ``iIL=False``. This is the value
                     :math:`I_{IL}` in **3GPP TS 38.212, Section 5.3.1.1**. This parameter is ignored if the 
-                    ``dataType`` is not ``None``. In this case, ``iIL`` is set to ``False`` for ``dataType="UCI"``,
-                    and ``True`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                    ``dataType`` is not `None`. In this case, ``iIL`` is set to `False` for ``dataType="UCI"``,
+                    and `True` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
 
                 :nPC: Total number of parity-check bits. By default this is set to 0. This is the value :math:`N_{PC}`
                     in **3GPP TS 38.212, Section 5.3.1**. This parameter is ignored if the ``dataType`` is not 
-                    ``None``. In this case, ``nPC=0`` when ``dataType`` is set to ``"DCI"`` or ``"PBCH"``. For the
+                    `None`. In this case, ``nPC=0`` when ``dataType`` is set to ``"DCI"`` or ``"PBCH"``. For the
                     ``"UCI"`` case, this value may be set to 0 or 3 which is determined based on the procedure
                     explained in **3GPP TS 38.212, Section 5.3.1.2**.
                     
                 :nPCwm: The number of *Low-weight*, *High-Reliability* parity-check bits out of the total parity-check
                     bits ``nPC``. By default this is set to 0. This is the value :math:`n_{PC}^{wm}` in **3GPP TS
                     38.212, Sections 5.3.1.2, 6.3.1.3.1, and 6.3.2.3.1**. This parameter is ignored if the 
-                    ``dataType`` is not ``None``. In this case, ``nPCwm=0`` when ``dataType`` is set to ``"DCI"``
+                    ``dataType`` is not `None`. In this case, ``nPCwm=0`` when ``dataType`` is set to ``"DCI"``
                     or ``"PBCH"``. For the ``"UCI"`` case, this value may be set to 0 or 1 which is determined based
                     on the procedure explained in **3GPP TS 38.212, Sections 6.3.1.3.1 and 6.3.2.3.1**.
 
                 :iSeg: Segmentation flag. This is a boolean value that indicates whether segmentation is enabled 
-                    (``True``) or disabled (``False``). By default ``iSeg=False``. This is the value :math:`I_{seg}`
+                    (`True`) or disabled (`False`). By default ``iSeg=False``. This is the value :math:`I_{seg}`
                     in **3GPP TS 38.212, Section 5.2.1**. This parameter is ignored if the ``dataType`` is not
-                    ``None``. In this case, ``iSeg=False`` when ``dataType="DCI"`` or ``dataType="PBCH"``. When
+                    `None`. In this case, ``iSeg=False`` when ``dataType="DCI"`` or ``dataType="PBCH"``. When
                     ``dataType="UCI"``, ``iSeg`` is set based on the value of ``payloadSize``.
 
-                :crcPoly: The CRC polynomial. This is a string specifying the CRC polynomial or ``None``. If
+                :crcPoly: The CRC polynomial. This is a string specifying the CRC polynomial or `None`. If
                     specified, it must be one of the values specified in 
                     :py:meth:`~neoradium.chancodebase.ChanCodeBase.getCrc` for the ``poly`` parameter. The default 
-                    value is ``"11"``. This parameter is ignored if the ``dataType`` is not ``None``. In this case
+                    value is ``"11"``. This parameter is ignored if the ``dataType`` is not `None`. In this case
                     ``crcPoly`` is set to ``"6"`` or ``"11"`` depending on ``payloadSize`` for ``dataType="UCI"``,
                     and ``"24C"`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
                     
@@ -199,7 +199,7 @@ class PolarBase(ChanCodeBase):
                 is the same as ``rateMatchedLen`` if segmentation is disabled. This is the value :math:`E_r` in
                 **3GPP TS 38.212, Section 5.5**.
                 
-            :codeBlockSize: The code-block size. This is the value :math:`K` in **3GPP TS 38.212, Section 5.3.1**
+            :codeBlockSize: The code block size. This is the value :math:`K` in **3GPP TS 38.212, Section 5.3.1**
                 which includes the CRC bits (if any).
 
             :polarCodeSize: The polar code size :math:`N`. This is always a power of 2.
@@ -211,7 +211,7 @@ class PolarBase(ChanCodeBase):
             :pcBits: A list of indices of the parity-check bits in the coded bitstream. This can be empty depending 
                 on ``nPC``.
     
-            :generator: The polar coding *generator* matrix as a 2-D numpy array.
+            :generator: The polar coding *generator* matrix as a 2-D NumPy array.
         """
         super().__init__()
         
@@ -476,12 +476,12 @@ class PolarEncoder(PolarBase):
             If specified, it is used as a title for the printed information.
 
         getStr: Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string.
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string.
             Otherwise, nothing is returned.
         """
         if title is None:   title = "Polar Encoder Properties:"
@@ -493,20 +493,20 @@ class PolarEncoder(PolarBase):
     def doSegmentation(self, txBlock):
         r"""
         If segmentation is enabled, the first step in Polar encoding process is breaking down the transport block
-        into smaller code-blocks. This function receives a transport block ``txBlock``, performs segmentation
+        into smaller code blocks. This function receives a transport block ``txBlock``, performs segmentation
         depending on the value of ``iSeg`` property based on **3GPP TS 38.212, Section 5.2.1**, and outputs a 2D
-        ``C x K`` numpy array containing ``C`` code-blocks of length ``K``. Note that ``C`` can only be 1 or 2 and
+        ``C x K`` NumPy array containing ``C`` code blocks of length ``K``. Note that ``C`` can only be 1 or 2 and
         if ``iSeg=False``, then ``C=1``.
 
         Parameters
         ----------
-        txBlock: numpy array
-            A numpy array of bits containing the transport block information.
+        txBlock: NumPy array
+            A NumPy array of bits containing the transport block information.
             
         Returns
         -------
-        numpy array
-            A 2D ``C x K`` numpy array containing ``C`` code-blocks of length ``K``.
+        NumPy array
+            A 2D ``C x K`` NumPy array containing ``C`` code blocks of length ``K``.
         """
         a = len(txBlock)
             
@@ -526,18 +526,18 @@ class PolarEncoder(PolarBase):
     # ******************************************************************************************************************
     def encode(self, codeBlocks):
         r"""
-        This function encodes a set of code-blocks and returns a set of Polar-coded codewords based on the procedure
+        This function encodes a set of code blocks and returns a set of Polar-coded code blocks based on the procedure
         explained in **3GPP TS 38.212, Section 5.3.1**.
 
         Parameters
         ----------
-        codeBlocks: numpy array
-            A ``C x K`` numpy array containing ``C`` code-blocks of length ``K`` being Polar-encoded by this function.
+        codeBlocks: NumPy array
+            A ``C x K`` NumPy array containing ``C`` code blocks of length ``K`` being Polar-encoded by this function.
 
         Returns
         -------
-        numpy array
-            A ``C x N`` numpy array containing the ``C`` encoded codewords.
+        NumPy array
+            A ``C x N`` NumPy array containing the ``C`` encoded code blocks.
         """
         c, k = codeBlocks.shape
         nn, e = self.polarCodeSize, self.rateMatchedBlockLen
@@ -546,8 +546,8 @@ class PolarEncoder(PolarBase):
         if self.iIL:
             codeBlocks = codeBlocks[:,self.inInterleaveIndexes]
 
-        # Applying the generator matrix to get the codeword
-        codewords = []
+        # Applying the generator matrix to get the code block
+        encodedBlocks = []
         for codeBlock in codeBlocks:
             u = np.zeros(nn, dtype=np.uint8)
             u[self.msgBits] = codeBlock                 # Populate the message bits
@@ -559,40 +559,40 @@ class PolarEncoder(PolarBase):
                     if n in self.pcBits:    u[n] = y[0]
                     else:                   y[0] ^= u[n]
                     
-            codewords += [u.dot(self.generator)%2]      # Apply the generator matrix and add to the encoded codewords
+            encodedBlocks += [u.dot(self.generator)%2]  # Apply the generator matrix and add to the encoded code blocks
                     
-        return np.int8(codewords)
+        return np.int8(encodedBlocks)
 
     # ******************************************************************************************************************
-    def rateMatch(self, codewords):
+    def rateMatch(self, codeBlocks):
         r"""
-        This function receives a set of encoded codewords and returns the rate-matched codewords. It first performs
+        This function receives a set of encoded code blocks and returns the rate-matched code blocks. It first performs
         Sub-block interleaving based on **3GPP TS 38.212, Section 5.4.1.1**, then bit selection is done based on
         **3GPP TS 38.212, Section 5.4.1.2**. Finally, if *Coded bits Interleaving* is enabled (``iBIL=True``), this
         function applies the procedure in **3GPP TS 38.212, Section 5.4.1.3** for *Coded bits Interleaving*.
 
         Parameters
         ----------
-        codeWords: numpy array
-            A ``C x N`` numpy array containing ``C`` encoded codewords of length ``N`` being rate-matched by
+        codeBlocks: NumPy array
+            A ``C x N`` NumPy array containing ``C`` encoded code blocks of length ``N`` being rate-matched by
             this function.
 
         Returns
         -------
-        numpy array
-            A ``C x E`` numpy array containing the ``C`` rate-matched codewords of length ``E`` where
+        NumPy array
+            A ``C x E`` NumPy array containing the ``C`` rate-matched code blocks of length ``E`` where
             ``E=rateMatchedBlockLen``.
         """
         # Sub-block Interleaving indices. See TS 38.212 V17.0.0 (2021-12), Section 5.4.1.1
         jj = self.sbInterleaveIndexes
-        codewords = codewords[:,jj]
+        codeBlocks = codeBlocks[:,jj]
         nn, k, e = self.polarCodeSize, self.codeBlockSize, self.rateMatchedBlockLen
         
             
         # Bit Selection. TS 38.212, Section 5.4.1.2
-        if e>=nn:                   rateMatchedCWs = codewords[:, [k%nn for k in range(e)] ]    # Repetition
-        elif (k/e) <= (7.0/16):     rateMatchedCWs = codewords[:, nn-e:]                        # Puncturing
-        else:                       rateMatchedCWs = codewords[:, :e]                           # Shortening
+        if e>=nn:                   rateMatchedCWs = codeBlocks[:, [k%nn for k in range(e)] ]    # Repetition
+        elif (k/e) <= (7.0/16):     rateMatchedCWs = codeBlocks[:, nn-e:]                        # Puncturing
+        else:                       rateMatchedCWs = codeBlocks[:, :e]                           # Shortening
 
         if self.iBIL:
             # Interleaving of coded bits.
@@ -615,7 +615,7 @@ class SclDecoder:                                               # Not documented
     def reset(self):
         self.pathCosts = np.float64([0])    # Path Costs (Lower value means more probable results)
         self.uHats = np.int8([[]])          # uHats. The 'U' candidates (Including frozen bits)
-        self.xHats = np.int8([[]])          # xHat. The codewords candidates
+        self.xHats = np.int8([[]])          # xHat. The code block candidates
         self.llrIdxs = np.int16([0])        # The indices mapping candidates to LLRs
         self.count = 1                      # Current number of candidates
         
@@ -769,46 +769,46 @@ class PolarDecoder(PolarBase):
             A set of optional arguments depending on the ``dataType``:
 
                 :iBIL: Coded bits Interleaving flag. This is a boolean value that indicates whether coded bits
-                    interleaving is enabled (``True``) or disabled (``False``). By default ``iBIL=False``. This
+                    interleaving is enabled (`True`) or disabled (`False`). By default ``iBIL=False``. This
                     is the value :math:`I_{BIL}` in **3GPP TS 38.212, Section 5.4.1.3**. This parameter is ignored
-                    if the ``dataType`` is not ``None``. In this case, ``iBIL`` is set to ``True`` for 
-                    ``dataType="UCI"``, and ``False`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                    if the ``dataType`` is not `None`. In this case, ``iBIL`` is set to `True` for 
+                    ``dataType="UCI"``, and `False` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
 
                 :nMax: Max value of :math:`n` where :math:`N=2^n` is the length of the polar code. By default this
                     is set to 10 (which means :math:`N=1024`. This is the value :math:`N_{max}` in **3GPP TS 38.212,
-                    Section 5.3.1.2**. This parameter is ignored if the ``dataType`` is not ``None``. In this case,
+                    Section 5.3.1.2**. This parameter is ignored if the ``dataType`` is not `None`. In this case,
                     ``nMax=10`` when ``dataType="UCI"``, and ``nMax=9`` for ``dataType="DCI"`` and ``dataType="PBCH"``
                     cases.
 
                 :iIL: Input Interleaving flag. This is a boolean value that indicates whether input interleaving
-                    is enabled (``True``) or disabled (``False``). By default ``iIL=False``. This is the value
+                    is enabled (`True`) or disabled (`False`). By default ``iIL=False``. This is the value
                     :math:`I_{IL}` in **3GPP TS 38.212, Section 5.3.1.1**. This parameter is ignored if the 
-                    ``dataType`` is not ``None``. In this case, ``iIL`` is set to ``False`` for ``dataType="UCI"``,
-                    and ``True`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
+                    ``dataType`` is not `None`. In this case, ``iIL`` is set to `False` for ``dataType="UCI"``,
+                    and `True` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
 
                 :nPC: Total number of parity-check bits. By default this is set to 0. This is the value :math:`N_{PC}`
                     in **3GPP TS 38.212, Section 5.3.1**. This parameter is ignored if the ``dataType`` is not 
-                    ``None``. In this case, ``nPC=0`` when ``dataType`` is set to ``"DCI"`` or ``"PBCH"``. For the
+                    `None`. In this case, ``nPC=0`` when ``dataType`` is set to ``"DCI"`` or ``"PBCH"``. For the
                     ``"UCI"`` case, this value may be set to 0 or 3 which is determined based on the procedure
                     explained in **3GPP TS 38.212, Section 5.3.1.2**.
 
                 :nPCwm: The number of *Low-weight*, *High-Reliability* parity-check bits out of the total parity-check
                     bits ``nPC``. By default this is set to 0. This is the value :math:`n_{PC}^{wm}` in **3GPP TS
                     38.212, Sections 5.3.1.2, 6.3.1.3.1, and 6.3.2.3.1**. This parameter is ignored if the 
-                    ``dataType`` is not ``None``. In this case, ``nPCwm=0`` when ``dataType`` is set to ``"DCI"``
+                    ``dataType`` is not `None`. In this case, ``nPCwm=0`` when ``dataType`` is set to ``"DCI"``
                     or ``"PBCH"``. For the ``"UCI"`` case, this value may be set to 0 or 1 which is determined based
                     on the procedure explained in **3GPP TS 38.212, Sections 6.3.1.3.1 and 6.3.2.3.1**.
 
                 :iSeg: Segmentation flag. This is a boolean value that indicates whether segmentation is enabled 
-                    (``True``) or disabled (``False``). By default ``iSeg=False``. This is the value :math:`I_{seg}`
+                    (`True`) or disabled (`False`). By default ``iSeg=False``. This is the value :math:`I_{seg}`
                     in **3GPP TS 38.212, Section 5.2.1**. This parameter is ignored if the ``dataType`` is not
-                    ``None``. In this case, ``iSeg=False`` when ``dataType="DCI"`` or ``dataType="PBCH"``. When
+                    `None`. In this case, ``iSeg=False`` when ``dataType="DCI"`` or ``dataType="PBCH"``. When
                     ``dataType="UCI"``, ``iSeg`` is set based on the value of ``payloadSize``.
 
-                :crcPoly: The CRC polynomial. This is a string specifying the CRC polynomial or ``None``. If
+                :crcPoly: The CRC polynomial. This is a string specifying the CRC polynomial or `None`. If
                     specified, it must be one of the values specified in 
                     :py:meth:`~neoradium.chancodebase.ChanCodeBase.getCrc` for the ``poly`` parameter. The default 
-                    value is ``"11"``. This parameter is ignored if the ``dataType`` is not ``None``. In this case
+                    value is ``"11"``. This parameter is ignored if the ``dataType`` is not `None`. In this case
                     ``crcPoly`` is set to ``"6"`` or ``"11"`` depending on ``payloadSize`` for ``dataType="UCI"``,
                     and ``"24C"`` for ``dataType="DCI"`` and ``dataType="PBCH"`` cases.
                     
@@ -816,8 +816,8 @@ class PolarDecoder(PolarBase):
                     The default is 8.
                     
                 :useMinsum: A Boolean value indicating whether the *Min-Sum* approximation should be used in the SCL 
-                    algorithm. ``True`` (default) means the "Min-Sum" approximation is used resulting in faster
-                    decoding with slightly less precise results. ``False`` means the actual extrinsic likelihood
+                    algorithm. `True` (default) means the "Min-Sum" approximation is used resulting in faster
+                    decoding with slightly less precise results. `False` means the actual extrinsic likelihood
                     function based on hyperbolic tangent function is used.
 
 
@@ -847,12 +847,12 @@ class PolarDecoder(PolarBase):
             If specified, it is used as a title for the printed information.
 
         getStr: Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string.
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string.
             Otherwise, nothing is returned.
         """
         if title is None:   title = "Polar Decoder Properties:"
@@ -874,7 +874,7 @@ class PolarDecoder(PolarBase):
         # Sub-block interleaver:
         self.sbInterleaveIndexes = np.argsort(self.sbInterleaveIndexes)
         
-        # Coded-block interleaver:
+        # Coded block interleaver:
         if self.cbInterleaveIndexes is not None:
             self.cbInterleaveIndexes = np.argsort(self.cbInterleaveIndexes)
 
@@ -882,21 +882,21 @@ class PolarDecoder(PolarBase):
     def recoverRate(self, rxBlock):
         r"""
         This function receives an array of Log-Likelihood Ratios (LLRs) in ``rxBlock`` and returns a set of
-        rate-recovered LLRs for each codeword which are ready for Polar decoding. This function does the exact opposite
+        rate-recovered LLRs for each code block which are ready for Polar decoding. This function does the exact opposite
         of the :py:class:`PolarEncoder`'s :py:meth:`rateMatch` method. Note that while the :py:meth:`rateMatch`
         works with bits, this method works on LLRs which are usually obtained by performing demodulation process.
 
         Parameters
         ----------
-        rxBlock: numpy array
-            A numpy array of Log-Likelihood Ratios (LLRs) obtained as a result of demodulation process. Each element
+        rxBlock: NumPy array
+            A NumPy array of Log-Likelihood Ratios (LLRs) obtained as a result of demodulation process. Each element
             is a real LLR value corresponding to a each received bit. The larger the LLR value, the more likely it is
             for that bit to be a ``0``.
 
         Returns
         -------
-        numpy array
-            A ``C x N`` numpy array of ``C`` received coded blocks of length ``N`` containing the LLR values for
+        NumPy array
+            A ``C x N`` NumPy array of ``C`` received coded blocks of length ``N`` containing the LLR values for
             each coded block ready to be polar-decoded.
         """
         c, e = rxBlock.shape
@@ -937,18 +937,18 @@ class PolarDecoder(PolarBase):
 
         Parameters
         ----------
-        rxLlrBlocks: numpy array
-            A ``C x N`` numpy array of ``C`` received coded blocks of length ``N`` containing the LLR values for each
+        rxLlrBlocks: NumPy array
+            A ``C x N`` NumPy array of ``C`` received coded blocks of length ``N`` containing the LLR values for each
             coded block.
 
         Returns
         -------
-        txBlock: numpy array of bits
-            A 1D numpy array of length :math:`A` containing the decoded transport block bits where :math:`A` is
+        txBlock: NumPy array of bits
+            A 1D NumPy array of length :math:`A` containing the decoded transport block bits where :math:`A` is
             equal to the parameter ``payloadSize``.
             
         numCrcErrors: int
-            The total number of CRC errors if ``crcPoly`` is not ``None``, otherwise, zero.
+            The total number of CRC errors if ``crcPoly`` is not `None`, otherwise, zero.
         """
         c, nn = rxLlrBlocks.shape
         if nn != self.polarCodeSize:

@@ -73,9 +73,9 @@ class TrjPoint:
                 :-1: Means there is no path between the UE at this :py:class:`~neoradium.trjchan.TrjPoint` and the 
                     base station. (Total Blockage)
                 
-        pathInfo: numpy array
+        pathInfo: NumPy array
             An ``n × 8`` matrix, where ``n`` is the number of paths. It contains the multipath information at this
-            :py:class:`~neoradium.trjchan.TrjPoint`. The default is an empty numpy array. The eight parameters for 
+            :py:class:`~neoradium.trjchan.TrjPoint`. The default is an empty NumPy array. The eight parameters for 
             each path are stored in this matrix as follows:
             
                 :0: Path *phase* angle in degrees.
@@ -108,7 +108,7 @@ class TrjPoint:
             The distance between this :py:class:`~neoradium.trjchan.TrjPoint` and the base station in meters. The 
             default is zero.
             
-        speed: numpy array
+        speed: NumPy array
             The 3D vector of linear speed at this :py:class:`~neoradium.trjchan.TrjPoint` in meters per second (m/s).
             
         sampleNo: int
@@ -132,29 +132,29 @@ class TrjPoint:
                 
             :linearSpeed: UE's linear speed at this :py:class:`~neoradium.trjchan.TrjPoint` (Read-only).
             
-            :phases: The *phase* angles in degrees for all paths or ``None`` if there is are paths.
-            :delays: The *delay* in nanoseconds for all paths or ``None`` if there are no paths.
-            :powers: The *gain* in dB for all NLOS paths or ``None`` if there are no paths.
-            :aoas: The Azimuth angle Of Arrival (AOA) in degrees for all paths or ``None`` if there are no paths.
-            :zoas: The Zenith angle Of Arrival (ZOA) in degrees for all paths or ``None`` if there are no paths.
-            :aods: The Azimuth angle Of Departure (AOD) in degrees for all paths or ``None`` if there are no paths.
-            :zods: The Zenith angle Of Departure (ZOD) in degrees for all paths or ``None`` if there are no paths.
-            :bounces: The path interaction information for all paths or ``None`` if there are no paths. See the 
+            :phases: The *phase* angles in degrees for all paths or `None` if there is are paths.
+            :delays: The *delay* in nanoseconds for all paths or `None` if there are no paths.
+            :powers: The *gain* in dB for all NLOS paths or `None` if there are no paths.
+            :aoas: The Azimuth angle Of Arrival (AOA) in degrees for all paths or `None` if there are no paths.
+            :zoas: The Zenith angle Of Arrival (ZOA) in degrees for all paths or `None` if there are no paths.
+            :aods: The Azimuth angle Of Departure (AOD) in degrees for all paths or `None` if there are no paths.
+            :zods: The Zenith angle Of Departure (ZOD) in degrees for all paths or `None` if there are no paths.
+            :bounces: The path interaction information for all paths or `None` if there are no paths. See the 
                 explanation of the path interactions for the ``pathInfo`` parameter above.
-            :losPhase: The LOS path's *phase* angle in degrees or ``None`` if there is no LOS path.
-            :losDelay: The LOS path's *delay* in nanoseconds or ``None`` if there is no LOS path.
-            :losPower: The LOS path's *gain* in dB or ``None`` if there is no LOS path.
-            :losAoa: The LOS path's Azimuth angle Of Arrival (AOA) in degrees or ``None`` if there is no LOS path.
-            :losZoa: The LOS path's Zenith angle Of Arrival (ZOA) in degrees or ``None`` if there is no LOS path.
-            :losAod: The LOS path's Azimuth angle Of Departure (AOD) in degrees or ``None`` if there is no LOS path.
-            :losZod: The LOS path's Zenith angle Of Departure (ZOD) in degrees or ``None`` if there is no LOS path.
-            :nlosPhases: The *phase* angles in degrees for all NLOS paths or ``None`` if there are no NLOS paths.
-            :nlosDelays: The *delay* in nanoseconds for all NLOS paths or ``None`` if there are no NLOS paths.
-            :nlosPowers: The *gain* in dB for all NLOS paths or ``None`` if there are no NLOS paths.
-            :nlosAoas: The Azimuth angle Of Arrival (AOA) in degrees for all NLOS paths or ``None`` if there are no NLOS paths.
-            :nlosZoas: The Zenith angle Of Arrival (ZOA) in degrees for all NLOS paths or ``None`` if there are no NLOS paths.
-            :nlosAods: The Azimuth angle Of Departure (AOD) in degrees for all NLOS paths or ``None`` if there are no NLOS paths.
-            :nlosZods: The Zenith angle Of Departure (ZOD) in degrees for all NLOS paths or ``None`` if there are no NLOS paths.
+            :losPhase: The LOS path's *phase* angle in degrees or `None` if there is no LOS path.
+            :losDelay: The LOS path's *delay* in nanoseconds or `None` if there is no LOS path.
+            :losPower: The LOS path's *gain* in dB or `None` if there is no LOS path.
+            :losAoa: The LOS path's Azimuth angle Of Arrival (AOA) in degrees or `None` if there is no LOS path.
+            :losZoa: The LOS path's Zenith angle Of Arrival (ZOA) in degrees or `None` if there is no LOS path.
+            :losAod: The LOS path's Azimuth angle Of Departure (AOD) in degrees or `None` if there is no LOS path.
+            :losZod: The LOS path's Zenith angle Of Departure (ZOD) in degrees or `None` if there is no LOS path.
+            :nlosPhases: The *phase* angles in degrees for all NLOS paths or `None` if there are no NLOS paths.
+            :nlosDelays: The *delay* in nanoseconds for all NLOS paths or `None` if there are no NLOS paths.
+            :nlosPowers: The *gain* in dB for all NLOS paths or `None` if there are no NLOS paths.
+            :nlosAoas: The Azimuth angle Of Arrival (AOA) in degrees for all NLOS paths or `None` if there are no NLOS paths.
+            :nlosZoas: The Zenith angle Of Arrival (ZOA) in degrees for all NLOS paths or `None` if there are no NLOS paths.
+            :nlosAods: The Azimuth angle Of Departure (AOD) in degrees for all NLOS paths or `None` if there are no NLOS paths.
+            :nlosZods: The Zenith angle Of Departure (ZOD) in degrees for all NLOS paths or `None` if there are no NLOS paths.
         """
         self.xyz = np.float64(xyz)
         self.hasLos = int(hasLos)      # 1: LOS path present; 0: Only NLOS paths; -1: No path present
@@ -220,7 +220,7 @@ class TrjPoint:
             "TrjPoint Properties:" is used.
 
         getStr: boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
                     
         Returns
         -------
@@ -489,8 +489,8 @@ class Trajectory:
             The title used for the information. By default the text "Trajectory Properties:" is used.
 
         getStr: boolean
-            If this is ``True``, the function returns a text string instead of printing the info. Otherwise when this
-            is ``False`` (default) the function prints the information.
+            If this is `True`, the function returns a text string instead of printing the info. Otherwise when this
+            is `False` (default) the function prints the information.
             
         Returns
         -------
@@ -640,13 +640,13 @@ class TrjChannel(ChannelModel):
         kwargs : dict
             Here’s a list of additional optional parameters that can be used to further customize this channel model:
 
-                :normalizeGains: If the default value of ``True`` is used, the path gains are normalized before 
+                :normalizeGains: If the default value of `True` is used, the path gains are normalized before 
                     being applied to the signals.
                     
-                :normalizeOutput: If the default value of ``True`` is used, the gains are normalized based on the 
+                :normalizeOutput: If the default value of `True` is used, the gains are normalized based on the 
                     number of receive antennas.
 
-                :normalizeDelays: If the default value of ``True`` is used, the delays are normalized as specified in 
+                :normalizeDelays: If the default value of `True` is used, the delays are normalized as specified in 
                     “Step 3” of **3GPP TR 38.901 section 8.4**. Otherwise, the original delays obtained from 
                     ray-tracing are used.
 
@@ -691,7 +691,7 @@ class TrjChannel(ChannelModel):
 
             :pathDelays: This read-only property returns the path delays for all paths between the base 
                 station and the UE at current position on the trajectory. If the parameter ``normalizeDelays``
-                is ``True``, the delays from the ray-tracing are normalized according to "Step 3" in **3GPP TR 38.901 
+                is `True`, the delays from the ray-tracing are normalized according to "Step 3" in **3GPP TR 38.901 
                 Section 8.4**. Note that the delay normalization (if enabled) is only applied to this property; the
                 redirected properties "delays", "losDelay", and "nlosDelays" always keep the original delay values from
                 the ray-tracing. 
@@ -800,16 +800,16 @@ class TrjChannel(ChannelModel):
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If ``None`` (default), the text
+            If specified, it is used as a title for the printed information. If `None` (default), the text
             "TrjChannel Properties:" is used for the title.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns
+            If the ``getStr`` parameter is `True`, then this function returns
             the information in a text string. Otherwise, nothing is returned.
         """
         # Do not call the parent class's print, because some of parameters do not apply to this subclass
@@ -856,7 +856,7 @@ class TrjChannel(ChannelModel):
         
         Returns
         -------
-        numpy array or None
+        NumPy array or None
             This function returns a 4-D complex tensor of shape ``L x Nr x Nt x Np``, where ``L`` represents the 
             number of time symbols, ``Nr`` and ``Nt`` indicate the number of receiver and transmitter antennas
             respectively, and ``Np`` denotes the number of paths between the base station and the UE at its current

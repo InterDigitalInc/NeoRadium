@@ -87,11 +87,11 @@ class ChanCodeBase:
         
         Parameters
         ----------
-        bits: numpy array
-            A 1D or 2D numpy array of bits. If it is a 1D numpy array, the CRC bits are calculated for the given 
-            bitstream and a 1D numpy array containing the CRC bits is returned. If ``bits`` is an ``N x L`` numpy 
+        bits: NumPy array
+            A 1D or 2D NumPy array of bits. If it is a 1D NumPy array, the CRC bits are calculated for the given 
+            bitstream and a 1D NumPy array containing the CRC bits is returned. If ``bits`` is an ``N x L`` NumPy 
             array, it is assumed that we have ``N`` bitstreams of length ``L``. In this case the CRC bits are
-            calculated for each one of ``N`` bitstreams and an ``N x C`` numpy array is returned where ``C`` is
+            calculated for each one of ``N`` bitstreams and an ``N x C`` NumPy array is returned where ``C`` is
             the CRC length.
             
         poly: str
@@ -112,9 +112,9 @@ class ChanCodeBase:
 
         Returns
         -------
-        numpy array
-            If ``bits`` is a 1D numpy array, the CRC bits are returned in a 1D numpy array. If ``bits`` is an
-            ``N x L`` numpy array, the CRC bits of ``N`` bitstreams are returned in an ``N x C`` numpy array where
+        NumPy array
+            If ``bits`` is a 1D NumPy array, the CRC bits are returned in a 1D NumPy array. If ``bits`` is an
+            ``N x L`` NumPy array, the CRC bits of ``N`` bitstreams are returned in an ``N x C`` NumPy array where
             ``C`` is the CRC length.
         """
         if type(poly)==str:   poly = np.uint8(strToPoly[poly])
@@ -131,16 +131,16 @@ class ChanCodeBase:
     @classmethod
     def checkCrc(cls, bits, poly):
         r"""
-        Checks the CRC bits at the end of the bitstream ``bits`` and returns ``True`` if the CRC is correct (matched)
-        and ``False`` if it is not.
+        Checks the CRC bits at the end of the bitstream ``bits`` and returns `True` if the CRC is correct (matched)
+        and `False` if it is not.
         
         Parameters
         ----------
-        bits: numpy array
-            A 1D or 2D numpy array of bits. If it is a 1D numpy array, the CRC bits are checked for the given
-            bitstream and a boolean value is returned. If ``bits`` is an ``N x L`` numpy array, it is assumed that 
+        bits: NumPy array
+            A 1D or 2D NumPy array of bits. If it is a 1D NumPy array, the CRC bits are checked for the given
+            bitstream and a boolean value is returned. If ``bits`` is an ``N x L`` NumPy array, it is assumed that 
             we have ``N`` bitstreams of length ``L``. In this case the CRC bits are checked for each one of ``N``
-            bitstreams and a boolean numpy array of length ``N`` is returned specifying the results of CRC check
+            bitstreams and a boolean NumPy array of length ``N`` is returned specifying the results of CRC check
             for each bitstream.
             
         poly: str
@@ -149,9 +149,9 @@ class ChanCodeBase:
 
         Returns
         -------
-        boolean or numpy array
-            If ``bits`` is a 1D numpy array, the CRC check result is returned as a boolean value. If ``bits`` is an
-            ``N x L`` numpy array, the CRC check results of ``N`` bitstreams are returned in a boolean numpy array
+        boolean or NumPy array
+            If ``bits`` is a 1D NumPy array, the CRC check result is returned as a boolean value. If ``bits`` is an
+            ``N x L`` NumPy array, the CRC check results of ``N`` bitstreams are returned in a boolean NumPy array
             of length ``N``.
         """
         return np.count_nonzero( cls.getCrc(bits, poly), -1)==0
@@ -168,12 +168,12 @@ class ChanCodeBase:
         
         Parameters
         ----------
-        bits: numpy array
-            A 1D or 2D numpy array of bits. If it is a 1D numpy array, the CRC bits are calculated for the given
-            bitstream and a 1D numpy array containing the original bitstream and the CRC bits is returned. If 
-            ``bits`` is an ``N x L`` numpy array, it is assumed that we have ``N`` bitstreams of length ``L``. In
+        bits: NumPy array
+            A 1D or 2D NumPy array of bits. If it is a 1D NumPy array, the CRC bits are calculated for the given
+            bitstream and a 1D NumPy array containing the original bitstream and the CRC bits is returned. If 
+            ``bits`` is an ``N x L`` NumPy array, it is assumed that we have ``N`` bitstreams of length ``L``. In
             this case the CRC bits are calculated and appended to the end of each one of ``N`` bitstreams and an
-            ``N x M`` numpy array is returned where ``M=L+C`` and ``C`` is the CRC length.
+            ``N x M`` NumPy array is returned where ``M=L+C`` and ``C`` is the CRC length.
 
         poly: str
             The string specifying the generator polynomial. See the :py:meth:`getCrc` method above for a list of
@@ -181,10 +181,10 @@ class ChanCodeBase:
 
         Returns
         -------
-        numpy array
-            If ``bits`` is a 1D numpy array, the new bitstream with CRC appended to the end is returned in a 1D numpy
-            array. If ``bits`` is an ``N x L`` numpy array, the CRC bits for each one of ``N`` bitstreams are appended
-            to the end and an ``N x M`` numpy array is returned where ``M=L+C`` and ``C`` is the CRC length.
+        NumPy array
+            If ``bits`` is a 1D NumPy array, the new bitstream with CRC appended to the end is returned in a 1D NumPy
+            array. If ``bits`` is an ``N x L`` NumPy array, the CRC bits for each one of ``N`` bitstreams are appended
+            to the end and an ``N x M`` NumPy array is returned where ``M=L+C`` and ``C`` is the CRC length.
         """
         return np.append(bits, cls.getCrc(bits, poly), axis=-1)
 

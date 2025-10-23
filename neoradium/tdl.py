@@ -695,16 +695,16 @@ class TdlChannel(ChannelModel):
                   passed to the ``delaySpread`` and ``dopplerShift`` parameters (See 
                   :py:class:`~neoradium.channelmodel.ChannelModel`)
                   
-                * ``None`` can be used to completely customize the TDL channel. See 
+                * `None` can be used to completely customize the TDL channel. See 
                   :ref:`Customizing TDL Model <CustomizingTDL>` below for more information.
 
         kwargs : dict
             Here’s a list of additional optional parameters that can be used to further customize this channel model:
 
-                :normalizeGains: A boolean flag. The default value is ``True``, indicating that the path gains 
+                :normalizeGains: A boolean flag. The default value is `True`, indicating that the path gains 
                     are normalized before they are applied to the signals.
                     
-                :normalizeOutput: A boolean flag. The default value is ``True``, indicating that the gains are 
+                :normalizeOutput: A boolean flag. The default value is `True`, indicating that the gains are 
                     normalized based on the number of receive antennas.
                     
                 :txDir: A string that represents the transmission direction, which can be either “Downlink” or 
@@ -718,7 +718,7 @@ class TdlChannel(ChannelModel):
                     is 80 dB.
                 
                 :seed: The seed used by the random functions in the channel model. Setting this to a fixed value ensures
-                    that the channel model generates repeatable results. The default value is ``None``, indicating 
+                    that the channel model generates repeatable results. The default value is `None`, indicating 
                     that this channel model uses the **NeoRadium**’s :doc:`global random generator <./Random>`.
 
                 :dopplerShift: The maximum Doppler shift in Hertz. The default value is 40 Hertz, which corresponds to
@@ -759,7 +759,7 @@ class TdlChannel(ChannelModel):
                     ``polarization``. However you can specify your own correlation matrix using this parameter. See
                     :ref:`Calculating Correlation Matrix <CalculatingCorrMat>` for more information.
                 
-                :kFactor: The K-Factor (in dB) used for scaling. The default is ``None``. If not specified 
+                :kFactor: The K-Factor (in dB) used for scaling. The default is `None`. If not specified 
                     (``kFactor=None``), K-factor scaling is disabled.
 
                 :sosType: The TDL model uses the Sum-of-Sinusoids method to calculate the channel gains. This 
@@ -833,7 +833,7 @@ class TdlChannel(ChannelModel):
            parameters of the model by passing in additional information. For example you can choose 'B100-400' for
            ``profile`` and then pass your own path delays to override the path delays specified in the standard.
            
-        b) You can also define your own model completely from scratch. You first pass ``None`` for the ``profile`` 
+        b) You can also define your own model completely from scratch. You first pass `None` for the ``profile`` 
            parameter and then specify all channel model parameters. Note that you **must** specify at least the
            following parameters in this case:
            
@@ -846,7 +846,7 @@ class TdlChannel(ChannelModel):
                 * kFactorLos (defaults to ``pathPowers[0]-pathPowers[1]``)
            
            Also note that if your channel model contains a LOS tap, it **must** be the first tap in the lists, and the
-           ``hasLos`` parameter should be set to ``True``.
+           ``hasLos`` parameter should be set to `True`.
         """
         super().__init__(bwp, **kwargs)
 
@@ -959,16 +959,16 @@ class TdlChannel(ChannelModel):
             The number of indentation characters.
             
         title : str or None
-            If specified, it serves as the title for the printed information. If ``None`` (the default), an 
+            If specified, it serves as the title for the printed information. If `None` (the default), an 
             automatic title is generated based on the channel model parameters.
 
         getStr : Boolean
-            If ``True``, returns a text string instead of printing it.
+            If `True`, returns a text string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is ``True``, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
             Otherwise, nothing is returned.
         """
         if title is None:
@@ -1010,16 +1010,16 @@ class TdlChannel(ChannelModel):
     def restart(self, restartRanGen=False, applyToBwp=True):
         r"""
         This method first re-initializes the random object if a ``seed`` was provided to this channel model and the 
-        ``restartRanGen`` parameter is set to ``True``. Subsequently, it invokes the base class’s
+        ``restartRanGen`` parameter is set to `True`. Subsequently, it invokes the base class’s
         :py:meth:`~neoradium.channelmodel.ChannelModel.restart` method.
 
         Parameters
         ----------
         restartRanGen : Boolean
             If a ``seed`` was not provided to this channel model, this parameter is ignored. Otherwise, if 
-            ``restartRanGen`` is set to ``True``, this channel model's random generator is reset and if 
-            ``restartRanGen`` is ``False`` (default), the random generator is not reset. This means if 
-            ``restartRanGen`` is ``False``, calling this function starts a new sequence of channel instances that 
+            ``restartRanGen`` is set to `True`, this channel model's random generator is reset and if 
+            ``restartRanGen`` is `False` (default), the random generator is not reset. This means if 
+            ``restartRanGen`` is `False`, calling this function starts a new sequence of channel instances that 
             are different from the sequence when the channel was instantiated.
             
         applyToBwp : Boolean

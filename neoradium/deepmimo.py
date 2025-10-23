@@ -82,7 +82,7 @@ class DeepMimoData:
         After reading the `DeepMIMO <https://www.deepmimo.net>`_ scenario files, this class sets internal properties 
         as follows:
         
-            :gridSize: A numpy array of 2 integers indicating the number of grid points  in ``x`` and ``y`` 
+            :gridSize: A NumPy array of 2 integers indicating the number of grid points  in ``x`` and ``y`` 
                 directions.
                 
             :numGridPoints: The total number of grid points with ray-tracing data in the specified scenario. Note 
@@ -91,9 +91,9 @@ class DeepMimoData:
             :delta: The distance between 2 neighboring grid points (in ``x`` or ``y`` direction). It is assumed that 
                 this value is the same along the ``X`` and ``Y`` axes.
                 
-            :bsXyz: A numpy array containing the three dimensional coordinates of the base station.
+            :bsXyz: A NumPy array containing the three dimensional coordinates of the base station.
          
-            :xyMin, xyMax: Numpy arrays containing the coordinates of lower left and upper right points on the grid. 
+            :xyMin, xyMax: NumPy arrays containing the coordinates of lower left and upper right points on the grid. 
                 In other words, for the :math:`(x,y)` coordinates of any grid point, we have:
                 
                 .. math::
@@ -586,8 +586,8 @@ class DeepMimoData:
             The title used for the information. By default the text "DeepMimoData Properties:" is used.
 
         getStr: boolean
-            If this is ``True``, the function returns a text string instead of printing the info. Otherwise when this 
-            is ``False`` (default) the function prints the information.
+            If this is `True`, the function returns a text string instead of printing the info. Otherwise when this 
+            is `False` (default) the function prints the information.
             
         Returns
         -------
@@ -986,8 +986,8 @@ class DeepMimoData:
 
             .. Important:: At least one of ``trajTime``, ``trajDist``, or ``trajLen`` must be specified.
 
-        xyStart: list, tuple, numpy array, or None
-            The 2-D coordinates of the the trajectory’s initial position. If this parameter is set to ``None`` 
+        xyStart: list, tuple, NumPy array, or None
+            The 2-D coordinates of the the trajectory’s initial position. If this parameter is set to `None` 
             (default), the trajectory’s starting point is automatically determined based on ``trajDir`` and 
             ``xyBounds``. Otherwise, the given value is first checked against the trajectory bounds (``xyBounds``) and
             modified if needed to ensure that the starting point falls within the specified boundaries.
@@ -1070,9 +1070,9 @@ class DeepMimoData:
                 :1stPathPowers: The color used for each point depends the path power of the strongest path at that
                     point.
                         
-        overlay: :py:class:`~neoradium.trjchan.Trajectory` or numpy array or None
+        overlay: :py:class:`~neoradium.trjchan.Trajectory` or NumPy array or None
             If this is a :py:class:`~neoradium.trjchan.Trajectory` object, then the trajectory will be drawn over the
-            map. If this is a numpy array, it must contain a list of indices of the points in the current scenario. In
+            map. If this is a NumPy array, it must contain a list of indices of the points in the current scenario. In
             this case all the points in the list will be drawn (scatter plot) over the map.
 
         figSize: float
@@ -1355,7 +1355,7 @@ class DeepMimoData:
 
         Returns
         -------
-        numpy array
+        NumPy array
             An array of 2-D points on the current scenario map specifying the trajectory.
 
 
@@ -1439,7 +1439,7 @@ print("Clicked points:", points)
         
         Parameters
         ----------
-        points: numpy array 
+        points: NumPy array 
             This array of 2-D points on the current scenario map specifies the trajectory. The 
             :py:meth:`interactiveTrajPoints` function can be used to obtain these points interactively.
 
@@ -1513,15 +1513,15 @@ print("Clicked points:", points)
             The bandwidth part object used by the returned generator to construct channel matrices.
 
         los: Boolean or None        
-            It can be set to ``None``, ``True``, or ``False``.
+            It can be set to `None`, `True`, or `False`.
 
-                * If set to ``None``, the sampled points are not filtered based on their Line-of-Sight communication 
+                * If set to `None`, the sampled points are not filtered based on their Line-of-Sight communication 
                   path (default).
             
-                * If set to ``True``, only the points with a Line-of-Sight communication path to the base station are
+                * If set to `True`, only the points with a Line-of-Sight communication path to the base station are
                   considered.
             
-                * If set to ``False``, only the points without a Line-of-Sight communication path to the base station 
+                * If set to `False`, only the points without a Line-of-Sight communication path to the base station 
                   are considered. 
         
         minDist: float
@@ -1558,12 +1558,12 @@ print("Clicked points:", points)
             Here is a list of additional optional parameters that can be used to further customize the calculation 
             of the channel matrices:
             
-                :normalizeGains: If the default value of ``True`` is used, the path gains are normalized.
+                :normalizeGains: If the default value of `True` is used, the path gains are normalized.
                     
-                :normalizeOutput: If the default value of ``True`` is used, the gains are normalized based on the 
+                :normalizeOutput: If the default value of `True` is used, the gains are normalized based on the 
                     number of receive antenna.
 
-                :normalizeDelays: If the default value of ``True`` is used, the delays are normalized as specified in 
+                :normalizeDelays: If the default value of `True` is used, the delays are normalized as specified in 
                     “Step 3” of **3GPP TR 38.901 section 8.4**. Otherwise, the original delays obtained from 
                     ray-tracing are used.
 
