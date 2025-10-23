@@ -37,6 +37,7 @@ Key Features
 * **DeepMIMO Integration** :red:`(New)`: Enables the import of DeepMIMO ray-tracing scenarios for creating user trajectories.
 * **Trajectory-based Channel Models** :red:`(New)`: Facilitates the creation of spatially and temporally consistent sequences of channels based on user trajectories, for use in end-to-end communication pipelines.
 * **Channel Datasets** :red:`(New)`: Introduces new functionality to generate datasets of channel matrices based on CDL channel models or temporally and spatially consistent sequences of channel matrices derived from DeepMIMO trajectories.
+* **HARQ** :red:`(New)`: Support for Hybrid Automatic Repeat reQuest (HARQ).
 
 
 .. toctree::
@@ -64,10 +65,12 @@ Key Features
    source/API/RefSig
    source/API/PhyChannels
    source/API/ChanCode
+   source/API/Harq
    source/API/Antenna
    source/API/Channels
    source/API/Random
    source/API/DeepMIMO
+   source/API/SnrHelper
 
 Indices
 =======

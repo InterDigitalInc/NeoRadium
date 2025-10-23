@@ -28,8 +28,8 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "# Create an antenna element with 65° beam width and maximum attenuation of 30db\n",
-    "el = nr.AntennaElement(beamWidth=[65,65], maxAttenuation=30)\n"
+    "# Create an antenna element with a 65° beamwidth and a maximum attenuation of 30 dB.\n",
+    "el = nr.AntennaElement(beamWidth=[65,65], maxAttenuation=30)"
    ]
   },
   {
@@ -50,9 +50,9 @@
     }
    ],
    "source": [
-    "# Depending on the input parameters the \"drawRadiation\" method can create different types of graphs. Here\n",
-    "# we draw the directivity of our antenna element at the horizontal plane of zero elevation.\n",
-    "radValues = el.drawRadiation(theta=90, viewAngles=(90,0), radiationType=\"Directivity\", normalize=True)\n"
+    "# Depending on the input parameters, the 'drawRadiation' method can generate different types of plots.\n",
+    "# Here, we plot the antenna element’s directivity in the horizontal plane at zero elevation.\n",
+    "radValues = el.drawRadiation(theta=90, viewAngles=(90,0), radiationType=\"Directivity\", normalize=True)"
    ]
   },
   {
@@ -73,17 +73,9 @@
     }
    ],
    "source": [
-    "# Here the \"drawRadiation\" method is used to draw the Field values in the vertical plane at azimuth angle 0.\n",
-    "radValues = el.drawRadiation(phi=0, radiationType=\"Field\", normalize=True)\n"
+    "# Here, the 'drawRadiation' method is used to plot the field values in the vertical plane at an azimuth angle of 0°.\n",
+    "radValues = el.drawRadiation(phi=0, radiationType=\"Field\", normalize=True)"
    ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "a1a4c372-32a6-4325-bb45-8e24499b82f7",
-   "metadata": {},
-   "outputs": [],
-   "source": []
   },
   {
    "cell_type": "code",
@@ -103,7 +95,7 @@
     }
    ],
    "source": [
-    "# Here the \"drawRadiation\" method is used to draw a 3D graph of directivity.\n",
+    "# Here, the 'drawRadiation' method is used to generate a 3D plot of directivity.\n",
     "radValues = el.drawRadiation(radiationType=\"Directivity\", normalize=True, viewAngles=(90,0))\n"
    ]
   },
@@ -125,9 +117,9 @@
     }
    ],
    "source": [
-    "# Here the \"drawRadiation\" method is used again to draw a 3D graph of directivity. This time however, we are\n",
-    "# specifying the angle resolution to be 2 degree. This makes the graph generation faster but also coarser than\n",
-    "# the previous one. (The default angle resolution is 1 degree)\n",
+    "# Here, the 'drawRadiation' method is used again to generate a 3D plot of directivity.\n",
+    "# This time, however, we set the angular resolution to 2°, which makes the plot render faster \n",
+    "# but slightly coarser than before. (The default angular resolution is 1°.)\n",
     "radValues = el.drawRadiation(theta=np.arange(0,180.1,2), phi=np.arange(-180,180.1,2), \n",
     "                             radiationType=\"Directivity\", normalize=True, viewAngles=(90,0))"
    ]
@@ -150,7 +142,7 @@
     }
    ],
    "source": [
-    "# Create an omnidirectional antenna element with θ(3dB)=75°\n",
+    "# Create an omnidirectional antenna element with θ(3 dB)=75°.\n",
     "omni = nr.AntennaElement(beamWidth=[75,360])\n",
     "radValues = omni.drawRadiation(radiationType=\"PowerDb\", normalize=True, viewAngles=(40,20))"
    ]

@@ -1,0 +1,546 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SNR Calculations in NeoRadium &mdash; NeoRadium 0.4.0 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Comparing Antenna Element Calculations with Matlab" href="../CompareWithMatlab/Antenna/AntennaElement.html" />
+    <link rel="prev" title="Evaluating the Trained Channel Estimator" href="../MLChEst/MLChestEvaluateTorch.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.4.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">SNR Calculations in NeoRadium</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Matlab's-Assumption">Matlab’s Assumption</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with Matlab</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.4.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">SNR Calculations in NeoRadium</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/Others/SnrCalculations.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="SNR-Calculations-in-NeoRadium">
+<h1>SNR Calculations in NeoRadium<a class="headerlink" href="#SNR-Calculations-in-NeoRadium" title="Link to this heading"></a></h1>
+<p>This notebook demonstrates how NeoRadium calculates the noise standard deviation from a given SNR value in both the time and frequency domains.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">LdpcEncoder</span><span class="p">,</span> <span class="n">Grid</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">Waveform</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">toDb</span><span class="p">,</span> <span class="n">toLinear</span><span class="p">,</span> <span class="n">getNmse</span>
+<br/></pre></div>
+</div>
+</div>
+<p>First let’s try a simple case without a channel model:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NOTE: You can find a similar Matlab example at:</span>
+<span class="c1"># https://www.mathworks.com/help/5g/ug/snr-definition-used-in-link-simulations.html</span>
+<span class="n">snrDb</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">snr</span> <span class="o">=</span> <span class="n">toLinear</span><span class="p">(</span><span class="n">snrDb</span><span class="p">)</span>   <span class="c1"># SNR in linear scale</span>
+
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">52</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>
+<span class="n">nr</span><span class="p">,</span> <span class="n">nt</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span>  <span class="c1"># receiver and transmitter antennas</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
+
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">interleavingBundleSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">&#39;16QAM&#39;</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">prgSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">codeRate</span> <span class="o">=</span> <span class="mi">490</span><span class="o">/</span><span class="mi">1024</span>
+<span class="n">ldpcEncoder</span> <span class="o">=</span> <span class="n">LdpcEncoder</span><span class="p">(</span><span class="n">baseGraphNo</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="n">pdsch</span><span class="o">.</span><span class="n">modems</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">modulation</span><span class="p">,</span>
+                          <span class="n">txLayers</span><span class="o">=</span><span class="n">pdsch</span><span class="o">.</span><span class="n">numLayers</span><span class="p">,</span> <span class="n">targetRate</span><span class="o">=</span><span class="n">codeRate</span><span class="p">)</span>
+
+
+
+<span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                          <span class="c1"># Make the results reproducible.</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span>                       <span class="c1"># Create a resource grid populated with DMRS</span>
+<span class="n">txBlockSize</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getTxBlockSize</span><span class="p">(</span><span class="n">codeRate</span><span class="p">)</span> <span class="c1"># Calculate the transport block size based on 3GPP TS 38.214</span>
+<span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">txBlockSize</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>        <span class="c1"># Create random binary data</span>
+
+<span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitSizes</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>            <span class="c1"># Actual number of bits available in the resource grid</span>
+
+<span class="c1"># Now perform the segmentation, rate-matching, and encoding in one call:</span>
+<span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">getRateMatchedCodeBlocks</span><span class="p">(</span><span class="n">txBlock</span><span class="p">,</span> <span class="n">numBits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Now populate the resource grid with coded data. This includes QAM modulation and resource mapping.</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">rateMatchedCodeBlocks</span><span class="p">)</span>
+
+<span class="c1"># Store the indexes of the PDSCH data in pdschIndexes to be used later.</span>
+<span class="n">pdschIndexes</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">&quot;PDSCH&quot;</span><span class="p">)</span>
+
+<span class="c1"># Getting the Precoding Matrix, and precoding the resource grid</span>
+<span class="n">precoder</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nt</span><span class="p">,</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">numLayers</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">numLayers</span><span class="p">)</span>      <span class="c1"># Get the precoder matrix from the PDSCH object</span>
+<span class="n">precodedGrid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">precode</span><span class="p">(</span><span class="n">precoder</span><span class="p">)</span>                                   <span class="c1"># Perform the precoding</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of Resource Grid:         </span><span class="si">{</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of Precoded Resource Grid:</span><span class="si">{</span><span class="n">precodedGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">txWaveform</span> <span class="o">=</span> <span class="n">precodedGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of txWaveform:            </span><span class="si">{</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Applying channel to the transmitted signal</span>
+<span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">(</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">waveform</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nr</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of rxWaveform:            </span><span class="si">{</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">rxGrid</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of rxGrid:                </span><span class="si">{</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Bandwidth Part Properties:
+  Resource Blocks:    52 RBs starting at 0 (624 subcarriers)
+  Subcarrier Spacing: 30 kHz
+  CP Type:            normal
+  Bandwidth:          18.72 MHz
+  symbolsPerSlot:     14
+  slotsPerSubFrame:   2
+  nFFT:               1024
+  frameNo:            0
+  slotNo:             0
+
+Shape of Resource Grid:         (1, 14, 624)
+Shape of Precoded Resource Grid:(2, 14, 624)
+Shape of txWaveform:            (2, 15360)
+Shape of rxWaveform:            (2, 15360)
+Shape of rxGrid:                (2, 14, 624)
+</pre></div></div>
+</div>
+<p>The standard deviation of the noise in time domain is:</p>
+<div class="math notranslate nohighlight">
+\[\sigma_T = \sqrt{\frac {N_{FFT} \sigma_x^2} {K.{SNR}}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma_x^2\)</span> is the variance of the time-domain signal (the Waveform object), <span class="math notranslate nohighlight">\(K\)</span> is the number of subcarriers in the current bandwidth part, and <span class="math notranslate nohighlight">\(N_{FFT}\)</span> is the FFT size (<code class="docutils literal notranslate"><span class="pre">bwp.nFFT</span></code>). This value can be used to generate Gaussian noise applied to a Waveform object:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noiseStdTime</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">getNoiseStd</span><span class="p">(</span><span class="n">snr</span><span class="p">,</span> <span class="n">bwp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Time): </span><span class="si">{</span><span class="n">noiseStdTime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Noise STD (Time): 0.0220441589451537
+</pre></div></div>
+</div>
+<p>The standard deviation of the noise in Frequency domain is:</p>
+<div class="math notranslate nohighlight">
+\[\sigma_F = \sqrt{\frac {\sigma_X^2} {SNR}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma_X^2\)</span> is the variance of the frequency-domain signal (the Grid object). This can be used to generate Gaussian noise applied to a Grid object:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noiseStdFreq</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">getNoiseStd</span><span class="p">(</span><span class="n">snr</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Noise STD (Freq): 0.705375297931587
+</pre></div></div>
+</div>
+<p>Verifying Equation:</p>
+<div class="math notranslate nohighlight">
+\[\sigma_T = \sqrt{{\frac 1 {N_{FFT}}}} \sigma_F\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq)/sqrt(</span><span class="si">{</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="p">)</span><span class="si">}</span><span class="s2"> = Noise STD (Time)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Noise STD (Freq)/sqrt(1024): 0.022042978060362095 = Noise STD (Time)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply noise in time domain and measure noise in frequency domain:</span>
+<span class="n">noisyRxWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">noiseStd</span><span class="o">=</span><span class="n">noiseStdTime</span><span class="p">)</span>
+<span class="n">noisyRxGrid</span> <span class="o">=</span> <span class="n">noisyRxWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
+<span class="n">noiseGrid</span> <span class="o">=</span> <span class="n">noisyRxGrid</span><span class="o">.</span><span class="n">grid</span> <span class="o">-</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise Grid STD: </span><span class="si">{</span><span class="n">noiseGrid</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Noise Grid STD: 0.7020339000063331
+Noise STD (Freq): 0.705375297931587
+</pre></div></div>
+</div>
+<section id="Matlab's-Assumption">
+<h2>Matlab’s Assumption<a class="headerlink" href="#Matlab's-Assumption" title="Link to this heading"></a></h2>
+<p>Matlab assumes <span class="math notranslate nohighlight">\(\sigma_{X}^2 = \frac{1}{N_r}\)</span>, where <span class="math notranslate nohighlight">\(N_r\)</span> is the number of receiver antennas. With that assumption, we have:</p>
+<p><span class="math notranslate nohighlight">\(\sigma_F = \frac{1}{\sqrt{N_r \cdot SNR}}\)</span> and <span class="math notranslate nohighlight">\(\sigma_T = \frac{1}{\sqrt{N_r \cdot N_{FFT} \cdot SNR}}\)</span></p>
+<p>Note that in this case, these values are the same since we used <span class="math notranslate nohighlight">\(\sigma_{X}^2 = \frac{1}{N_r}\)</span>. This is not always true in practice.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noiseStdTime1</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nr</span><span class="o">*</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="o">*</span><span class="n">snr</span><span class="p">)</span>
+<span class="n">noiseStdFreq1</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nr</span><span class="o">*</span><span class="n">snr</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Time Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdTime1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdFreq1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Noise STD (Time Domain - RxPower=1/Nr): 0.022097086912079608
+Noise STD (Freq Domain - RxPower=1/Nr): 0.7071067811865475
+</pre></div></div>
+</div>
+<p>Now we try the same steps with a CDL channel model:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now repeat the same process using a CDL channel model with two layers:</span>
+<span class="n">snrDb</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">snr</span> <span class="o">=</span> <span class="n">toLinear</span><span class="p">(</span><span class="n">snrDb</span><span class="p">)</span>
+
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">52</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>
+
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">interleavingBundleSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">&#39;16QAM&#39;</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">prgSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">codeRate</span> <span class="o">=</span> <span class="mi">490</span><span class="o">/</span><span class="mi">1024</span>
+<span class="n">ldpcEncoder</span> <span class="o">=</span> <span class="n">LdpcEncoder</span><span class="p">(</span><span class="n">baseGraphNo</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="n">pdsch</span><span class="o">.</span><span class="n">modems</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">modulation</span><span class="p">,</span>
+                          <span class="n">txLayers</span><span class="o">=</span><span class="n">pdsch</span><span class="o">.</span><span class="n">numLayers</span><span class="p">,</span> <span class="n">targetRate</span><span class="o">=</span><span class="n">codeRate</span><span class="p">)</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                          <span class="c1"># Making the results reproducible.</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span>                       <span class="c1"># Create a resource grid already populated with DMRS</span>
+<span class="n">txBlockSize</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getTxBlockSize</span><span class="p">(</span><span class="n">codeRate</span><span class="p">)</span> <span class="c1"># Calculate the Transport Block Size based on 3GPP TS 38.214</span>
+<span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">txBlockSize</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>        <span class="c1"># Create random binary data</span>
+
+<span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitSizes</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>            <span class="c1"># Actual number of bits available in the resource grid</span>
+
+<span class="c1"># Now perform the segmentation, rate-matching, and encoding in one call:</span>
+<span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">getRateMatchedCodeBlocks</span><span class="p">(</span><span class="n">txBlock</span><span class="p">,</span> <span class="n">numBits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Now populate the resource grid with coded data. This includes QAM modulation and resource mapping.</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">rateMatchedCodeBlocks</span><span class="p">)</span>
+
+<span class="c1"># Store the indexes of the PDSCH data in pdschIndexes to be used later.</span>
+<span class="n">pdschIndexes</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">&quot;PDSCH&quot;</span><span class="p">)</span>
+
+<span class="c1"># Creating a CdlChannel object:</span>
+<span class="n">f0</span> <span class="o">=</span> <span class="mf">4e9</span>  <span class="c1"># Carrier Frequency</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="n">f0</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>  <span class="c1"># 4 TX antennas</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>  <span class="c1"># 2 RX antennas</span>
+                     <span class="n">normalizeGains</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">normalizeOutput</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">nr</span><span class="p">,</span><span class="n">nt</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">nrNt</span>
+
+<span class="c1"># Getting the Precoding Matrix, and precoding the resource grid</span>
+<span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>              <span class="c1"># Get the channel matrix</span>
+<span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>      <span class="c1"># Get the precoder matrix from the PDSCH object</span>
+<span class="n">precodedGrid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">precode</span><span class="p">(</span><span class="n">precoder</span><span class="p">)</span>                   <span class="c1"># Perform the precoding</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of Resource Grid:         </span><span class="si">{</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of Precoded Resource Grid:</span><span class="si">{</span><span class="n">precodedGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">txWaveform</span> <span class="o">=</span> <span class="n">precodedGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of txWaveform:            </span><span class="si">{</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of rxWaveform:            </span><span class="si">{</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">offset</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getTimingOffset</span><span class="p">()</span>
+<span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Timing Offset:                  </span><span class="si">{</span><span class="n">offset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">rxGrid</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of rxGrid:                </span><span class="si">{</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">rxGridF</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToGrid</span><span class="p">(</span><span class="n">precodedGrid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of rxGridF:               </span><span class="si">{</span><span class="n">rxGridF</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NMSE(rxGrid,rxGridF):           </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="w"> </span><span class="n">rxGridF</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Shape of Resource Grid:         (2, 14, 624)
+Shape of Precoded Resource Grid:(4, 14, 624)
+Shape of txWaveform:            (4, 15360)
+Shape of rxWaveform:            (2, 15360)
+Timing Offset:                  13
+Shape of rxGrid:                (2, 14, 624)
+Shape of rxGridF:               (2, 14, 624)
+NMSE(rxGrid,rxGridF):           6.457297490367846e-07
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noiseStdTime</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">getNoiseStd</span><span class="p">(</span><span class="n">snr</span><span class="p">,</span> <span class="n">bwp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Time): </span><span class="si">{</span><span class="n">noiseStdTime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Noise STD (Time): 0.06558965831573078
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noiseStdFreq</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">getNoiseStd</span><span class="p">(</span><span class="n">snr</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Noise STD (Freq): 2.0989851489946787
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq)/sqrt(</span><span class="si">{</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="p">)</span><span class="si">}</span><span class="s2"> = Noise STD (Time)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Noise STD (Freq)/sqrt(1024): 0.06559328590608371 = Noise STD (Time)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In this case, Matlab&#39;s assumption is not valid; these values do not match the calculated STD values above.</span>
+<span class="n">noiseStdTime1</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nr</span><span class="o">*</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="o">*</span><span class="n">snr</span><span class="p">)</span>
+<span class="n">noiseStdFreq1</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nr</span><span class="o">*</span><span class="n">snr</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Time Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdTime1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdFreq1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Noise STD (Time Domain - RxPower=1/Nr): 0.022097086912079608
+Noise STD (Freq Domain - RxPower=1/Nr): 0.7071067811865475
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply noise in the time domain and measure the resulting noise in the frequency domain:</span>
+<span class="n">noisyRxWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">noiseStd</span><span class="o">=</span><span class="n">noiseStdTime</span><span class="p">)</span>
+<span class="n">noisySyncedWaveform</span> <span class="o">=</span> <span class="n">noisyRxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+<span class="n">noisyRxGrid</span> <span class="o">=</span> <span class="n">noisySyncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
+<span class="n">noiseGrid</span> <span class="o">=</span> <span class="n">noisyRxGrid</span><span class="o">.</span><span class="n">grid</span> <span class="o">-</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise Grid STD: </span><span class="si">{</span><span class="n">noiseGrid</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Noise Grid STD: 2.082620653246523
+Noise STD (Freq): 2.0989851489946787
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../MLChEst/MLChestEvaluateTorch.html" class="btn btn-neutral float-left" title="Evaluating the Trained Channel Estimator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../CompareWithMatlab/Antenna/AntennaElement.html" class="btn btn-neutral float-right" title="Comparing Antenna Element Calculations with Matlab" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

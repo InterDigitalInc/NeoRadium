@@ -6,15 +6,15 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modulation &mdash; NeoRadium 0.3.1 Documentation</title>
+  <title>Modulation &mdash; NeoRadium 0.4.0 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=73ab78ac" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../_static/documentation_options.js?v=6c02275b"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -34,7 +34,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.3.1
+            NeoRadium 0.4.0
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -70,10 +70,12 @@
 <li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
 </ul>
 
         </div>
@@ -82,7 +84,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.3.1</a>
+          <a href="../../index.html">NeoRadium 0.4.0</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -166,13 +168,13 @@ bits from the input bitstream to a complex symbol.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
 “Modem Properties:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -187,13 +189,13 @@ Otherwise, nothing is returned.</p>
 <dd><p>Modulates the given bitstream to an array(s) of complex symbols using current modulation scheme.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>bitstreams</strong> (<em>numpy array</em><em> of </em><em>bits</em>) – A 1-D (one code block) or 2-D (several code blocks) array of bits.</p>
+<dd class="field-odd"><p><strong>bitstreams</strong> (<em>NumPy array</em><em> of </em><em>bits</em>) – A 1-D (one code block) or 2-D (several code blocks) array of bits.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Returns a 1-D or 2-D (depending on shape of <code class="docutils literal notranslate"><span class="pre">bitstreams</span></code>) numpy complex array of modulated symbols.</p>
+<dd class="field-even"><p>Returns a 1-D or 2-D (depending on shape of <code class="docutils literal notranslate"><span class="pre">bitstreams</span></code>) NumPy complex array of modulated symbols.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy array of complex values</p>
+<dd class="field-odd"><p>NumPy array of complex values</p>
 </dd>
 </dl>
 </dd></dl>
@@ -207,23 +209,23 @@ bitstream.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>symbols</strong> (<em>1-D</em><em> or </em><em>2-D Complex numpy array</em>) – An <code class="docutils literal notranslate"><span class="pre">m``x``n</span></code> complex numpy array where <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of coded blocks and <code class="docutils literal notranslate"><span class="pre">n</span></code> is the length of
+<li><p><strong>symbols</strong> (<em>1-D</em><em> or </em><em>2-D Complex NumPy array</em>) – An <code class="docutils literal notranslate"><span class="pre">m``x``n</span></code> complex NumPy array where <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of coded blocks and <code class="docutils literal notranslate"><span class="pre">n</span></code> is the length of
 each code block. If it is a 1-D array, it means there is only one code block to demodulate.</p></li>
 <li><p><strong>noiseVar</strong> (<em>float</em>) – The noise variance obtained using noise estimation or using the actual noise variance value used in
 simulation.</p></li>
-<li><p><strong>useMax</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (the default), this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the calculation of the LLR
+<li><p><strong>useMax</strong> (<em>Boolean</em>) – If <cite>True</cite> (the default), this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the calculation of the LLR
 values. This is faster but uses an approximation and is slightly less accurate than the actual Log
-Likelihood method which uses logarithm and exponential functions. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the slower more accurate
+Likelihood method which uses logarithm and exponential functions. If <cite>False</cite>, the slower more accurate
 method is used.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A 1-D or 2-D numpy array of LLR values depending on the dimensionality of <code class="docutils literal notranslate"><span class="pre">symbols</span></code>. In case of 2-D array,
+<dd class="field-even"><p>A 1-D or 2-D NumPy array of LLR values depending on the dimensionality of <code class="docutils literal notranslate"><span class="pre">symbols</span></code>. In case of 2-D array,
 the return value is an <code class="docutils literal notranslate"><span class="pre">m``x``l</span></code> array of LLR values where <code class="docutils literal notranslate"><span class="pre">l=</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">qm</span></code>. In case of 1-D array, the
 output is a 1-D array of <code class="docutils literal notranslate"><span class="pre">l</span></code> LLR values.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy array of floating point</p>
+<dd class="field-odd"><p>NumPy array of floating point</p>
 </dd>
 </dl>
 </dd></dl>
@@ -237,20 +239,20 @@ LLR values, and then uses “hard decision” to convert LLRs to bits.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>symbols</strong> (<em>2-D complex numpy array</em>) – A <code class="docutils literal notranslate"><span class="pre">m``x``n</span></code> complex numpy array where <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of coded blocks and <code class="docutils literal notranslate"><span class="pre">n</span></code> is the length of
+<li><p><strong>symbols</strong> (<em>2-D complex NumPy array</em>) – A <code class="docutils literal notranslate"><span class="pre">m``x``n</span></code> complex NumPy array where <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of coded blocks and <code class="docutils literal notranslate"><span class="pre">n</span></code> is the length of
 each code block.</p></li>
 <li><p><strong>noiseVar</strong> (<em>float</em>) – The noise variance obtained using noise estimation or using the actual noise variance value used in
 simulation.</p></li>
-<li><p><strong>useMax</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the calculation of the LLR values. This is
+<li><p><strong>useMax</strong> (<em>Boolean</em>) – If <cite>True</cite>, this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the calculation of the LLR values. This is
 faster but uses an approximation and is slightly less accurate than the actual Log Likelihood method which
-uses logarithm and exponential functions. If <code class="docutils literal notranslate"><span class="pre">False</span></code>, the slower more accurate method is used.</p></li>
+uses logarithm and exponential functions. If <cite>False</cite>, the slower more accurate method is used.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Returns a 2-D array of demodulated bits.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy array of bit values</p>
+<dd class="field-odd"><p>NumPy array of bit values</p>
 </dd>
 </dl>
 </dd></dl>

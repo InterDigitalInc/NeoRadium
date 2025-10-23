@@ -6,15 +6,15 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resource Grid &mdash; NeoRadium 0.3.1 Documentation</title>
+  <title>Resource Grid &mdash; NeoRadium 0.4.0 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=73ab78ac" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../_static/documentation_options.js?v=6c02275b"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.3.1
+            NeoRadium 0.4.0
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -60,6 +60,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Resource Grid</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#neoradium.grid.Grid"><code class="docutils literal notranslate"><span class="pre">Grid</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.print"><code class="docutils literal notranslate"><span class="pre">Grid.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.clone"><code class="docutils literal notranslate"><span class="pre">Grid.clone()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.getStats"><code class="docutils literal notranslate"><span class="pre">Grid.getStats()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.reTypeAt"><code class="docutils literal notranslate"><span class="pre">Grid.reTypeAt()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.getReIndexes"><code class="docutils literal notranslate"><span class="pre">Grid.getReIndexes()</span></code></a></li>
@@ -70,6 +71,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.equalize"><code class="docutils literal notranslate"><span class="pre">Grid.equalize()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.estimateChannelLS"><code class="docutils literal notranslate"><span class="pre">Grid.estimateChannelLS()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.applyChannel"><code class="docutils literal notranslate"><span class="pre">Grid.applyChannel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.getNoiseStd"><code class="docutils literal notranslate"><span class="pre">Grid.getNoiseStd()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.addNoise"><code class="docutils literal notranslate"><span class="pre">Grid.addNoise()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.drawMap"><code class="docutils literal notranslate"><span class="pre">Grid.drawMap()</span></code></a></li>
 </ul>
@@ -81,10 +83,12 @@
 <li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
 </ul>
 
         </div>
@@ -93,7 +97,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.3.1</a>
+          <a href="../../index.html">NeoRadium 0.4.0</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -169,7 +173,7 @@ content type, the default value is used. The following content types are current
 </dd>
 </dl>
 </p></li>
-<li><p><strong>useReDesc</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the resource grid will also include additional fields that describe the content of each
+<li><p><strong>useReDesc</strong> (<em>Boolean</em>) – If <cite>True</cite>, the resource grid will also include additional fields that describe the content of each
 resource element (RE). This can be used during the debugging to make sure the resources are allocated
 correctly.</p></li>
 <li><p><strong>numSlots</strong> (<em>int</em>) – The number of time slots to include in the resource grid. The number of time symbols <code class="docutils literal notranslate"><span class="pre">L</span></code> (the second
@@ -254,15 +258,29 @@ examples of accessing the RE values in the resource grid:</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – If specified, it is used as a title for the printed information.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.grid.Grid.clone">
+<span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.clone" title="Link to this definition"></a></dt>
+<dd><p>Creates a copy of this resource grid object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A copy of this resource grid object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -316,7 +334,7 @@ the returned indices to retrieve these values.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reTypeStr</strong> (<em>str</em><em> or </em><em>None</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the default content type of this resource grid is used as the key. For
+<dd class="field-odd"><p><strong>reTypeStr</strong> (<em>str</em><em> or </em><em>None</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> is <cite>None</cite>, the default content type of this resource grid is used as the key. For
 example if this resource grid was created with <code class="docutils literal notranslate"><span class="pre">contents=&quot;PDSCH&quot;</span></code>, then the indices of all resource
 elements with content type “PDSCH” are returned.</p>
 <p>Otherwise, this function returns the indices of all resource elements in the resource grid with the
@@ -369,7 +387,7 @@ REs in a different layer is used for transmission of data for a different UE. (S
 </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A tuple of three 1-D numpy arrays specifying a list of locations in the resource grid. This value can be
+<dd class="field-even"><p>A tuple of three 1-D NumPy arrays specifying a list of locations in the resource grid. This value can be
 used directly to access REs at the specified locations. (See the above example)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -391,7 +409,7 @@ following two methods are equivalent.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reTypeStr</strong> (<em>str</em><em> or </em><em>None</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the default content type of this resource grid is used as the key. For
+<dd class="field-odd"><p><strong>reTypeStr</strong> (<em>str</em><em> or </em><em>None</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> is <cite>None</cite>, the default content type of this resource grid is used as the key. For
 example, if this resource grid was created with <code class="docutils literal notranslate"><span class="pre">contents=&quot;PDSCH&quot;</span></code>, then the values of all resource
 elements with content type “PDSCH” are returned.</p>
 <p>Otherwise, this function returns the values of all resource elements in the resource grid with the content
@@ -400,11 +418,11 @@ for <code class="docutils literal notranslate"><span class="pre">reTypeStr</span
 </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A 1-D complex numpy array containing the values for all REs with the content type specified by
+<dd class="field-even"><p>A 1-D complex NumPy array containing the values for all REs with the content type specified by
 <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>1-D numpy array</p>
+<dd class="field-odd"><p>1-D NumPy array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -417,7 +435,7 @@ supports <em>Precoding RB groups (PRGs)</em> which means different precoding mat
 groups of subcarriers in the resource grid. See <strong>3GPP TS 38.214, Section 5.1.2.3</strong> for more details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>f</strong> (<em>numpy array</em><em> or </em><em>list</em><em> of </em><em>tuples</em>) – <p>This function supports two types of precoding:</p>
+<dd class="field-odd"><p><strong>f</strong> (<em>NumPy array</em><em> or </em><em>list</em><em> of </em><em>tuples</em>) – <p>This function supports two types of precoding:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Wideband<span class="colon">:</span></dt>
 <dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">f</span></code> is an <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code> matrix where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antennas and <code class="docutils literal notranslate"><span class="pre">Nl</span></code>
@@ -503,7 +521,7 @@ process when extracting Log-Likelihood Ratios (LLRs) from the equalized resource
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hf</strong> (<em>4-D complex numpy array</em>) – This is an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nl</span></code> numpy array representing the estimated channel matrix, where <code class="docutils literal notranslate"><span class="pre">L</span></code> is
+<li><p><strong>hf</strong> (<em>4-D complex NumPy array</em>) – This is an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nl</span></code> NumPy array representing the estimated channel matrix, where <code class="docutils literal notranslate"><span class="pre">L</span></code> is
 the number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of receiver antennas,
 and <code class="docutils literal notranslate"><span class="pre">Nl</span></code> is the number of layers.</p></li>
 <li><p><strong>noiseVar</strong> (<em>float</em><em> or </em><em>None</em>) – The variance of the noise applied to the received resource grid. If this is not provided, this method
@@ -517,7 +535,7 @@ class).</p></li>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>eqGrid</strong> (<a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The equalized grid object of shape <code class="docutils literal notranslate"><span class="pre">Nl</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> where <code class="docutils literal notranslate"><span class="pre">Nl</span></code> is the number of layers, <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
 number of OFDM symbols, and <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers.</p></li>
-<li><p><strong>llrScales</strong> (<em>3-D numpy array</em>) – The Log-Likelihood Ratios (LLR) scaling factors which are used by the demodulation process when extracting
+<li><p><strong>llrScales</strong> (<em>3-D NumPy array</em>) – The Log-Likelihood Ratios (LLR) scaling factors which are used by the demodulation process when extracting
 Log-Likelihood Ratios (LLRs) from the equalized resource grid. The shape of this array is <code class="docutils literal notranslate"><span class="pre">Nl</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code>
 which is similar to <code class="docutils literal notranslate"><span class="pre">eqGrid</span></code> above.</p></li>
 </ul>
@@ -543,7 +561,7 @@ values at pilot locations, <span class="math notranslate nohighlight">\(P\)</spa
 locations <span class="math notranslate nohighlight">\(h_p\)</span> is then calculated by:</p>
 <div class="math notranslate nohighlight">
 \[h_p = \frac {Y_p} P  \qquad \qquad \qquad \text{(element-wise division)}\]</div>
-<p>2) If <code class="docutils literal notranslate"><span class="pre">meanCdm</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the <span class="math notranslate nohighlight">\(h_p\)</span> values in each CDM group are averaged which results in a new
+<p>2) If <code class="docutils literal notranslate"><span class="pre">meanCdm</span></code> is <cite>True</cite>, the <span class="math notranslate nohighlight">\(h_p\)</span> values in each CDM group are averaged which results in a new
 smaller set of <span class="math notranslate nohighlight">\(h_p\)</span> values located at centers of CDM groups.</p>
 <p>3) Frequency interpolation along subcarriers is applied to <span class="math notranslate nohighlight">\(h_p\)</span> values at all OFDM symbols containing
 pilots based on <code class="docutils literal notranslate"><span class="pre">polarInt</span></code> and <code class="docutils literal notranslate"><span class="pre">kernel</span></code> values.</p>
@@ -555,15 +573,15 @@ whole channel matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rsInfo</strong> (<a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code>) – <p>This object contain reference signal information for the channel estimation. If it is a
+<li><p><strong>rsInfo</strong> (<a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a> or <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a>) – <p>This object contain reference signal information for the channel estimation. If it is a
 <a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a> object, the channel matrix is estimated based on the CSI-RS
 signals which does not include the precoding effect.</p>
-<p>If this is a <code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code> object, the channel matrix is estimated based on the
+<p>If this is a <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object, the channel matrix is estimated based on the
 demodulation reference signals which includes the precoding effect.</p>
 </p></li>
-<li><p><strong>meanCdm</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the <span class="math notranslate nohighlight">\(h_p\)</span> values at pilot locations for each CDM group are averaged before applying
+<li><p><strong>meanCdm</strong> (<em>Boolean</em>) – If <cite>True</cite>, the <span class="math notranslate nohighlight">\(h_p\)</span> values at pilot locations for each CDM group are averaged before applying
 subcarrier interpolation. Otherwise interpolation is applied directly on the <span class="math notranslate nohighlight">\(h_p\)</span> values.</p></li>
-<li><p><strong>polarInt</strong> (<em>Boolean</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the interpolation along the subcarriers is applied in polar coordinates. This means all
+<li><p><strong>polarInt</strong> (<em>Boolean</em>) – <p>If <cite>True</cite>, the interpolation along the subcarriers is applied in polar coordinates. This means all
 <span class="math notranslate nohighlight">\(h_p\)</span> values are converted to the polar coordinates and then the type of interpolation specified by
 <code class="docutils literal notranslate"><span class="pre">kernel</span></code> is applied to magnitudes and angles of these values. The results are then converted back to the
 cartesian coordinates. Otherwise (default), the interpolation is applied in the cartesian coordinates.</p>
@@ -608,10 +626,10 @@ class.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul>
-<li><p><strong>hEst</strong> (<em>a 4-D complex numpy array</em>) – If <code class="docutils literal notranslate"><span class="pre">rsInfo</span></code> is a <a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a> object, an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> complex numpy
+<li><p><strong>hEst</strong> (<em>a 4-D complex NumPy array</em>) – If <code class="docutils literal notranslate"><span class="pre">rsInfo</span></code> is a <a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a> object, an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> complex NumPy
 array is returned where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is
 the number of receiver antennas, and <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antennas.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">rsInfo</span></code> is a <code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code> object, an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nl</span></code> complex numpy array
+<p>If <code class="docutils literal notranslate"><span class="pre">rsInfo</span></code> is a <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object, an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nl</span></code> complex NumPy array
 is returned where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is
 the number of receiver antennas, and <code class="docutils literal notranslate"><span class="pre">Nl</span></code> is the number of layers.</p>
 </li>
@@ -636,7 +654,7 @@ process of doing OFDM modulation, applying the channel, performing synchronizati
 domain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channelMatrix</strong> (<em>4-D complex numpy array</em>) – This is an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> numpy array representing the estimated channel matrix, where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
+<dd class="field-odd"><p><strong>channelMatrix</strong> (<em>4-D complex NumPy array</em>) – This is an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> NumPy array representing the estimated channel matrix, where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
 number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of receiver antennas,
 and <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antennas.</p>
 </dd>
@@ -651,48 +669,123 @@ number of OFDM symbols, and <code class="docutils literal notranslate"><span cla
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="neoradium.grid.Grid.addNoise">
-<span class="sig-name descname"><span class="pre">addNoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.addNoise" title="Link to this definition"></a></dt>
-<dd><p>Adds Additive White Gaussian Noise (AWGN) to this resource grid based on the given noise properties. The
-<em>noisy</em> grid is then returned in a new <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object. The <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of the returned grid
-contains the variance of the noise applied by this function.</p>
+<dt class="sig sig-object py" id="neoradium.grid.Grid.getNoiseStd">
+<span class="sig-name descname"><span class="pre">getNoiseStd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">snr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.getNoiseStd" title="Link to this definition"></a></dt>
+<dd><p>This function calculates the noise standard deviation for the given signal-to-noise ratio (SNR). It first
+calculates the average received signal power per resource element (RE) and then uses it, along with the given
+SNR, to calculate the noise power. The returned standard deviation can be used directly by the
+<a class="reference internal" href="#neoradium.grid.Grid.addNoise" title="neoradium.grid.Grid.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a> method using the <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – <p>One of the following parameters <strong>must</strong> be specified. They specify how the noise signal is generated.</p>
+<dd class="field-odd"><p><strong>snr</strong> (<em>float</em>) – The signal-to-noise ratio in linear scale (not in dB).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The noise standard deviation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.grid.Grid.addNoise">
+<span class="sig-name descname"><span class="pre">addNoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.addNoise" title="Link to this definition"></a></dt>
+<dd><p>Adds Additive White Gaussian Noise (AWGN) to this resource grid based on the specified noise properties.
+The <em>noisy</em> grid is returned as a new <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object. The <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of the returned
+grid contains the variance of the noise applied by this function.</p>
+<p>If you already have a noise signal in a NumPy array, you can use the <code class="docutils literal notranslate"><span class="pre">noise</span></code> parameter of this function
+to apply it directly to this resource grid:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">myNoise</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">awgn</span><span class="p">(</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>    <span class="c1"># Create AWGN with σ = 0.1</span>
+<span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">noise</span><span class="o">=</span><span class="n">myNoise</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>If you know the variance or standard deviation of the noise, you can use them directly by setting the
+arguments <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> and <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> respectively:</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id5" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">noiseStd</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>       <span class="c1"># Same result as above</span>
+<span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">noiseVar</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>      <span class="c1"># Same result as above</span>
+</pre></div>
+</div>
+</div>
+<p>If you have a signal-to-noise ratio (SNR), there are two approaches for adding noise to the received
+resource grid:</p>
+<p><strong>Matlab Approach:</strong></p>
+<p>In this case, it is assumed that the received signal power is normalized to
+<span class="math notranslate nohighlight">\(\frac{1}{N_r}\)</span>, where <span class="math notranslate nohighlight">\(N_r\)</span> is the number of receiver antennas. Please note that when
+channel models such as CDL, TDL, or trajectory-based models are used in the communication
+pipeline, this assumption is not always valid. Support for this approach is included only to allow
+comparison with Matlab.</p>
+<div class="math notranslate nohighlight">
+\[\sigma^2_{AWGN} = \frac{1}{N_r \cdot 10^{\frac{SNR_{dB}}{10}}}\]</div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id6" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">mySnrDb</span><span class="p">,</span> <span class="n">useRxPower</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><strong>Using RX Power:</strong></p>
+<p>In this case, the function first calculates the average received signal power per resource
+element (RE) and uses it, along with the given signal-to-noise ratio, to calculate the noise power.</p>
+<div class="math notranslate nohighlight">
+\[\sigma^2_{AWGN} = \frac{\sigma^2_{RX}}{10^{\frac{SNR_{dB}}{10}}}\]</div>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id7" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">mySnrDb</span><span class="p">,</span> <span class="n">useRxPower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Please refer to the notebook <a class="reference internal" href="../Playground/Notebooks/Others/SnrCalculations.html"><span class="doc">SNR Calculations in NeoRadium</span></a> for
+a complete analysis of how NeoRadium calculates and applies noise power for a given signal-to-noise ratio.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – <p>The amount of noise must be specified by one of the parameters <code class="docutils literal notranslate"><span class="pre">noise</span></code>, <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code>, <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">snrDb</span></code>.</p>
 <dl class="field-list">
 <dt class="field-odd">noise<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A numpy array with the same shape as this <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object containing the noise information.
-If the noise information is provided by <code class="docutils literal notranslate"><span class="pre">noise</span></code> it is added directly to the grid. In this case all
-other parameters are ignored.</p>
+<dd class="field-odd"><p>NumPy array with the same shape as this <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object containing the noise values.
+If <code class="docutils literal notranslate"><span class="pre">noise</span></code> is provided, it is added directly to the grid and all other parameters are ignored.</p>
 </dd>
 <dt class="field-even">noiseStd<span class="colon">:</span></dt>
-<dd class="field-even"><p>The standard deviation of the noise. An AWGN complex noise signal is generated with zero-mean
-and the specified standard deviation. If <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> is specified, <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> and <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> values
-below are ignored.</p>
+<dd class="field-even"><p>The standard deviation of the noise. AWGN complex noise is generated with zero mean
+and the specified standard deviation. If <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> is specified, <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> and <code class="docutils literal notranslate"><span class="pre">snrDb</span></code>
+are ignored.</p>
 </dd>
 <dt class="field-odd">noiseVar<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The variance of the noise. An AWGN complex noise signal is generated with zero-mean and the
-specified variance. If <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> is specified, the value of <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> is ignored.</p>
+<dd class="field-odd"><p>The variance of the noise. AWGN complex noise is generated with zero mean
+and the specified variance. If <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> is specified, the <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> value is ignored.</p>
 </dd>
 <dt class="field-even">snrDb<span class="colon">:</span></dt>
-<dd class="field-even"><p>The signal to noise ratio in dB. First the noise variance is calculated using the given SNR value
-and then an AWGN complex noise signal is generated with zero-mean and the calculated variance. This
-function uses the following formula to calculate the noise variance <span class="math notranslate nohighlight">\(\sigma^2_{AWGN}\)</span> from
-<span class="math notranslate nohighlight">\(snrDb\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\sigma^2_{AWGN} = \frac 1 {N_r.10^{\frac {snrDb} {10}}}\]</div>
-<p>where <span class="math notranslate nohighlight">\(N_r\)</span> is the number of receiver antennas.</p>
+<dd class="field-even"><p>The signal-to-noise ratio in decibels (dB). The noise standard deviation is calculated using
+the given SNR value and the <code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> parameter. Then, AWGN complex noise is generated
+with zero mean and the calculated standard deviation.</p>
 </dd>
-<dt class="field-odd">ranGen<span class="colon">:</span></dt>
-<dd class="field-odd"><p>If provided, it is used as the random generator
-for the AWGN generation. Otherwise, <strong>NeoRadium</strong>’s <a class="reference internal" href="Random.html"><span class="doc">global random generator</span></a> is used.</p>
+<dt class="field-odd">useRxPower<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If <cite>True</cite>, this function first calculates the average received signal power per resource
+element (RE) and uses it, along with the given signal-to-noise ratio, to compute the noise power.
+Otherwise, it is assumed that the received signal power is normalized to <span class="math notranslate nohighlight">\(\frac{1}{N_r}\)</span> (Matlab
+approach), where <span class="math notranslate nohighlight">\(N_r\)</span> is the number of receiver antennas.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, the default value of <code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> is <cite>False</cite> (Matlab approach) for backward
+compatibility. However, in future releases, this may change to <cite>True</cite>. To ensure
+forward-compatible code, explicitly set this parameter instead of relying on the default.</p>
+</div>
+</dd>
+<dt class="field-even">ranGen<span class="colon">:</span></dt>
+<dd class="field-even"><p>If provided, this random generator is used for AWGN generation. Otherwise, <strong>NeoRadium</strong>’s
+<a class="reference internal" href="Random.html"><span class="doc">global random generator</span></a> is used.</p>
 </dd>
 </dl>
 </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A new grid object containing the <em>noisy</em> version of this grid. The <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of the returned
-grid contains the variance of the noise applied by this function.</p>
+<dd class="field-even"><p>A new grid object containing the <em>noisy</em> version of this grid. The <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of the
+returned grid contains the variance of the noise applied by this function.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a></p>

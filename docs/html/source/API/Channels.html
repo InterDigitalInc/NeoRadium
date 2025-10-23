@@ -6,15 +6,15 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Channel Models &mdash; NeoRadium 0.3.1 Documentation</title>
+  <title>Channel Models &mdash; NeoRadium 0.4.0 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=73ab78ac" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../_static/documentation_options.js?v=6c02275b"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.3.1
+            NeoRadium 0.4.0
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -63,6 +63,7 @@
 <li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Channel Models</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-neoradium.channelmodel">Channel Model Base Class</a><ul>
@@ -122,6 +123,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
 </ul>
 
         </div>
@@ -130,7 +132,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.3.1</a>
+          <a href="../../index.html">NeoRadium 0.4.0</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -181,11 +183,11 @@ arrays are processed in connection with the channel multipath properties.</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">normalizeGains<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A boolean flag. The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>, indicating that the path gains
+<dd class="field-odd"><p>A boolean flag. The default value is <cite>True</cite>, indicating that the path gains
 are normalized before they are applied to the signals.</p>
 </dd>
 <dt class="field-even">normalizeOutput<span class="colon">:</span></dt>
-<dd class="field-even"><p>A boolean flag. The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>, indicating that the gains are
+<dd class="field-even"><p>A boolean flag. The default value is <cite>True</cite>, indicating that the gains are
 normalized based on the number of receive antennas.</p>
 </dd>
 <dt class="field-odd">txDir<span class="colon">:</span></dt>
@@ -203,7 +205,7 @@ normalized based on the number of receive antennas.</p>
 </dd>
 <dt class="field-odd">seed<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The seed used by the random functions in the channel model. Setting this to a fixed value ensures
-that the channel model generates repeatable results. The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>, indicating
+that the channel model generates repeatable results. The default value is <cite>None</cite>, indicating
 that this channel model uses the <strong>NeoRadium</strong>’s <a class="reference internal" href="Random.html"><span class="doc">global random number generator</span></a>.</p>
 </dd>
 <dt class="field-even">dopplerShift<span class="colon">:</span></dt>
@@ -243,13 +245,13 @@ samples per second.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
 “Channel Model Properties:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -266,9 +268,9 @@ Otherwise, nothing is returned.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>restartRanGen</strong> (<em>Boolean</em>) – If a <code class="docutils literal notranslate"><span class="pre">seed</span></code> was not provided to this channel model, this parameter is ignored. Otherwise, if
-<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the random number generator of this channel model is reset. If
-<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> (the default), the random number generator is not reset. This means that
-if <code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, for stochastic channel models, calling this function starts a new
+<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is set to <cite>True</cite>, the random number generator of this channel model is reset. If
+<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <cite>False</cite> (the default), the random number generator is not reset. This means that
+if <code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <cite>False</cite>, for stochastic channel models, calling this function starts a new
 sequence of channel instances, which differs from the sequence when the channel was instantiated.</p></li>
 <li><p><strong>applyToBwp</strong> (<em>Boolean</em>) – If set to <cite>True</cite> (the default), this function restarts the <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>
 associated with this channel model. Otherwise, the <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> state
@@ -346,7 +348,7 @@ OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</sp
 <code class="docutils literal notranslate"><span class="pre">Nt</span></code> indicates the number of transmit antennas.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>4-D complex numpy array</p>
+<dd class="field-even"><p>4-D complex NumPy array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -383,10 +385,10 @@ the number of paths. The path gains are normalized based on the <code class="doc
 values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The path gains as a numpy array of shape <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Np</span></code>.</p>
+<dd class="field-odd"><p>The path gains as a NumPy array of shape <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Np</span></code>.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>4-D complex numpy array</p>
+<dd class="field-even"><p>4-D complex NumPy array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -415,18 +417,18 @@ from the <a class="reference internal" href="#neoradium.channelmodel.ChannelMode
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>bwp</strong> (<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>) – The bandwidth part object used by the channel model to create channel matrices.</p></li>
-<li><p><strong>profile</strong> (<em>str</em><em> or </em><em>None</em>) – The CDL profile. It can be one of ‘A’, ‘B’, ‘C’, ‘D’, ‘E’, or <code class="docutils literal notranslate"><span class="pre">None</span></code>. See <strong>3GPP TR 38.90, Section
-7.7.1</strong> for more information. Use <code class="docutils literal notranslate"><span class="pre">None</span></code> to indicate a customized version of CDL channel (See
+<li><p><strong>profile</strong> (<em>str</em><em> or </em><em>None</em>) – The CDL profile. It can be one of ‘A’, ‘B’, ‘C’, ‘D’, ‘E’, or <cite>None</cite>. See <strong>3GPP TR 38.90, Section
+7.7.1</strong> for more information. Use <cite>None</cite> to indicate a customized version of CDL channel (See
 <a class="reference internal" href="#customizingcdl"><span class="std std-ref">Customizing CDL Model</span></a>).</p></li>
 <li><p><strong>kwargs</strong> (<em>dict</em>) – <p>Here’s a list of additional optional parameters that can be used to further customize this channel model:</p>
 <blockquote>
 <div><dl class="field-list">
 <dt class="field-odd">normalizeGains<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A boolean flag. The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>, indicating that the path gains
+<dd class="field-odd"><p>A boolean flag. The default value is <cite>True</cite>, indicating that the path gains
 are normalized before they are applied to the signals.</p>
 </dd>
 <dt class="field-even">normalizeOutput<span class="colon">:</span></dt>
-<dd class="field-even"><p>A boolean flag. The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>, indicating that the gains are
+<dd class="field-even"><p>A boolean flag. The default value is <cite>True</cite>, indicating that the gains are
 normalized based on the number of receive antennas.</p>
 </dd>
 <dt class="field-odd">txDir<span class="colon">:</span></dt>
@@ -444,7 +446,7 @@ normalized based on the number of receive antennas.</p>
 </dd>
 <dt class="field-odd">seed<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The seed used by the random functions in the channel model. Setting this to a fixed value ensures
-that the channel model generates repeatable results. The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>, indicating
+that the channel model generates repeatable results. The default value is <cite>None</cite>, indicating
 that this channel model uses the <strong>NeoRadium</strong>’s <a class="reference internal" href="Random.html"><span class="doc">global random generator</span></a>.</p>
 </dd>
 <dt class="field-even">dopplerShift<span class="colon">:</span></dt>
@@ -514,7 +516,7 @@ degrees: bearing angle (math:<cite>alpha</cite>), downtilt angle (math:<cite>bet
 <strong>3GPP TR 38.901, Section 7.1.3</strong>.</p>
 </dd>
 <dt class="field-even">kFactor<span class="colon">:</span></dt>
-<dd class="field-even"><p>The K-Factor (in dB) used for scaling. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. If not specified
+<dd class="field-even"><p>The K-Factor (in dB) used for scaling. The default is <cite>None</cite>. If not specified
 (<code class="docutils literal notranslate"><span class="pre">kFactor=None</span></code>), K-factor scaling is disabled.</p>
 </dd>
 <dt class="field-odd">xPolPower<span class="colon">:</span></dt>
@@ -523,15 +525,15 @@ to “Step 3” in <strong>3GPP TR 38.901, Section 7.7.1</strong>.</p>
 </dd>
 <dt class="field-even">angleScaling<span class="colon">:</span></dt>
 <dd class="field-even"><p>The <a class="reference internal" href="#anglescaling"><span class="std std-ref">Angle Scaling</span></a> parameters. If specified, it must be a tuple of
-2 numpy arrays.</p>
+2 NumPy arrays.</p>
 <p>The first item specifies the mean values for angle scaling. It’s a 1-D NumPy array containing
 four values for: the <em>Azimuth angle of Departure</em>, <em>Azimuth angle of Arrival</em>, <em>Zenith angle of
 Departure</em>, and <em>Zenith angle of Arrival</em>.</p>
-<p>The second item specifies the RMS angle spread values. It is a 1-D numpy array containing four RMS
+<p>The second item specifies the RMS angle spread values. It is a 1-D NumPy array containing four RMS
 values for: the <em>Azimuth angle of Departure</em>, <em>Azimuth angle of Arrival</em>, <em>Zenith angle of
 Departure</em>, and <em>Zenith angle of Arrival</em>. For more information, please refer to
 <a class="reference internal" href="#anglescaling"><span class="std std-ref">Angle Scaling</span></a> below.</p>
-<p>If this value is set to <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default), the <em>Angle Scaling</em> is disabled.</p>
+<p>If this value is set to <cite>None</cite> (the default), the <em>Angle Scaling</em> is disabled.</p>
 </dd>
 <dt class="field-odd">pathDelays<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Use this parameter to customize or override the default path delays, which are set
@@ -631,7 +633,7 @@ TR 38.901, Section 7.5</strong>  for more details.</p>
 </dl>
 </div></blockquote>
 <p id="anglescaling"><strong>Angle Scaling:</strong></p>
-<p>If <code class="docutils literal notranslate"><span class="pre">angleScaling</span></code> is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, angle scaling is disabled. Otherwise, it is applied to all angles of
+<p>If <code class="docutils literal notranslate"><span class="pre">angleScaling</span></code> is set to <cite>None</cite>, angle scaling is disabled. Otherwise, it is applied to all angles of
 arrival and departure for all clusters, as per <strong>3GPP TR 38.901, Section 7.7.5.1 and Annex A</strong>.</p>
 <p id="customizingcdl"><strong>Customizing CDL Model:</strong></p>
 <p>There are two different ways to customize the CDL model:</p>
@@ -639,7 +641,7 @@ arrival and departure for all clusters, as per <strong>3GPP TR 38.901, Section 7
 <li><p>You can select one of the predefined CDL profiles (A, B, C, D, or E) and then modify the model’s parameters
 by providing additional information. For instance, you can choose the CDL-B model and override the standard
 path delays by specifying your own path delays.</p></li>
-<li><p>You can also create your own model entirely from scratch. Initially, pass <code class="docutils literal notranslate"><span class="pre">None</span></code> for the <code class="docutils literal notranslate"><span class="pre">profile</span></code>
+<li><p>You can also create your own model entirely from scratch. Initially, pass <cite>None</cite> for the <code class="docutils literal notranslate"><span class="pre">profile</span></code>
 parameter and then specify all the channel model parameters. Please note that in this case, you
 <strong>must</strong> specify at least the following parameters:</p>
 <blockquote>
@@ -661,7 +663,7 @@ parameter and then specify all the channel model parameters. Please note that in
 </ul>
 </div></blockquote>
 <p>Also note that if your channel model contains a LOS cluster, it <strong>must</strong> be the first cluster in the lists,
-and the <code class="docutils literal notranslate"><span class="pre">hasLos</span></code> parameter should be set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+and the <code class="docutils literal notranslate"><span class="pre">hasLos</span></code> parameter should be set to <cite>True</cite>.</p>
 </li>
 </ol>
 <dl class="py method">
@@ -672,13 +674,13 @@ and the <code class="docutils literal notranslate"><span class="pre">hasLos</spa
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it serves as the title for the printed information. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default), an
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it serves as the title for the printed information. If <cite>None</cite> (the default), an
 automatic title is generated based on the channel model parameters.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -691,15 +693,15 @@ Otherwise, nothing is returned.</p>
 <dt class="sig sig-object py" id="neoradium.cdl.CdlChannel.restart">
 <span class="sig-name descname"><span class="pre">restart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">restartRanGen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">applyToBwp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.cdl.CdlChannel.restart" title="Link to this definition"></a></dt>
 <dd><p>This method first re-initializes the random object if a <code class="docutils literal notranslate"><span class="pre">seed</span></code> was provided to this channel model and the
-<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>. It then randomly re-initializes the ray coupling and initial
+<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> parameter is set to <cite>True</cite>. It then randomly re-initializes the ray coupling and initial
 phases and calls the base class <a class="reference internal" href="#neoradium.channelmodel.ChannelModel.restart" title="neoradium.channelmodel.ChannelModel.restart"><code class="xref py py-meth docutils literal notranslate"><span class="pre">restart()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>restartRanGen</strong> (<em>Boolean</em>) – If a <code class="docutils literal notranslate"><span class="pre">seed</span></code> was not provided to this channel model, this parameter is ignored. Otherwise, if
-<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, this channel model’s random generator is reset and if
-<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), the random generator is not reset. This means if
-<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, calling this function starts a new sequence of channel instances,
+<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is set to <cite>True</cite>, this channel model’s random generator is reset and if
+<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <cite>False</cite> (default), the random generator is not reset. This means if
+<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <cite>False</cite>, calling this function starts a new sequence of channel instances,
 which differs from the sequence when the channel was instantiated.</p></li>
 <li><p><strong>applyToBwp</strong> (<em>Boolean</em>) – If set to <cite>True</cite> (the default), this function restarts the <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>
 associated with this channel model. Otherwise, the <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> state
@@ -765,10 +767,10 @@ of the channel matrices:</p>
 <blockquote>
 <div><dl class="field-list">
 <dt class="field-odd">normalizeGains<span class="colon">:</span></dt>
-<dd class="field-odd"><p>If the default value of <code class="docutils literal notranslate"><span class="pre">True</span></code> is used, the path gains are normalized.</p>
+<dd class="field-odd"><p>If the default value of <cite>True</cite> is used, the path gains are normalized.</p>
 </dd>
 <dt class="field-even">normalizeOutput<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the default value of <code class="docutils literal notranslate"><span class="pre">True</span></code> is used, the gains are normalized based on the
+<dd class="field-even"><p>If the default value of <cite>True</cite> is used, the gains are normalized based on the
 number of receive antennas.</p>
 </dd>
 <dt class="field-odd">filterLen<span class="colon">:</span></dt>
@@ -804,7 +806,7 @@ for the <em>bearing</em> angle <span class="math notranslate nohighlight">\(\alp
 information.</p>
 </dd>
 <dt class="field-even">seed<span class="colon">:</span></dt>
-<dd class="field-even"><p>The seed used to generate CDL channel matrices. The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>, indicating
+<dd class="field-even"><p>The seed used to generate CDL channel matrices. The default value is <cite>None</cite>, indicating
 that this channel model uses the <strong>NeoRadium</strong>’s <a class="reference internal" href="Random.html"><span class="doc">global random generator</span></a>. In
 this case the results are not reproducible.</p>
 </dd>
@@ -812,7 +814,7 @@ this case the results are not reproducible.</p>
 <dd class="field-odd"><p>The carrier frequency of the CDL channel model in Hz. The default is 3.5 GHz.</p>
 </dd>
 <dt class="field-even">kFactor<span class="colon">:</span></dt>
-<dd class="field-even"><p>The K-Factor (in dB) used for scaling. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. If not specified
+<dd class="field-even"><p>The K-Factor (in dB) used for scaling. The default is <cite>None</cite>. If not specified
 (<code class="docutils literal notranslate"><span class="pre">kFactor=None</span></code>), K-factor scaling is disabled.</p>
 </dd>
 <dt class="field-odd">xPolPower<span class="colon">:</span></dt>
@@ -821,15 +823,15 @@ to “Step 3” in <strong>3GPP TR 38.901, Section 7.7.1</strong>.</p>
 </dd>
 <dt class="field-even">angleScaling<span class="colon">:</span></dt>
 <dd class="field-even"><p>The <a class="reference internal" href="#anglescaling"><span class="std std-ref">Angle Scaling</span></a> parameters. If specified, it must be a tuple of
-2 numpy arrays.</p>
+2 NumPy arrays.</p>
 <p>The first item specifies the mean values for angle scaling. It’s a 1-D NumPy array containing
 four values for: the <em>Azimuth angle of Departure</em>, <em>Azimuth angle of Arrival</em>, <em>Zenith angle of
 Departure</em>, and <em>Zenith angle of Arrival</em>.</p>
-<p>The second item specifies the RMS angle spread values. It is a 1-D numpy array containing four RMS
+<p>The second item specifies the RMS angle spread values. It is a 1-D NumPy array containing four RMS
 values for: the <em>Azimuth angle of Departure</em>, <em>Azimuth angle of Arrival</em>, <em>Zenith angle of
 Departure</em>, and <em>Zenith angle of Arrival</em>. For more information, please refer to
 <a class="reference internal" href="#anglescaling"><span class="std std-ref">Angle Scaling</span></a>.</p>
-<p>If this value is set to <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default), the <em>Angle Scaling</em> is disabled.</p>
+<p>If this value is set to <cite>None</cite> (the default), the <em>Angle Scaling</em> is disabled.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -904,7 +906,7 @@ Table B.2.2-1</strong> and <strong>3GPP TS 38.101-4 Table B.2.2-2</strong>. This
 for FR2. Note that the delay spread and doppler shift specified here overrides any values
 passed to the <code class="docutils literal notranslate"><span class="pre">delaySpread</span></code> and <code class="docutils literal notranslate"><span class="pre">dopplerShift</span></code> parameters (See
 <a class="reference internal" href="#neoradium.channelmodel.ChannelModel" title="neoradium.channelmodel.ChannelModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelModel</span></code></a>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> can be used to completely customize the TDL channel. See
+<li><p><cite>None</cite> can be used to completely customize the TDL channel. See
 <a class="reference internal" href="#customizingtdl"><span class="std std-ref">Customizing TDL Model</span></a> below for more information.</p></li>
 </ul>
 </div></blockquote>
@@ -913,11 +915,11 @@ passed to the <code class="docutils literal notranslate"><span class="pre">delay
 <blockquote>
 <div><dl class="field-list">
 <dt class="field-odd">normalizeGains<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A boolean flag. The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>, indicating that the path gains
+<dd class="field-odd"><p>A boolean flag. The default value is <cite>True</cite>, indicating that the path gains
 are normalized before they are applied to the signals.</p>
 </dd>
 <dt class="field-even">normalizeOutput<span class="colon">:</span></dt>
-<dd class="field-even"><p>A boolean flag. The default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>, indicating that the gains are
+<dd class="field-even"><p>A boolean flag. The default value is <cite>True</cite>, indicating that the gains are
 normalized based on the number of receive antennas.</p>
 </dd>
 <dt class="field-odd">txDir<span class="colon">:</span></dt>
@@ -936,7 +938,7 @@ is 80 dB.</p>
 </dd>
 <dt class="field-odd">seed<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The seed used by the random functions in the channel model. Setting this to a fixed value ensures
-that the channel model generates repeatable results. The default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>, indicating
+that the channel model generates repeatable results. The default value is <cite>None</cite>, indicating
 that this channel model uses the <strong>NeoRadium</strong>’s <a class="reference internal" href="Random.html"><span class="doc">global random generator</span></a>.</p>
 </dd>
 <dt class="field-even">dopplerShift<span class="colon">:</span></dt>
@@ -1000,7 +1002,7 @@ matrix based on 3GPP standard using the given parameters such as <code class="do
 <a class="reference internal" href="#calculatingcorrmat"><span class="std std-ref">Calculating Correlation Matrix</span></a> for more information.</p>
 </dd>
 <dt class="field-even">kFactor<span class="colon">:</span></dt>
-<dd class="field-even"><p>The K-Factor (in dB) used for scaling. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. If not specified
+<dd class="field-even"><p>The K-Factor (in dB) used for scaling. The default is <cite>None</cite>. If not specified
 (<code class="docutils literal notranslate"><span class="pre">kFactor=None</span></code>), K-factor scaling is disabled.</p>
 </dd>
 <dt class="field-odd">sosType<span class="colon">:</span></dt>
@@ -1082,7 +1084,7 @@ following documents:</p>
 <li><p>You can choose one of the predefined TDL profiles (See the <code class="docutils literal notranslate"><span class="pre">profile</span></code> parameter above) and then modify the
 parameters of the model by passing in additional information. For example you can choose ‘B100-400’ for
 <code class="docutils literal notranslate"><span class="pre">profile</span></code> and then pass your own path delays to override the path delays specified in the standard.</p></li>
-<li><p>You can also define your own model completely from scratch. You first pass <code class="docutils literal notranslate"><span class="pre">None</span></code> for the <code class="docutils literal notranslate"><span class="pre">profile</span></code>
+<li><p>You can also define your own model completely from scratch. You first pass <cite>None</cite> for the <code class="docutils literal notranslate"><span class="pre">profile</span></code>
 parameter and then specify all channel model parameters. Note that you <strong>must</strong> specify at least the
 following parameters in this case:</p>
 <blockquote>
@@ -1099,7 +1101,7 @@ following parameters in this case:</p>
 </ul>
 </div></blockquote>
 <p>Also note that if your channel model contains a LOS tap, it <strong>must</strong> be the first tap in the lists, and the
-<code class="docutils literal notranslate"><span class="pre">hasLos</span></code> parameter should be set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">hasLos</span></code> parameter should be set to <cite>True</cite>.</p>
 </li>
 </ol>
 <dl class="py method">
@@ -1110,13 +1112,13 @@ following parameters in this case:</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it serves as the title for the printed information. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (the default), an
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it serves as the title for the printed information. If <cite>None</cite> (the default), an
 automatic title is generated based on the channel model parameters.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -1129,15 +1131,15 @@ Otherwise, nothing is returned.</p>
 <dt class="sig sig-object py" id="neoradium.tdl.TdlChannel.restart">
 <span class="sig-name descname"><span class="pre">restart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">restartRanGen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">applyToBwp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.tdl.TdlChannel.restart" title="Link to this definition"></a></dt>
 <dd><p>This method first re-initializes the random object if a <code class="docutils literal notranslate"><span class="pre">seed</span></code> was provided to this channel model and the
-<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> parameter is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>. Subsequently, it invokes the base class’s
+<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> parameter is set to <cite>True</cite>. Subsequently, it invokes the base class’s
 <a class="reference internal" href="#neoradium.channelmodel.ChannelModel.restart" title="neoradium.channelmodel.ChannelModel.restart"><code class="xref py py-meth docutils literal notranslate"><span class="pre">restart()</span></code></a> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>restartRanGen</strong> (<em>Boolean</em>) – If a <code class="docutils literal notranslate"><span class="pre">seed</span></code> was not provided to this channel model, this parameter is ignored. Otherwise, if
-<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, this channel model’s random generator is reset and if
-<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), the random generator is not reset. This means if
-<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, calling this function starts a new sequence of channel instances that
+<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is set to <cite>True</cite>, this channel model’s random generator is reset and if
+<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <cite>False</cite> (default), the random generator is not reset. This means if
+<code class="docutils literal notranslate"><span class="pre">restartRanGen</span></code> is <cite>False</cite>, calling this function starts a new sequence of channel instances that
 are different from the sequence when the channel was instantiated.</p></li>
 <li><p><strong>applyToBwp</strong> (<em>Boolean</em>) – If set to <cite>True</cite> (the default), this function restarts the Bandwidth Part associated with this channel
 model. Otherwise, the Bandwidth Part’s state remains unchanged.</p></li>
@@ -1193,8 +1195,8 @@ base station. (Total Blockage)</p>
 </dl>
 </div></blockquote>
 </p></li>
-<li><p><strong>pathInfo</strong> (<em>numpy array</em>) – <p>An <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">×</span> <span class="pre">8</span></code> matrix, where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of paths. It contains the multipath information at this
-<a class="reference internal" href="#neoradium.trjchan.TrjPoint" title="neoradium.trjchan.TrjPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjPoint</span></code></a>. The default is an empty numpy array. The eight parameters for
+<li><p><strong>pathInfo</strong> (<em>NumPy array</em>) – <p>An <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">×</span> <span class="pre">8</span></code> matrix, where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of paths. It contains the multipath information at this
+<a class="reference internal" href="#neoradium.trjchan.TrjPoint" title="neoradium.trjchan.TrjPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjPoint</span></code></a>. The default is an empty NumPy array. The eight parameters for
 each path are stored in this matrix as follows:</p>
 <blockquote>
 <div><dl class="field-list simple">
@@ -1246,7 +1248,7 @@ from the transmitter to the receiver. Each digit represents a specific type of i
 </p></li>
 <li><p><strong>bsDist</strong> (<em>float</em>) – The distance between this <a class="reference internal" href="#neoradium.trjchan.TrjPoint" title="neoradium.trjchan.TrjPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjPoint</span></code></a> and the base station in meters. The
 default is zero.</p></li>
-<li><p><strong>speed</strong> (<em>numpy array</em>) – The 3D vector of linear speed at this <a class="reference internal" href="#neoradium.trjchan.TrjPoint" title="neoradium.trjchan.TrjPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjPoint</span></code></a> in meters per second (m/s).</p></li>
+<li><p><strong>speed</strong> (<em>NumPy array</em>) – The 3D vector of linear speed at this <a class="reference internal" href="#neoradium.trjchan.TrjPoint" title="neoradium.trjchan.TrjPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjPoint</span></code></a> in meters per second (m/s).</p></li>
 <li><p><strong>sampleNo</strong> (<em>int</em>) – The time when the UE arrives at this <a class="reference internal" href="#neoradium.trjchan.TrjPoint" title="neoradium.trjchan.TrjPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjPoint</span></code></a> as a number of samples from
 the start of <a class="reference internal" href="#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a>. This is based on <strong>3GPP</strong> sample rate of 30,720,000
 samples per second.</p></li>
@@ -1274,71 +1276,71 @@ the points along the trajectory.</p>
 <dd class="field-even"><p>UE’s linear speed at this <a class="reference internal" href="#neoradium.trjchan.TrjPoint" title="neoradium.trjchan.TrjPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjPoint</span></code></a> (Read-only).</p>
 </dd>
 <dt class="field-odd">phases<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The <em>phase</em> angles in degrees for all paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is are paths.</p>
+<dd class="field-odd"><p>The <em>phase</em> angles in degrees for all paths or <cite>None</cite> if there is are paths.</p>
 </dd>
 <dt class="field-even">delays<span class="colon">:</span></dt>
-<dd class="field-even"><p>The <em>delay</em> in nanoseconds for all paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no paths.</p>
+<dd class="field-even"><p>The <em>delay</em> in nanoseconds for all paths or <cite>None</cite> if there are no paths.</p>
 </dd>
 <dt class="field-odd">powers<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The <em>gain</em> in dB for all NLOS paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no paths.</p>
+<dd class="field-odd"><p>The <em>gain</em> in dB for all NLOS paths or <cite>None</cite> if there are no paths.</p>
 </dd>
 <dt class="field-even">aoas<span class="colon">:</span></dt>
-<dd class="field-even"><p>The Azimuth angle Of Arrival (AOA) in degrees for all paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no paths.</p>
+<dd class="field-even"><p>The Azimuth angle Of Arrival (AOA) in degrees for all paths or <cite>None</cite> if there are no paths.</p>
 </dd>
 <dt class="field-odd">zoas<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The Zenith angle Of Arrival (ZOA) in degrees for all paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no paths.</p>
+<dd class="field-odd"><p>The Zenith angle Of Arrival (ZOA) in degrees for all paths or <cite>None</cite> if there are no paths.</p>
 </dd>
 <dt class="field-even">aods<span class="colon">:</span></dt>
-<dd class="field-even"><p>The Azimuth angle Of Departure (AOD) in degrees for all paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no paths.</p>
+<dd class="field-even"><p>The Azimuth angle Of Departure (AOD) in degrees for all paths or <cite>None</cite> if there are no paths.</p>
 </dd>
 <dt class="field-odd">zods<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The Zenith angle Of Departure (ZOD) in degrees for all paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no paths.</p>
+<dd class="field-odd"><p>The Zenith angle Of Departure (ZOD) in degrees for all paths or <cite>None</cite> if there are no paths.</p>
 </dd>
 <dt class="field-even">bounces<span class="colon">:</span></dt>
-<dd class="field-even"><p>The path interaction information for all paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no paths. See the
+<dd class="field-even"><p>The path interaction information for all paths or <cite>None</cite> if there are no paths. See the
 explanation of the path interactions for the <code class="docutils literal notranslate"><span class="pre">pathInfo</span></code> parameter above.</p>
 </dd>
 <dt class="field-odd">losPhase<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The LOS path’s <em>phase</em> angle in degrees or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no LOS path.</p>
+<dd class="field-odd"><p>The LOS path’s <em>phase</em> angle in degrees or <cite>None</cite> if there is no LOS path.</p>
 </dd>
 <dt class="field-even">losDelay<span class="colon">:</span></dt>
-<dd class="field-even"><p>The LOS path’s <em>delay</em> in nanoseconds or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no LOS path.</p>
+<dd class="field-even"><p>The LOS path’s <em>delay</em> in nanoseconds or <cite>None</cite> if there is no LOS path.</p>
 </dd>
 <dt class="field-odd">losPower<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The LOS path’s <em>gain</em> in dB or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no LOS path.</p>
+<dd class="field-odd"><p>The LOS path’s <em>gain</em> in dB or <cite>None</cite> if there is no LOS path.</p>
 </dd>
 <dt class="field-even">losAoa<span class="colon">:</span></dt>
-<dd class="field-even"><p>The LOS path’s Azimuth angle Of Arrival (AOA) in degrees or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no LOS path.</p>
+<dd class="field-even"><p>The LOS path’s Azimuth angle Of Arrival (AOA) in degrees or <cite>None</cite> if there is no LOS path.</p>
 </dd>
 <dt class="field-odd">losZoa<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The LOS path’s Zenith angle Of Arrival (ZOA) in degrees or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no LOS path.</p>
+<dd class="field-odd"><p>The LOS path’s Zenith angle Of Arrival (ZOA) in degrees or <cite>None</cite> if there is no LOS path.</p>
 </dd>
 <dt class="field-even">losAod<span class="colon">:</span></dt>
-<dd class="field-even"><p>The LOS path’s Azimuth angle Of Departure (AOD) in degrees or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no LOS path.</p>
+<dd class="field-even"><p>The LOS path’s Azimuth angle Of Departure (AOD) in degrees or <cite>None</cite> if there is no LOS path.</p>
 </dd>
 <dt class="field-odd">losZod<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The LOS path’s Zenith angle Of Departure (ZOD) in degrees or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there is no LOS path.</p>
+<dd class="field-odd"><p>The LOS path’s Zenith angle Of Departure (ZOD) in degrees or <cite>None</cite> if there is no LOS path.</p>
 </dd>
 <dt class="field-even">nlosPhases<span class="colon">:</span></dt>
-<dd class="field-even"><p>The <em>phase</em> angles in degrees for all NLOS paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no NLOS paths.</p>
+<dd class="field-even"><p>The <em>phase</em> angles in degrees for all NLOS paths or <cite>None</cite> if there are no NLOS paths.</p>
 </dd>
 <dt class="field-odd">nlosDelays<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The <em>delay</em> in nanoseconds for all NLOS paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no NLOS paths.</p>
+<dd class="field-odd"><p>The <em>delay</em> in nanoseconds for all NLOS paths or <cite>None</cite> if there are no NLOS paths.</p>
 </dd>
 <dt class="field-even">nlosPowers<span class="colon">:</span></dt>
-<dd class="field-even"><p>The <em>gain</em> in dB for all NLOS paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no NLOS paths.</p>
+<dd class="field-even"><p>The <em>gain</em> in dB for all NLOS paths or <cite>None</cite> if there are no NLOS paths.</p>
 </dd>
 <dt class="field-odd">nlosAoas<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The Azimuth angle Of Arrival (AOA) in degrees for all NLOS paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no NLOS paths.</p>
+<dd class="field-odd"><p>The Azimuth angle Of Arrival (AOA) in degrees for all NLOS paths or <cite>None</cite> if there are no NLOS paths.</p>
 </dd>
 <dt class="field-even">nlosZoas<span class="colon">:</span></dt>
-<dd class="field-even"><p>The Zenith angle Of Arrival (ZOA) in degrees for all NLOS paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no NLOS paths.</p>
+<dd class="field-even"><p>The Zenith angle Of Arrival (ZOA) in degrees for all NLOS paths or <cite>None</cite> if there are no NLOS paths.</p>
 </dd>
 <dt class="field-odd">nlosAods<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The Azimuth angle Of Departure (AOD) in degrees for all NLOS paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no NLOS paths.</p>
+<dd class="field-odd"><p>The Azimuth angle Of Departure (AOD) in degrees for all NLOS paths or <cite>None</cite> if there are no NLOS paths.</p>
 </dd>
 <dt class="field-even">nlosZods<span class="colon">:</span></dt>
-<dd class="field-even"><p>The Zenith angle Of Departure (ZOD) in degrees for all NLOS paths or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there are no NLOS paths.</p>
+<dd class="field-even"><p>The Zenith angle Of Departure (ZOD) in degrees for all NLOS paths or <cite>None</cite> if there are no NLOS paths.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -1352,7 +1354,7 @@ explanation of the path interactions for the <code class="docutils literal notra
 <li><p><strong>indent</strong> (<em>int</em>) – Used internally to adjust the indentation of the printed info.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – The title used for the information. By default the text
 “TrjPoint Properties:” is used.</p></li>
-<li><p><strong>getStr</strong> (<em>boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1511,8 +1513,8 @@ of the trajectory is shown with a small red circle.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – Used internally to adjust the indentation of the printed info.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – The title used for the information. By default the text “Trajectory Properties:” is used.</p></li>
-<li><p><strong>getStr</strong> (<em>boolean</em>) – If this is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the function returns a text string instead of printing the info. Otherwise when this
-is <code class="docutils literal notranslate"><span class="pre">False</span></code> (default) the function prints the information.</p></li>
+<li><p><strong>getStr</strong> (<em>boolean</em>) – If this is <cite>True</cite>, the function returns a text string instead of printing the info. Otherwise when this
+is <cite>False</cite> (default) the function prints the information.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1577,15 +1579,15 @@ information that is used to create sequences of channels.</p></li>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">normalizeGains<span class="colon">:</span></dt>
-<dd class="field-odd"><p>If the default value of <code class="docutils literal notranslate"><span class="pre">True</span></code> is used, the path gains are normalized before
+<dd class="field-odd"><p>If the default value of <cite>True</cite> is used, the path gains are normalized before
 being applied to the signals.</p>
 </dd>
 <dt class="field-even">normalizeOutput<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the default value of <code class="docutils literal notranslate"><span class="pre">True</span></code> is used, the gains are normalized based on the
+<dd class="field-even"><p>If the default value of <cite>True</cite> is used, the gains are normalized based on the
 number of receive antennas.</p>
 </dd>
 <dt class="field-odd">normalizeDelays<span class="colon">:</span></dt>
-<dd class="field-odd"><p>If the default value of <code class="docutils literal notranslate"><span class="pre">True</span></code> is used, the delays are normalized as specified in
+<dd class="field-odd"><p>If the default value of <cite>True</cite> is used, the delays are normalized as specified in
 “Step 3” of <strong>3GPP TR 38.901 section 8.4</strong>. Otherwise, the original delays obtained from
 ray-tracing are used.</p>
 </dd>
@@ -1647,7 +1649,7 @@ the UE at current position on the current trajectory.</p>
 <dt class="field-odd">pathDelays<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This read-only property returns the path delays for all paths between the base
 station and the UE at current position on the trajectory. If the parameter <code class="docutils literal notranslate"><span class="pre">normalizeDelays</span></code>
-is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the delays from the ray-tracing are normalized according to “Step 3” in <strong>3GPP TR 38.901
+is <cite>True</cite>, the delays from the ray-tracing are normalized according to “Step 3” in <strong>3GPP TR 38.901
 Section 8.4</strong>. Note that the delay normalization (if enabled) is only applied to this property; the
 redirected properties “delays”, “losDelay”, and “nlosDelays” always keep the original delay values from
 the ray-tracing.</p>
@@ -1702,13 +1704,13 @@ with this channel model. Otherwise, the Bandwidth Part’s state remains unchang
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
 “TrjChannel Properties:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns
 the information in a text string. Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -1730,7 +1732,7 @@ respectively, and <code class="docutils literal notranslate"><span class="pre">N
 location along its trajectory.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy array or None</p>
+<dd class="field-even"><p>NumPy array or None</p>
 </dd>
 </dl>
 </dd></dl>

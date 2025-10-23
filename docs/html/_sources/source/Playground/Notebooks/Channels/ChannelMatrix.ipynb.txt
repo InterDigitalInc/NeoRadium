@@ -80,29 +80,29 @@
       "  txDir:                Downlink\n",
       "  filterLen:            16 samples\n",
       "  delayQuantSize:       64\n",
-      "  stopBandAtten:        80 db\n",
+      "  stopBandAtten:        80 dB\n",
       "  dopplerShift:         5 Hz\n",
       "  coherenceTime:        84.628 milliseconds\n",
       "  delaySpread:          300 ns\n",
       "  ueDirAZ:              0.0°, 90.0°\n",
-      "  Cross Pol. Power:     7 db\n",
+      "  Cross Pol. Power:     7 dB\n",
       "  angleSpreads:         2° 15° 3° 7°\n",
       "  TX Antenna:\n",
       "    Total Elements:     8\n",
       "    spacing:            0.5𝜆, 0.5𝜆\n",
       "    shape:              2 rows x 4 columns\n",
       "    polarization:       |\n",
-      "    Orientation (𝛼,𝛃,𝛄): 0° 0° 0°\n",
       "  RX Antenna:\n",
       "    Total Elements:     2\n",
       "    spacing:            0.5𝜆, 0.5𝜆\n",
       "    shape:              1 rows x 2 columns\n",
       "    polarization:       |\n",
+      "    Orientation (𝛼,𝛃,𝛄): 180° 0° 0°\n",
       "  hasLOS:               False\n",
       "  NLOS Paths (24):\n",
       "    Delays (ns):        0.000 62.97 66.57 69.87 65.28 190.9 193.4 196.8 197.5 238.0 246.3 280.0\n",
       "                        368.5 392.4 651.1 813.1 1277. 1380. 1647. 1682. 1891. 1991. 2112. 2595.\n",
-      "    Powers (db):        -4.40 -1.20 -3.50 -5.20 -2.50 0.000 -2.20 -3.90 -7.40 -7.10 -10.7 -11.1\n",
+      "    Powers (dB):        -4.40 -1.20 -3.50 -5.20 -2.50 0.000 -2.20 -3.90 -7.40 -7.10 -10.7 -11.1\n",
       "                        -5.10 -6.80 -8.70 -13.2 -13.9 -13.9 -15.8 -17.1 -16.0 -15.7 -21.6 -22.8\n",
       "    AODs (Deg):         -47  -23  -23  -23  -41  0    0    0    73   -64  80   -97 \n",
       "                        -55  -64  -78  103  99   89   -102 92   93   107  119  -124\n",
@@ -134,7 +134,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Time to apply channel in Freq. Domain: 0.004931926727294922\n"
+      "Time to apply channel in Freq. Domain: 0.0037841796875\n"
      ]
     }
    ],
@@ -157,7 +157,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Time to apply channel in Time Domain: 0.28674793243408203\n",
+      "Time to apply channel in Time Domain: 0.2902951240539551\n",
       "NMSE between the rxGrid in Time and Freq. domains:  6.7222404693767e-10\n"
      ]
     }

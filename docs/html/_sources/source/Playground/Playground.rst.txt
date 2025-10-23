@@ -61,7 +61,16 @@ Physical Downlink Shared Channel (PDSCH)
         Notebooks/PDSCH/PDSCH-endToEnd.ipynb
         Notebooks/PDSCH/PDSCH-BER.ipynb
         Notebooks/PDSCH/PDSCH-BLER.ipynb
+        Notebooks/PDSCH/PDSCH-Throughput.ipynb
 
+Hybrid Automatic Repeat reQuest (HARQ)
+--------------------------------------
+    .. toctree::
+        :maxdepth: 1
+
+        Notebooks/HARQ/Harq.ipynb
+        Notebooks/HARQ/HarqEventCallback.ipynb
+        Notebooks/HARQ/TransportChannelWithHarq.ipynb
 
 A Deep Learning Case Study
 --------------------------
@@ -71,6 +80,21 @@ A Deep Learning Case Study
         Notebooks/MLChEst/MLChestDataGen.ipynb
         Notebooks/MLChEst/MLChestTrainTorch.ipynb
         Notebooks/MLChEst/MLChestEvaluateTorch.ipynb
+
+Research Papers
+---------------
+    .. toctree::
+        :maxdepth: 1
+
+        A Self-Refining Multi-Layer Receiver Pipeline <https://github.com/InterDigitalInc/NeoRadium/tree/main/Playground/Research/SelfRefining>
+
+Other Examples
+--------------
+
+    .. toctree::
+        :maxdepth: 1
+
+        Notebooks/Others/SnrCalculations.ipynb
 
 Comparing with Matlab
 ---------------------
@@ -92,6 +116,7 @@ CDL Channel Model
         :maxdepth: 1
 
         Notebooks/CompareWithMatlab/CDL/CDL-Matlab.ipynb
+        Notebooks/CompareWithMatlab/CDL-SISO/SisoCdl.ipynb
 
 CSI-RS
 """"""
@@ -118,3 +143,4 @@ LDPC and Polar Coding
 
         Notebooks/CompareWithMatlab/LDPC/LDPC-Matlab.ipynb
         Notebooks/CompareWithMatlab/Polar/PolarMatlab.ipynb
+

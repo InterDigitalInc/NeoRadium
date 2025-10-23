@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Channel State Information Reference Signals (CSI-RS) Configuration &mdash; NeoRadium 0.3.1 Documentation</title>
+  <title>Channel State Information Reference Signals (CSI-RS) Configuration &mdash; NeoRadium 0.4.0 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=73ab78ac" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../../../_static/documentation_options.js?v=6c02275b"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.3.1
+            NeoRadium 0.4.0
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -64,7 +64,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with Matlab</a></li>
 </ul>
 </li>
@@ -78,10 +81,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
 </ul>
 
         </div>
@@ -90,7 +95,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.3.1</a>
+          <a href="../../../../index.html">NeoRadium 0.4.0</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -141,9 +146,9 @@
 
 Bandwidth Part Properties:
   Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-  Subcarrier Spacing: 15 KHz
+  Subcarrier Spacing: 15 kHz
   CP Type:            normal
-  bandwidth:          4.32 MHz
+  Bandwidth:          4.32 MHz
   symbolsPerSlot:     14
   slotsPerSubFrame:   1
   nFFT:               2048
@@ -157,9 +162,9 @@ Bandwidth Part Properties:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 1st row of 38.211 Table 7.4.1.5.3-1</span>
-<span class="c1"># 1 port, 1 of 12 bits set in freqMap (only first 4 bits are valid), CDM size is 1, and density is 3.</span>
+<span class="c1"># 1 port, 1 of 4 bits set in freqMap, CDM size is 1, and density is 3.</span>
 <span class="c1"># The CSI-RS resources are at symbol 1 and REs 3, 7, and 11.</span>
-<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">(</span><span class="n">csiType</span><span class="o">=</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;000000001000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">(</span><span class="n">csiType</span><span class="o">=</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;1000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="o">.</span><span class="n">numPorts</span><span class="p">)</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
@@ -184,9 +189,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -201,7 +206,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     1
       Table Row:          1
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -222,10 +227,10 @@ Grid Stats:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 2nd row of 38.211 Table 7.4.1.5.3-1 with density=0.5</span>
-<span class="c1"># 1 ports, 1 of 4 bits set in freqMap, CDM size is 1, and density is 0.5.</span>
+<span class="c1"># 1 ports, 1 of 12 bits set in freqMap, CDM size is 1, and density is 0.5.</span>
 <span class="c1"># The CSI-RS resources are at symbol 1 and RE 3. Every other RB is skipped.</span>
 <span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">()</span>
-<span class="n">csiRsConfig</span><span class="o">.</span><span class="n">addCsiRs</span><span class="p">(</span><span class="n">csiType</span><span class="o">=</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;1000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">csiRsConfig</span><span class="o">.</span><span class="n">addCsiRs</span><span class="p">(</span><span class="n">csiType</span><span class="o">=</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;000000001000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="o">.</span><span class="n">numPorts</span><span class="p">)</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
@@ -250,9 +255,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -267,7 +272,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     1
       Table Row:          2
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -288,9 +293,9 @@ Grid Stats:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example for 2nd row of 38.211 Table 7.4.1.5.3-1 with density=1 using a different symbol (3)</span>
-<span class="c1"># 1 ports, 1 of 4 bits set in freqMap, CDM size is 1, and density is 1.</span>
+<span class="c1"># 1 ports, 1 of 12 bits set in freqMap, CDM size is 1, and density is 1.</span>
 <span class="c1"># The CSI-RS resources are at symbol 3 and RE 3.</span>
-<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;1000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">)])</span>
+<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;000000001000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">)])</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="o">.</span><span class="n">numPorts</span><span class="p">)</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
@@ -315,9 +320,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -332,7 +337,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     3
       Table Row:          2
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -380,9 +385,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -397,7 +402,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     3
       Table Row:          3
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -452,9 +457,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -469,7 +474,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     6
       Table Row:          3
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -525,9 +530,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -542,7 +547,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     6
       Table Row:          4
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -612,9 +617,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -629,7 +634,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     6
       Table Row:          5
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -698,9 +703,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -715,7 +720,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     6
       Table Row:          6
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -812,9 +817,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -829,7 +834,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     6
       Table Row:          7
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -926,9 +931,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -943,7 +948,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     6
       Table Row:          8
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -1040,9 +1045,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -1057,7 +1062,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     6
       Table Row:          9
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -1182,9 +1187,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -1199,7 +1204,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     6
       Table Row:          10
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -1326,9 +1331,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -1343,7 +1348,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     6
       Table Row:          11
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -1498,9 +1503,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -1515,7 +1520,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     6
       Table Row:          12
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -1670,9 +1675,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -1687,7 +1692,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     4  8
       Table Row:          13
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -1898,9 +1903,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -1915,7 +1920,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     4  8
       Table Row:          14
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -2126,9 +2131,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -2143,7 +2148,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     5
       Table Row:          15
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -2354,9 +2359,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -2371,7 +2376,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     4  8
       Table Row:          16
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -2638,9 +2643,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -2655,7 +2660,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     2  8
       Table Row:          17
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:
@@ -2922,9 +2927,9 @@ CSI-RS Configuration: (1 Resource Sets)
     Slot Period:          4
     Bandwidth Part:
       Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
-      Subcarrier Spacing: 15 KHz
+      Subcarrier Spacing: 15 kHz
       CP Type:            normal
-      bandwidth:          4.32 MHz
+      Bandwidth:          4.32 MHz
       symbolsPerSlot:     14
       slotsPerSubFrame:   1
       nFFT:               2048
@@ -2939,7 +2944,7 @@ CSI-RS Configuration: (1 Resource Sets)
       Symbol Indexes:     6
       Table Row:          18
       Slot Offset:        0
-      Power:              0 db
+      Power:              0 dB
       scramblingID:       0
 
 Grid Stats:

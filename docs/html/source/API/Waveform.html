@@ -6,15 +6,15 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Waveform &mdash; NeoRadium 0.3.1 Documentation</title>
+  <title>Waveform &mdash; NeoRadium 0.4.0 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=73ab78ac" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../_static/documentation_options.js?v=6c02275b"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.3.1
+            NeoRadium 0.4.0
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -61,6 +61,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Waveform</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#neoradium.waveform.Waveform"><code class="docutils literal notranslate"><span class="pre">Waveform</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.print"><code class="docutils literal notranslate"><span class="pre">Waveform.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.getNoiseStd"><code class="docutils literal notranslate"><span class="pre">Waveform.getNoiseStd()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.addNoise"><code class="docutils literal notranslate"><span class="pre">Waveform.addNoise()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.pad"><code class="docutils literal notranslate"><span class="pre">Waveform.pad()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.waveform.Waveform.sync"><code class="docutils literal notranslate"><span class="pre">Waveform.sync()</span></code></a></li>
@@ -75,10 +76,12 @@
 <li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
 </ul>
 
         </div>
@@ -87,7 +90,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.3.1</a>
+          <a href="../../index.html">NeoRadium 0.4.0</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -124,7 +127,7 @@ demodulation, which results in a <a class="reference internal" href="Grid.html#n
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>waveform</strong> (<em>2D complex numpy array</em>) – A <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">x</span> <span class="pre">Ns</span></code> 2D complex numpy array representing a set of time-domain signals of length <code class="docutils literal notranslate"><span class="pre">Ns</span></code> for each
+<li><p><strong>waveform</strong> (<em>2D complex NumPy array</em>) – A <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">x</span> <span class="pre">Ns</span></code> 2D complex NumPy array representing a set of time-domain signals of length <code class="docutils literal notranslate"><span class="pre">Ns</span></code> for each
 one of <code class="docutils literal notranslate"><span class="pre">P</span></code> antenna elements. The value <code class="docutils literal notranslate"><span class="pre">P</span></code> is equal to <code class="docutils literal notranslate"><span class="pre">Nt</span></code>, the number of transmitter antennas when
 this is a transmitted signal, and equal to <code class="docutils literal notranslate"><span class="pre">Nr</span></code>, the number of receiver antennas when this is a received
 signal.</p></li>
@@ -138,7 +141,7 @@ the variance of the noise is saved in the Waveform object.</p></li>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">shape<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Returns the shape of the 2-dimensional waveform numpy array.</p>
+<dd class="field-odd"><p>Returns the shape of the 2-dimensional waveform NumPy array.</p>
 </dd>
 <dt class="field-even">numPorts<span class="colon">:</span></dt>
 <dd class="field-even"><p>The number of transmitter or receiver antennas (<code class="docutils literal notranslate"><span class="pre">P</span></code>) for this waveform.</p>
@@ -157,11 +160,11 @@ the variance of the noise is saved in the Waveform object.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – If specified, it is used as a title for the printed information.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -171,48 +174,133 @@ Otherwise, nothing is returned.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="neoradium.waveform.Waveform.getNoiseStd">
+<span class="sig-name descname"><span class="pre">getNoiseStd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">snr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.waveform.Waveform.getNoiseStd" title="Link to this definition"></a></dt>
+<dd><p>This function calculates the noise standard deviation for the given signal-to-noise ratio. It first calculates
+the average received signal power per resource element (RE) and then uses it, along with the given
+signal-to-noise ratio, to calculate the noise power. The returned standard deviation can be used directly
+by the <a class="reference internal" href="#neoradium.waveform.Waveform.addNoise" title="neoradium.waveform.Waveform.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a> method using the <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>snr</strong> (<em>float</em>) – The signal-to-noise ratio in the linear form (not dB).</p></li>
+<li><p><strong>bwp</strong> (<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>) – The bandwidth part object used to create the waveform.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The noise standard deviation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="neoradium.waveform.Waveform.addNoise">
 <span class="sig-name descname"><span class="pre">addNoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.waveform.Waveform.addNoise" title="Link to this definition"></a></dt>
 <dd><p>Adds Additive White Gaussian Noise (AWGN) to this waveform based on the given noise properties. The <em>noisy</em>
 waveform is then returned in a new <a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object.</p>
-<p>This is to some extent similar to the <a class="reference internal" href="Grid.html#neoradium.grid.Grid.addNoise" title="neoradium.grid.Grid.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a> method of the
-<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class which applies noise in the frequency domain.</p>
+<p>This is similar to the <a class="reference internal" href="Grid.html#neoradium.grid.Grid.addNoise" title="neoradium.grid.Grid.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a> method of the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>
+class, which applies noise in the frequency domain.</p>
+<p>If you have the noise signal in a numpy array, you can use the <code class="docutils literal notranslate"><span class="pre">noise</span></code> parameter of this function to apply it
+to this waveform:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">myNoise</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">awgn</span><span class="p">(</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>    <span class="c1"># Create AWGN with σ = 0.1</span>
+<span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">noise</span><span class="o">=</span><span class="n">myNoise</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>If you know the variance or standard deviation of the noise, then you can use them directly by setting the
+arguments <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> and <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> respectively.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id2" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">noiseStd</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>       <span class="c1"># Same results as above</span>
+<span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">noiseVar</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>      <span class="c1"># Same results as above</span>
+</pre></div>
+</div>
+</div>
+<p>If you have a signal-to-noise ratio, there are two different approaches to adding noise to the received
+waveform.</p>
+<p><strong>Matlab Approach:</strong></p>
+<blockquote>
+<div><p>In this case, it is assumed that the received signal power is normalized to
+<span class="math notranslate nohighlight">\(\frac 1 {N_r}\)</span> where <span class="math notranslate nohighlight">\(N_r\)</span> is the number of receiver antenna. Please note that when
+channel models such as CDL, TDL, or trajectory based channel models are used in the communication
+pipleline, this assumption is not always true. Support for this approach is included only to allow
+comparison with Matlab.</p>
+<div class="math notranslate nohighlight">
+\[\sigma^2_{AWGN} = \frac 1 {N_r.nFFT.10^{\frac {snrDb} {10}}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(nFFT\)</span> is the FFT size derived from the given <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>
+object.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id3" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">mySnrDb</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span> <span class="n">useRxPower</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+<p><strong>Using RX Power:</strong></p>
+<blockquote>
+<div><p>In this case, this function first calculates the average received signal power per resource
+element (RE), and uses it, along with the given signal-to-noise ratio to calculate the noise power.</p>
+<div class="math notranslate nohighlight">
+\[\sigma^2_{AWGN} = \frac {\sigma^2_{RX}} {nFFT.10^{\frac {snrDb} {10}}}\]</div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">mySnrDb</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span> <span class="n">useRxPower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+<p>Please refer to the notebook <a class="reference internal" href="../Playground/Notebooks/Others/SnrCalculations.html"><span class="doc">SNR Calculations in NeoRadium</span></a> for
+a complete analysis of how NeoRadium calculates and applies noise power for a given signal-to-noise ratio.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – <p>One of the following parameters, which specify how the noise signal is generated, <strong>must</strong> be specified.</p>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – <p>One of the following methods of specifying the noise <strong>must</strong> be specified.</p>
 <dl class="field-list">
 <dt class="field-odd">noise<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A numpy array with the same shape as this <a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object containing the noise
+<dd class="field-odd"><p>A NumPy array with the same shape as this <a class="reference internal" href="#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object containing the noise
 information. If the noise information is provided by <code class="docutils literal notranslate"><span class="pre">noise</span></code>, it is added directly to the waveform. In
 this case all other parameters are ignored.</p>
 </dd>
 <dt class="field-even">noiseStd<span class="colon">:</span></dt>
 <dd class="field-even"><p>The standard deviation of the noise. An AWGN complex noise signal is generated with zero mean
-and the specified standard deviation. If <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> is specified, <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code>, <code class="docutils literal notranslate"><span class="pre">snrDb</span></code>, and
-<code class="docutils literal notranslate"><span class="pre">nFFT</span></code> values below are ignored.</p>
+and the specified standard deviation. If <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> is specified, <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> and <code class="docutils literal notranslate"><span class="pre">snrDb</span></code>
+are ignored.</p>
 </dd>
 <dt class="field-odd">noiseVar<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The variance of the noise. An AWGN complex noise signal is generated with zero mean and the
-specified variance. If <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> is specified, the values of <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> and <code class="docutils literal notranslate"><span class="pre">nFFT</span></code> are ignored.</p>
+specified variance. If <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> is specified, the value of <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> is ignored.</p>
 </dd>
 <dt class="field-even">snrDb<span class="colon">:</span></dt>
-<dd class="field-even"><p>The signal to noise ratio in dB. First the noise variance is calculated using the given SNR
-value and the <code class="docutils literal notranslate"><span class="pre">nFFT</span></code> value. Then an AWGN complex noise signal is generated with zero mean and
-the calculated variance. Please note that if an SNR value is used to specify the amount of noise, the
-value of <code class="docutils literal notranslate"><span class="pre">nFFT</span></code> should also be provided.</p>
+<dd class="field-even"><p>The signal-to-noise ratio in dB. First the noise standard deviation is calculated using the given
+SNR value and the <code class="docutils literal notranslate"><span class="pre">bwp</span></code> and <code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> parameters. Then an AWGN complex noise signal is generated
+with zero mean and the calculated standard deviation. Please note that if an SNR value is used to
+specify the amount of noise, then a <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object also needs to
+be provided.</p>
 </dd>
-<dt class="field-odd">nFFT<span class="colon">:</span></dt>
-<dd class="field-odd"><p>This is only used if <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> is specified. It is the length of Fast Fourier Transform that is
-applied to the signals for time/frequency domain conversion. This value is usually available from the
-<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object being used for the transmission. This function
-uses the following formula to calculate the noise variance <span class="math notranslate nohighlight">\(\sigma^2_{AWGN}\)</span> from <span class="math notranslate nohighlight">\(snrDb\)</span>
-and <span class="math notranslate nohighlight">\(nFFT\)</span> values:</p>
-<div class="math notranslate nohighlight">
-\[\sigma^2_{AWGN} = \frac 1 {N_r.nFFT.10^{\frac {snrDb} {10}}}\]</div>
-<p>where <span class="math notranslate nohighlight">\(N_r\)</span> is the number of receiver antennas.</p>
+<dt class="field-odd">bwp<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>
+The bandwidth part object used to extract the FFT information. This is only used if <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> is
+used to specify the amount of noise.</p>
 </dd>
-<dt class="field-even">ranGen<span class="colon">:</span></dt>
-<dd class="field-even"><p>If provided, it is used as the random generator
+<dt class="field-even">useRxPower<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boolean
+If <cite>True</cite>, this function first calculates the average received signal power per resource element (RE),
+and uses it with the given signal-to-noise ratio to calculate the noise power. Otherwise, it is assumed
+that the received signal power is normalized to <span class="math notranslate nohighlight">\(\frac 1 {N_r}\)</span> where <span class="math notranslate nohighlight">\(N_r\)</span> is the number
+of receiver antenna (Matlab Approach).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently the default value of <code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> is <cite>False</cite> (Matlab approach) for backward
+compatibility. However, in future releases this may be changed to <cite>True</cite>. To ensure
+forward-compatible code, explicitly set this parameter instead of relying on the default.</p>
+</div>
+</dd>
+<dt class="field-odd">ranGen<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If provided, it is used as the random generator
 for the AWGN generation. Otherwise, if this is not specified, <strong>NeoRadium</strong>’s <a class="reference internal" href="Random.html"><span class="doc">global random
 generator</span></a> is used.</p>
 </dd>

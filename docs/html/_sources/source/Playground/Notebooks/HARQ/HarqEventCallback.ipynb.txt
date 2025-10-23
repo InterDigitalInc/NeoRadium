@@ -1,0 +1,244 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "1ea4038d-302f-4750-8468-5e35843d23f5",
+   "metadata": {},
+   "source": [
+    "## HARQ event callback\n",
+    "This notebook shows how to define and use a HARQ event callback. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "e3664f61-6925-4e91-a826-5b49b9057030",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import time\n",
+    "\n",
+    "from neoradium import LdpcEncoder, HarqEntity, random, Modem\n",
+    "from neoradium.utils import toLinear"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "147122ee-42f9-476f-95ec-ffef35a05576",
+   "metadata": {},
+   "source": [
+    "### Creating an LDPC Encoder object"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "bd6bbd98-bba6-40fd-83f4-3847dfc95b68",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "LDPC Encoder Properties:\n",
+      "  Base Graph:         1\n",
+      "  Modulation:         16QAM\n",
+      "  Number of layers:   1\n",
+      "  Target Rate:        0.478515625\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "modulation=\"16QAM\"      # Modulation scheme\n",
+    "codeRate = 490/1024     # Target code rate\n",
+    "numLayers = 1           # To test this with 2 codewords, set this to a value between 5 and 8\n",
+    "ldpcEncoder = LdpcEncoder(baseGraphNo=1,  modulation=modulation, txLayers=numLayers, targetRate=codeRate)\n",
+    "ldpcEncoder.print()     # Print the LDPC encoder's properties"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b8b46858-b580-4f96-8430-7cd8d8faa190",
+   "metadata": {},
+   "source": [
+    "### Defining a callback function and passing it to the HARQ entity"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "25586ee3-fd24-4056-aadd-618a2029ef9d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Define a simple call back function which prints the event information:\n",
+    "def handleEvents(event, harqCW):\n",
+    "    # event: The event string. It can be one of ”RXFAILED”, ”RXSUCCESS”, or ”TIMEOUT”\n",
+    "    # harqCW: The instance of HarqCW class that triggered the event\n",
+    "    print(f\"HARQ Process {harqCW.process.id}   CW{harqCW.cwIdx+1}: {event:10s}   curTry: {harqCW.curTry}   RV: {harqCW.rv}   TxBlock: {harqCW.txBlockNo}\")\n",
+    "\n",
+    "# Create the HARQ entity with \"Chase Combining\" and 8 processes\n",
+    "harq = HarqEntity(ldpcEncoder, harqType=\"CC\", numProc=8, eventCallback=handleEvents)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "40eb7f44-525b-44e7-8383-330bb6bf237c",
+   "metadata": {},
+   "source": [
+    "### Main transmission loop"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "f5d162d0-bf7e-4d9a-b86c-78d263ae2145",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "HARQ Process 0   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 0\n",
+      "HARQ Process 1   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 1\n",
+      "HARQ Process 2   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 2\n",
+      "HARQ Process 3   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 3\n",
+      "HARQ Process 4   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 4\n",
+      "HARQ Process 5   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 5\n",
+      "HARQ Process 6   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 6\n",
+      "HARQ Process 7   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 7\n",
+      "HARQ Process 0   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 0\n",
+      "HARQ Process 1   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 1\n",
+      "HARQ Process 2   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 2\n",
+      "HARQ Process 3   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 3\n",
+      "HARQ Process 4   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 4\n",
+      "HARQ Process 5   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 5\n",
+      "HARQ Process 6   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 6\n",
+      "HARQ Process 7   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 7\n",
+      "HARQ Process 0   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 8\n",
+      "HARQ Process 1   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 9\n",
+      "HARQ Process 2   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 10\n",
+      "HARQ Process 3   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 11\n",
+      "HARQ Process 4   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 12\n",
+      "HARQ Process 5   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 13\n",
+      "HARQ Process 6   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 14\n",
+      "HARQ Process 7   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 15\n",
+      "HARQ Process 0   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 8\n",
+      "HARQ Process 1   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 9\n",
+      "HARQ Process 2   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 10\n",
+      "HARQ Process 3   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 11\n",
+      "HARQ Process 4   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 12\n",
+      "HARQ Process 5   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 13\n",
+      "HARQ Process 6   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 14\n",
+      "HARQ Process 7   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 15\n",
+      "HARQ Process 0   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 16\n",
+      "HARQ Process 1   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 17\n",
+      "HARQ Process 2   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 18\n",
+      "HARQ Process 3   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 19\n",
+      "HARQ Process 4   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 20\n",
+      "HARQ Process 5   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 21\n",
+      "HARQ Process 6   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 22\n",
+      "HARQ Process 7   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 23\n",
+      "HARQ Process 0   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 16\n",
+      "HARQ Process 1   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 17\n",
+      "HARQ Process 2   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 18\n",
+      "HARQ Process 3   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 19\n",
+      "HARQ Process 4   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 20\n",
+      "HARQ Process 5   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 21\n",
+      "HARQ Process 6   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 22\n",
+      "HARQ Process 7   CW1: RXSUCCESS    curTry: 1   RV: 0   TxBlock: 23\n",
+      "HARQ Process 0   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 24\n",
+      "HARQ Process 1   CW1: RXFAILED     curTry: 0   RV: 0   TxBlock: 25\n",
+      "\n",
+      "HARQ Entity Statistics:\n",
+      "  txBits (per try):     [260000 240000      0      0]\n",
+      "  rxBits (per try):     [     0 240000      0      0]\n",
+      "  txBlocks (per try):   [26 24  0  0]\n",
+      "  rxBlocks (per try):   [ 0 24  0  0]\n",
+      "  numTimeouts:          0\n",
+      "  totalTxBlocks:        50\n",
+      "  totalRxBlocks:        24\n",
+      "  totalTxBits:          500000\n",
+      "  totalRxBits:          240000\n",
+      "  throughput:           48.00%\n",
+      "  bler:                 52.00%\n",
+      "  Average Num. Retries: 1.00%\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "ebNoDb = 3                                                  # Set the Eb/No ratio (dB)\n",
+    "snrDb = ebNoDb + 10*np.log10(ldpcEncoder.qm * codeRate)     # Convert Eb/No to SNR (dB)\n",
+    "snr = toLinear(snrDb)                                       # Linear SNR\n",
+    "noiseStd = np.sqrt(1/snr)                                   # Noise standard deviation\n",
+    "\n",
+    "rangen = random.getGenerator(123)                           # Create new random generator and make results reproducible\n",
+    "modem = Modem(modulation)                                   # The Modem instance used for modulation/demodulation\n",
+    "numTransmissions = 50                                       # Total number of transmissions\n",
+    "txBlockSizes = harq.numCW*[10000]                           # Transport block sizes. One per codeword.\n",
+    "\n",
+    "harq.reset()                                                # Reset HARQ for each execution of this cell\n",
+    "for t in range(numTransmissions):                           # Run this \"numTransmissions\" times\n",
+    "    txBlocks = []                                           # Transport blocks. One per codeword.\n",
+    "    for c in range(harq.numCW):\n",
+    "        if harq.needNewData[c]:                             # New transmission.\n",
+    "            txBlocks += [ random.bits(txBlockSizes[c]) ]    # Create random bits for the new transport block\n",
+    "        else:                                               # Retransmission\n",
+    "            txBlocks += [ None ]                            # Set transport block to None to indicate retransmission\n",
+    "\n",
+    "    rateMatchedCodeWords = harq.getRateMatchedCodeBlocks(txBlocks)  # Prepare the bitstream for transmission    \n",
+    "\n",
+    "    llrs = []                                               # Received Log-Likelihood Ratios. One per codeword.\n",
+    "    for c in range(harq.numCW):\n",
+    "        channelOutput = modem.modulate(rateMatchedCodeWords[c])                     # Modulate the codeblocks\n",
+    "        noisyRxSignal = channelOutput + rangen.awgn(channelOutput.shape, noiseStd)  # Add Noise\n",
+    "        llrs += [ modem.getLLRsFromSymbols(noisyRxSignal, noiseStd**2) ]            # Calculate the LLRs for each codeword\n",
+    "\n",
+    "    decodedTxBlocks, blockErrors = harq.decodeLLRs(llrs, txBlockSizes)\n",
+    "    harq.goNext()                                           # Get ready for the next transmission\n",
+    "harq.printStats()                                           # Print HARQ entity's statistics"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "979b8864-6416-44fd-b7ea-65ae02e9f42d",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "5645d861-6384-4f11-8dcf-a69812c7d4a5",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

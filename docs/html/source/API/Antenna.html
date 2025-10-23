@@ -6,15 +6,15 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Antenna &mdash; NeoRadium 0.3.1 Documentation</title>
+  <title>Antenna &mdash; NeoRadium 0.4.0 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=73ab78ac" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../_static/documentation_options.js?v=6c02275b"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Channel Models" href="Channels.html" />
-    <link rel="prev" title="Channel Coding" href="ChanCode.html" /> 
+    <link rel="prev" title="HARQ" href="Harq.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.3.1
+            NeoRadium 0.4.0
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -63,6 +63,7 @@
 <li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Antenna</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#neoradium.antenna.AntennaBase"><code class="docutils literal notranslate"><span class="pre">AntennaBase</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.antenna.AntennaBase.getSteeringVector"><code class="docutils literal notranslate"><span class="pre">AntennaBase.getSteeringVector()</span></code></a></li>
@@ -115,6 +116,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
 </ul>
 
         </div>
@@ -123,7 +125,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.3.1</a>
+          <a href="../../index.html">NeoRadium 0.4.0</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -177,16 +179,16 @@ for the given Azimuth and Zenith angles. Note that this function can only be cal
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>numpy array</em>) – A 1-D array of zenith angles in degrees. (between 0 and 180)</p></li>
-<li><p><strong>phi</strong> (<em>numpy array</em>) – A 1-D array of azimuth angles in degrees. (between -180 and 180)</p></li>
+<li><p><strong>theta</strong> (<em>NumPy array</em>) – A 1-D array of zenith angles in degrees. (between 0 and 180)</p></li>
+<li><p><strong>phi</strong> (<em>NumPy array</em>) – A 1-D array of azimuth angles in degrees. (between -180 and 180)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A 3-D complex numpy array containing steering vectors for every combination of <cite>theta</cite> and <cite>phi</cite>. The
+<dd class="field-even"><p>A 3-D complex NumPy array containing steering vectors for every combination of <cite>theta</cite> and <cite>phi</cite>. The
 shape of the output is (numElements, numTheta, numPhi).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -199,13 +201,13 @@ by the arguments <code class="docutils literal notranslate"><span class="pre">th
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the fields.</p>
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the fields.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for zenith angles
 (in degrees)</p>
 <p>If this is a scalar value, the fields are calculated only for the single specified zenith angle (in degrees)</p>
 <p>If this is None, the fields are calculated for all zenith angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the fields.</p>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the fields.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
 (in degrees)</p>
 <p>If this is a scalar value, the fields are calculated only for the single specified azimuth angle
@@ -215,11 +217,11 @@ by the arguments <code class="docutils literal notranslate"><span class="pre">th
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A 3-D complex numpy array containing steering vectors for each combination of <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. The
+<dd class="field-even"><p>A 3-D complex NumPy array containing steering vectors for each combination of <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. The
 shape of the output is (numElements x numTheta x numPhi)</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -232,34 +234,34 @@ horizontal polarizations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the fields.</p>
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the fields.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for zenith angles
 (in degrees)</p>
 <p>If this is a scalar value, the fields are calculated only for the single specified zenith angle
 (in degrees)</p>
 <p>If this is None, the fields are calculated for all zenith angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the fields.</p>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the fields.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
 (in degrees)</p>
 <p>If this is a scalar value, the fields are calculated only for the single specified azimuth angle
 (in degrees)</p>
 <p>If this is None, the fields are calculated for all azimuth angles between -180 and 180 degrees.</p>
 </p></li>
-<li><p><strong>weights</strong> (<em>numpy array</em>) – A vector of weights to be applied to the field values. The weights can be used to steer the beams to the
-desired direction. If this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the field pattern is returned without any beamforming.</p></li>
+<li><p><strong>weights</strong> (<em>NumPy array</em>) – A vector of weights to be applied to the field values. The weights can be used to steer the beams to the
+desired direction. If this is <cite>None</cite>, the field pattern is returned without any beamforming.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><dl class="simple">
-<dt><strong>arrayFieldV</strong>:</dt><dd><p>A numpy array of shape (numTheta x numPhi) containing the field values with vertical
+<dt><strong>arrayFieldV</strong>:</dt><dd><p>A NumPy array of shape (numTheta x numPhi) containing the field values with vertical
 polarization at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt><strong>arrayFieldH</strong>:</dt><dd><p>A numpy array of shape (numTheta x numPhi) containing the field values with horizontal
+<dt><strong>arrayFieldH</strong>:</dt><dd><p>A NumPy array of shape (numTheta x numPhi) containing the field values with horizontal
 polarization at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 </dl>
@@ -268,7 +270,7 @@ polarization at the directions specified by <code class="docutils literal notran
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2 Numpy Arrays</p>
+<dd class="field-odd"><p>2 NumPy Arrays</p>
 </dd>
 </dl>
 </dd></dl>
@@ -284,29 +286,29 @@ to get fields at the specified directions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the fields.</p>
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the fields.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for zenith angles
 (in degrees)</p>
 <p>If this is a scalar value, the fields are calculated only for the single specified zenith angle (in degrees)</p>
 <p>If this is None, the fields are calculated for all zenith angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the fields.</p>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the fields.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
 (in degrees)</p>
 <p>If this is a scalar value, the fields are calculated only for the single specified azimuth angle
 (in degrees)</p>
 <p>If this is None, the fields are calculated for all azimuth angles between -180 and 180 degrees.</p>
 </p></li>
-<li><p><strong>weights</strong> (<em>numpy array</em>) – A vector of weights to be applied to the field values. The weights can be used to steer the beams to the
-desired direction. If this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the field pattern is returned without any beamforming.</p></li>
+<li><p><strong>weights</strong> (<em>NumPy array</em>) – A vector of weights to be applied to the field values. The weights can be used to steer the beams to the
+desired direction. If this is <cite>None</cite>, the field pattern is returned without any beamforming.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A numpy array of shape (numTheta x numPhi) containing the field values at the directions specified by
+<dd class="field-even"><p>A NumPy array of shape (numTheta x numPhi) containing the field values at the directions specified by
 <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -319,7 +321,7 @@ the <a class="reference internal" href="#neoradium.antenna.AntennaBase.getField"
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the
 field powers.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for zenith angles
 (in degrees)</p>
@@ -327,7 +329,7 @@ field powers.</p>
 (in degrees)</p>
 <p>If this is None, the field powers are calculated for all zenith angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the
 field powers.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
 (in degrees)</p>
@@ -335,16 +337,16 @@ field powers.</p>
 (in degrees)</p>
 <p>If this is None, the field powers are calculated for all azimuth angles between -180 and 180 degrees.</p>
 </p></li>
-<li><p><strong>weights</strong> (<em>numpy array</em>) – A vector of weights to be applied to the field values. The weights can be used to steer the beams to the
-desired direction. If this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the field pattern is returned without any beamforming.</p></li>
+<li><p><strong>weights</strong> (<em>NumPy array</em>) – A vector of weights to be applied to the field values. The weights can be used to steer the beams to the
+desired direction. If this is <cite>None</cite>, the field pattern is returned without any beamforming.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A numpy array of shape (numElements x numTheta x numPhi) containing the field powers at the directions
+<dd class="field-even"><p>A NumPy array of shape (numElements x numTheta x numPhi) containing the field powers at the directions
 specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -359,7 +361,7 @@ then converts them to dB.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles
 (in degrees) used to calculate the field powers.</p>
 <p>If this is a tuple, the values are assumed to specify the range
 of values used for zenith angles (in degrees)</p>
@@ -368,7 +370,7 @@ for the single specified zenith angle (in degrees)</p>
 <p>If this is None, the field powers are calculated for all zenith
 angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles
 (in degrees) used to calculate the field powers.</p>
 <p>If this is a tuple, the values are assumed to specify the range
 of values used for azimuth angles (in degrees)</p>
@@ -377,17 +379,17 @@ for the single specified azimuth angle (in degrees)</p>
 <p>If this is None, the field powers are calculated for all azimuth
 angles between -180 and 180 degrees.</p>
 </p></li>
-<li><p><strong>weights</strong> (<em>numpy array</em>) – A vector of weights to be applied to the field values. The weights
+<li><p><strong>weights</strong> (<em>NumPy array</em>) – A vector of weights to be applied to the field values. The weights
 can be used to steer the beams to the desired direction. If this is
-<code class="docutils literal notranslate"><span class="pre">None</span></code>, the field pattern is returned without any beamforming.</p></li>
+<cite>None</cite>, the field pattern is returned without any beamforming.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A numpy array of shape (numElements x numTheta x numPhi) containing
+<dd class="field-even"><p>A NumPy array of shape (numElements x numTheta x numPhi) containing
 the field powers in dB at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -412,7 +414,7 @@ is the relative directivity in dB with respect to an “isotropic” radiator.</
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the
 directivity.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for zenith angles
 (in degrees)</p>
@@ -420,7 +422,7 @@ directivity.</p>
 (in degrees)</p>
 <p>If this is None, the directivity is calculated for all zenith angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the
 directivity.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
 (in degrees)</p>
@@ -428,16 +430,16 @@ directivity.</p>
 (in degrees)</p>
 <p>If this is None, the directivity is calculated for all azimuth angles between -180 and 180 degrees.</p>
 </p></li>
-<li><p><strong>weights</strong> (<em>numpy array</em>) – A vector of weights to be applied to the field values. The weights can be used to steer the beams to the
-desired direction. If this is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the field pattern is returned without any beamforming.</p></li>
+<li><p><strong>weights</strong> (<em>NumPy array</em>) – A vector of weights to be applied to the field values. The weights can be used to steer the beams to the
+desired direction. If this is <cite>None</cite>, the field pattern is returned without any beamforming.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A numpy array of shape (numElements x numTheta x numPhi) containing the directivity in dbi at the
+<dd class="field-even"><p>A NumPy array of shape (numElements x numTheta x numPhi) containing the directivity in dbi at the
 directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -450,7 +452,7 @@ arrays in the directions specified by <code class="docutils literal notranslate"
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles (in degrees) used to visualize the
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to visualize the
 radiations.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for zenith angles
 (in degrees)</p>
@@ -458,7 +460,7 @@ radiations.</p>
 (in degrees)</p>
 <p>If this is None, the radiations are visualized for all zenith angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to visualize the
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to visualize the
 radiations.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
 (in degrees)</p>
@@ -476,7 +478,7 @@ radiations.</p>
 </ul>
 </div></blockquote>
 </p></li>
-<li><p><strong>normalize</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default) all the values are normalized before being plotted.</p></li>
+<li><p><strong>normalize</strong> (<em>Boolean</em>) – If <cite>True</cite> (default) all the values are normalized before being plotted.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – The title to be used for the plot. If not specified, then this function creates a title based on the
 given parameters.</p></li>
 <li><p><strong>viewAngles</strong> (<em>tuple</em>) – For 3-D plots, you can use this parameter to specify your desired viewing angle. For non-3D plots, this
@@ -485,10 +487,10 @@ parameter is ignored. The default is <code class="docutils literal notranslate">
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A numpy array containing the actual data used for the visualization.</p>
+<dd class="field-even"><p>A NumPy array containing the actual data used for the visualization.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 <p><strong>Plot Types:</strong></p>
@@ -522,14 +524,14 @@ inverse matrix is the same as its transpose, which can be used to convert from t
 coordinate system. For more information please refer to <strong>3GPP TR 38.901 equation (7.1-4)</strong>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>orientation</strong> (<em>list</em><em> or </em><em>numpy array</em>) – A list or numpy array containing the orientation angles <span class="math notranslate nohighlight">\(\alpha\)</span> (bearing angle), <span class="math notranslate nohighlight">\(\beta\)</span>
+<dd class="field-odd"><p><strong>orientation</strong> (<em>list</em><em> or </em><em>NumPy array</em>) – A list or NumPy array containing the orientation angles <span class="math notranslate nohighlight">\(\alpha\)</span> (bearing angle), <span class="math notranslate nohighlight">\(\beta\)</span>
 (downtilt angle), and <span class="math notranslate nohighlight">\(\gamma\)</span> (slant angle) in radians.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A 3x3 rotation matrix that is used to transform the local coordinates to global coordinates.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -544,25 +546,25 @@ Please refer to <strong>3GPP TR 38.901 sections 7.1 and 7.5</strong> for more de
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>numpy array</em>) – A 2-D numpy array containing the zenith angles (in radians) used to calculate the fields. This is an
+<li><p><strong>theta</strong> (<em>NumPy array</em>) – A 2-D NumPy array containing the zenith angles (in radians) used to calculate the fields. This is an
 <code class="docutils literal notranslate"><span class="pre">n</span></code> by <code class="docutils literal notranslate"><span class="pre">m</span></code> matrix where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of clusters and <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of rays per cluster.</p></li>
-<li><p><strong>phi</strong> (<em>numpy array</em>) – A 2-D numpy array containing the azimuth angles (in radians) used to calculate the fields. This is an
+<li><p><strong>phi</strong> (<em>NumPy array</em>) – A 2-D NumPy array containing the azimuth angles (in radians) used to calculate the fields. This is an
 <code class="docutils literal notranslate"><span class="pre">n</span></code> by <code class="docutils literal notranslate"><span class="pre">m</span></code> matrix where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of clusters and <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of rays per cluster.</p></li>
-<li><p><strong>orientation</strong> (<em>list</em><em> or </em><em>numpy array</em>) – A list or numpy array containing the orientation angles <span class="math notranslate nohighlight">\(\alpha\)</span> (bearing angle), <span class="math notranslate nohighlight">\(\beta\)</span>
+<li><p><strong>orientation</strong> (<em>list</em><em> or </em><em>NumPy array</em>) – A list or NumPy array containing the orientation angles <span class="math notranslate nohighlight">\(\alpha\)</span> (bearing angle), <span class="math notranslate nohighlight">\(\beta\)</span>
 (downtilt angle), and <span class="math notranslate nohighlight">\(\gamma\)</span> (slant angle) in radians.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><dl class="simple">
-<dt><strong>field</strong>:</dt><dd><p>A numpy array of shape (numAntenna x 2 x n x m) containing the field information for each antenna
+<dt><strong>field</strong>:</dt><dd><p>A NumPy array of shape (numAntenna x 2 x n x m) containing the field information for each antenna
 element and each one of <code class="docutils literal notranslate"><span class="pre">m</span></code> rays in each one of <code class="docutils literal notranslate"><span class="pre">n</span></code> clusters. The second dimension (2) is used
 to separate the vertical and horizontal polarization.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt><strong>locFactor</strong>:</dt><dd><p>A numpy array of shape (numAntenna x n x m) containing the location factor. For more information
+<dt><strong>locFactor</strong>:</dt><dd><p>A NumPy array of shape (numAntenna x n x m) containing the location factor. For more information
 please refer to <strong>3GPP TR 38.901 equations 7.5-28 and 7.5-28</strong>.</p>
 </dd>
 </dl>
@@ -571,7 +573,7 @@ please refer to <strong>3GPP TR 38.901 equations 7.5-28 and 7.5-28</strong>.</p>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2 Numpy Arrays</p>
+<dd class="field-odd"><p>2 NumPy Arrays</p>
 </dd>
 </dl>
 </dd></dl>
@@ -649,13 +651,13 @@ to <strong>TR38.901-Table 7.3-1</strong> for more details.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
 “Antenna Element:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -674,7 +676,7 @@ Otherwise, nothing is returned.</p>
 object.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Numpy array</p>
+<dd class="field-even"><p>NumPy array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -687,7 +689,7 @@ object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<em>list</em><em> or </em><em>numpy Array</em>) – A list of 3 values (x, y, and z) specifying the position to be used for the cloned
+<li><p><strong>position</strong> (<em>list</em><em> or </em><em>NumPy Array</em>) – A list of 3 values (x, y, and z) specifying the position to be used for the cloned
 <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>.</p></li>
 <li><p><strong>polAngle</strong> (<em>float</em>) – The polarization angle of the cloned <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> in degrees.</p></li>
 <li><p><strong>panel</strong> (<a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>) – The <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> object containing the cloned <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>.</p></li>
@@ -710,7 +712,7 @@ This function is implemented based on <strong>TR38.901-Table 7.3-1</strong>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the field
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the field
 powers.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for zenith angles
 (in degrees)</p>
@@ -718,7 +720,7 @@ powers.</p>
 (in degrees)</p>
 <p>If this is None, the field powers are calculated for all zenith angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the field
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the field
 powers.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
 (in degrees)</p>
@@ -731,11 +733,11 @@ powers.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code> have the same shape, the returned value has the same shape as <code class="docutils literal notranslate"><span class="pre">theta</span></code> and
 <code class="docutils literal notranslate"><span class="pre">phi</span></code> and contains the field powers in dB at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. Otherwise,
-a numpy array of shape (numTheta x numPhi) is returned, containing the field powers in dB at all
+a NumPy array of shape (numTheta x numPhi) is returned, containing the field powers in dB at all
 combinations of <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -749,7 +751,7 @@ representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the field
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the field
 powers.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for zenith angles
 (in degrees)</p>
@@ -757,7 +759,7 @@ powers.</p>
 (in degrees)</p>
 <p>If this is None, the field powers are calculated for all zenith angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the field
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the field
 powers.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
 (in degrees)</p>
@@ -770,11 +772,11 @@ powers.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code> have the same shape, the returned value has the same shape as <code class="docutils literal notranslate"><span class="pre">theta</span></code> and
 <code class="docutils literal notranslate"><span class="pre">phi</span></code> and contains the field powers at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. Otherwise,
-a numpy array of shape (numTheta x numPhi) is returned, containing the field powers at all
+a NumPy array of shape (numTheta x numPhi) is returned, containing the field powers at all
 combinations of <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -789,13 +791,13 @@ orientations only. Use the <a class="reference internal" href="#neoradium.antenn
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the fields.</p>
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the fields.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for zenith angles
 (in degrees)</p>
 <p>If this is a scalar value, the fields are calculated only for the single specified zenith angle (in degrees)</p>
 <p>If this is None, the fields are calculated for all zenith angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the fields.</p>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the fields.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
 (in degrees)</p>
 <p>If this is a scalar value, the fields are calculated only for the single specified azimuth angle
@@ -807,11 +809,11 @@ orientations only. Use the <a class="reference internal" href="#neoradium.antenn
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code> have the same shape, the returned value has the same shape as <code class="docutils literal notranslate"><span class="pre">theta</span></code> and
 <code class="docutils literal notranslate"><span class="pre">phi</span></code> and contains the electric field at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. Otherwise,
-a numpy array of shape (numTheta x numPhi) is returned, containing the electric field at all
+a NumPy array of shape (numTheta x numPhi) is returned, containing the electric field at all
 combinations of <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -824,13 +826,13 @@ horizontal polarizations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the fields.</p>
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the fields.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for zenith angles
 (in degrees)</p>
 <p>If this is a scalar value, the fields are calculated only for the single specified zenith angle (in degrees)</p>
 <p>If this is None, the fields are calculated for all zenith angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the fields.</p>
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the fields.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
 (in degrees)</p>
 <p>If this is a scalar value, the fields are calculated only for the single specified azimuth angle
@@ -841,16 +843,16 @@ horizontal polarizations.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>If <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code> have the same shape, the following returned values are also the same shape as
-<code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. Otherwise, two numpy arrays of shape (numTheta x numPhi) are returned.</p>
+<code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. Otherwise, two NumPy arrays of shape (numTheta x numPhi) are returned.</p>
 <ul class="simple">
 <li><dl class="simple">
-<dt><strong>arrayFieldV</strong>:</dt><dd><p>A numpy array containing the field values with vertical polarization at the directions specified by
+<dt><strong>arrayFieldV</strong>:</dt><dd><p>A NumPy array containing the field values with vertical polarization at the directions specified by
 <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt><strong>arrayFieldH</strong>:</dt><dd><p>A numpy array containing the field values with horizontal polarization at the directions specified by
+<dt><strong>arrayFieldH</strong>:</dt><dd><p>A NumPy array containing the field values with horizontal polarization at the directions specified by
 <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 </dl>
@@ -859,7 +861,7 @@ horizontal polarizations.</p>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2 Numpy Arrays</p>
+<dd class="field-odd"><p>2 NumPy Arrays</p>
 </dd>
 </dl>
 </dd></dl>
@@ -884,7 +886,7 @@ is the relative directivity in dB with respect to an “isotropic” radiator.</
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the zenith angles (in degrees) used to calculate the
+<li><p><strong>theta</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the zenith angles (in degrees) used to calculate the
 directivity.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for zenith angles
 (in degrees)</p>
@@ -892,7 +894,7 @@ directivity.</p>
 (in degrees)</p>
 <p>If this is None, the directivity is calculated for all zenith angles between 0 and 180 degrees.</p>
 </p></li>
-<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>numpy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or numpy array, it specifies the azimuth angles (in degrees) used to calculate the
+<li><p><strong>phi</strong> (<em>list</em><em>, </em><em>tuple</em><em>, </em><em>NumPy array</em><em>, </em><em>scalar</em><em>, or </em><em>None</em>) – <p>If this is a list or NumPy array, it specifies the azimuth angles (in degrees) used to calculate the
 directivity.</p>
 <p>If this is a tuple, the values are assumed to specify the range of values used for azimuth angles
 (in degrees)</p>
@@ -900,17 +902,17 @@ directivity.</p>
 (in degrees)</p>
 <p>If this is None, the directivity is calculated for all azimuth angles between -180 and 180 degrees.</p>
 </p></li>
-<li><p><strong>weights</strong> (<em>numpy array</em>) – This parameter is ignored by the <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> objects.</p></li>
+<li><p><strong>weights</strong> (<em>NumPy array</em>) – This parameter is ignored by the <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> objects.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code> have the same shape, the returned value has the same shape as <code class="docutils literal notranslate"><span class="pre">theta</span></code> and
 <code class="docutils literal notranslate"><span class="pre">phi</span></code> and contains the directivity at the directions specified by <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>. Otherwise,
-a numpy array of shape (numTheta x numPhi) is returned, containing the directivity at all
+a NumPy array of shape (numTheta x numPhi) is returned, containing the directivity at all
 combinations of <code class="docutils literal notranslate"><span class="pre">theta</span></code> and <code class="docutils literal notranslate"><span class="pre">phi</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -945,7 +947,7 @@ objects, or None.</p>
 elements in this panel.</p></li>
 <li><p>If it is a 2-D array of <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a> objects, the specified elements are used for
 the elements of this panel.</p></li>
-<li><p>If it is <code class="docutils literal notranslate"><span class="pre">None</span></code>, then antenna elements of the panel are created using the default values.</p></li>
+<li><p>If it is <cite>None</cite>, then antenna elements of the panel are created using the default values.</p></li>
 </ul>
 </dd>
 <dt class="field-odd">polarization<span class="colon">:</span></dt>
@@ -959,14 +961,14 @@ either “+” (0 and 90 degree pairs), or “x” (-45 and 45 degree pairs). By
 <dd class="field-even"><p>The position of the center point of this panel in the antenna array containing this panel.</p>
 </dd>
 <dt class="field-odd">array<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> object containing this antenna panel or <code class="docutils literal notranslate"><span class="pre">None</span></code> if this panel
+<dd class="field-odd"><p>The <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> object containing this antenna panel or <cite>None</cite> if this panel
 is not part of an antenna array.</p>
 </dd>
 <dt class="field-even">matlabOrder<span class="colon">:</span></dt>
 <dd class="field-even"><p>Current implementation of Matlab toolkit uses a different order for the elements in
 a panel compared to the order specified in the 3-GPP standard (See <strong>3GPP TR 38.901 -
 Section 7.3</strong>). By default, this class uses the standard order (<code class="docutils literal notranslate"><span class="pre">matlabOrder=False</span></code>). If you need
-to compare your results with Matlab implementation, you can set this parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+to compare your results with Matlab implementation, you can set this parameter to <cite>True</cite>.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -982,13 +984,13 @@ to compare your results with Matlab implementation, you can set this parameter t
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
 “Antenna Panel:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -1005,7 +1007,7 @@ angles, and the parent <code class="docutils literal notranslate"><span class="p
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<em>list</em><em> or </em><em>numpy array</em>) – The position of the center point of the cloned panel in the antenna array containing it.</p></li>
+<li><p><strong>position</strong> (<em>list</em><em> or </em><em>NumPy array</em>) – The position of the center point of the cloned panel in the antenna array containing it.</p></li>
 <li><p><strong>polarization</strong> (<em>str</em>) – The polarization of antenna elements on the cloned panel. The panel can be singly polarized
 (P=1) or dually polarized (P=2). For singly polarized panels, the <code class="docutils literal notranslate"><span class="pre">polarization</span></code> can be either
 “|” (Vertical), or “-” (Horizontal). For dually polarized panels, the <code class="docutils literal notranslate"><span class="pre">polarization</span></code> can be
@@ -1076,7 +1078,7 @@ panel is returned.</p></li>
 values are in multiples of wavelength.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1084,19 +1086,19 @@ values are in multiples of wavelength.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.antenna.AntennaPanel.getAllPositions">
 <span class="sig-name descname"><span class="pre">getAllPositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polarization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel.getAllPositions" title="Link to this definition"></a></dt>
-<dd><p>Returns the positions of all elements in this panel as a 2-D numpy array.</p>
+<dd><p>Returns the positions of all elements in this panel as a 2-D NumPy array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em>) – If this is a dually polarized panel and this parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the positions of all elements is
+<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em>) – If this is a dually polarized panel and this parameter is <cite>True</cite>, the positions of all elements is
 returned. In this case, there will be repeated positions in the returned array as the 2 polarized pairs
 of elements have the same position. Otherwise, if <code class="docutils literal notranslate"><span class="pre">polarization=False</span></code>, only one position is returned
 for a pair of polarized antenna elements. If this is a singly polarized panel, this parameter is ignored.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">x</span> <span class="pre">3</span></code> numpy array containing the positions of all <code class="docutils literal notranslate"><span class="pre">n</span></code> elements in this panel.</p>
+<dd class="field-even"><p>An <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">x</span> <span class="pre">3</span></code> NumPy array containing the positions of all <code class="docutils literal notranslate"><span class="pre">n</span></code> elements in this panel.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1114,7 +1116,7 @@ if <code class="docutils literal notranslate"><span class="pre">ref=&quot;Array&
 <li><p><strong>maxSize</strong> (<em>float</em>) – This parameter specifies how large the output image of this panel should be. Depending on the number of
 antenna element rows and columns in this panel, the <code class="docutils literal notranslate"><span class="pre">maxSize</span></code> can specify the width or height of the
 resulting image.</p></li>
-<li><p><strong>zeroTicks</strong> (<em>Boolean</em>) – If this is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the zero positions on both axes are indicated by additional “ticks” to show
+<li><p><strong>zeroTicks</strong> (<em>Boolean</em>) – If this is <cite>True</cite>, the zero positions on both axes are indicated by additional “ticks” to show
 the center of this panel. Otherwise the “ticks” on the horizontal and vertical axes are only at the
 locations of antenna elements.</p></li>
 <li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, this will be used as the title for the image created for this panel. Otherwise the title
@@ -1134,11 +1136,11 @@ following code prints the position of every element in this panel:</p>
 </pre></div>
 </div>
 <p>By default, this function iterates through elements in the order specified in <strong>3GPP TR 38.901 - Section
-7.3</strong>. If the parameter <code class="docutils literal notranslate"><span class="pre">matlabOrder</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, then the Matlab order is used. Please refer
+7.3</strong>. If the parameter <code class="docutils literal notranslate"><span class="pre">matlabOrder</span></code> is set to <cite>True</cite>, then the Matlab order is used. Please refer
 <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> parameter documentation for more information about <code class="docutils literal notranslate"><span class="pre">matlabOrder</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em>) – If this is a dually polarized panel and this parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then all elements are included in
+<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em>) – If this is a dually polarized panel and this parameter is <cite>True</cite>, then all elements are included in
 the iteration. Otherwise, if <code class="docutils literal notranslate"><span class="pre">polarization=False</span></code>, only the first element of the polarized pair of
 elements at each position is included in the iteration. If this is a singly polarized panel, this
 parameter is ignored.</p>
@@ -1178,7 +1180,7 @@ objects, or None.</p>
 panels in this array.</p></li>
 <li><p>If it is a 2-D array of <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> objects, the specified panels are used for the
 panels of this array.</p></li>
-<li><p>If it is <code class="docutils literal notranslate"><span class="pre">None</span></code>, then antenna panels and elements of this array are created using the default
+<li><p>If it is <cite>None</cite>, then antenna panels and elements of this array are created using the default
 values.</p></li>
 </ul>
 </dd>
@@ -1196,13 +1198,13 @@ values.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
 “Antenna Array:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -1263,7 +1265,7 @@ is not specified, by default the position of the first element in the specified 
 values are in multiples of wavelength.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1291,7 +1293,7 @@ following code prints the position of every element in this array:</p>
 <p>This function uses the <a class="reference internal" href="#neoradium.antenna.AntennaPanel.allElements" title="neoradium.antenna.AntennaPanel.allElements"><code class="xref py py-meth docutils literal notranslate"><span class="pre">AntennaPanel.allElements()</span></code></a> to iterate through each panel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em>) – If the panels of this array are dually polarized and this parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then all elements are
+<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em>) – If the panels of this array are dually polarized and this parameter is <cite>True</cite>, then all elements are
 included in the iteration. Otherwise, if <code class="docutils literal notranslate"><span class="pre">polarization=False</span></code>, only the first element of the polarized
 pair of elements at each position is included in the iteration. If the panels of this array are singly
 polarized, this parameter is ignored.</p>
@@ -1305,19 +1307,19 @@ polarized, this parameter is ignored.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.antenna.AntennaArray.getAllPositions">
 <span class="sig-name descname"><span class="pre">getAllPositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polarization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray.getAllPositions" title="Link to this definition"></a></dt>
-<dd><p>Returns the positions of all elements in this array as a 2-D numpy array.</p>
+<dd><p>Returns the positions of all elements in this array as a 2-D NumPy array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em>) – If the panels of this array are dually polarized and this parameter is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then the positions of
+<dd class="field-odd"><p><strong>polarization</strong> (<em>Boolean</em>) – If the panels of this array are dually polarized and this parameter is <cite>True</cite>, then the positions of
 all elements are returned. Otherwise, if <code class="docutils literal notranslate"><span class="pre">polarization=False</span></code>, only the position of the first element
 of the polarized pair of elements at each position is returned. If the panels of this array are singly
 polarized, this parameter is ignored.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">x</span> <span class="pre">3</span></code> numpy array containing the positions of all <code class="docutils literal notranslate"><span class="pre">n</span></code> elements in this array.</p>
+<dd class="field-even"><p>An <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">x</span> <span class="pre">3</span></code> NumPy array containing the positions of all <code class="docutils literal notranslate"><span class="pre">n</span></code> elements in this array.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Numpy Array</p>
+<dd class="field-odd"><p>NumPy Array</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1340,7 +1342,7 @@ to get the number of elements in one panel (<code class="docutils literal notran
 <li><p><strong>maxSize</strong> (<em>(</em><em>float: 6.0</em><em>)</em>) – This parameter specifies how large the output image of this array should be. Depending on the number of
 antenna element/panel rows and columns in this array, the <code class="docutils literal notranslate"><span class="pre">maxSize</span></code> can specify the width or height of
 the resulting image.</p></li>
-<li><p><strong>zeroTicks</strong> (<em>Boolean</em>) – If this is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the zero positions on both axes are indicated by additional “ticks” to show
+<li><p><strong>zeroTicks</strong> (<em>Boolean</em>) – If this is <cite>True</cite>, the zero positions on both axes are indicated by additional “ticks” to show
 the center of this array. Otherwise the “ticks” on the horizontal and vertical axes are only at the
 locations of antenna elements.</p></li>
 <li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, this will be used as the title for the image created for this array. Otherwise the title
@@ -1358,7 +1360,7 @@ locations of antenna elements.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="ChanCode.html" class="btn btn-neutral float-left" title="Channel Coding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Harq.html" class="btn btn-neutral float-left" title="HARQ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="Channels.html" class="btn btn-neutral float-right" title="Channel Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -1,0 +1,613 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HARQ &mdash; NeoRadium 0.4.0 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Antenna" href="Antenna.html" />
+    <link rel="prev" title="Channel Coding" href="ChanCode.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NeoRadium 0.4.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HARQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.harq.HarqCW"><code class="docutils literal notranslate"><span class="pre">HarqCW</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.harq.HarqProcess"><code class="docutils literal notranslate"><span class="pre">HarqProcess</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.harq.HarqProcess.reset"><code class="docutils literal notranslate"><span class="pre">HarqProcess.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.harq.HarqProcess.print"><code class="docutils literal notranslate"><span class="pre">HarqProcess.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.harq.HarqProcess.getRateMatchedCodeBlocks"><code class="docutils literal notranslate"><span class="pre">HarqProcess.getRateMatchedCodeBlocks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.harq.HarqProcess.decodeLLRs"><code class="docutils literal notranslate"><span class="pre">HarqProcess.decodeLLRs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.harq.HarqEntity"><code class="docutils literal notranslate"><span class="pre">HarqEntity</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.harq.HarqEntity.reset"><code class="docutils literal notranslate"><span class="pre">HarqEntity.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.harq.HarqEntity.print"><code class="docutils literal notranslate"><span class="pre">HarqEntity.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.harq.HarqEntity.printStats"><code class="docutils literal notranslate"><span class="pre">HarqEntity.printStats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.harq.HarqEntity.goNext"><code class="docutils literal notranslate"><span class="pre">HarqEntity.goNext()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.harq.HarqEntity.getRateMatchedCodeBlocks"><code class="docutils literal notranslate"><span class="pre">HarqEntity.getRateMatchedCodeBlocks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.harq.HarqEntity.decodeLLRs"><code class="docutils literal notranslate"><span class="pre">HarqEntity.decodeLLRs()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NeoRadium 0.4.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">HARQ</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/source/API/Harq.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-neoradium.harq">
+<span id="harq"></span><h1>HARQ<a class="headerlink" href="#module-neoradium.harq" title="Link to this heading"></a></h1>
+<p>The module <code class="docutils literal notranslate"><span class="pre">harq.py</span></code> contains the API for Hybrid Automatic Repeat reQuest (HARQ), a fundamental mechanism in 5G NR,
+designed for error correction and reliable data transfer over radio links. The class structure follows the 3GPP
+HARQ hierarchy:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#neoradium.harq.HarqEntity" title="neoradium.harq.HarqEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqEntity</span></code></a>: The main HARQ management object. It implements the “HARQ Entity” as specified
+in <strong>3GPP TS 38.321, Section 5.3.2.1</strong>.</p></li>
+<li><p><a class="reference internal" href="#neoradium.harq.HarqProcess" title="neoradium.harq.HarqProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqProcess</span></code></a>: Each HARQ entity contains one or more HARQ processes. This class implements
+the “HARQ Process” object as specified in <strong>3GPP TS 38.321, Section 5.3.2.2</strong>.</p></li>
+<li><p><a class="reference internal" href="#neoradium.harq.HarqCW" title="neoradium.harq.HarqCW"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqCW</span></code></a>: Each HARQ process can handle up to two codewords. This class implements HARQ
+processing for a single codeword. A <a class="reference internal" href="#neoradium.harq.HarqProcess" title="neoradium.harq.HarqProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqProcess</span></code></a> can have one or two
+<a class="reference internal" href="#neoradium.harq.HarqCW" title="neoradium.harq.HarqCW"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqCW</span></code></a> objects, depending on the number of codewords.</p></li>
+</ul>
+<p>This implementation adheres to the procedures specified in <strong>3GPP TS 38.321, TS 38.212, and TS 38.214</strong>.</p>
+<p><strong>A typical HARQ workflow:</strong></p>
+<p>Here’s a typical workflow example for using HARQ in your simulations:</p>
+<ol class="arabic">
+<li><p>Create an LDPC encoder, for instance:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ldpcEncoder</span> <span class="o">=</span> <span class="n">LdpcEncoder</span><span class="p">(</span><span class="n">baseGraphNo</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">&#39;QPSK&#39;</span><span class="p">,</span> <span class="n">txLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">targetRate</span><span class="o">=</span><span class="mi">490</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Create a HARQ entity object, passing in the LDPC encoder:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">harq</span> <span class="o">=</span> <span class="n">HarqEntity</span><span class="p">(</span><span class="n">ldpcEncoder</span><span class="p">,</span> <span class="n">harqType</span><span class="o">=</span><span class="s2">&quot;IR&quot;</span><span class="p">,</span> <span class="n">numProc</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>  <span class="c1"># Using &quot;Incremental Redundancy&quot; with 16 HARQ processes</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>For each transmission and each codeword, check the <code class="docutils literal notranslate"><span class="pre">needNewData</span></code> property. If it is <cite>True</cite> for a codeword, create
+the transport block bits for the corresponding codeword. Otherwise, set the transport block to <cite>None</cite> (for
+retransmission). Once the transport blocks are ready for each codeword, call the
+<a class="reference internal" href="#neoradium.harq.HarqEntity.getRateMatchedCodeBlocks" title="neoradium.harq.HarqEntity.getRateMatchedCodeBlocks"><code class="xref py py-meth docutils literal notranslate"><span class="pre">HarqEntity.getRateMatchedCodeBlocks()</span></code></a> function to prepare the rate-matched bitstreams for transmission.
+Here is an example:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">txBlocks</span> <span class="o">=</span> <span class="p">[]</span>                                         <span class="c1"># Transport blocks, one per codeword.</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numCodewords</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">harq</span><span class="o">.</span><span class="n">needNewData</span><span class="p">[</span><span class="n">c</span><span class="p">]:</span>                           <span class="c1"># New transmission.</span>
+        <span class="n">txBlocks</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">txBlockSizes</span><span class="p">[</span><span class="n">c</span><span class="p">])</span> <span class="p">]</span>  <span class="c1"># Create random bits for the new transport block</span>
+    <span class="k">else</span><span class="p">:</span>                                             <span class="c1"># Retransmission</span>
+        <span class="n">txBlocks</span> <span class="o">+=</span> <span class="p">[</span> <span class="kc">None</span> <span class="p">]</span>                          <span class="c1"># Set transport block to None indicating retransmission</span>
+
+<span class="n">rateMatchedCodeWords</span> <span class="o">=</span> <span class="n">harq</span><span class="o">.</span><span class="n">getRateMatchedCodeBlocks</span><span class="p">(</span><span class="n">txBlocks</span><span class="p">)</span>  <span class="c1"># Prepare the bitstream for transmission</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>At the receiving end, after demodulating the LLRs, the <a class="reference internal" href="#neoradium.harq.HarqEntity.decodeLLRs" title="neoradium.harq.HarqEntity.decodeLLRs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">HarqEntity.decodeLLRs()</span></code></a> method is invoked to obtain
+a list of decoded blocks for each codeword. For instance:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">decodedTxBlocks</span><span class="p">,</span> <span class="n">blockErrors</span> <span class="o">=</span> <span class="n">harq</span><span class="o">.</span><span class="n">decodeLLRs</span><span class="p">(</span><span class="n">llrs</span><span class="p">,</span> <span class="n">txBlockSize</span><span class="p">)</span>  <span class="c1"># Decode received LLRs</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Near the end of the transmission loop, the HARQ entity’s <a class="reference internal" href="#neoradium.harq.HarqEntity.goNext" title="neoradium.harq.HarqEntity.goNext"><code class="xref py py-meth docutils literal notranslate"><span class="pre">goNext()</span></code></a> method is called to
+transition to the next HARQ process for the subsequent transmission.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">harq</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<p>Please refer to the notebook <a class="reference internal" href="../Playground/Notebooks/HARQ/Harq.html"><span class="doc">Using HARQ</span></a> for a complete example of the above workflow.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.harq.HarqCW">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.harq.</span></span><span class="sig-name descname"><span class="pre">HarqCW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">process</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cwIdx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqCW" title="Link to this definition"></a></dt>
+<dd><p>This class implements the HARQ Processing for a single codeword. The <a class="reference internal" href="#neoradium.harq.HarqProcess" title="neoradium.harq.HarqProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">neoradium.harq.HarqProcess</span></code></a> class
+can have either one or two <a class="reference internal" href="#neoradium.harq.HarqCW" title="neoradium.harq.HarqCW"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqCW</span></code></a> objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>process</strong> (<a class="reference internal" href="#neoradium.harq.HarqProcess" title="neoradium.harq.HarqProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqProcess</span></code></a>) – The <a class="reference internal" href="#neoradium.harq.HarqProcess" title="neoradium.harq.HarqProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqProcess</span></code></a> object that holds this <a class="reference internal" href="#neoradium.harq.HarqCW" title="neoradium.harq.HarqCW"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqCW</span></code></a>
+instance.</p></li>
+<li><p><strong>cwIdx</strong> (<em>int</em>) – The codeword index, which is 0 for the first codeword, or 1 for the second codeword.</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Other Read-Only Properties:</strong></p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">curTry<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This indicates the current number of retransmissions. It starts at zero for the first transmission
+for this codeword. This value increments after each transmission failure.</p>
+</dd>
+<dt class="field-even">rv<span class="colon">:</span></dt>
+<dd class="field-even"><p>This represents the redundancy version used for retransmissions. For “Chase Combining” retransmission,
+this value is always zero. For “Incremental Redundancy” retransmission, it is updated based on the
+<code class="docutils literal notranslate"><span class="pre">rvSequence</span></code> parameter of the <a class="reference internal" href="#neoradium.harq.HarqEntity" title="neoradium.harq.HarqEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqEntity</span></code></a> object.</p>
+</dd>
+<dt class="field-odd">txBlockNo<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This indicates the number of unique transport blocks (not including retransmissions)
+transmitted so far since the start of communication before the one currently being processed by this
+<a class="reference internal" href="#neoradium.harq.HarqCW" title="neoradium.harq.HarqCW"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqCW</span></code></a> instance.</p>
+</dd>
+<dt class="field-even">needNewData<span class="colon">:</span></dt>
+<dd class="field-even"><p>This indicates whether the <a class="reference internal" href="#neoradium.harq.HarqCW" title="neoradium.harq.HarqCW"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqCW</span></code></a> object is ready to receive a
+new transport block for transmission. If it is <cite>True</cite>, it means it is ready to transmit the new block.
+If it is <cite>False</cite>, it means it is still busy retransmitting the previous block. This corresponds to the
+<strong>New Data Indicator (NDI)</strong> in <strong>3GPP TS 38.212</strong></p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.harq.HarqProcess">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.harq.</span></span><span class="sig-name descname"><span class="pre">HarqProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numCW</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqProcess" title="Link to this definition"></a></dt>
+<dd><p>This class encapsulates the functionality of a HARQ process as outlined in <strong>3GPP TS 38.321, Section 5.3.2.2</strong>. A
+HARQ entity manages multiple parallel HARQ processes, each identified by a unique HARQ process identifier. The UE
+capabilities determine the maximum number of HARQ processes per cell, which can be 16 or 32. A single HARQ process
+can support one or two Transport Blocks, depending on the number of codewords. In this implementation, each
+codeword is processed by a dedicated <a class="reference internal" href="#neoradium.harq.HarqCW" title="neoradium.harq.HarqCW"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqCW</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<a class="reference internal" href="#neoradium.harq.HarqEntity" title="neoradium.harq.HarqEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqEntity</span></code></a>) – The <a class="reference internal" href="#neoradium.harq.HarqEntity" title="neoradium.harq.HarqEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqEntity</span></code></a> object that holds this <a class="reference internal" href="#neoradium.harq.HarqProcess" title="neoradium.harq.HarqProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqProcess</span></code></a>
+instance.</p></li>
+<li><p><strong>id</strong> (<em>int</em>) – The unique identifier associated with this HARQ process.</p></li>
+<li><p><strong>numCW</strong> (<em>int</em>) – The number of codewords processed by this HARQ process. It can be 1 or 2.</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Other Read-Only Properties:</strong></p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">needNewData<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of one or two boolean values, corresponding to each codeword. For each element in the
+list, a <cite>True</cite> value indicates that the HARQ process is ready to receive a new transport block for
+transmission, while a <cite>False</cite> value signifies that it is currently busy retransmitting the previous
+transport block. This aligns with the <strong>New Data Indicator (NDI)</strong> defined in <strong>3GPP TS 38.212</strong>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.harq.HarqProcess.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqProcess.reset" title="Link to this definition"></a></dt>
+<dd><p>Resets this HARQ process to prepare it for new transmissions. It resets the counters and releases any
+encoder/decoder retransmission buffers by calling the <cite>reset</cite> method of the <a class="reference internal" href="#neoradium.harq.HarqCW" title="neoradium.harq.HarqCW"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqCW</span></code></a>
+objects.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.harq.HarqProcess.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqProcess.print" title="Link to this definition"></a></dt>
+<dd><p>Prints the properties of this <a class="reference internal" href="#neoradium.harq.HarqProcess" title="neoradium.harq.HarqProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqProcess</span></code></a> object and its
+<a class="reference internal" href="#neoradium.harq.HarqCW" title="neoradium.harq.HarqCW"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqCW</span></code></a> objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – If specified, it is used as a title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
+Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.harq.HarqProcess.getRateMatchedCodeBlocks">
+<span class="sig-name descname"><span class="pre">getRateMatchedCodeBlocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txBlocks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concatCBs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqProcess.getRateMatchedCodeBlocks" title="Link to this definition"></a></dt>
+<dd><p>This function takes a list of one or two transport blocks (<code class="docutils literal notranslate"><span class="pre">txBlocks</span></code>) based on the number of codewords
+and returns a list of LDPC-encoded and rate-matched bitstreams for each codeword. If a transport block in
+the <code class="docutils literal notranslate"><span class="pre">txBlocks</span></code> list is set to <cite>None</cite>, it uses the buffered encoded bitstream and only applies rate matching
+for retransmitting the previously encoded transport block. Otherwise, it assumes new transmission and encodes
+the transport block, saving the encoded bits for future retransmissions. For more information about the LDPC
+encoding process, refer to the <a class="reference internal" href="ChanCode.html#neoradium.ldpc.LdpcEncoder.getRateMatchedCodeBlocks" title="neoradium.ldpc.LdpcEncoder.getRateMatchedCodeBlocks"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getRateMatchedCodeBlocks()</span></code></a> method of the
+<a class="reference internal" href="ChanCode.html#neoradium.ldpc.LdpcEncoder" title="neoradium.ldpc.LdpcEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">LdpcEncoder</span></code></a> class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>txBlocks</strong> (<em>list</em>) – A list of one or two NumPy arrays for each codeword. The presence of a ‘None’ value for each transport
+block in the list indicates a retransmission of previously buffered encoded transport block.</p></li>
+<li><p><strong>g</strong> (<em>list</em><em> or </em><em>None</em>) – A list of one or two integer values for each codeword. Each element in the list represents the total
+number of bits available for transmitting the transport block. This value corresponds to the value
+<span class="math notranslate nohighlight">\(G\)</span> in the <em>bit selection</em> process explained in <strong>3GPP TS 38.212, Section 5.4.2.1</strong>. If not
+provided (default), it is calculated using the formula <span class="math notranslate nohighlight">\(G=\lceil \frac {B-24} R \rceil\)</span>, where
+<span class="math notranslate nohighlight">\(B\)</span> is the transport block size and <span class="math notranslate nohighlight">\(R\)</span> is the code rate.</p></li>
+<li><p><strong>concatCBs</strong> (<em>Boolean</em>) – If <cite>True</cite> (Default), the rate-matched code blocks are concatenated, and a single array of bits is
+returned for each codeword. Otherwise, for each codeword, a list of NumPy arrays is returned, where
+each element in the list represents the bit array corresponding to each code block.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">concatCBs</span></code> is <cite>True</cite>, a one-dimensional NumPy array is returned, containing the concatenation of
+all rate-matched coded blocks. Otherwise, a list of NumPy arrays is returned, where each element in the
+list corresponds to the bit array of a coded block.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NumPy array or list of NumPy arrays</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.harq.HarqProcess.decodeLLRs">
+<span class="sig-name descname"><span class="pre">decodeLLRs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">llrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">txBlockSizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numIter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqProcess.decodeLLRs" title="Link to this definition"></a></dt>
+<dd><p>This function takes a list of one or two NumPy arrays, each containing Log-Likelihood Ratios (LLRs) for the
+demodulated received signals for each codeword. It then returns a list of one or two decoded transport blocks,
+with the size of each transport block specified by the <code class="docutils literal notranslate"><span class="pre">txBlockSizes</span></code> list, which provides the transport
+block sizes for each codeword.</p>
+<p>For each codeword, the function recovers the rate, decodes the code blocks using LDPC decoding, checks the
+code block CRCs, and merges all code blocks to reassemble the transport block. In case of retransmissions,
+the function combines the LLR values of the retransmission with those from previous transmissions before
+decoding the code blocks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>llrs</strong> (<em>list</em>) – A list of one or two NumPy arrays, each containing the Log-Likelihood Ratios (LLRs) from the demodulated
+received signals corresponding to each codeword.</p></li>
+<li><p><strong>txBlockSizes</strong> (<em>list</em>) – A list containing one or two integer values, each representing the transport block size for each codeword.</p></li>
+<li><p><strong>numIter</strong> (<em>int</em>) – The number of iterations in the <em>Layered Belief Propagation</em> decoding algorithm. In some cases, larger
+values may lead to more accurate decoding but can slow down the entire decoding process. For more
+information, please refer to the <a class="reference internal" href="ChanCode.html#neoradium.ldpc.LdpcDecoder.decode" title="neoradium.ldpc.LdpcDecoder.decode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">decode()</span></code></a> method of the
+<a class="reference internal" href="ChanCode.html#neoradium.ldpc.LdpcDecoder" title="neoradium.ldpc.LdpcDecoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">LdpcDecoder</span></code></a> class. The default value is 5.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>decodedTxBlock</strong> (<em>list</em>) – A list of one or two NumPy arrays, each containing the decoded transport blocks for each codeword.</p></li>
+<li><p><strong>blockErrors</strong> (<em>list</em>) – A list containing one or two integer values, each representing the number of code block CRC errors
+for the corresponding codeword.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.harq.HarqEntity">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.harq.</span></span><span class="sig-name descname"><span class="pre">HarqEntity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">harqType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numProc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rvSequence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxTries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eventCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqEntity" title="Link to this definition"></a></dt>
+<dd><p>This class encapsulates the functionality of a HARQ entity as specified in <strong>3GPP TS 38.321, Section 5.3.2.1</strong>. A
+HARQ entity is configured for each Serving Cell to manage downlink (DL) and uplink (UL) HARQ operations. The
+primary purpose of a HARQ entity is to maintain multiple parallel HARQ processes and direct HARQ information and
+associated Transport Blocks to these corresponding processes. This HARQ information includes key parameters
+such as the New Data Indicator (NDI), Transport Block Size (TBS), Redundancy Version (RV), and the HARQ process
+ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoder</strong> (<a class="reference internal" href="ChanCode.html#neoradium.ldpc.LdpcEncoder" title="neoradium.ldpc.LdpcEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">LdpcEncoder</span></code></a>) – The <a class="reference internal" href="ChanCode.html#neoradium.ldpc.LdpcEncoder" title="neoradium.ldpc.LdpcEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">neoradium.ldpc.LdpcEncoder</span></code></a> object, used by this HARQ entity for LDPC encoding. It is also
+used to create the corresponding <a class="reference internal" href="ChanCode.html#neoradium.ldpc.LdpcDecoder" title="neoradium.ldpc.LdpcDecoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">neoradium.ldpc.LdpcDecoder</span></code></a> object, which is used for LDPC
+decoding.</p></li>
+<li><p><strong>harqType</strong> (<em>str</em>) – <p>The retransmission method used by this HARQ entity. It can be one of <code class="docutils literal notranslate"><span class="pre">&quot;CC&quot;``(default)</span> <span class="pre">or</span> <span class="pre">``&quot;IR&quot;</span></code>:</p>
+<dl class="field-list simple">
+<dt class="field-odd">”CC”<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Indicates <strong>Chase Combining</strong> which is a straightforward HARQ method where each retransmission
+is an exact copy of the original data. The receiver simply combines the energy (or LLRs) from
+these identical transmissions, which increases the signal-to-noise ratio and makes it more likely
+that the combined signal can be decoded correctly.</p>
+</dd>
+<dt class="field-even">”IR”<span class="colon">:</span></dt>
+<dd class="field-even"><p>Indicates <strong>Incremental Redundancy</strong>, a more efficient and advanced method. Instead of re-sending
+identical copies, each retransmission contains new and different parity bits, known as redundancy
+versions. The receiver combines these unique pieces of information with the original transmission,
+progressively building a stronger and more complete coded block. This approach significantly
+improves the chances of successful decoding with fewer retransmissions compared to Chase Combining.</p>
+</dd>
+</dl>
+<dl>
+<dt>numProc: int</dt><dd><p>The number of HARQ processes utilized by this HARQ entity. It varies depending on the capabilities
+of the UE. A HARQ entity can manage up to 32 HARQ processes, with the default being 8.</p>
+</dd>
+<dt>rvSequence: list of integers</dt><dd><p>For the Incremental Redundancy HARQ, this specifies the sequence of redundancy versions (RV) values
+used for each consecutive retransmission. The default sequence is <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">1]</span></code>, which is based
+on <strong>3GPP TS 38.214, Table 5.1.2.1-2</strong>.</p>
+</dd>
+<dt>maxTries: int</dt><dd><p>The maximum number of transmission attempts for a specified transport block. If a transport block’s
+transmission fails after this many attempts, a timeout event occurs. In the case of PDSCH, this value
+is equivalent to the parameter <code class="docutils literal notranslate"><span class="pre">pdsch-AggregationFactor</span></code>, as explained in <strong>3GPP TS 38.321,
+Section 5.3.2.1</strong>.</p>
+</dd>
+<dt>eventCallback: function or None</dt><dd><p>If this callback function is provided, it will be invoked on the following events:</p>
+<dl class="field-list simple">
+<dt class="field-odd">“RXFAILED”<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This event is triggered when a transport block transmission fails, whether it’s the
+original transmission or a retransmission.</p>
+</dd>
+<dt class="field-even">“RXSUCCESS”<span class="colon">:</span></dt>
+<dd class="field-even"><p>This event is triggered when a transport block transmission succeeds, whether it’s the
+original transmission or a retransmission.</p>
+</dd>
+<dt class="field-odd">“TIMEOUT”<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This event is triggered when a transport block transmission fails after the <code class="docutils literal notranslate"><span class="pre">maxTries</span></code>
+transmissions.</p>
+</dd>
+</dl>
+<p>For more information, refer to the <a class="reference internal" href="#eventcallback"><span class="std std-ref">Event callback function section</span></a> below.</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Other Read-Only Properties:</strong></p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">processes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of <a class="reference internal" href="#neoradium.harq.HarqProcess" title="neoradium.harq.HarqProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqProcess</span></code></a> objects managed by this HARQ entity.</p>
+</dd>
+<dt class="field-even">curProcess<span class="colon">:</span></dt>
+<dd class="field-even"><p>The HARQ process that is currently transmitting or retransmitting the transport blocks.</p>
+</dd>
+<dt class="field-odd">curProcIdx<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The current HARQ process that is currently transmitting or retransmitting the transport blocks.</p>
+</dd>
+<dt class="field-even">numCW<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of codewords. This is based on the LDPC encoder’s <code class="docutils literal notranslate"><span class="pre">txLayers</span></code> parameter.</p>
+</dd>
+<dt class="field-odd">needNewData<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of one or two boolean values, corresponding to each codeword. For each element in the
+list, a <cite>True</cite> value indicates that current HARQ process (<code class="docutils literal notranslate"><span class="pre">curProcess</span></code>) is ready to receive a new
+transport block for transmission, while a <cite>False</cite> value signifies that it is currently busy
+retransmitting the previous transport block. This aligns with the <strong>New Data Indicator (NDI)</strong> defined
+in <strong>3GPP TS 38.212</strong>.</p>
+</dd>
+<dt class="field-even">totalTxBlocks<span class="colon">:</span></dt>
+<dd class="field-even"><p>The total number of transport blocks transmitted, including retransmissions.</p>
+</dd>
+<dt class="field-odd">totalRxBlocks<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The total number of transport blocks received and successfully decoded.</p>
+</dd>
+<dt class="field-even">totalTxBits<span class="colon">:</span></dt>
+<dd class="field-even"><p>The total number of transport block bits transmitted, including retransmissions.</p>
+</dd>
+<dt class="field-odd">totalRxBits<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The total number of transport block bits received and successfully decoded.</p>
+</dd>
+<dt class="field-even">throughput<span class="colon">:</span></dt>
+<dd class="field-even"><p>The communication throughput expressed as a percentage. It’s calculated as
+<code class="docutils literal notranslate"><span class="pre">totalRxBits*100/totalTxBits</span></code>.</p>
+</dd>
+<dt class="field-odd">bler<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The Block Error Rate expressed as a percentage. It’s calculated as
+<code class="docutils literal notranslate"><span class="pre">(totalTxBlocks-totalRxBlocks)*100/totalTxBlocks</span></code>.</p>
+</dd>
+<dt class="field-even">numTimeouts<span class="colon">:</span></dt>
+<dd class="field-even"><p>The total number of timeout events, which occur when a transport block fails after all
+retransmissions attempts.</p>
+</dd>
+<dt class="field-odd">meanTries<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The average number of transmission attempts per transport block. This value ranges from zero
+(indicating no retransmissions) to <code class="docutils literal notranslate"><span class="pre">maxTries</span></code> (indicating all transmissions timed out).</p>
+</dd>
+</dl>
+</div></blockquote>
+<p id="eventcallback"><strong>Event Callback Function</strong></p>
+<p>This function is automatically invoked when a transmission event occurs. It accepts the following parameters:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">eventStr<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This string can be one of <code class="docutils literal notranslate"><span class="pre">”RXFAILED”</span></code>, <code class="docutils literal notranslate"><span class="pre">”RXSUCCESS”</span></code>, or <code class="docutils literal notranslate"><span class="pre">”TIMEOUT”</span></code>, as explained above.</p>
+</dd>
+<dt class="field-even">harqCW<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <a class="reference internal" href="#neoradium.harq.HarqCW" title="neoradium.harq.HarqCW"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqCW</span></code></a> object that triggered the event. This object can be used
+to obtain more information about the event.</p>
+</dd>
+</dl>
+<p>Here is an example of an event callback function that prints all triggered events:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">myEventHandler</span><span class="p">(</span><span class="n">eventStr</span><span class="p">,</span> <span class="n">harqCW</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HARQ Process </span><span class="si">{</span><span class="n">harqCW</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">id</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2"> CW</span><span class="si">{</span><span class="n">harqCW</span><span class="o">.</span><span class="n">cwIdx</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">event</span><span class="si">:</span><span class="s2">10s</span><span class="si">}</span><span class="s2"> curTry:</span><span class="si">{</span><span class="n">harqCW</span><span class="o">.</span><span class="n">curTry</span><span class="si">}</span><span class="s2"> RV:</span><span class="si">{</span><span class="n">harqCW</span><span class="o">.</span><span class="n">rv</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Please refer to the notebook <a class="reference internal" href="../Playground/Notebooks/HARQ/HarqEventCallback.html"><span class="doc">HARQ event callback</span></a> for a complete example
+of using event callback functions.</p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.harq.HarqEntity.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqEntity.reset" title="Link to this definition"></a></dt>
+<dd><p>Resets this HARQ entity to prepare it for a new set of transmissions. It resets the counters and releases
+any encoder/decoder retransmission buffers by invoking <a class="reference internal" href="#neoradium.harq.HarqProcess.reset" title="neoradium.harq.HarqProcess.reset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">HarqProcess.reset()</span></code></a> for all HARQ
+processes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.harq.HarqEntity.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqEntity.print" title="Link to this definition"></a></dt>
+<dd><p>Prints the properties of this <a class="reference internal" href="#neoradium.harq.HarqEntity" title="neoradium.harq.HarqEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqEntity</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – If specified, it is used as a title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
+Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.harq.HarqEntity.printStats">
+<span class="sig-name descname"><span class="pre">printStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqEntity.printStats" title="Link to this definition"></a></dt>
+<dd><p>Prints the statistics of this <a class="reference internal" href="#neoradium.harq.HarqEntity" title="neoradium.harq.HarqEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqEntity</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
+Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.harq.HarqEntity.goNext">
+<span class="sig-name descname"><span class="pre">goNext</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqEntity.goNext" title="Link to this definition"></a></dt>
+<dd><p>This function should be called after the transmission of each transport block. It updates the internal
+pointer <code class="docutils literal notranslate"><span class="pre">curProcIdx</span></code> to point to the next HARQ process.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.harq.HarqEntity.getRateMatchedCodeBlocks">
+<span class="sig-name descname"><span class="pre">getRateMatchedCodeBlocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txBlocks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concatCBs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqEntity.getRateMatchedCodeBlocks" title="Link to this definition"></a></dt>
+<dd><p>This function takes a list of one or two transport blocks (<code class="docutils literal notranslate"><span class="pre">txBlocks</span></code>) based on the number of codewords
+and returns a list of LDPC-encoded and rate-matched bitstreams for each codeword. If a transport block in
+the <code class="docutils literal notranslate"><span class="pre">txBlocks</span></code> list is set to <cite>None</cite>, it uses the buffered encoded bitstream and only applies rate matching
+for retransmitting the previously encoded transport block. Otherwise, it assumes new transmission and encodes
+the transport block and saves the encoded bits into the HARQ process for future retransmissions. This function
+internally calls the <a class="reference internal" href="#neoradium.harq.HarqProcess.getRateMatchedCodeBlocks" title="neoradium.harq.HarqProcess.getRateMatchedCodeBlocks"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getRateMatchedCodeBlocks()</span></code></a> method of the <a class="reference internal" href="#neoradium.harq.HarqProcess" title="neoradium.harq.HarqProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqProcess</span></code></a>
+class. For more details, refer to the documentation of <a class="reference internal" href="#neoradium.harq.HarqProcess.getRateMatchedCodeBlocks" title="neoradium.harq.HarqProcess.getRateMatchedCodeBlocks"><code class="xref py py-meth docutils literal notranslate"><span class="pre">HarqProcess.getRateMatchedCodeBlocks()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.harq.HarqEntity.decodeLLRs">
+<span class="sig-name descname"><span class="pre">decodeLLRs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">llrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">txBlockSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numIter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.harq.HarqEntity.decodeLLRs" title="Link to this definition"></a></dt>
+<dd><p>This function takes a list of one or two NumPy arrays, each containing Log-Likelihood Ratios (LLRs) for the
+demodulated received signals for each codeword. It then returns a list of one or two decoded transport blocks,
+with the size of each transport block specified by the <code class="docutils literal notranslate"><span class="pre">txBlockSizes</span></code> list, which provides the transport
+block sizes for each codeword.</p>
+<p>For each codeword, the function recovers the rate, decodes the code blocks using LDPC decoding, checks the
+code block CRCs, and merges all code blocks to reassemble the transport block. In case of retransmissions,
+the function combines the LLR values of the retransmissions with those from previous transmissions before
+decoding the code blocks.</p>
+<p>This function internally calls the <a class="reference internal" href="#neoradium.harq.HarqProcess.decodeLLRs" title="neoradium.harq.HarqProcess.decodeLLRs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">decodeLLRs()</span></code></a> method of the <a class="reference internal" href="#neoradium.harq.HarqProcess" title="neoradium.harq.HarqProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqProcess</span></code></a>
+class. For more details, refer to the documentation of <a class="reference internal" href="#neoradium.harq.HarqProcess.decodeLLRs" title="neoradium.harq.HarqProcess.decodeLLRs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">HarqProcess.decodeLLRs()</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ChanCode.html" class="btn btn-neutral float-left" title="Channel Coding" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Antenna.html" class="btn btn-neutral float-right" title="Antenna" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

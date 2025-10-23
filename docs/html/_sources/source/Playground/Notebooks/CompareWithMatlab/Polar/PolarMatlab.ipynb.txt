@@ -82,7 +82,7 @@
       "  Code Block CRC (crcPoly) ......: 24C\n",
       "  Input Interleaving (iIL) ......: Enabled\n",
       "  Coded bit Interleaving (iBIL)..: Disabled\n",
-      "  Num Parity checks (nPC, nPCwm) : 0,0\n",
+      "  Parity-check bits (nPC, nPCwm) : 0,0\n",
       "\n"
      ]
     }
@@ -314,9 +314,9 @@
       "  Code Block CRC (crcPoly) ......: 24C\n",
       "  Input Interleaving (iIL) ......: Enabled\n",
       "  Coded bit Interleaving (iBIL)..: Disabled\n",
-      "  Num Parity checks (nPC, nPCwm) : 0,0\n",
+      "  Parity-check bits (nPC, nPCwm) : 0,0\n",
       "  SCL List Size .................: 8\n",
-      "  MinSum Approximation ..........: Enabled\n",
+      "  Min-sum Approximation .........: Enabled\n",
       "\n"
      ]
     }
@@ -367,9 +367,7 @@
    "cell_type": "code",
    "execution_count": 13,
    "id": "f7085147",
-   "metadata": {
-    "scrolled": false
-   },
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
@@ -395,7 +393,7 @@
     "decTxBlockMatlab = scipy.io.loadmat(matlabFilesPath+'/decBits.mat')['decBits'].reshape(-1)[:payloadLen]\n",
     "print(\"Matlab Decoded Transport Block:\", \"\".join(str(x) for x in decTxBlockMatlab))\n",
     "\n",
-    "assert np.abs(txpBlock-decTxBlock).sum()==0, \"MISMATCH WITH MATLAB!!!\"\n"
+    "assert np.abs(txpBlock-decTxBlock).sum()==0, \"MISMATCH WITH INPUT BITS!!!\""
    ]
   },
   {

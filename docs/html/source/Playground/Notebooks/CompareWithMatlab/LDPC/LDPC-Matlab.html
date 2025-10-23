@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Comparing the LDPC results with Matlab &mdash; NeoRadium 0.3.1 Documentation</title>
+  <title>Comparing the LDPC results with Matlab &mdash; NeoRadium 0.4.0 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
-      <link rel="stylesheet" type="text/css" href="../../../../../_static/neoradium.css?v=73ab78ac" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=6c02275b"></script>
       <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../../index.html" class="icon icon-home">
-            NeoRadium 0.3.1
+            NeoRadium 0.4.0
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -60,7 +60,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#other-examples">Other Examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab">Comparing with Matlab</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id1">Antenna</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#cdl-channel-model">CDL Channel Model</a></li>
@@ -85,10 +88,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/RefSig.html">Reference Signals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Harq.html">HARQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/SnrHelper.html">SnrScheduler</a></li>
 </ul>
 
         </div>
@@ -97,7 +102,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../../index.html">NeoRadium 0.3.1</a>
+          <a href="../../../../../index.html">NeoRadium 0.4.0</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -138,7 +143,7 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an LDPC encoder object</span>
-<span class="n">ldpcEncoder</span> <span class="o">=</span> <span class="n">LdpcEncoder</span><span class="p">(</span><span class="n">baseGraphNo</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">&#39;QPSK&#39;</span><span class="p">,</span> <span class="n">rv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">txLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nRef</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">targetRate</span><span class="o">=</span><span class="mi">449</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
+<span class="n">ldpcEncoder</span> <span class="o">=</span> <span class="n">LdpcEncoder</span><span class="p">(</span><span class="n">baseGraphNo</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">&#39;QPSK&#39;</span><span class="p">,</span> <span class="n">txLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nRef</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">targetRate</span><span class="o">=</span><span class="mi">449</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -185,8 +190,12 @@ array([0, 0, 1, 1, 0, 0, 1, 1, 0, 1], dtype=int8)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Do the segmentation:</span>
-<span class="c1"># To compare with Matlab, we need to use -1 for filler bits</span>
-<span class="n">codeBlocksCrc</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">doSegmentation</span><span class="p">(</span><span class="n">tbWithCrc</span><span class="p">,</span> <span class="n">fillerBit</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">codeBlocksCrc</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">doSegmentation</span><span class="p">(</span><span class="n">tbWithCrc</span><span class="p">)</span>
+
+<span class="c1"># NeoRadium does not set filler bits to -1. To match with matalab, we need to set these bits</span>
+<span class="c1"># to -1. This is only needed when comparing segmentation results with matlab.</span>
+<span class="n">fillerStart</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">codeBlockSize</span><span class="o">-</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">numFillerBits</span>
+<span class="n">codeBlocksCrc</span><span class="p">[:,</span> <span class="n">fillerStart</span> <span class="p">:</span> <span class="n">fillerStart</span><span class="o">+</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">numFillerBits</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
 <span class="c1"># Compare results with Matlab:</span>
 <span class="n">codeBlocksCrcMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/cbsIn.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;cbsIn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
@@ -241,15 +250,15 @@ Base Graph Shape: (46, 68)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check the valid LDPC codewords:</span>
-<span class="c1"># Set Filler bits to zero before encoding and do not puncture first 2 columns</span>
-<span class="n">codeBlocksCrc</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">setFillerBits</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">testCodeWords</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="p">,</span> <span class="n">zeroFillerBits</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">puncture</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check the valid LDPC coded blocks:</span>
+<span class="c1"># Do not puncture first 2 columns because we need the whole coded blocks for the</span>
+<span class="c1"># &quot;isValidCodedBlock&quot; function below</span>
+<span class="n">testCodedBlocks</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="p">,</span> <span class="n">puncture</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="p">(</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodeword</span><span class="p">(</span><span class="n">testCodeWords</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
- <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodeword</span><span class="p">(</span><span class="n">testCodeWords</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
- <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodeword</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">68</span><span class="o">*</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">liftingSize</span><span class="p">)),</span>  <span class="c1"># Always valid</span>
- <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodeword</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">68</span><span class="o">*</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">liftingSize</span><span class="p">)))</span>   <span class="c1"># Intentionally Invalid</span>
+<span class="p">(</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodedBlock</span><span class="p">(</span><span class="n">testCodedBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+ <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodedBlock</span><span class="p">(</span><span class="n">testCodedBlocks</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+ <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodedBlock</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">68</span><span class="o">*</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">liftingSize</span><span class="p">)),</span>  <span class="c1"># Always valid</span>
+ <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">isValidCodedBlock</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">68</span><span class="o">*</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">liftingSize</span><span class="p">)))</span>   <span class="c1"># Intentionally Invalid</span>
 <br/></pre></div>
 </div>
 </div>
@@ -270,12 +279,17 @@ Base Graph Shape: (46, 68)
 <span class="c1"># Do segmentation</span>
 <span class="n">codeBlocksCrc</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">doSegmentation</span><span class="p">(</span><span class="n">tbWithCrc</span><span class="p">)</span>
 <span class="c1"># Encoding:</span>
-<span class="n">codeWords</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;codeWords Shape:&quot;</span><span class="p">,</span> <span class="n">codeWords</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">codedBlocks</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;codedBlocks Shape:&quot;</span><span class="p">,</span> <span class="n">codedBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># NeoRadium does not set filler bits to -1. To match with matalab, we need to set these bits</span>
+<span class="c1"># to -1. This is only needed when comparing encoder output (before rate matching) with matlab.</span>
+<span class="n">fillerStart</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">codeBlockSize</span><span class="o">-</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">numFillerBits</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">liftingSize</span>
+<span class="n">codedBlocks</span><span class="p">[:,</span> <span class="n">fillerStart</span> <span class="p">:</span> <span class="n">fillerStart</span><span class="o">+</span><span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">numFillerBits</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
 <span class="c1"># Compare results with Matlab:</span>
-<span class="n">codeWordsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/enc.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;enc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codeWords</span><span class="o">-</span><span class="n">codeWordsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">codedBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/enc.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;enc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codedBlocks</span><span class="o">-</span><span class="n">codedBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
 <br/><br/></pre></div>
 </div>
 </div>
@@ -284,19 +298,19 @@ Base Graph Shape: (46, 68)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-codeWords Shape: (2, 15840)
+codedBlocks Shape: (2, 15840)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rateMatchedCodeWords</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">rateMatch</span><span class="p">(</span><span class="n">codeWords</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate-Matched codeWords Shape:&quot;</span><span class="p">,</span> <span class="n">rateMatchedCodeWords</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">rateMatch</span><span class="p">(</span><span class="n">codedBlocks</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate-Matched coded blocks Shape:&quot;</span><span class="p">,</span> <span class="n">rateMatchedCodeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
 <span class="c1"># Compare results with Matlab:</span>
-<span class="n">rateMatchedCodeWordsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/chIn.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;chIn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeWords</span><span class="o">-</span><span class="n">rateMatchedCodeWordsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">rateMatchedCodeBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/chIn.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;chIn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="o">-</span><span class="n">rateMatchedCodeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
 <br/><br/></pre></div>
 </div>
 </div>
@@ -305,7 +319,7 @@ codeWords Shape: (2, 15840)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Rate-Matched codeWords Shape: (22808,)
+Rate-Matched coded blocks Shape: (22808,)
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -313,11 +327,11 @@ Rate-Matched codeWords Shape: (22808,)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Do all of it with one call end to end</span>
-<span class="n">rateMatchedCodeWords</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">getRateMatchedCodeWords</span><span class="p">(</span><span class="n">inBits</span><span class="p">)</span>
+<span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">getRateMatchedCodeBlocks</span><span class="p">(</span><span class="n">inBits</span><span class="p">)</span>
 
 <span class="c1"># Compare results with Matlab:</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeWords</span><span class="o">-</span><span class="n">rateMatchedCodeWordsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
-<br/></pre></div>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="o">-</span><span class="n">rateMatchedCodeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<br/><br/></pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -325,7 +339,7 @@ Rate-Matched codeWords Shape: (22808,)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simple bipolar channel with no noise:</span>
-<span class="n">channelOutput</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">rateMatchedCodeWords</span>
+<span class="n">channelOutput</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">rateMatchedCodeBlocks</span>
 </pre></div>
 </div>
 </div>
@@ -334,7 +348,7 @@ Rate-Matched codeWords Shape: (22808,)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an LDPC decoder</span>
-<span class="n">ldpcDecoder</span> <span class="o">=</span> <span class="n">LdpcDecoder</span><span class="p">(</span><span class="n">baseGraphNo</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">&#39;QPSK&#39;</span><span class="p">,</span> <span class="n">rv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">txLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nRef</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">ldpcDecoder</span> <span class="o">=</span> <span class="n">LdpcDecoder</span><span class="p">(</span><span class="n">baseGraphNo</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">&#39;QPSK&#39;</span><span class="p">,</span> <span class="n">txLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nRef</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
 
 <span class="c1"># Recover rate</span>
 <span class="n">rxCodedBlocks</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">recoverRate</span><span class="p">(</span><span class="n">channelOutput</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inBits</span><span class="p">))</span>
@@ -362,8 +376,8 @@ Rate-Matched codeWords Shape: (22808,)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Decode the rate-recovered message</span>
-<span class="n">rxCodeWords</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">rxCodedBlocks</span><span class="p">)</span>
-<span class="n">rxCodeWords</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">rxCodeBlocks</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">rxCodedBlocks</span><span class="p">)</span>
+<span class="n">rxCodeBlocks</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
 </div>
@@ -381,8 +395,8 @@ Rate-Matched codeWords Shape: (22808,)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare results with matlab:</span>
-<span class="n">rxCodeWordsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/decBits.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;decBits&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodeWords</span><span class="o">-</span><span class="n">rxCodeWordsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">rxCodeBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/decBits.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;decBits&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodeBlocks</span><span class="o">-</span><span class="n">rxCodeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -391,13 +405,13 @@ Rate-Matched codeWords Shape: (22808,)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Undo Segmentation and CRC checking</span>
-<span class="n">rxDecodedWordsWithoutCrc</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrcAndMerge</span><span class="p">(</span><span class="n">rxCodeWords</span><span class="p">)</span>
+<span class="n">rxCodeBlocksWithoutCrc</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrcAndMerge</span><span class="p">(</span><span class="n">rxCodeBlocks</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CRC Matched:&quot;</span><span class="p">,</span> <span class="n">crcMatch</span><span class="p">)</span>
 
 <span class="c1"># Compare results with matlab:</span>
-<span class="n">rxDecodedWordsWithoutCrcMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/decBlk.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;decBlk&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxDecodedWordsWithoutCrc</span><span class="o">-</span><span class="n">rxDecodedWordsWithoutCrcMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
-<span class="n">rxDecodedWordsWithoutCrc</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">rxCodeBlocksWithoutCrcMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/decBlk.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;decBlk&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="o">-</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">rxCodeBlocksWithoutCrc</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
 </div>
@@ -423,7 +437,7 @@ CRC Matched: [ True  True]
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The transport block CRC checking</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrc</span><span class="p">(</span><span class="n">rxDecodedWordsWithoutCrc</span><span class="p">,</span><span class="s1">&#39;24A&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrc</span><span class="p">(</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="p">,</span><span class="s1">&#39;24A&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -440,7 +454,7 @@ True
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare with original input</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxDecodedWordsWithoutCrc</span><span class="p">[:</span><span class="o">-</span><span class="mi">24</span><span class="p">]</span><span class="o">-</span><span class="n">inBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="p">[:</span><span class="o">-</span><span class="mi">24</span><span class="p">]</span><span class="o">-</span><span class="n">inBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH INPUT BITS!!!&quot;</span>
 </pre></div>
 </div>
 </div>

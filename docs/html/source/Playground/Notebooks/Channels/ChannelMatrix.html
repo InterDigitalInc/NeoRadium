@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Channel Matrix &mdash; NeoRadium 0.3.1 Documentation</title>
+  <title>Channel Matrix &mdash; NeoRadium 0.4.0 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=73ab78ac" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../../../_static/documentation_options.js?v=6c02275b"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.3.1
+            NeoRadium 0.4.0
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -66,7 +66,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with Matlab</a></li>
 </ul>
 </li>
@@ -80,10 +83,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
 </ul>
 
         </div>
@@ -92,7 +97,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.3.1</a>
+          <a href="../../../../index.html">NeoRadium 0.4.0</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -188,29 +193,29 @@ CDL-C Channel Properties:
   txDir:                Downlink
   filterLen:            16 samples
   delayQuantSize:       64
-  stopBandAtten:        80 db
+  stopBandAtten:        80 dB
   dopplerShift:         5 Hz
   coherenceTime:        84.628 milliseconds
   delaySpread:          300 ns
   ueDirAZ:              0.0°, 90.0°
-  Cross Pol. Power:     7 db
+  Cross Pol. Power:     7 dB
   angleSpreads:         2° 15° 3° 7°
   TX Antenna:
     Total Elements:     8
     spacing:            0.5𝜆, 0.5𝜆
     shape:              2 rows x 4 columns
     polarization:       |
-    Orientation (𝛼,𝛃,𝛄): 0° 0° 0°
   RX Antenna:
     Total Elements:     2
     spacing:            0.5𝜆, 0.5𝜆
     shape:              1 rows x 2 columns
     polarization:       |
+    Orientation (𝛼,𝛃,𝛄): 180° 0° 0°
   hasLOS:               False
   NLOS Paths (24):
     Delays (ns):        0.000 62.97 66.57 69.87 65.28 190.9 193.4 196.8 197.5 238.0 246.3 280.0
                         368.5 392.4 651.1 813.1 1277. 1380. 1647. 1682. 1891. 1991. 2112. 2595.
-    Powers (db):        -4.40 -1.20 -3.50 -5.20 -2.50 0.000 -2.20 -3.90 -7.40 -7.10 -10.7 -11.1
+    Powers (dB):        -4.40 -1.20 -3.50 -5.20 -2.50 0.000 -2.20 -3.90 -7.40 -7.10 -10.7 -11.1
                         -5.10 -6.80 -8.70 -13.2 -13.9 -13.9 -15.8 -17.1 -16.0 -15.7 -21.6 -22.8
     AODs (Deg):         -47  -23  -23  -23  -41  0    0    0    73   -64  80   -97
                         -55  -64  -78  103  99   89   -102 92   93   107  119  -124
@@ -241,7 +246,7 @@ CDL-C Channel Properties:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Time to apply channel in Freq. Domain: 0.004931926727294922
+Time to apply channel in Freq. Domain: 0.0037841796875
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -267,7 +272,7 @@ Time to apply channel in Freq. Domain: 0.004931926727294922
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Time to apply channel in Time Domain: 0.28674793243408203
+Time to apply channel in Time Domain: 0.2902951240539551
 NMSE between the rxGrid in Time and Freq. domains:  6.7222404693767e-10
 </pre></div></div>
 </div>

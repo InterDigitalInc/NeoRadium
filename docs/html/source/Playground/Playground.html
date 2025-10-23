@@ -6,15 +6,15 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Playground &mdash; NeoRadium 0.3.1 Documentation</title>
+  <title>Playground &mdash; NeoRadium 0.4.0 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=73ab78ac" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../_static/documentation_options.js?v=6c02275b"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.3.1
+            NeoRadium 0.4.0
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -92,12 +92,27 @@
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-endToEnd.html">PDSCH end-to-end communication</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BER.html">Calculating bit error rate of PDSCH communication</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BLER.html">Calculating BER/BLER for PDSCH Communication with LDPC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-Throughput.html">NR PDSCH Throughput with HARQ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/HARQ/Harq.html">Using HARQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/HARQ/HarqEventCallback.html">HARQ event callback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/HARQ/TransportChannelWithHarq.html">Modeling Transport Channel</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#a-deep-learning-case-study">A Deep Learning Case Study</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/MLChEst/MLChestDataGen.html">Generating Dataset for Channel Estimation Training</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/MLChEst/MLChestTrainTorch.html">Training A ResNet model for Channel Estimation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/MLChEst/MLChestEvaluateTorch.html">Evaluating the Trained Channel Estimator</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#research-papers">Research Papers</a><ul>
+<li class="toctree-l3"><a class="reference external" href="https://github.com/InterDigitalInc/NeoRadium/tree/main/Playground/Research/SelfRefining">A Self-Refining Multi-Layer Receiver Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#other-examples">Other Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Others/SnrCalculations.html">SNR Calculations in NeoRadium</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#comparing-with-matlab">Comparing with Matlab</a><ul>
@@ -109,11 +124,11 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#cdl-channel-model">CDL Channel Model</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL/CDL-Matlab.html">Comparing the CDL Channel results with Matlab</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL-SISO/SisoCdl.html">Comparing SISO CDL Channel results with Matlab</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#csi-rs">CSI-RS</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html">Comparing the CSI-RS results with Matlab</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html#Side-Note:">Side Note:</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pdsch">PDSCH</a><ul>
@@ -139,10 +154,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../API/RefSig.html">Reference Signals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/Harq.html">HARQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/SnrHelper.html">SnrScheduler</a></li>
 </ul>
 
         </div>
@@ -151,7 +168,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.3.1</a>
+          <a href="../../index.html">NeoRadium 0.4.0</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -245,6 +262,19 @@
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-endToEnd.html">PDSCH end-to-end communication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BER.html">Calculating bit error rate of PDSCH communication</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BLER.html">Calculating BER/BLER for PDSCH Communication with LDPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-Throughput.html">NR PDSCH Throughput with HARQ</a></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="hybrid-automatic-repeat-request-harq">
+<h2>Hybrid Automatic Repeat reQuest (HARQ)<a class="headerlink" href="#hybrid-automatic-repeat-request-harq" title="Link to this heading"></a></h2>
+<blockquote>
+<div><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/HARQ/Harq.html">Using HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/HARQ/HarqEventCallback.html">HARQ event callback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/HARQ/TransportChannelWithHarq.html">Modeling Transport Channel</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -257,6 +287,26 @@
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/MLChEst/MLChestDataGen.html">Generating Dataset for Channel Estimation Training</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/MLChEst/MLChestTrainTorch.html">Training A ResNet model for Channel Estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/MLChEst/MLChestEvaluateTorch.html">Evaluating the Trained Channel Estimator</a></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="research-papers">
+<h2>Research Papers<a class="headerlink" href="#research-papers" title="Link to this heading"></a></h2>
+<blockquote>
+<div><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/InterDigitalInc/NeoRadium/tree/main/Playground/Research/SelfRefining">A Self-Refining Multi-Layer Receiver Pipeline</a></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="other-examples">
+<h2>Other Examples<a class="headerlink" href="#other-examples" title="Link to this heading"></a></h2>
+<blockquote>
+<div><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Others/SnrCalculations.html">SNR Calculations in NeoRadium</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -281,6 +331,7 @@
 <div><div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL/CDL-Matlab.html">Comparing the CDL Channel results with Matlab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL-SISO/SisoCdl.html">Comparing SISO CDL Channel results with Matlab</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -291,7 +342,6 @@
 <div><div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html">Comparing the CSI-RS results with Matlab</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html#Side-Note:">Side Note:</a></li>
 </ul>
 </div>
 </div></blockquote>

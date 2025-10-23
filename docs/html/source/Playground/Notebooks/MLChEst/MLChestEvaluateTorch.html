@@ -6,16 +6,16 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Evaluating the Trained Channel Estimator &mdash; NeoRadium 0.3.1 Documentation</title>
+  <title>Evaluating the Trained Channel Estimator &mdash; NeoRadium 0.4.0 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=73ab78ac" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=4621528c"></script>
+      <script src="../../../../_static/documentation_options.js?v=6c02275b"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -24,7 +24,7 @@
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="Comparing Antenna Element Calculations with Matlab" href="../CompareWithMatlab/Antenna/AntennaElement.html" />
+    <link rel="next" title="SNR Calculations in NeoRadium" href="../Others/SnrCalculations.html" />
     <link rel="prev" title="Training A ResNet model for Channel Estimation" href="MLChestTrainTorch.html" /> 
 </head>
 
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.3.1
+            NeoRadium 0.4.0
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -60,17 +60,20 @@
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="MLChestDataGen.html">Generating Dataset for Channel Estimation Training</a></li>
 <li class="toctree-l3"><a class="reference internal" href="MLChestTrainTorch.html">Training A ResNet model for Channel Estimation</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Evaluating the Trained Channel Estimator</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Load-the-trained-mode">Load the trained mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Load-the-trained-model">Load the trained model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#mlChanEst-function"><code class="docutils literal notranslate"><span class="pre">mlChanEst</span></code> function</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Evaluation-Pipeline">Evaluation Pipeline</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with Matlab</a></li>
 </ul>
 </li>
@@ -84,10 +87,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
 </ul>
 
         </div>
@@ -96,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.3.1</a>
+          <a href="../../../../index.html">NeoRadium 0.4.0</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -119,7 +124,7 @@
 <h1>Evaluating the Trained Channel Estimator<a class="headerlink" href="#Evaluating-the-Trained-Channel-Estimator" title="Link to this heading"></a></h1>
 <p>Now that we have a trained model, we can use it in the communication pipeline and compare its performance with baselines. In this case we compare it with perfect channel estimation and <strong>NeoRadium</strong>’s Least-Square channel estimation method.</p>
 <p>The following diagram shows the pipeline used for evaluation of our deep-learning-based channel estimator.</p>
-<img alt="Evaluation-Pipeline" src="../../../../_images/EvalPipeline.png" />
+<p><img alt="Evaluation-Pipeline" src="../../../../_images/EvalPipeline.png" /></p>
 <p>So, lets get started by importing the required modules.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -137,8 +142,8 @@
 </pre></div>
 </div>
 </div>
-<section id="Load-the-trained-mode">
-<h2>Load the trained mode<a class="headerlink" href="#Load-the-trained-mode" title="Link to this heading"></a></h2>
+<section id="Load-the-trained-model">
+<h2>Load the trained model<a class="headerlink" href="#Load-the-trained-model" title="Link to this heading"></a></h2>
 <p>Here we define the channel estimator model and initialize it with the trained parameters.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -454,7 +459,7 @@ SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="MLChestTrainTorch.html" class="btn btn-neutral float-left" title="Training A ResNet model for Channel Estimation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../CompareWithMatlab/Antenna/AntennaElement.html" class="btn btn-neutral float-right" title="Comparing Antenna Element Calculations with Matlab" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../Others/SnrCalculations.html" class="btn btn-neutral float-right" title="SNR Calculations in NeoRadium" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

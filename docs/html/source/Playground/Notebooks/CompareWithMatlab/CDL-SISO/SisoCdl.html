@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comparing SISO CDL Channel results with Matlab &mdash; NeoRadium 0.4.0 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="Comparing the CSI-RS results with Matlab" href="../CSI-RS/CSI-RS-Matlab.html" />
+    <link rel="prev" title="Comparing the CDL Channel results with Matlab" href="../CDL/CDL-Matlab.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            NeoRadium 0.4.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#other-examples">Other Examples</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab">Comparing with Matlab</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id1">Antenna</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../Playground.html#cdl-channel-model">CDL Channel Model</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../CDL/CDL-Matlab.html">Comparing the CDL Channel results with Matlab</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Comparing SISO CDL Channel results with Matlab</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#csi-rs">CSI-RS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#pdsch">PDSCH</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#ldpc-and-polar-coding">LDPC and Polar Coding</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/SnrHelper.html">SnrScheduler</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">NeoRadium 0.4.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Comparing SISO CDL Channel results with Matlab</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../_sources/source/Playground/Notebooks/CompareWithMatlab/CDL-SISO/SisoCdl.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Comparing-SISO-CDL-Channel-results-with-Matlab">
+<h1>Comparing SISO CDL Channel results with Matlab<a class="headerlink" href="#Comparing-SISO-CDL-Channel-results-with-Matlab" title="Link to this heading"></a></h1>
+<p>Compare the results of this notebook with the Matlab file <code class="docutils literal notranslate"><span class="pre">SisoCdl.mlx</span></code> in the <code class="docutils literal notranslate"><span class="pre">MatlabFiles</span></code> directory.</p>
+<p>The “.mat” files in the <code class="docutils literal notranslate"><span class="pre">MatlabFiles</span></code> directory were created by Matlab running the <code class="docutils literal notranslate"><span class="pre">SisoCdl.mlx</span></code> file. If you want to recreate these files, follow the instructions in the Matlab file. <a class="reference external" href="MatlabFiles/SisoCdl.html">Here</a> is the execution results of this code in Matlab.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">Waveform</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">getNmse</span>
+
+<span class="n">matlabFilesPath</span> <span class="o">=</span> <span class="s2">&quot;./MatlabFiles&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>    <span class="c1"># Carrier 25 Resource Blocks, 15KHz subcarrier spacing</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>                                   <span class="c1"># The only bandwidth part in the carrier</span>
+
+<span class="n">cdlModel</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span>
+<span class="n">phiInit</span><span class="p">,</span> <span class="n">coupling</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="o">.</span><span class="n">getMatlabRandomInit</span><span class="p">(</span><span class="n">cdlModel</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span> <span class="c1"># Match Matlab random values</span>
+
+<span class="n">speedKmh</span> <span class="o">=</span> <span class="mi">15</span>                <span class="c1"># speed of UE device: 15 km/h</span>
+<span class="n">speed</span> <span class="o">=</span> <span class="n">speedKmh</span><span class="o">*</span><span class="mi">1000</span><span class="o">/</span><span class="mi">3600</span>   <span class="c1"># m/s</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mi">299792458</span>                <span class="c1"># Speed of light</span>
+<span class="n">fc</span> <span class="o">=</span> <span class="mf">4e9</span>                     <span class="c1"># 4 GHz</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">speed</span><span class="o">*</span><span class="n">fc</span><span class="o">/</span><span class="n">c</span>               <span class="c1"># Doppler Shift (Hz)</span>
+
+<span class="c1"># NOTE: Always make sure to use this antenna config in Matlab to match the standard and NeoRadium&#39;s default</span>
+<span class="c1"># cdl.TransmitAntennaArray.Size = [1 1 1 1 1];     % 1x1 antenna panel</span>
+<span class="c1"># cdl.TransmitAntennaArray.Element = &#39;38.901&#39;;     % Make sure we are using 3GPP antennas. (Default is not 3GPP)</span>
+<span class="c1"># cdl.TransmitArrayOrientation = [0; 0; 0];        % Transmit antenna orientation bearing(α), downtilt(β), and slant(γ) angles in degrees</span>
+<span class="c1"># cdl.TransmitAntennaArray.PolarizationAngles = [0 90];</span>
+
+<span class="c1"># cdl.ReceiveAntennaArray.Size = [1 1 1 1 1];     % 1x1 antenna</span>
+<span class="c1"># cdl.ReceiveAntennaArray.Element = &#39;38.901&#39;;     % Make sure we are using 3GPP antennas. (Default is not 3GPP)</span>
+<span class="c1"># cdl.ReceiveArrayOrientation = [180; 0; 0];      % Receive antenna orientation bearing(α), downtilt(β), and slant(γ) angles in degrees</span>
+<span class="c1"># cdl.ReceiveAntennaArray.PolarizationAngles = [0 90];</span>
+
+
+<span class="c1"># Create the channel model</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">cdlModel</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="n">fc</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="n">d</span><span class="p">,</span>
+                     <span class="n">initialPhases</span> <span class="o">=</span> <span class="n">phiInit</span><span class="p">,</span> <span class="n">rayCoupling</span> <span class="o">=</span> <span class="n">coupling</span><span class="p">,</span>
+                     <span class="n">stopBandAtten</span> <span class="o">=</span> <span class="mi">70</span><span class="p">)</span>            <span class="c1"># NeoRadium default is 80; Matlab default is 70;</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+CDL-C Channel Properties:
+  carrierFreq:          4 GHz
+  normalizeGains:       True
+  normalizeOutput:      True
+  txDir:                Downlink
+  filterLen:            16 samples
+  delayQuantSize:       64
+  stopBandAtten:        70 dB
+  dopplerShift:         55.59401586635868 Hz
+  coherenceTime:        7.611 milliseconds
+  delaySpread:          10 ns
+  ueDirAZ:              0.0°, 90.0°
+  Cross Pol. Power:     7 dB
+  angleSpreads:         2° 15° 3° 7°
+  TX Antenna:
+    freqRange:                   0 Hz .. 100 GHz
+    polAngle:                    0°
+    polModel:                    2
+    beamWidth:                   65°,65°
+    verticalSidelobeAttenuation: 30
+    maxAttenuation:              30 dB
+    mainMaxGain:                 8 dBi
+  RX Antenna:
+    freqRange:                   0 Hz .. 100 GHz
+    polAngle:                    0°
+    polModel:                    2
+    beamWidth:                   65°,65°
+    verticalSidelobeAttenuation: 30
+    maxAttenuation:              30 dB
+    mainMaxGain:                 8 dBi
+    Orientation (𝛼,𝛃,𝛄): 180° 0° 0°
+  hasLOS:               False
+  NLOS Paths (24):
+    Delays (ns):        0.000 2.099 2.219 2.329 2.176 6.366 6.448 6.560 6.584 7.935 8.213 9.336
+                        12.28 13.08 21.70 27.10 42.58 46.00 54.90 56.07 63.06 66.37 70.42 86.52
+    Powers (dB):        -4.40 -1.20 -3.50 -5.20 -2.50 0.000 -2.20 -3.90 -7.40 -7.10 -10.7 -11.1
+                        -5.10 -6.80 -8.70 -13.2 -13.9 -13.9 -15.8 -17.1 -16.0 -15.7 -21.6 -22.8
+    AODs (Deg):         -47  -23  -23  -23  -41  0    0    0    73   -64  80   -97
+                        -55  -64  -78  103  99   89   -102 92   93   107  119  -124
+    AOAs (Deg):         -101 120  120  120  -128 170  170  170  55   66   -48  47
+                        68   -69  82   31   -16  4    -14  10   6    1    -22  34
+    ZODs (Deg):         97   99   99   99   101  99   99   99   105  95   106  94
+                        104  104  93   104  95   93   92   107  93   93   105  108
+    ZOAs (Deg):         88   72   72   72   70   75   75   75   67   64   71   60
+                        91   60   61   101  62   67   53   62   52   62   58   57
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a random signal for 1 subframe (1 ms)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="mf">0.001</span>       <span class="c1"># 1 subframe = 1 ms</span>
+<span class="n">numInputSamples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">sampleRate</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<span class="n">nr</span><span class="p">,</span> <span class="n">nt</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">nrNt</span>     <span class="c1"># Get the number of antanna from the channel</span>
+
+<span class="c1"># Load the &quot;txWaveform&quot; generated by the Matlab code</span>
+<span class="n">txWaveform</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/txWaveform.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;txWaveform&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">numInputSamples</span><span class="p">)</span>
+
+<span class="c1"># Check the following numbers with the Matlabmatlab-generated numbers to make sure we are using</span>
+<span class="c1"># the same input signal:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TX Waveform Data:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">:</span><span class="mi">204</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>  <span class="c1"># Matlab: txWaveform(201:204,3:4)</span>
+
+<span class="c1"># Use the following line instead of above line to create a random signal (The result will be</span>
+<span class="c1"># different from Matlab)</span>
+<span class="c1"># txWaveform = np.random.normal(size=(numSamples, nt)) + 1j*np.random.normal(size=(numSamples, nt))</span>
+
+<span class="c1"># Now apply the channel to the waveform</span>
+<span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RX Waveform Data:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">rxWaveform</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">:</span><span class="mi">204</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>  <span class="c1"># Matlab: rxWaveform(201:204,2)</span>
+
+<span class="c1"># Load Matlab results and compare with the above results</span>
+<span class="n">rxWaveformMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/rxWaveform.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;rxWaveform&#39;</span><span class="p">]</span>
+<span class="k">assert</span> <span class="n">rxWaveformMatlab</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="n">numInputSamples</span><span class="p">,</span> <span class="n">nr</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NMSE:&quot;</span><span class="p">,</span> <span class="n">getNmse</span><span class="p">(</span><span class="n">rxWaveformMatlab</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">waveform</span><span class="p">))</span>   <span class="c1"># NMSE between NeoRadium and Matlab results</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+TX Waveform Data:
+ [ 0.3957+0.3554j  0.1609-1.6695j -0.1543+0.4127j -0.484 -1.0458j]
+RX Waveform Data:
+ [ 1.0979-0.9033j  0.1692-0.5916j -0.7662-0.9718j  0.1534-0.7265j]
+NMSE: 9.313019773677275e-05
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../CDL/CDL-Matlab.html" class="btn btn-neutral float-left" title="Comparing the CDL Channel results with Matlab" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../CSI-RS/CSI-RS-Matlab.html" class="btn btn-neutral float-right" title="Comparing the CSI-RS results with Matlab" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

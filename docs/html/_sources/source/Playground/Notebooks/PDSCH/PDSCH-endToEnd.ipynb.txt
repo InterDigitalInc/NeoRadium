@@ -6,24 +6,24 @@
    "metadata": {},
    "source": [
     "# PDSCH end-to-end communication\n",
-    "This notebook shows how an end-to-end communication through a 5G Physical Downlink Shared Channel (PDSCH) can be simulated in **NeoRadium** based on 3GPP NR standard. It demonstrate the following steps:\n",
+    "This notebook shows how an end-to-end communication through a 5G Physical Downlink Shared Channel (PDSCH) can be simulated in **NeoRadium** based on 3GPP NR standard. It demonstrates the following steps:\n",
     "\n",
-    "- Creating LDPC encoder object and using it to perform transport block segmentation, LDPC encoding and rate matching based on 3GPP TS 38.212.\n",
-    "- Creating a ``PDSCH`` object and using it to populate a transmitted resource grid based on the encoded transport blocks. During this process, the PDSCH also adds DMRS reference signals in the resource grid based on 3GPP TS 38.211 and TS 38.214.\n",
-    "- Creating a CDL channel model as specified in 3GPP TR 38.901 using the ``CdlChannel`` class. This class and the resource gird created by the ``PDSCH``, are used to calculate a precoding matrix which is then used to precode the resource grid.\n",
+    "- Creating LDPC encoder object, which performs transport block segmentation, LDPC encoding, and rate matching based on 3GPP TS 38.212.\n",
+    "- Creating a ``PDSCH`` object and using it to populate a transmitted resource grid based on the encoded transport blocks. During this process, the PDSCH adds DMRS reference signals to the resource grid based on 3GPP TS 38.211 and TS 38.214.\n",
+    "- Creating a CDL channel model as specified in 3GPP TR 38.901 using the ``CdlChannel`` class. This class and the resource grid created by the ``PDSCH``, are used to calculate a precoding matrix which is then used to precode the resource grid.\n",
     "- Converting the precoded resource grid to a time-domain (transmitted) waveform through OFDM modulation performed by the ``ofdmModulate`` method of the ``Grid`` class.\n",
     "- Applying the CDL channel to the transmitted waveform to obtain the received waveform.\n",
-    "- Synchronizing the received waveform by calculating the timing offset using the CDL class object.\n",
+    "- Synchronizing the received waveform by calculating the timing offset using the CdlChannel object.\n",
     "- Applying OFDM demodulation to the synchronized received waveform to get a received resource grid.\n",
     "- Estimating the channel matrix using the DMRS reference signals.\n",
-    "- Equalizing the received resource grid using Minimum mean-squared error (MMSE) equalization to cancel the effect of communication channel.\n",
-    "- Using the ``getLLRsFromGrid`` function of ``PDSCH`` class to extract log-likelihood ratios from the received resource grid.\n",
-    "- Recovering the rate and then LDPC-decoding the transport blocks from the log-likelihood ratios.\n",
+    "- Equalizing the received resource grid using minimum mean-squared error (MMSE) equalization to cancel the effects of the communication channel.\n",
+    "- Using the ``getLLRsFromGrid`` function of ``PDSCH`` class to extract log-likelihood ratios (LLRs) from the received resource grid.\n",
+    "- Performing rate-recovery and LDPC-decoding on the log-likelihood ratios.\n",
     "- Comparing the received bitstream with the original values used at the beginning of the pipeline.\n",
     "\n",
     "![PDSCH-Pipeline](PDSCH-Pipeline.png)\n",
     "\n",
-    "Let's get started by importing the **NewRadium** modules used in the notebook."
+    "Let's get started by importing the **NeoRadium** modules used in the notebook."
    ]
   },
   {
@@ -34,10 +34,9 @@
    "outputs": [],
    "source": [
     "import numpy as np\n",
-    "import scipy.io\n",
     "import time\n",
     "\n",
-    "from neoradium import Carrier, PDSCH, CdlChannel, AntennaPanel, LdpcEncoder, Grid, random\n"
+    "from neoradium import Carrier, PDSCH, CdlChannel, AntennaPanel, LdpcEncoder, Grid, random"
    ]
   },
   {
@@ -46,7 +45,7 @@
    "metadata": {},
    "source": [
     "### Carrier Configuration\n",
-    "Here using the ``Carrier`` class we define a carrier with 30 KHz subcarrier spacing with 51 resource blocks. The print function prints information about the carrier. Please note that by default a single bandwidth part is defined which covers the whole carrier. Additional bandwidth parts can be added to the carrier if needed."
+    "Here, using the Carrier class, we define a carrier with a 30 kHz subcarrier spacing and 51 resource blocks. The print function prints information about the carrier. Please note that by default a single bandwidth part is defined which covers the whole carrier. Additional bandwidth parts can be added to the carrier if needed."
    ]
   },
   {
@@ -61,14 +60,14 @@
      "text": [
       "\n",
       "Carrier Properties:\n",
-      "  Cell Id:               1\n",
-      "  Bandwidth Parts:       1\n",
-      "  Active Bandwidth Part: 0\n",
+      "  Cell Id:              1\n",
+      "  Bandwidth Parts:      1\n",
+      "  Active BWP:           0\n",
       "  Bandwidth Part 0:\n",
       "    Resource Blocks:    51 RBs starting at 0 (612 subcarriers)\n",
-      "    Subcarrier Spacing: 30 KHz\n",
+      "    Subcarrier Spacing: 30 kHz\n",
       "    CP Type:            normal\n",
-      "    bandwidth:          18.36 MHz\n",
+      "    Bandwidth:          18.36 MHz\n",
       "    symbolsPerSlot:     14\n",
       "    slotsPerSubFrame:   2\n",
       "    nFFT:               1024\n",
@@ -92,7 +91,7 @@
     "### PDSCH and DMRS Configuration\n",
     "Now let's use the ``PDSCH`` class to configure the PDSCH communication parameters. Here we choose \"Mapping Type A\" and \"QAM16\" modulation (by default). We also set the number of layers to 2 and disable interleaving by setting ``interleavingBundleSize`` to zero.\n",
     "\n",
-    "We then set the DMRS configuration using the ``setDMRD`` method of the ``PDSCH`` class. Here we use DMRS ``configType`` set to 2 with 2 additional symbol time allocations (``additionalPos=2``). Although **NeoRadium** supports both wide band and narrow band precoding, we set the \"Precoding RB Group (PRG)\" size to 0 which means the same precoding is used for all subcarriers (Wideband Precoding)."
+    "Next, we set the DMRS configuration using the ``setDMRS`` method of the ``PDSCH`` class. Here we use DMRS ``configType`` set to 2 with 2 additional symbol time allocations (``additionalPos=2``). Although **NeoRadium** supports both wide band and narrow band precoding, we set the \"Precoding RB Group (PRG)\" size to 0, which means the same precoding is applied to all subcarriers (wideband precoding)"
    ]
   },
   {
@@ -122,9 +121,9 @@
       "  PRG Size: Wideband\n",
       "  Bandwidth Part:\n",
       "    Resource Blocks:    51 RBs starting at 0 (612 subcarriers)\n",
-      "    Subcarrier Spacing: 30 KHz\n",
+      "    Subcarrier Spacing: 30 kHz\n",
       "    CP Type:            normal\n",
-      "    bandwidth:          18.36 MHz\n",
+      "    Bandwidth:          18.36 MHz\n",
       "    symbolsPerSlot:     14\n",
       "    slotsPerSubFrame:   2\n",
       "    nFFT:               1024\n",
@@ -143,7 +142,7 @@
       "    allCdmGroups: [0]\n",
       "    symSet: [ 2  7 11]\n",
       "    REs (before shift): [0, 1, 6, 7]\n",
-      "    epreRatioDb: 0 (db)\n",
+      "    epreRatioDb: 0 (dB)\n",
       "\n"
      ]
     }
@@ -160,7 +159,7 @@
    "metadata": {},
    "source": [
     "### Channel Coding Configuration\n",
-    "Now it is time to define the parameters of LDPC channel coding. **NeoRadium** provides the ``LdpcEncoder`` and ``LdpcDecoder`` classes. These classes can be used to perform data segmentation/de-segmentation, rate-matching/rate-recovery, and encoding/decoding. Here we first set our desired code rate, then create an ``LdpcEncoder`` object that will be used for LDPC encoding."
+    "Now it’s time to define the parameters for LDPC channel coding. **NeoRadium** provides the ``LdpcEncoder`` and ``LdpcDecoder`` classes. These classes can be used to perform data segmentation and de-segmentation, rate matching and rate recovery, and encoding and decoding. Here we first set our desired code rate, then create an ``LdpcEncoder`` object that will be used for LDPC encoding."
    ]
   },
   {
@@ -181,17 +180,17 @@
    "metadata": {},
    "source": [
     "### Resource Grid Creation and Mapping\n",
-    "Now that we have created the PDSCH and LDPC encoder objects, we can use them to perform channel coding and resource mapping. In the following cell, we first create a resource grid object using the ``getGrid`` method of the ``PDSCH`` object. This will create a resource grid, creates the DMRS reference signals and puts them in the specified locations in the resource grid.\n",
+    "Now that we have created the PDSCH and LDPC encoder objects, we can use them to perform channel coding and resource mapping. In the following cell, we first create a resource grid object using the ``getGrid`` method of the ``PDSCH`` object. This creates a resource grid, generates the DMRS reference signals, and places them in their specified locations within the grid.\n",
     "\n",
-    "The method ``getTxBlockSize`` is used to calculate the transport block size(s) based on the resources available in the grid for data transmission at the specified code rate. This function calculates the the transport block size based on 3GPP TS 38.214.\n",
+    "The method ``getTxBlockSize`` is used to calculate the transport block size(s) based on the resources available in the grid for data transmission at the specified code rate. This function calculates the transport block size based on 3GPP TS 38.214.\n",
     "\n",
     "Once we have the transport block size, we create random bits for transmission using the utility function ``makeRandomBits``.\n",
     "\n",
-    "The function ``getBitSizes`` returns total bit capacity of the resource grid for each code word. This is the total number of encoded data bits that can be transmitted using the resource grid. It is used to perform rate-matching by the ``LdpcEncoder`` class.\n",
+    "The function ``getBitSizes`` returns the total bit capacity of the resource grid for each codeword. This is the total number of encoded data bits that can be transmitted using the resource grid. It is used to perform rate-matching by the ``LdpcEncoder`` class.\n",
     "\n",
-    "The function ``getRateMatchedCodeWords`` performs segmentation, rate-matching, and LDPC encoding in a single call. The output contains the encoded bits for each codeword.\n",
+    "The function ``getRateMatchedCodeBlocks`` performs segmentation, rate-matching, and LDPC encoding in a single call. \n",
     "\n",
-    "Once we have the rated-matched encoded bits, we can map them to the available resources in the resource grid. This is exactly what the ``populateGrid`` method of the ``PDSCH`` class does. This function first converts bits to complex symbols using the QAM modulation and then assigns the symbols to the available resource elements in the resource grid at different time, frequency, and layer locations.\n",
+    "Once we have the rate-matched encoded bits, we can map them to the available resources in the resource grid. This is exactly what the ``populateGrid`` method of the ``PDSCH`` class does. This function first converts bits to complex symbols using the QAM modulation and then assigns the symbols to the available resource elements in the resource grid across different time, frequency, and layer locations.\n",
     "\n",
     "The ``drawMap`` method of the ``Grid`` class is used here to show the allocation of data and DMRS in the resource grid."
    ]
@@ -235,17 +234,17 @@
     "numBits = pdsch.getBitSizes(grid)            # Actual number of bits available in the resource grid\n",
     "\n",
     "# Now perform the segmentation, rate-matching, and encoding in one call:\n",
-    "rateMatchedCodeWords = ldpcEncoder.getRateMatchedCodeWords(txBlock, numBits[0])\n",
+    "rateMatchedCodeBlocks = ldpcEncoder.getRateMatchedCodeBlocks(txBlock, numBits[0])\n",
     "\n",
     "# Now populate the resource grid with coded data. This includes QAM modulation and resource mapping.\n",
-    "pdsch.populateGrid(grid, rateMatchedCodeWords)\n",
+    "pdsch.populateGrid(grid, rateMatchedCodeBlocks)\n",
     "\n",
     "# Store the indexes of the PDSCH data in pdschIndexes to be used later.\n",
     "pdschIndexes = pdsch.getReIndexes(grid, \"PDSCH\")   \n",
     "\n",
     "print(\"TX Block Size:\", txBlockSize[0])\n",
     "print(\"Number of bits:\", numBits[0])\n",
-    "print(\"Size of the rate-matched coded block:\", rateMatchedCodeWords.shape[0])\n",
+    "print(\"Size of the rate-matched coded block:\", rateMatchedCodeBlocks.shape[0])\n",
     "\n",
     "# Get statistics about the grid resource allocation\n",
     "gridStats = grid.getStats()\n",
@@ -263,9 +262,9 @@
    "metadata": {},
    "source": [
     "### Channel Simulation and Precoding\n",
-    "The next step in the pipeline is the precoding process. In practice the precoding information is extracted at the UE side (The receiver in this case) from the estimated channel. Since we are demonstrating only a downlink communication here, we assume that the precoding matrix is somehow available. \n",
+    "The next step in the pipeline is the precoding process. In practice the precoding information is extracted at the UE side (The receiver in this case) from the estimated channel. Since we are demonstrating only downlink communication here, we assume that the precoding matrix is somehow available. \n",
     "\n",
-    "To calculate the precoding matrix we first need to define the channel model. Here we use a CDL channel model as specified in 3GPP TR 38.901. The ``CdlChannel`` class is used to create a channel model object. Here we are using a CDL-C model which simulates NLOS communication. We use delay spread of 300 ns and a doppler shift of 5 Hz. We also use a small MIMO configuration with 8 transmitter antenna and 2 receiver antenna. The ``print`` function of the ``CdlChannel`` class can be used to show all properties of the CDL channel model.\n",
+    "To calculate the precoding matrix we first need to define the channel model. Here we use a CDL channel model as specified in 3GPP TR 38.901. The ``CdlChannel`` class is used to create a channel model object. Here we are using a CDL-C model which simulates NLOS communication. We use delay spread of 300 ns and a doppler shift of 5 Hz. We also use a small MIMO configuration with 8 transmit antennas and 2 receive antennas. The ``print`` function of the ``CdlChannel`` class can be used to show all properties of the CDL channel model.\n",
     "\n",
     "To calculate the precoding matrix, we first get the channel matrix from the ``CdlChannel`` object. The channel matrix is a 4-D complex tensor of size ``l``x``k``x ``Nr``x``Nt``. Where ``l``, ``k``, ``Nr``, and ``Nt`` are the number of time symbols (14), the number of subcarriers (51x12=612), the number of receiver antenna (2), and the number of transmitter antenna (8) respectively. \n",
     "\n",
@@ -296,7 +295,7 @@
     "channel = CdlChannel(bwp, 'C', delaySpread=300, carrierFreq=f0, dopplerShift=5,\n",
     "                     txAntenna = AntennaPanel([2,4], polarization=\"|\"),  # 8 TX antenna\n",
     "                     rxAntenna = AntennaPanel([1,2], polarization=\"|\"))  # 2 RX antenna\n",
-    "# channel.print()                                       # Unremark to pring all channel information\n",
+    "# channel.print()                                       # Uncomment to print all channel information\n",
     "\n",
     "# Getting the Precoding Matrix, and precoding the resource grid\n",
     "channelMatrix = channel.getChannelMatrix()              # Get the channel matrix\n",
@@ -314,7 +313,7 @@
    "metadata": {},
    "source": [
     "### OFDM Modulation\n",
-    "To transmit the precoded resource grid it first needs to be transformed to time-domain. The method ``ofdmModulate`` of the ``Grid`` class converts the precoded grid into a set of time-domain waveforms for each transmit antenna. The output of the OFDM modulation is a ``Waveform`` class that contains the waveforms for each transmit antenna."
+    "To transmit the precoded resource grid, it must first be transformed into the time domain. The method ``ofdmModulate`` of the ``Grid`` class converts the precoded grid into a set of time-domain waveforms for each transmit antenna. The output of the OFDM modulation is a ``Waveform`` class that contains the time-domain waveforms for each transmit antenna."
    ]
   },
   {
@@ -343,7 +342,7 @@
    "metadata": {},
    "source": [
     "### Applying the channel model to the transmitted waveform\n",
-    "Now we need to pass the transmitted waveform through our CDL channel model. Since channel models usually delay the signals, to make sure we get the whole waveform on the output end of the channel, we need to append some zeros to the end of the waveform. The number of these zeros depend on the maximum channel delay that can be obtained using the ``getMaxDelay`` method of the ``CdlChannel`` class. The ``pad`` method of ``Waveform`` class append zeros to the end of waveform.\n",
+    "Now we need to pass the transmitted waveform through our CDL channel model. Because channel models typically delay signals, we append zeros to the end of the waveform to ensure the entire signal is captured at the channel output. The number of these zeros depend on the maximum channel delay that can be obtained using the ``getMaxDelay`` method of the ``CdlChannel`` class. The ``pad`` method of the ``Waveform`` class appends zeros to the end of waveform.\n",
     "\n",
     "Now the channel model can be applied to the transmitted waveform to obtain the received waveform. This is exactly what the ``applyToSignal`` method of the ``CdlChannel`` class does. The output is another ``Waveform`` object containing the received waveform for each receiver antenna."
    ]
@@ -380,7 +379,9 @@
    "metadata": {},
    "source": [
     "### Adding Noise\n",
-    "We can use the ``addNoise`` method of the ``Waveform`` class to add AWGN to the received signal. Since we are adding the noise in the time-domain, the FFT size is also used in the calculation noise variance. So, we are passing both SNR value and the FFT size to the ``addNoise`` method."
+    "We can use the ``addNoise`` method of the ``Waveform`` class to add AWGN to the received signal. Since we are adding the noise in the time-domain, we need to provide an instance of ``BandwidthPart`` object to extract FFT information.\n",
+    "\n",
+    "Here, we calculate the noise power using the SNR value and the received signal power by setting ``useRxPower`` to ``True``. Please refer to the [documentation of addNoise](https://ail-wireless.pages.interdigital.com/neoradium/source/API/Waveform.html#neoradium.waveform.Waveform.addNoise) for more information about the ``useRxPower`` argument."
    ]
   },
   {
@@ -390,7 +391,8 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "noisyRxWaveform = rxWaveform.addNoise(snrDb=30, nFFT=bwp.nFFT)\n"
+    "from neoradium.utils import toLinear\n",
+    "noisyRxWaveform = rxWaveform.addNoise(snrDb=20, bwp=bwp, useRxPower=False)"
    ]
   },
   {
@@ -399,9 +401,9 @@
    "metadata": {},
    "source": [
     "### Synchronization and OFDM Demodulation\n",
-    "Because of multiple different path delays involved in the channel model, we need to find the best starting point in the received waveform. This is usually done by finding the position of maximum correlation between the received signal and reference signals. The function ``getTimingOffset`` of the ``CdlChannel`` provides this \"timing offset\" which is the number of samples we need to skip from the beginning of the received waveform.\n",
+    "Because of multiple path delays involved in the channel model, we need to find the best starting point in the received waveform. This is usually done by finding the position of maximum correlation between the received signal and reference signals. The function ``getTimingOffset`` of the ``CdlChannel`` provides this \"timing offset\" which is the number of samples we need to skip from the beginning of the received waveform.\n",
     "\n",
-    "After synchronization, the waveform can be used for OFDM demodulation to the received resource grid. The class method ``ofdmDemodulate`` creates a ``Grid`` class instance containing the received resource grid."
+    "After synchronization, the waveform can be used for OFDM demodulation to obtain the received resource grid. The class method ``ofdmDemodulate`` creates a ``Grid`` class instance containing the noisy received resource grid."
    ]
   },
   {
@@ -426,8 +428,8 @@
     "print(\"Timing Offset:                  \", offset)\n",
     "\n",
     "# OFDM Demodulation\n",
-    "rxGrid = syncedWaveform.ofdmDemodulate(bwp)\n",
-    "print(\"Shape of received resource grid:\", rxGrid.shape)"
+    "noisyRxGrid = syncedWaveform.ofdmDemodulate(bwp)\n",
+    "print(\"Shape of received resource grid:\", noisyRxGrid.shape)"
    ]
   },
   {
@@ -436,7 +438,7 @@
    "metadata": {},
    "source": [
     "### Applying channel in Frequency Domain\n",
-    "You can also use a shortcut method of applying the channel model to the transmitted grid directly without going to time domain. Although this is not exactly what happens in practice, it is sometimes useful (or convenient) to avid the time domain.\n",
+    "You can also use a shortcut method of applying the channel model to the transmitted grid directly without going to time domain.\n",
     "\n",
     "The method ``applyChannel`` of the ``Grid`` class can be used to apply a channel matrix to a resource grid. For example:\n",
     "\n",
@@ -446,13 +448,13 @@
     "```\n",
     "\n",
     "### Channel Estimation\n",
-    "The input to the channel estimation process is the received resource grid and the known reference signals (in this case DMRS) and the output is the estimated channel. Note that in this case the estimated channel includes the precoding process. That is because the DMRS reference signals were added to the resource grid **before** precoding.\n",
+    "The input to the channel estimation process is the received resource grid and the known reference signals (in this case DMRS) and the output is the estimated channel. Note that in this case the estimated channel includes the precoding process. This is because the DMRS reference signals were inserted into the resource grid **before** precoding.\n",
     "\n",
     "#### Perfect Channel Estimation\n",
     "For perfect channel estimation, we need to apply precoding to the channel matrix. This can be done by a simple matrix multiplication as shown in the following cell.\n",
     "\n",
     "#### Practical Channel Estimation\n",
-    "The method ``estimateChannelLS`` of the ``Grid`` class can be used to estimate the channel matrix. This method performs CDM averaging, Least-Squared channel estimation at pilot locations, and applying interpolation to get the whole channel matrix. \n"
+    "The method ``estimateChannelLS`` of the ``Grid`` class can be used to estimate the channel matrix. This method performs CDM averaging, least-squares channel estimation at pilot locations, and applying interpolation to get the whole channel matrix. \n"
    ]
   },
   {
@@ -471,11 +473,12 @@
    ],
    "source": [
     "# Perfect channel estimation (Applying the precoding to the channel matrix)\n",
-    "# estChannelMatrix = channelMatrix @ precoder[None,...]\n",
+    "# estChannelMatrix = channelMatrix @ precoder[None,...]  # Uncomment to use Perfect channel estimation.\n",
+    " \n",
+    "# Least-squares channel estimation\n",
+    "estChannelMatrix, _ = noisyRxGrid.estimateChannelLS(pdsch.dmrs, polarInt=True, kernel='linear')\n",
     "\n",
-    "# Practical channel estimation\n",
-    "estChannelMatrix, _ = rxGrid.estimateChannelLS(pdsch.dmrs)    # Un-remark to use practical channel estimation\n",
-    "print(\"Shape of estimated channel:\", estChannelMatrix.shape)\n"
+    "print(\"Shape of estimated channel:\", estChannelMatrix.shape)"
    ]
   },
   {
@@ -484,7 +487,7 @@
    "metadata": {},
    "source": [
     "### Equalization\n",
-    "Now that we have an estimation of channel matrix, we can use it for equalization. The method ``equalize`` of the ``Grid`` class uses the Minimum mean-squared error (MMSE) equalization algorithm to cancel the effect of the channel in the received resource grid.\n",
+    "Now that we have an estimate of the channel matrix, we can use it for equalization. The method ``equalize`` of the ``Grid`` class uses the Minimum mean-squared error (MMSE) equalization algorithm to mitigate the effects of the channel in the received resource grid.\n",
     "\n",
     "It outputs a ``Grid`` object containing the equalized received resource grid and the LLR scaling values which is used later to scale the log-likelihood ratios from the demodulation process.\n"
    ]
@@ -505,7 +508,7 @@
     }
    ],
    "source": [
-    "eqGrid, llrScales = rxGrid.equalize(estChannelMatrix)\n",
+    "eqGrid, llrScales = noisyRxGrid.equalize(estChannelMatrix)\n",
     "print(\"Shape of equalized grid:\", eqGrid.shape)\n",
     "print(\"Shape of LLR Scales:    \", llrScales.shape)"
    ]
@@ -516,7 +519,7 @@
    "metadata": {},
    "source": [
     "### Demodulation, De-mapping, Descrambling\n",
-    "The method ``getLLRsFromGrid`` of the ``PDSCH`` object performs demodulation, de-mapping, and descrambling of the received grid in one call. The output of this process is a set of log-likelihood ratios (LLRs) for the each received codeword extracted from the received resource grid. Note that in this example there is only one codeword."
+    "The method ``getLLRsFromGrid`` of the ``PDSCH`` object performs demodulation, de-mapping, and descrambling of the received grid in one call. The output of this process is a set of log-likelihood ratios (LLRs) extracted from the received resource grid for the each codeword. Note that in this example there is only one codeword."
    ]
   },
   {
@@ -529,13 +532,13 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Length of LLRs for the first code-word: 63648\n"
+      "Length of LLRs for the first codeword: 63648\n"
      ]
     }
    ],
    "source": [
     "llrs = pdsch.getLLRsFromGrid(eqGrid, pdschIndexes, llrScales)\n",
-    "print(\"Length of LLRs for the first code-word:\", llrs[0].shape[0])"
+    "print(\"Length of LLRs for the first codeword:\", llrs[0].shape[0])"
    ]
   },
   {
@@ -544,9 +547,9 @@
    "metadata": {},
    "source": [
     "### Rate Recovery and LDPC decoding\n",
-    "We are close to the end of pipeline. We just need to decode the LLRs to the actual transport blocks. To do this, we need an LDPC decoder object. The method ``getDecoder`` of the ``LdpcEncoder`` class conveniently creates a  decoder object matching the parameters of the encoder.\n",
+    "We are close to the end of the pipeline. We just need to decode the LLRs to the actual transport blocks. To do this, we need an LDPC decoder object. The method ``getDecoder`` of the ``LdpcEncoder`` class conveniently creates a  decoder object matching the parameters of the encoder.\n",
     "\n",
-    "The function ``recoverRate`` of the LDPC decoder object can then be used to recover the rate of LDPC codewords based on the transport block size. This is based on the procedure specified in 3GPP TS 38.212.\n",
+    "The function ``recoverRate`` of the LDPC decoder object can then be used to recover the rate of LDPC code blocks based on the transport block size. This is based on the procedure specified in 3GPP TS 38.212.\n",
     "\n",
     "The rate-recovered coded blocks are then ready to be LDPC-decoded using the ``decode`` method of the ``LdpcDecoder`` class (Each coded block is decoded separately). The output is a set of the decoded blocks.\n"
    ]
@@ -586,7 +589,7 @@
    "metadata": {},
    "source": [
     "### CRC checking and De-segmentation\n",
-    "The CRC of each decoded block must be checked and then the decoded blocks need to be merged (de-segmented) to provide the transport blocks. The method ``checkCrcAndMerge`` of the ``LdpcDecoder`` class does exactly this. The output of this method is a decoded transport block wich also contains a transport block CRC appended at the end.\n",
+    "The CRC of each decoded block must be checked and then the decoded blocks need to be merged (de-segmented) to provide the transport blocks. The method ``checkCrcAndMerge`` of the ``LdpcDecoder`` class does exactly this. The output of this method is a decoded transport block which also contains a transport block CRC appended at the end.\n",
     "\n",
     "The ``checkCrc`` method of the ``LdpcDecoder`` class can be used to check the transport block CRC."
    ]
@@ -622,7 +625,7 @@
    "metadata": {},
    "source": [
     "### Comparing the decoded transport block with the original\n",
-    "We can get the decoded transport block by removing the 24-bit CRC at the end. Then we can compare the results with the original transport block that was created randomly at the beginning of this pipeline."
+    "We can get the decoded transport block by removing the 24-bit CRC at the end. Then, we can compare the results with the original transport block that was randomly generated at the beginning of this pipeline."
    ]
   },
   {
