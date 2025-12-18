@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reference Signals &mdash; NeoRadium 0.4.0 Documentation</title>
+  <title>Reference Signals &mdash; NeoRadium 0.4.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.4.0
+            NeoRadium 0.4.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -112,7 +112,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.4.0</a>
+          <a href="../../index.html">NeoRadium 0.4.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -194,7 +194,7 @@ configuration parameters. For example, the following code configures CSI-RS with
 <p>For more examples, see <a class="reference internal" href="../Playground/Notebooks/CSI-RS/CSI-RS.html"><span class="doc">Channel State Information Reference Signals (CSI-RS) Configuration</span></a></p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.csirs.CsiRs">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRs" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRs" title="Link to this definition"></a></dt>
 <dd><p>This class implements a CSI-RS resource which can be used to represent a Zero-Power (ZP - see <strong>3GPP TS 38.214
 Section 5.1.4.2</strong>) or Non-Zero-Power (NZP - see <strong>3GPP TS 38.214 Section 5.2.2.3.1</strong>) resource.”</p>
 <dl class="field-list simple">
@@ -307,7 +307,7 @@ Otherwise, nothing is returned.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.csirs.CsiRsSet">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRsSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsSet" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRsSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsSet" title="Link to this definition"></a></dt>
 <dd><p>This class implements a CSI-RS resource set which contains one or more CSI-RS resources (<a class="reference internal" href="#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a>
 objects). A CSI-RS resource set can be either Zero-Power (ZP) or Non-Zero-Power (NZP). All CSI-RS resources
 in a set are of the same type (ZP or NZP). By default, a CSI-RS resource set is configured with one CSI-RS resource.
@@ -443,7 +443,7 @@ Otherwise, nothing is returned.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.csirs.CsiRsConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRsConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiRsSetList</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsConfig" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRsConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiRsSetList</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsConfig" title="Link to this definition"></a></dt>
 <dd><p>This class implements the overall CSI-RS configuration. It keeps a list of CSI-RS resource sets
 (<a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a> objects) each of which contains one or more CSI-RS resources (<a class="reference internal" href="#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a> objects). By
 default, this class creates a single CSI-RS resource set. More CSI-RS resource sets can be added using the
@@ -560,7 +560,7 @@ uplink. This means a <a class="reference internal" href="#neoradium.dmrs.DMRS" t
 transmitted, a PTRS is always associated with one DMRS port.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.dmrs.DMRS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.dmrs.</span></span><span class="sig-name descname"><span class="pre">DMRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pxxch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.DMRS" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.dmrs.</span></span><span class="sig-name descname"><span class="pre">DMRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pxxch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.DMRS" title="Link to this definition"></a></dt>
 <dd><p>This class encapsulates the configuration and functionality of Demodulation Reference Signals. A <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a>
 object can be associated with a <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>, a <code class="xref py py-class docutils literal notranslate"><span class="pre">PDCCH</span></code>, a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">PUSCH</span></code>, or a <code class="xref py py-class docutils literal notranslate"><span class="pre">PUCCH</span></code>. (Currently only
@@ -707,7 +707,7 @@ the Demodulation Reference Signals.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.dmrs.PTRS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.dmrs.</span></span><span class="sig-name descname"><span class="pre">PTRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dmrs</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.PTRS" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.dmrs.</span></span><span class="sig-name descname"><span class="pre">PTRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dmrs</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.PTRS" title="Link to this definition"></a></dt>
 <dd><p>This class encapsulates the functionality of Phase Tracking Reference Signals (PTRS). A <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> object
 can be associated with a <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> or a <code class="xref py py-class docutils literal notranslate"><span class="pre">PUSCH</span></code>. (Currently
 only <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> is implemented in <strong>NeoRadium</strong>. Support for other channels is coming soon.)</p>

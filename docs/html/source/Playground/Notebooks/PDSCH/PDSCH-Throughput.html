@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NR PDSCH Throughput with HARQ &mdash; NeoRadium 0.4.0 Documentation</title>
+  <title>NR PDSCH Throughput with HARQ &mdash; NeoRadium 0.4.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.4.0
+            NeoRadium 0.4.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -97,7 +97,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.4.0</a>
+          <a href="../../../../index.html">NeoRadium 0.4.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -127,7 +127,7 @@
 <li><p>Resource grids, populating them, and applying channel models to them.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -140,7 +140,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Carrier object with 51 resource blocks and 30KHz subcarrier spacing</span>
@@ -174,7 +174,7 @@ Carrier Properties:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize the modulation and code rate.</span>
@@ -309,7 +309,7 @@ CDL-C Channel Properties:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print header lines:</span>
@@ -351,12 +351,13 @@ CDL-C Channel Properties:
         <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">precodedGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>       <span class="c1"># Apply the channel to the precoded resource (Freq. domain)</span>
         <span class="n">noisyRxGrid</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">,</span> <span class="n">useRxPower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Add noise (Using RX power to calcualte Noise Power)</span>
 
-        <span class="c1"># Calculate the channel matrix with the precoding effect. This is assuming perfect channel estimation. For practical</span>
-        <span class="c1"># channel estimation we can use the DMRS reference signals and use the &quot;estimateChannelLS&quot; method of resource grid object.</span>
-        <span class="n">precodingChannelMatrix</span> <span class="o">=</span> <span class="n">channelMatrix</span> <span class="o">@</span> <span class="n">precoder</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
+        <span class="c1"># Calculate the effective channel matrix with the precoding effect. This is assuming perfect channel</span>
+        <span class="c1"># estimation. For practical channel estimation we can use the DMRS reference signals and use the</span>
+        <span class="c1"># &quot;estimateChannelLS&quot; method of resource grid object.</span>
+        <span class="n">effChannelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getEffChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>
 
-        <span class="c1"># Use the channel matrix (with precoding effect) to equalize the received resource grid</span>
-        <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">noisyRxGrid</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">precodingChannelMatrix</span><span class="p">)</span>
+        <span class="c1"># Use the effective channel matrix to equalize the received resource grid</span>
+        <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">noisyRxGrid</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">effChannelMatrix</span><span class="p">)</span>
 
         <span class="c1"># Demodulate the equalized resource grid (eqGrid) to get the Log-Likelihood values</span>
         <span class="n">llrs</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLLRsFromGrid</span><span class="p">(</span><span class="n">eqGrid</span><span class="p">,</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">dataIndices</span><span class="p">,</span> <span class="n">llrScales</span><span class="p">)</span>
@@ -384,31 +385,32 @@ CDL-C Channel Properties:
 <div class="highlight"><pre>
 SNR(dB)  Tx Bits     Rx Bits     Throughput(%)  TX Blocks  RX Blocks  BLER(%)  Retry Mean  time(Sec.)
 -------  ----------  ----------  -------------  ---------  ---------  -------  ----------  ----------
-6        30216000    3263328     10.80          1000       108        89.20    3.54        158.70
-5        30216000    423024      1.40           1000       14         98.60    3.94        158.07
-4        30216000    0           0.00           1000       0          100.00   4.00        159.37
-3        30216000    0           0.00           1000       0          100.00   4.00        159.64
-7        30216000    5166936     17.10          1000       171        82.90    3.03        161.71
-8        30216000    6738168     22.30          1000       223        77.70    2.61        167.97
-9        30216000    8218752     27.20          1000       272        72.80    2.19        173.80
-10       30216000    10756896    35.60          1000       356        64.40    1.62        178.26
-11       30216000    12751152    42.20          1000       422        57.80    1.33        184.86
-12       30216000    13566984    44.90          1000       449        55.10    1.20        188.20
-13       30216000    15198648    50.30          1000       503        49.70    0.98        194.23
-14       30216000    18099384    59.90          1000       599        40.10    0.67        204.43
-15       30216000    22208760    73.50          1000       735        26.50    0.36        222.47
-16       30216000    24777120    82.00          1000       820        18.00    0.22        231.26
-17       30216000    26499432    87.70          1000       877        12.30    0.14        238.67
-18       30216000    27345480    90.50          1000       905        9.50     0.10        241.45
-19       30216000    28644768    94.80          1000       948        5.20     0.05        246.40
-20       30216000    29792976    98.60          1000       986        1.40     0.01        251.06
-21       30216000    30095136    99.60          1000       996        0.40     0.00        252.46
-22       30216000    30216000    100.00         1000       1000       0.00     0.00        252.83
-23       30216000    30216000    100.00         1000       1000       0.00     0.00        252.05
+6        30216000    3263328     10.80          1000       108        89.20    3.48        141.18
+5        30216000    1057560     3.50           1000       35         96.50    3.85        140.29
+4        30216000    0           0.00           1000       0          100.00   4.00        140.27
+3        30216000    0           0.00           1000       0          100.00   4.00        141.62
+7        30216000    4774128     15.80          1000       158        84.20    3.04        144.14
+8        30216000    6164064     20.40          1000       204        79.60    2.62        147.26
+9        30216000    8067672     26.70          1000       267        73.30    2.08        152.38
+10       30216000    9971280     33.00          1000       330        67.00    1.71        156.90
+11       30216000    11059056    36.60          1000       366        63.40    1.53        161.82
+12       30216000    13627416    45.10          1000       451        54.90    1.15        166.98
+13       30216000    18129600    60.00          1000       600        40.00    0.66        180.91
+14       30216000    21544008    71.30          1000       713        28.70    0.40        196.69
+15       30216000    23296536    77.10          1000       771        22.90    0.30        207.68
+16       30216000    24716688    81.80          1000       818        18.20    0.22        211.19
+17       30216000    25472088    84.30          1000       843        15.70    0.19        212.86
+18       30216000    26499432    87.70          1000       877        12.30    0.14        219.43
+19       30216000    27375696    90.60          1000       906        9.40     0.10        220.38
+20       30216000    28433256    94.10          1000       941        5.90     0.06        225.19
+21       30216000    29672112    98.20          1000       982        1.80     0.02        230.49
+22       30216000    30185784    99.90          1000       999        0.10     0.00        232.16
+23       30216000    30216000    100.00         1000       1000       0.00     0.00        232.53
+24       30216000    30216000    100.00         1000       1000       0.00     0.00        229.08
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Draw the throughput graph:</span>
@@ -429,6 +431,14 @@ SNR(dB)  Tx Bits     Rx Bits     Throughput(%)  TX Blocks  RX Blocks  BLER(%)  R
 </div>
 <div class="output_area docutils container">
 <img alt="../../../../_images/source_Playground_Notebooks_PDSCH_PDSCH-Throughput_5_0.png" src="../../../../_images/source_Playground_Notebooks_PDSCH_PDSCH-Throughput_5_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
 </div>
 </div>
 </section>

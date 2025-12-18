@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Antenna &mdash; NeoRadium 0.4.0 Documentation</title>
+  <title>Antenna &mdash; NeoRadium 0.4.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.4.0
+            NeoRadium 0.4.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -125,7 +125,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.4.0</a>
+          <a href="../../index.html">NeoRadium 0.4.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -166,7 +166,7 @@ this API, you can easily create antenna arrays and study their characteristics.<
 <p>This file contains the implementation of Antenna Elements, Panels, and Arrays.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.antenna.AntennaBase">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaBase" title="Link to this definition"></a></dt>
 <dd><p>This is the base class for all Antenna objects in <strong>NeoRadium</strong>. The classes <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>,
 <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a>, and <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> are all derived from this class.</p>
 <dl class="py method">
@@ -582,7 +582,7 @@ please refer to <strong>3GPP TR 38.901 equations 7.5-28 and 7.5-28</strong>.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.antenna.AntennaElement">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaElement" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaElement" title="Link to this definition"></a></dt>
 <dd><p>This class implements the functionality of an antenna element. This implementation is based on <strong>3GPP TR 38.901
 section 7.3</strong>.</p>
 <dl class="field-list simple">
@@ -668,7 +668,7 @@ Otherwise, nothing is returned.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="neoradium.antenna.AntennaElement.posInArray">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">posInArray</span></span><a class="headerlink" href="#neoradium.antenna.AntennaElement.posInArray" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">posInArray</span></span><a class="headerlink" href="#neoradium.antenna.AntennaElement.posInArray" title="Link to this definition"></a></dt>
 <dd><p>Returns the position of this element in the <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -921,7 +921,7 @@ combinations of <code class="docutils literal notranslate"><span class="pre">the
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.antenna.AntennaPanel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaPanel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2,</span> <span class="pre">2]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaPanel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2,</span> <span class="pre">2]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaPanel" title="Link to this definition"></a></dt>
 <dd><p>This class implements the functionality of a rectangular antenna panel containing a set of antenna elements
 (See <a class="reference internal" href="#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>) organized in a 2-d grid. The elements are assumed to be on the Y-Z plane. An
 antenna panel can be created individually or it can be grouped with other panels to form an
@@ -1155,7 +1155,7 @@ parameter is ignored.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.antenna.AntennaArray">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.antenna.</span></span><span class="sig-name descname"><span class="pre">AntennaArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.antenna.AntennaArray" title="Link to this definition"></a></dt>
 <dd><p>This class implements the functionality of a rectangular antenna array containing a set of antenna panels (See
 <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>) organized in a 2-d grid. The panels are assumed to be on the Y-Z plane.</p>
 <dl class="field-list simple">

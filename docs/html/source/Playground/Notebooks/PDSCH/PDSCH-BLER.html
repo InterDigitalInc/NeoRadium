@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculating BER/BLER for PDSCH Communication with LDPC &mdash; NeoRadium 0.4.0 Documentation</title>
+  <title>Calculating BER/BLER for PDSCH Communication with LDPC &mdash; NeoRadium 0.4.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.4.0
+            NeoRadium 0.4.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -97,7 +97,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.4.0</a>
+          <a href="../../../../index.html">NeoRadium 0.4.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -210,7 +210,7 @@
 
 
             <span class="k">if</span> <span class="n">chanEstMethod</span> <span class="o">==</span> <span class="s2">&quot;Perfect&quot;</span><span class="p">:</span>                          <span class="c1"># Perfect Channel Estimation</span>
-                <span class="n">estChannelMatrix</span> <span class="o">=</span> <span class="n">channelMatrix</span> <span class="o">@</span> <span class="n">precoder</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
+                <span class="n">estChannelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getEffChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>                                                   <span class="c1"># LS + Interpolation Channel Estimation</span>
                 <span class="n">estChannelMatrix</span><span class="p">,</span> <span class="n">noiseEst</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">estimateChannelLS</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">dmrs</span><span class="p">,</span> <span class="n">polarInt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                                                       <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
@@ -249,38 +249,39 @@
 Simulating end-to-end for &#34;16QAM&#34;, with &#34;Perfect&#34; channel estimation, in frequency domain.
 SNR(dB)    Total Bits  Bit Errors  BER(%)  Total Blocks  Block Errors  BLER(%)  time(Sec.)
 ---------  ----------  ----------  ------  ------------  ------------  -------  ----------
-    6.0     6043200           0      0.00         800             0       0.00     110.32
-    5.8     6043200         349      0.01         800             2       0.25     115.66
-    5.6     6043200       23641      0.39         800           124      15.50     119.87
-    5.4     6043200      219226      3.63         800           544      68.00     122.26
-    5.2     6043200      521096      8.62         800           781      97.62     122.39
-    5.0     6043200      724626     11.99         800           799      99.88     122.87
-    4.8     6043200      824174     13.64         800           800     100.00     122.43
-    4.6     6043200      896263     14.83         800           800     100.00     120.15
-    6.2     6043200           0      0.00         800             0       0.00     119.54
+    6.0     6043200           0      0.00         800             0       0.00     106.77
+    5.8     6043200          15      0.00         800             2       0.25     108.88
+    5.6     6043200       12405      0.21         800            60       7.50     110.18
+    5.4     6043200      131738      2.18         800           385      48.12     111.34
+    5.2     6043200      413528      6.84         800           723      90.38     111.92
+    5.0     6043200      664822     11.00         800           797      99.62     117.09
+    4.8     6043200      792561     13.11         800           800     100.00     117.29
+    4.6     6043200      871869     14.43         800           800     100.00     116.15
+    6.2     6043200           0      0.00         800             0       0.00     115.56
 
 Simulating end-to-end for &#34;16QAM&#34;, with &#34;LS&#34; channel estimation, in frequency domain.
 SNR(dB)    Total Bits  Bit Errors  BER(%)  Total Blocks  Block Errors  BLER(%)  time(Sec.)
 ---------  ----------  ----------  ------  ------------  ------------  -------  ----------
-    6.0     6043200     1153377     19.09         800           800     100.00     120.07
-    6.2     6043200     1113458     18.42         800           800     100.00     122.28
-    6.6     6043200     1020319     16.88         800           800     100.00     119.69
-    7.0     6043200      837213     13.85         800           782      97.75     119.66
-    6.8     6043200      950361     15.73         800           800     100.00     120.07
-    7.2     6043200      673459     11.14         800           678      84.75     120.70
-    7.4     6043200      554758      9.18         800           488      61.00     119.48
-    7.6     6043200      508271      8.41         800           407      50.88     121.37
-    7.8     6043200      484415      8.02         800           400      50.00     120.86
-    8.0     6043200      455392      7.54         800           400      50.00     119.83
-    8.2     6043200      417771      6.91         800           400      50.00     118.66
-    8.4     6043200      364735      6.04         800           395      49.38     121.64
-    8.6     6043200      268860      4.45         800           363      45.38     123.30
-    8.8     6043200      160604      2.66         800           262      32.75     122.01
-    9.0     6043200       72932      1.21         800           160      20.00     122.01
-    9.2     6043200       19074      0.32         800            51       6.38     121.36
-    9.4     6043200        1319      0.02         800            11       1.38     121.92
-    9.6     6043200           0      0.00         800             0       0.00     120.86
-    9.8     6043200           0      0.00         800             0       0.00     119.47
+    6.0     6043200     1136698     18.81         800           800     100.00     115.43
+    6.2     6043200     1094907     18.12         800           800     100.00     115.90
+    6.6     6043200      994696     16.46         800           800     100.00     115.50
+    7.0     6043200      780972     12.92         800           755      94.38     115.47
+    6.8     6043200      911237     15.08         800           795      99.38     116.53
+    6.4     6043200     1048762     17.35         800           800     100.00     115.67
+    7.2     6043200      622829     10.31         800           604      75.50     115.42
+    7.4     6043200      532087      8.80         800           437      54.62     115.56
+    7.6     6043200      498663      8.25         800           403      50.38     114.96
+    7.8     6043200      471762      7.81         800           400      50.00     116.14
+    8.0     6043200      441682      7.31         800           400      50.00     116.42
+    8.2     6043200      398856      6.60         800           400      50.00     115.79
+    8.4     6043200      327425      5.42         800           390      48.75     115.41
+    8.6     6043200      218633      3.62         800           333      41.62     115.23
+    8.8     6043200      113470      1.88         800           213      26.62     115.19
+    9.0     6043200       45144      0.75         800           108      13.50     114.76
+    9.2     6043200        8927      0.15         800            35       4.38     115.15
+    9.4     6043200         733      0.01         800             5       0.62     116.84
+    9.6     6043200           0      0.00         800             0       0.00     117.23
+    9.8     6043200           0      0.00         800             0       0.00     112.52
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">

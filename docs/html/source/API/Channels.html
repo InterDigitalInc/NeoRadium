@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Channel Models &mdash; NeoRadium 0.4.0 Documentation</title>
+  <title>Channel Models &mdash; NeoRadium 0.4.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.4.0
+            NeoRadium 0.4.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -76,6 +76,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.channelmodel.ChannelModel.getChannelMatrix"><code class="docutils literal notranslate"><span class="pre">ChannelModel.getChannelMatrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.channelmodel.ChannelModel.applyToSignal"><code class="docutils literal notranslate"><span class="pre">ChannelModel.applyToSignal()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.channelmodel.ChannelModel.getChannelGains"><code class="docutils literal notranslate"><span class="pre">ChannelModel.getChannelGains()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neoradium.channelmodel.ChannelModel.getEffChannel"><code class="docutils literal notranslate"><span class="pre">ChannelModel.getEffChannel()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -107,6 +108,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.trjchan.Trajectory.goNext"><code class="docutils literal notranslate"><span class="pre">Trajectory.goNext()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.trjchan.Trajectory.draw"><code class="docutils literal notranslate"><span class="pre">Trajectory.draw()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.trjchan.Trajectory.print"><code class="docutils literal notranslate"><span class="pre">Trajectory.print()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neoradium.trjchan.Trajectory.printDiscontinuities"><code class="docutils literal notranslate"><span class="pre">Trajectory.printDiscontinuities()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.trjchan.TrjChannel"><code class="docutils literal notranslate"><span class="pre">TrjChannel</span></code></a><ul>
@@ -132,7 +134,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.4.0</a>
+          <a href="../../index.html">NeoRadium 0.4.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -168,7 +170,7 @@ class defined in this module. For more information about these subclasses, pleas
 or <a class="reference internal" href="#neoradium.trjchan.TrjChannel" title="neoradium.trjchan.TrjChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjChannel</span></code></a>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.channelmodel.ChannelModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.channelmodel.</span></span><span class="sig-name descname"><span class="pre">ChannelModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channelmodel.ChannelModel" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.channelmodel.</span></span><span class="sig-name descname"><span class="pre">ChannelModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channelmodel.ChannelModel" title="Link to this definition"></a></dt>
 <dd><p>This is the base channel model class that handles higher level processing, such as creating Channel Impulse Response
 (CIR) and channel matrices and applying the channel to a time-domain <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a>
 or a frequency-domain resource <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>.</p>
@@ -393,6 +395,50 @@ values.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.channelmodel.ChannelModel.getEffChannel">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getEffChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channelMatrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precoder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.channelmodel.ChannelModel.getEffChannel" title="Link to this definition"></a></dt>
+<dd><p>This class method can be used to calculate the effective channel based on the given <code class="docutils literal notranslate"><span class="pre">channelMatrix</span></code> and the
+<code class="docutils literal notranslate"><span class="pre">precoder</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channelMatrix</strong> (<em>NumPy array</em>) – An <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> complex NumPy array representing the channel matrix, where <code class="docutils literal notranslate"><span class="pre">L</span></code> represents the
+number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> denotes the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of receive antennas,
+and <code class="docutils literal notranslate"><span class="pre">Nt</span></code> indicates the number of transmit antennas. It can be the actual channel matrix obtained directly
+from a channel model using the <a class="reference internal" href="#neoradium.channelmodel.ChannelModel.getChannelMatrix" title="neoradium.channelmodel.ChannelModel.getChannelMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getChannelMatrix()</span></code></a> method
+(perfect estimation), or an estimated channel matrix obtained using the
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid.estimateChannelLS" title="neoradium.grid.Grid.estimateChannelLS"><code class="xref py py-meth docutils literal notranslate"><span class="pre">estimateChannelLS()</span></code></a> method.</p></li>
+<li><p><strong>precoder</strong> (<em>List</em><em> of </em><em>tuples</em><em> or </em><em>NumPy array</em>) – <p>The precoder information can take one of the following forms:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Wideband<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">precoder</span></code> is an <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code> matrix where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antennas which
+<strong>must</strong> match the number of transmitter antennas in the <code class="docutils literal notranslate"><span class="pre">channelMatrix</span></code> above, and <code class="docutils literal notranslate"><span class="pre">Nl</span></code> is the
+number of transmission layers. In this case, the same <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code> matrix is applied to all subcarriers
+of the <code class="docutils literal notranslate"><span class="pre">channelMatrix</span></code>.</p>
+</dd>
+<dt class="field-even">Using PRGs<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">precoder</span></code> is a list of tuples of the form (<code class="docutils literal notranslate"><span class="pre">groupRBs</span></code>, <code class="docutils literal notranslate"><span class="pre">groupF</span></code>).
+For each entry in the list, the <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code> precoding matrix <code class="docutils literal notranslate"><span class="pre">groupF</span></code> is applied to all subcarriers
+of the resource blocks listed in <code class="docutils literal notranslate"><span class="pre">groupRBs</span></code>. In this case, different precoders are applied to
+different sub-bands of the <code class="docutils literal notranslate"><span class="pre">channelMatrix</span></code>.</p>
+</dd>
+</dl>
+<p>You can use the <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH.getPrecodingMatrix" title="neoradium.pdsch.PDSCH.getPrecodingMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getPrecodingMatrix()</span></code></a> method to obtain a precoder.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The effective channel as an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nl</span></code> NumPy array, where <code class="docutils literal notranslate"><span class="pre">L</span></code> represents the number of OFDM
+symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> denotes the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of receive antennas, and <code class="docutils literal notranslate"><span class="pre">Nl</span></code>
+indicates the number of transmission layers.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>4-D complex NumPy array</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -403,7 +449,7 @@ values.</p>
 Clustered Delay Line (CDL) channel model.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.cdl.CdlChannel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.cdl.</span></span><span class="sig-name descname"><span class="pre">CdlChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'A'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.cdl.CdlChannel" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.cdl.</span></span><span class="sig-name descname"><span class="pre">CdlChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'A'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.cdl.CdlChannel" title="Link to this definition"></a></dt>
 <dd><p>This class implements the Clustered Delay Line (CDL) channel model based on <strong>3GPP TR 38.901</strong>. It is derived
 from the <a class="reference internal" href="#neoradium.channelmodel.ChannelModel" title="neoradium.channelmodel.ChannelModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelModel</span></code></a> class.</p>
 <p>All of the API functions used in typical use cases are explained in the documentation of the
@@ -713,7 +759,7 @@ remains unchanged.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.cdl.CdlChannel.getChanGen">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getChanGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numChannels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ABCDE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delaySpread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">500)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ueSpeed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">70)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ueDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">360)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.cdl.CdlChannel.getChanGen" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getChanGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numChannels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ABCDE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delaySpread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">500)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ueSpeed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">70)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ueDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">360)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.cdl.CdlChannel.getChanGen" title="Link to this definition"></a></dt>
 <dd><p>Returns a generator object that can generate CDL channel matrices based on the given parameters and criteria.</p>
 <p>Refer to the notebook <a class="reference internal" href="../Playground/Notebooks/Channels/CdlChannelDataset.html"><span class="doc">Creating random CDL channels for a dataset</span></a> for an example of
 using this method.</p>
@@ -874,7 +920,7 @@ Departure</em>, and <em>Zenith angle of Arrival</em>. For more information, plea
 Tapped Delay Line (TDL) channel model</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.tdl.TdlChannel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.tdl.</span></span><span class="sig-name descname"><span class="pre">TdlChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'A'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.tdl.TdlChannel" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.tdl.</span></span><span class="sig-name descname"><span class="pre">TdlChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'A'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.tdl.TdlChannel" title="Link to this definition"></a></dt>
 <dd><p>This class implements the Tapped Delay Line (TDL) channel model based on <strong>3GPP TR 38.901</strong>. It is derived from the
 <a class="reference internal" href="#neoradium.channelmodel.ChannelModel" title="neoradium.channelmodel.ChannelModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelModel</span></code></a> class.</p>
 <p>According to <strong>3GPP TR 38.901</strong>, TDL models are mostly used for simplified evaluations, typically for non-MIMO
@@ -1160,7 +1206,7 @@ used in simulations to study the evolution of the channel over time and its effe
 models can also be used to generate datasets for sequential deep learning models, such as LSTMs and Transformers.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.trjchan.TrjPoint">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.trjchan.</span></span><span class="sig-name descname"><span class="pre">TrjPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hasLos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pathInfo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([],</span> <span class="pre">shape=(0,</span> <span class="pre">8),</span> <span class="pre">dtype=float64)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bsDist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pathLoss</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.,</span> <span class="pre">0.,</span> <span class="pre">0.])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleNo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.trjchan.TrjPoint" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.trjchan.</span></span><span class="sig-name descname"><span class="pre">TrjPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hasLos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pathInfo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([],</span> <span class="pre">shape=(0,</span> <span class="pre">8),</span> <span class="pre">dtype=float64)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bsDist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pathLoss</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.,</span> <span class="pre">0.,</span> <span class="pre">0.])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampleNo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.trjchan.TrjPoint" title="Link to this definition"></a></dt>
 <dd><p>This class encapsulates the spatial and temporal information at each point along a trajectory. A
 <a class="reference internal" href="#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a> object comprises an ordered set of <code class="docutils literal notranslate"><span class="pre">TrjPoint</span></code> objects. This class is
 also used by the <a class="reference internal" href="DeepMIMO.html#neoradium.deepmimo.DeepMimoData" title="neoradium.deepmimo.DeepMimoData"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeepMimoData</span></code></a> class to store the multipath information obtained
@@ -1371,7 +1417,7 @@ of this class. Otherwise, nothing is returned (default).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.trjchan.Trajectory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.trjchan.</span></span><span class="sig-name descname"><span class="pre">Trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">carrierFreq</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.trjchan.Trajectory" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.trjchan.</span></span><span class="sig-name descname"><span class="pre">Trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">carrierFreq</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.trjchan.Trajectory" title="Link to this definition"></a></dt>
 <dd><p>This class maintains a collection of <a class="reference internal" href="#neoradium.trjchan.TrjPoint" title="neoradium.trjchan.TrjPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjPoint</span></code></a> objects that collectively form a UE
 trajectory. Additionally, it offers the capability to update its internal state as the UE moves along the
 trajectory.</p>
@@ -1528,11 +1574,18 @@ is returned (default).</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.trjchan.Trajectory.printDiscontinuities">
+<span class="sig-name descname"><span class="pre">printDiscontinuities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.trjchan.Trajectory.printDiscontinuities" title="Link to this definition"></a></dt>
+<dd><p>This method prints all the <cite>discontinuities</cite> in this trajectory. A <cite>discontinuity</cite> is a situation where two
+consecutive points on the trajectory have different sets of paths.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.trjchan.TrjChannel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.trjchan.</span></span><span class="sig-name descname"><span class="pre">TrjChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.trjchan.TrjChannel" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.trjchan.</span></span><span class="sig-name descname"><span class="pre">TrjChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trajectory</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.trjchan.TrjChannel" title="Link to this definition"></a></dt>
 <dd><p>This class implements a trajectory-based channel model that can generate spatially and temporally consistent
 sequences of channel information. It creates channel instances based on the movement of users along a
 <a class="reference internal" href="#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a>. The <a class="reference internal" href="#neoradium.trjchan.TrjChannel" title="neoradium.trjchan.TrjChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjChannel</span></code></a> class has been
@@ -1591,41 +1644,46 @@ number of receive antennas.</p>
 “Step 3” of <strong>3GPP TR 38.901 section 8.4</strong>. Otherwise, the original delays obtained from
 ray-tracing are used.</p>
 </dd>
-<dt class="field-even">filterLen<span class="colon">:</span></dt>
-<dd class="field-even"><p>The length of the channel filter. The default is 16 sample.</p>
+<dt class="field-even">interpolateSlots<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the default value of <cite>True</cite> is used, the multipath information for each slot is
+interpolated to derive multipath information per time symbol. Otherwise, the same multipath
+information is used for all symbols in the slot, which is faster but less accurate.</p>
 </dd>
-<dt class="field-odd">delayQuantSize<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The size of delay fraction quantization for the channel filter. The default is 64.</p>
+<dt class="field-odd">filterLen<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The length of the channel filter. The default is 16 sample.</p>
 </dd>
-<dt class="field-even">stopBandAtten<span class="colon">:</span></dt>
-<dd class="field-even"><p>The Stop-band attenuation value (in dB) used by the channel filter. The default is 80dB.</p>
+<dt class="field-even">delayQuantSize<span class="colon">:</span></dt>
+<dd class="field-even"><p>The size of delay fraction quantization for the channel filter. The default is 64.</p>
 </dd>
-<dt class="field-odd">txAntenna<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The transmitter antenna, which is an instance of
+<dt class="field-odd">stopBandAtten<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The Stop-band attenuation value (in dB) used by the channel filter. The default is 80dB.</p>
+</dd>
+<dt class="field-even">txAntenna<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transmitter antenna, which is an instance of
 <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>, <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>,
 or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class. If not specified, a single antenna element is
 automatically created by default.</p>
 </dd>
-<dt class="field-even">rxAntenna<span class="colon">:</span></dt>
-<dd class="field-even"><p>The receiver antenna, which is an instance of
+<dt class="field-odd">rxAntenna<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The receiver antenna, which is an instance of
 <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaElement" title="neoradium.antenna.AntennaElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaElement</span></code></a>, <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>,
 or <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a> class. If not specified, a single antenna element is
 automatically created by default.</p>
 </dd>
-<dt class="field-odd">txOrientation<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The orientation of transmitter antenna. This is a list of 3 angle values in degrees for
+<dt class="field-even">txOrientation<span class="colon">:</span></dt>
+<dd class="field-even"><p>The orientation of transmitter antenna. This is a list of 3 angle values in degrees for
 the <em>bearing</em> angle <span class="math notranslate nohighlight">\(\alpha\)</span>, <em>downtilt</em> angle <span class="math notranslate nohighlight">\(\beta\)</span>, and <em>slant</em> angle
 <span class="math notranslate nohighlight">\(\gamma\)</span>. The default is [0,0,0]. Please refer to <strong>3GPP TR 38.901 Section 7.1.3</strong> for more
 information.</p>
 </dd>
-<dt class="field-even">rxOrientation<span class="colon">:</span></dt>
-<dd class="field-even"><p>The orientation of receiver antenna. This is a list of 3 angle values in degrees for
+<dt class="field-odd">rxOrientation<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The orientation of receiver antenna. This is a list of 3 angle values in degrees for
 the <em>bearing</em> angle <span class="math notranslate nohighlight">\(\alpha\)</span>, <em>downtilt</em> angle <span class="math notranslate nohighlight">\(\beta\)</span>, and <em>slant</em> angle
 <span class="math notranslate nohighlight">\(\gamma\)</span>. The default is [0,0,0]. Please refer to <strong>3GPP TR 38.901 Section 7.1.3</strong> for more
 information.</p>
 </dd>
-<dt class="field-odd">xPolPower<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The Cross-Polarization Power in dB. The default is 10db. It is defined as
+<dt class="field-even">xPolPower<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Cross-Polarization Power in dB. The default is 10db. It is defined as
 <span class="math notranslate nohighlight">\(X=10 log_{10} \kappa^{RT}\)</span> where <span class="math notranslate nohighlight">\(\kappa^{RT}\)</span> is the Cross-Polarization Ratio (XPR).
 In current implementation this value is used for all paths.</p>
 </dd>
@@ -1653,6 +1711,10 @@ is <cite>True</cite>, the delays from the ray-tracing are normalized according t
 Section 8.4</strong>. Note that the delay normalization (if enabled) is only applied to this property; the
 redirected properties “delays”, “losDelay”, and “nlosDelays” always keep the original delay values from
 the ray-tracing.</p>
+</dd>
+<dt class="field-even">totalBlockage<span class="colon">:</span></dt>
+<dd class="field-even"><p>This read-only property returns <cite>True</cite> if the channel is currently at a total blockage
+point, indicating that there is no communication path between the transmitter and receiver.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -1723,13 +1785,13 @@ the information in a text string. Otherwise, nothing is returned.</p>
 <dt class="sig sig-object py" id="neoradium.trjchan.TrjChannel.getPathGains">
 <span class="sig-name descname"><span class="pre">getPathGains</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.trjchan.TrjChannel.getPathGains" title="Link to this definition"></a></dt>
 <dd><p>Calculates the gains for Line-of-Sight (LOS) and Non-Line-of-Sight (NLOS) paths separately and combines the
-results before returning the gains between every RX/TX antenna pair, for every path, at every time instance.</p>
+results before returning the gains between every RX/TX antenna pair, for every path, at every time symbol.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>This function returns a 4-D complex tensor of shape <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Np</span></code>, where <code class="docutils literal notranslate"><span class="pre">L</span></code> represents the
+<dd class="field-odd"><p>This function returns a 4-D complex tensor of shape <code class="docutils literal notranslate"><span class="pre">Ns</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Np</span></code>, where <code class="docutils literal notranslate"><span class="pre">Ns</span></code> represents the
 number of time symbols, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> and <code class="docutils literal notranslate"><span class="pre">Nt</span></code> indicate the number of receiver and transmitter antennas
 respectively, and <code class="docutils literal notranslate"><span class="pre">Np</span></code> denotes the number of paths between the base station and the UE at its current
-location along its trajectory.</p>
+location along its trajectory. If the UE is at a total blockage point, this function returns <cite>None</cite>.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>NumPy array or None</p>
@@ -1739,26 +1801,105 @@ location along its trajectory.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.trjchan.TrjChannel.getChanSeqGen">
-<span class="sig-name descname"><span class="pre">getChanSeqGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seqPeriod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seqLen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNumSeq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.trjchan.TrjChannel.getChanSeqGen" title="Link to this definition"></a></dt>
-<dd><p>Returns a generator object that can generate sequences of channel matrices based on the given parameters.</p>
+<span class="sig-name descname"><span class="pre">getChanSeqGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seqPeriod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seqLen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNumSeq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chanCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seqCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.trjchan.TrjChannel.getChanSeqGen" title="Link to this definition"></a></dt>
+<dd><p>This function returns an iterable object that generates sequences of channel matrices based on the given parameters.</p>
 <p>Refer to the notebook <a class="reference internal" href="../Playground/Notebooks/RayTracing/ChannelSequences.html"><span class="doc">Creating temporally and spatially consistent sequences of channel matrices</span></a> for an example of
 using this method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>seqPeriod</strong> (<em>int</em>) – The sampling period of channel matrices along the trajectory. The default value of <code class="docutils literal notranslate"><span class="pre">1</span></code> means all
-channel matrices are included in the sequence. For instance, if this is set to <code class="docutils literal notranslate"><span class="pre">3</span></code>, every other three
-channel matrices (i.e., every other three slots) are included in the sequence.</p></li>
+channel matrices are included in the sequence. For instance, if this is set to <code class="docutils literal notranslate"><span class="pre">3</span></code>, every third
+channel matrix (i.e., one out of every three slots) is included in the sequence.</p></li>
 <li><p><strong>seqLen</strong> (<em>int</em>) – The length of the returned sequences. The default is <code class="docutils literal notranslate"><span class="pre">10</span></code>.</p></li>
-<li><p><strong>maxNumSeq</strong> (<em>int</em>) – The maximum number of sequences to generate. By default, it is set to <cite>np.inf</cite>, indicating no additional
-limit for the number of sequences. In this case, the channel sequences are generated until the end of
+<li><p><strong>maxNumSeq</strong> (<em>int</em><em> or </em><em>float</em>) – The maximum number of sequences to generate. By default, it is set to <code class="docutils literal notranslate"><span class="pre">np.inf</span></code>, indicating no additional
+limit on the number of sequences. In this case, channel sequences are generated until the end of
 the trajectory.</p></li>
-</ul>
+<li><p><strong>chanCallback</strong> (<em>function</em>) – <p>If provided, this function is called when a new channel matrix is generated and before it is added to
+the sequence. The function may modify the channel and return the modified channel matrix. The function may
+also return <cite>None</cite>, which means the current sequence is not valid and should be dropped. In this case,
+the generator discards the channels collected in the current sequence and starts a new sequence beginning
+with the next channel matrix according to <code class="docutils literal notranslate"><span class="pre">seqPeriod</span></code>. The default is <cite>None</cite> which disables this channel
+preprocessing feature. The user-defined function receives the following parameters:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">seqNo<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The sequence number, starting at zero and incremented for each sequence.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">ChanSeqGen</span></code>, a generator object that is used to generate sequences of channel matrices.</p>
+<dt class="field-even">elementNo<span class="colon">:</span></dt>
+<dd class="field-even"><p>The element index within the current sequence.</p>
+</dd>
+<dt class="field-odd">channelMatrix<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The current channel matrix. An <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> NumPy array where <code class="docutils literal notranslate"><span class="pre">L</span></code> represents
+the number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> denotes the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of
+receive antennas, and <code class="docutils literal notranslate"><span class="pre">Nt</span></code> indicates the number of transmit antennas.</p>
+</dd>
+<dt class="field-even">channel<span class="colon">:</span></dt>
+<dd class="field-even"><p>This <a class="reference internal" href="#neoradium.trjchan.TrjChannel" title="neoradium.trjchan.TrjChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjChannel</span></code></a> object.</p>
 </dd>
 </dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>seqCallback</strong> (<em>function</em>) – <p>If provided, this function is called when a new sequence of channels is generated and before it is used by
+the sequence generator. The function may modify the channel sequence and return the modified sequence. The
+function may also return <cite>None</cite>, which means the current sequence is not valid and should be dropped. In
+this case, the generator discards the sequence and initiates a new one, starting with the next
+channel matrix according to <code class="docutils literal notranslate"><span class="pre">seqPeriod</span></code>. The default is <cite>None</cite> which disables this sequence preprocessing
+feature. The user-defined function receives the following parameters:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">seqNo<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The sequence number, starting at zero and incremented for each sequence.</p>
+</dd>
+<dt class="field-even">channelSequence<span class="colon">:</span></dt>
+<dd class="field-even"><p>The sequence of channel matrices. An <code class="docutils literal notranslate"><span class="pre">S</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> NumPy array where
+<code class="docutils literal notranslate"><span class="pre">S</span></code> is the sequence length (the <code class="docutils literal notranslate"><span class="pre">seqLen</span></code> parameter above), <code class="docutils literal notranslate"><span class="pre">L</span></code> represents the number of
+OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> denotes the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of receive antennas,
+and <code class="docutils literal notranslate"><span class="pre">Nt</span></code> indicates the number of transmit antennas.</p>
+</dd>
+<dt class="field-odd">channel<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This <a class="reference internal" href="#neoradium.trjchan.TrjChannel" title="neoradium.trjchan.TrjChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjChannel</span></code></a> object.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An iterable object that yields sequences of channel matrices.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ChanSeqGen</p>
+</dd>
+</dl>
+<p>The following example creates sequences of effective channel matrixes (which includes the precoding effect)
+that do not contain any point with total blockage.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span>
+
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span> <span class="c1"># Carrier with 25 RBs, 30KHz subcarrier spacing</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">TrjChannel</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>       <span class="c1"># 8 TX antenna</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">))</span>       <span class="c1"># 2 RX antenna</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">chanCallback</span><span class="p">(</span><span class="n">seqNo</span><span class="p">,</span> <span class="n">elementNo</span><span class="p">,</span> <span class="n">channelMatrix</span><span class="p">,</span> <span class="n">channel</span><span class="p">):</span>
+    <span class="c1"># Drop the channels with total blockage</span>
+    <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">channel</span><span class="o">.</span><span class="n">totalBlockage</span> <span class="k">else</span> <span class="n">channelMatrix</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">seqCallback</span><span class="p">(</span><span class="n">seqNo</span><span class="p">,</span> <span class="n">channelSeq</span><span class="p">,</span> <span class="n">channel</span><span class="p">):</span>
+    <span class="c1"># Get the precoder matrix based on the first channel in the sequence</span>
+    <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelSeq</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c1"># Now create and return a new sequence containing the effective channels by applying</span>
+    <span class="c1"># the precoder to all channels in the sequence</span>
+    <span class="n">newSeq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">channel</span><span class="o">.</span><span class="n">getEffChannel</span><span class="p">(</span><span class="n">chanMat</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span> <span class="k">for</span> <span class="n">chanMat</span> <span class="ow">in</span> <span class="n">channelSeq</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">newSeq</span>
+
+<span class="n">chanSeqGen</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChanSeqGen</span><span class="p">(</span><span class="n">seqPeriod</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seqLen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">maxNumSeq</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                                   <span class="n">chanCallback</span><span class="o">=</span><span class="n">chanCallback</span><span class="p">,</span> <span class="n">seqCallback</span><span class="o">=</span><span class="n">seqCallback</span><span class="p">)</span>
+<span class="n">channelSequences</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">chanSeq</span> <span class="k">for</span> <span class="n">chanSeq</span> <span class="ow">in</span> <span class="n">chanSeqGen</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">channelSequences</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>   <span class="c1"># Prints: (20, 5, 14, 300, 4, 2) for (numSeq, seqLen, L, K, Nr, Nt)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>

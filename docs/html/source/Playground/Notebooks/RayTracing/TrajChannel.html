@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Using the Trajectory-based Channel Model &mdash; NeoRadium 0.4.0 Documentation</title>
+  <title>Using the Trajectory-based Channel Model &mdash; NeoRadium 0.4.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.4.0
+            NeoRadium 0.4.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -101,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.4.0</a>
+          <a href="../../../../index.html">NeoRadium 0.4.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -188,7 +188,7 @@ DeepMimoData Properties:
                                               <span class="n">segLen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>               <span class="c1"># Num grid points on shortest segment</span>
                                               <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span>                <span class="c1"># The bandwidth part</span>
                                               <span class="n">trajLen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>            <span class="c1"># Number of grid points on trajectory</span>
-                                              <span class="n">speedMps</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>           <span class="c1"># Speed in mps (Walking)</span>
+                                              <span class="n">speedMps</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>           <span class="c1"># Speed in mps (Walking)</span>
 
 <span class="n">trajectory</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>                                  <span class="c1"># Print the trajectory information</span>
 <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>        <span class="c1"># Draw the Map with the trajectory</span>
@@ -202,17 +202,17 @@ DeepMimoData Properties:
 <div class="highlight"><pre>
 
 Trajectory Properties:
-  start (x,y,z):         (-164.55, 39.83, 1.50)
-  No. of points:         201752
+  start (x,y,z):         (-164.55, 69.83, 1.50)
+  No. of points:         7968
   curIdx:                0 (0.00%)
-  curSpeed:              [0.85 0.85 0.  ]
-  Total distance:        242.08 meters
-  Total time:            201.751 seconds
-  Average Speed:         1.200 mps
+  curSpeed:              [21.28 21.28  0.  ]
+  Total distance:        240.42 meters
+  Total time:            7.967 seconds
+  Average Speed:         30.177 m/s
   Carrier Frequency:     3.5 GHz
-  Paths (Min, Avg, Max): 1, 8.97, 10
+  Paths (Min, Avg, Max): 5, 8.79, 10
   Totally blocked:       0
-  LOS percentage:        32.84%
+  LOS percentage:        59.43%
 
 </pre></div></div>
 </div>
@@ -231,14 +231,6 @@ Trajectory Properties:
 </div>
 <div class="output_area docutils container">
 <img alt="../../../../_images/source_Playground_Notebooks_RayTracing_TrajChannel_3_2.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_TrajChannel_3_2.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -282,7 +274,9 @@ Shape of Waveform:      (16, 30720)
 <span class="n">channel</span> <span class="o">=</span> <span class="n">TrjChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span>
                      <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>       <span class="c1"># 8 TX antenna</span>
                      <span class="n">txOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>                               <span class="c1"># Facing left</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">))</span>       <span class="c1"># 2 RX antenna</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>       <span class="c1"># 2 RX antenna</span>
+                     <span class="n">interpolateSlots</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                     <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -298,12 +292,13 @@ TrjChannel Properties:
   normalizeGains:       True
   normalizeOutput:      True
   normalizeDelays:      True
+  interpolateSlots:     True
   xPolPower:            10.00 (dB)
   filterLen:            16 samples
   delayQuantSize:       64
   stopBandAtten:        80 dB
-  dopplerShift:         14.015298117569412 Hz
-  coherenceTime:        0.030191451092315417 Sec.
+  dopplerShift:         353.7814505317208 Hz
+  coherenceTime:        0.0011960553246215984 sec
   TX Antenna:
     Total Elements:     16
     spacing:            0.5𝜆, 0.5𝜆
@@ -316,17 +311,17 @@ TrjChannel Properties:
     shape:              1 rows x 2 columns
     polarization:       x
   Trajectory:
-    start (x,y,z):         (-164.55, 39.83, 1.50)
-    No. of points:         201752
+    start (x,y,z):         (-164.55, 69.83, 1.50)
+    No. of points:         7968
     curIdx:                0 (0.00%)
-    curSpeed:              [0.85 0.85 0.  ]
-    Total distance:        242.08 meters
-    Total time:            201.751 seconds
-    Average Speed:         1.200 mps
+    curSpeed:              [21.28 21.28  0.  ]
+    Total distance:        240.42 meters
+    Total time:            7.967 seconds
+    Average Speed:         30.177 m/s
     Carrier Frequency:     3.5 GHz
-    Paths (Min, Avg, Max): 1, 8.97, 10
+    Paths (Min, Avg, Max): 5, 8.79, 10
     Totally blocked:       0
-    LOS percentage:        32.84%
+    LOS percentage:        59.43%
 
 </pre></div></div>
 </div>
@@ -348,7 +343,7 @@ TrjChannel Properties:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Time to apply channel in Freq. Domain: 0.013160228729248047
+Time to apply channel in Freq. Domain: 0.012088775634765625
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -374,9 +369,81 @@ Time to apply channel in Freq. Domain: 0.013160228729248047
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Time to apply channel in Time Domain: 0.2824540138244629
-NMSE between the rxGrid in Time and Freq. domains:  0.0005440608093966191
+Time to apply channel in Time Domain: 0.16606688499450684
+NMSE between the rxGrid in Time and Freq. domains:  1.9054214875297066e-18
 </pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The following example shows the difference between interpolating the multipath information</span>
+<span class="c1"># for different symbols in a slot vs using the same multipath information for all symbols in</span>
+<span class="c1"># a slot.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="n">chanMats</span> <span class="o">=</span> <span class="p">[]</span>                       <span class="c1"># list of consecutive channel matrixes</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">interpolateSlots</span> <span class="o">=</span> <span class="kc">True</span>     <span class="c1"># First: Using interpolation</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>                 <span class="c1"># 10 channel matrices</span>
+    <span class="n">chanMats</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span> <span class="p">]</span>
+    <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
+<span class="n">chanMats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">chanMats</span><span class="p">)</span>       <span class="c1"># Shape: 10 x 14 x 300 x 4 x 16</span>
+
+<span class="c1"># Sequence of channel values for first subcarrier, between first transmitter and</span>
+<span class="c1"># first receiver antenna (A sequence 140 complex values)</span>
+<span class="n">chanValuesInt</span> <span class="o">=</span> <span class="n">chanMats</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="n">chanMats</span> <span class="o">=</span> <span class="p">[]</span>                       <span class="c1"># Reset the list</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">interpolateSlots</span> <span class="o">=</span> <span class="kc">False</span>    <span class="c1"># Now not using interpolation</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>                 <span class="c1"># 10 channel matrices</span>
+    <span class="n">chanMats</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span> <span class="p">]</span>
+    <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
+<span class="n">chanMats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">chanMats</span><span class="p">)</span>       <span class="c1"># Shape: 10 x 14 x 300 x 4 x 16</span>
+<span class="n">chanValuesNoInt</span> <span class="o">=</span> <span class="n">chanMats</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">chanValuesInt</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;interpolateSlots=True&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">chanValuesNoInt</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;interpolateSlots=False&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;The channel values continuum for 140 symbols (10 slots) with and without interpolation&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#39;The channel values continuum for 140 symbols (10 slots) with and without interpolation&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_RayTracing_TrajChannel_8_1.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_TrajChannel_8_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:

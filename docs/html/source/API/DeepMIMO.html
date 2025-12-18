@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DeepMIMO and UE Trajectories &mdash; NeoRadium 0.4.0 Documentation</title>
+  <title>DeepMIMO and UE Trajectories &mdash; NeoRadium 0.4.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.4.0
+            NeoRadium 0.4.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -91,7 +91,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.4.0</a>
+          <a href="../../index.html">NeoRadium 0.4.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -120,7 +120,7 @@ an interactive map. A complete example of using the <a class="reference internal
 <a class="reference internal" href="../Playground/Notebooks/RayTracing/DeepMimo.html"><span class="doc">Working with DeepMIMO Scenarios</span></a> in the playground.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.deepmimo.</span></span><span class="sig-name descname"><span class="pre">DeepMimoData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseStationId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.deepmimo.</span></span><span class="sig-name descname"><span class="pre">DeepMimoData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseStationId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData" title="Link to this definition"></a></dt>
 <dd><p>This class encapsulates all the ray-tracing data read from <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario
 files. It can be used to create random trajectories of user (UE) movements by interpolating the ray-tracing
 information at intermediate points on the trajectory.</p>
@@ -211,7 +211,7 @@ following code counts the number of points with LOS paths.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.showScenarioInfo">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">showScenarioInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.showScenarioInfo" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">showScenarioInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.showScenarioInfo" title="Link to this definition"></a></dt>
 <dd><p>This class method prints information about the specified <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario. It
 can be used to find out the base stations and user grids available in the scenario.</p>
 <dl class="field-list simple">
@@ -246,7 +246,7 @@ this class. Otherwise, nothing is returned (default).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.setScenariosPath">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setScenariosPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newPath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.setScenariosPath" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setScenariosPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newPath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.setScenariosPath" title="Link to this definition"></a></dt>
 <dd><p>This class method establishes the path to a folder that contains the ray-tracing scenarios. Within this
 folder, each scenario is organized into its own sub-folder, with the same name as the scenario itself.</p>
 <dl class="field-list simple">

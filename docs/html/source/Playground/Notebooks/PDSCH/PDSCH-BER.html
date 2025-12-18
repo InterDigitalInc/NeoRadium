@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculating bit error rate of PDSCH communication &mdash; NeoRadium 0.4.0 Documentation</title>
+  <title>Calculating bit error rate of PDSCH communication &mdash; NeoRadium 0.4.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.4.0
+            NeoRadium 0.4.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -97,7 +97,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.4.0</a>
+          <a href="../../../../index.html">NeoRadium 0.4.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -133,7 +133,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numFrames</span> <span class="o">=</span> <span class="mi">2</span>                               <span class="c1"># Number of time-domain frames</span>
@@ -200,22 +200,15 @@
                 <span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">noisyRxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>               <span class="c1"># Synchronization</span>
                 <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>                 <span class="c1"># OFDM demodulation</span>
 
-            <span class="k">if</span> <span class="n">chanEstMethod</span> <span class="o">==</span> <span class="s2">&quot;Perfect&quot;</span><span class="p">:</span>                          <span class="c1"># Perfect Channel Estimation</span>
-                <span class="n">estChannelMatrix</span> <span class="o">=</span> <span class="n">channelMatrix</span> <span class="o">@</span> <span class="n">precoder</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>                                                   <span class="c1"># LS + Interpolation Channel Estimation</span>
+            <span class="k">if</span> <span class="n">chanEstMethod</span> <span class="o">==</span> <span class="s2">&quot;Perfect&quot;</span><span class="p">:</span>                                  <span class="c1"># Perfect Channel Estimation</span>
+                <span class="n">estChannelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getEffChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>                                                           <span class="c1"># LS + Interpolation Channel Estimation</span>
                 <span class="n">estChannelMatrix</span><span class="p">,</span> <span class="n">noiseEst</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">estimateChannelLS</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">dmrs</span><span class="p">,</span> <span class="n">polarInt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                                                       <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
-            <span class="n">act</span> <span class="o">=</span> <span class="n">channelMatrix</span> <span class="o">@</span> <span class="n">precoder</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
-            <span class="n">mse1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">estChannelMatrix</span> <span class="o">-</span> <span class="n">act</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-            <span class="n">fEst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">estChannelMatrix</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">estChannelMatrix</span><span class="o">.</span><span class="n">imag</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-            <span class="n">fAct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">act</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">act</span><span class="o">.</span><span class="n">imag</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-            <span class="n">mse2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">fEst</span> <span class="o">-</span> <span class="n">fAct</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">minMse</span><span class="o">&gt;</span><span class="n">mse2</span><span class="p">:</span> <span class="n">minMse</span><span class="o">=</span><span class="n">mse2</span>
-            <span class="k">if</span> <span class="n">maxMse</span><span class="o">&lt;</span><span class="n">mse2</span><span class="p">:</span> <span class="n">maxMse</span><span class="o">=</span><span class="n">mse2</span>
 
-            <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">estChannelMatrix</span><span class="p">)</span>       <span class="c1"># Equalization</span>
-            <span class="n">rxBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getHardBitsFromGrid</span><span class="p">(</span><span class="n">eqGrid</span><span class="p">,</span> <span class="n">pdschIndexes</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Demodulation</span>
-            <span class="n">bitErrors</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBits</span><span class="o">-</span><span class="n">txBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>                    <span class="c1"># Calculating number of bit errors</span>
+            <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">estChannelMatrix</span><span class="p">)</span>           <span class="c1"># Equalization</span>
+            <span class="n">rxBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getHardBitsFromGrid</span><span class="p">(</span><span class="n">eqGrid</span><span class="p">,</span> <span class="n">pdschIndexes</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>     <span class="c1"># Demodulation</span>
+            <span class="n">bitErrors</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBits</span><span class="o">-</span><span class="n">txBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>                        <span class="c1"># Calculating number of bit errors</span>
             <span class="n">totalBits</span> <span class="o">+=</span> <span class="n">numBits</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  </span><span class="si">%3d</span><span class="s2">      </span><span class="si">%8d</span><span class="s2">     </span><span class="si">%8d</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">snrDb</span><span class="p">,</span> <span class="n">totalBits</span><span class="p">,</span> <span class="n">bitErrors</span><span class="p">,</span>
                                                                 <span class="n">bitErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBits</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -255,22 +248,22 @@
 Simulating end-to-end for &#34;16QAM&#34;, with &#34;Perfect&#34; channel estimation, in time domain.
 SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)
 -------   ----------   ----------   ------   ----------
-    0       2545920       707059     27.77     18.15
-    5       2545920       447088     17.56     18.07
-   10       2545920       231451      9.09     18.11
-   15       2545920        84791      3.33     18.21
-   20       2545920         7757      0.30     18.02
-   25       2545920           18      0.00     18.30
+    0       2545920       704635     27.68     17.50
+    5       2545920       443659     17.43     17.41
+   10       2545920       229395      9.01     17.45
+   15       2545920        82020      3.22     17.57
+   20       2545920         7111      0.28     17.54
+   25       2545920           12      0.00     17.84
 
 Simulating end-to-end for &#34;16QAM&#34;, with &#34;LS&#34; channel estimation, in time domain.
 SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)
 -------   ----------   ----------   ------   ----------
-    0       2545920       865111     33.98     18.49
-    5       2545920       594020     23.33     18.21
-   10       2545920       331367     13.02     18.26
-   15       2545920       147727      5.80     18.30
-   20       2545920        30502      1.20     18.31
-   25       2545920         1193      0.05     18.19
+    0       2545920       863120     33.90     18.27
+    5       2545920       590719     23.20     18.35
+   10       2545920       327226     12.85     18.33
+   15       2545920       144614      5.68     18.05
+   20       2545920        28509      1.12     17.95
+   25       2545920         1046      0.04     18.00
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -278,6 +271,14 @@ SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)
 </div>
 <div class="output_area docutils container">
 <img alt="../../../../_images/source_Playground_Notebooks_PDSCH_PDSCH-BER_2_1.png" src="../../../../_images/source_Playground_Notebooks_PDSCH_PDSCH-BER_2_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
 </div>
 </div>
 </section>

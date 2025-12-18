@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Creating temporally and spatially consistent sequences of channel matrices &mdash; NeoRadium 0.4.0 Documentation</title>
+  <title>Creating temporally and spatially consistent sequences of channel matrices &mdash; NeoRadium 0.4.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.4.0
+            NeoRadium 0.4.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -101,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.4.0</a>
+          <a href="../../../../index.html">NeoRadium 0.4.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -123,7 +123,7 @@
   <section id="Creating-temporally-and-spatially-consistent-sequences-of-channel-matrices">
 <h1>Creating temporally and spatially consistent sequences of channel matrices<a class="headerlink" href="#Creating-temporally-and-spatially-consistent-sequences-of-channel-matrices" title="Link to this heading"></a></h1>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -132,7 +132,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace this with the folder on your computer where you store DeepMIMO scenarios</span>
@@ -169,7 +169,7 @@ DeepMimoData Properties:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                                 <span class="c1"># Make results reproducible</span>
@@ -197,22 +197,22 @@ DeepMimoData Properties:
 <div class="highlight"><pre>
 
 Trajectory Properties:
-  start (x,y,z):         (-164.55, 39.83, 1.50)
-  No. of points:         201752
+  start (x,y,z):         (-164.55, 69.83, 1.50)
+  No. of points:         200368
   curIdx:                0 (0.00%)
   curSpeed:              [0.85 0.85 0.  ]
-  Total distance:        242.08 meters
-  Total time:            201.751 seconds
-  Average Speed:         1.200 mps
+  Total distance:        240.42 meters
+  Total time:            200.367 seconds
+  Average Speed:         1.200 m/s
   Carrier Frequency:     3.5 GHz
-  Paths (Min, Avg, Max): 1, 8.97, 10
+  Paths (Min, Avg, Max): 5, 8.79, 10
   Totally blocked:       0
-  LOS percentage:        32.84%
+  LOS percentage:        59.42%
 
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -229,7 +229,7 @@ Trajectory Properties:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a MIMO channel model based on our trajectory.</span>
@@ -252,40 +252,41 @@ TrjChannel Properties:
   normalizeGains:       True
   normalizeOutput:      True
   normalizeDelays:      True
-  xPolPower:            10.00 (db)
+  interpolateSlots:     True
+  xPolPower:            10.00 (dB)
   filterLen:            16 samples
   delayQuantSize:       64
-  stopBandAtten:        80 db
-  dopplerShift:         14.015298117569412 Hz
-  coherenceTime:        0.030191451092315417 Sec.
+  stopBandAtten:        80 dB
+  dopplerShift:         14.015351581688819 Hz
+  coherenceTime:        0.03019133592150883 sec
   TX Antenna:
     Total Elements:     16
     spacing:            0.5𝜆, 0.5𝜆
     shape:              2 rows x 4 columns
     polarization:       x
+    Orientation (𝛼,𝛃,𝛄): 180° 0° 0°
   RX Antenna:
     Total Elements:     4
     spacing:            0.5𝜆, 0.5𝜆
     shape:              1 rows x 2 columns
     polarization:       x
-    Orientation (𝛼,𝛃,𝛄): 0° 0° 0°
   Trajectory:
-    start (x,y,z):         (-164.55, 39.83, 1.50)
-    No. of points:         201752
+    start (x,y,z):         (-164.55, 69.83, 1.50)
+    No. of points:         200368
     curIdx:                0 (0.00%)
     curSpeed:              [0.85 0.85 0.  ]
-    Total distance:        242.08 meters
-    Total time:            201.751 seconds
-    Average Speed:         1.200 mps
+    Total distance:        240.42 meters
+    Total time:            200.367 seconds
+    Average Speed:         1.200 m/s
     Carrier Frequency:     3.5 GHz
-    Paths (Min, Avg, Max): 1, 8.97, 10
+    Paths (Min, Avg, Max): 5, 8.79, 10
     Totally blocked:       0
-    LOS percentage:        32.84%
+    LOS percentage:        59.42%
 
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now create a sequence generator that generates up to 20 sequences with sequences</span>
@@ -299,7 +300,7 @@ TrjChannel Properties:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">chanSeqGen</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
@@ -334,6 +335,54 @@ Shape of Sequence 17: (10, 14, 300, 4, 16)
 Shape of Sequence 18: (10, 14, 300, 4, 16)
 Shape of Sequence 19: (10, 14, 300, 4, 16)
 </pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The following example uses the callback functions to modify the</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span>
+
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span> <span class="c1"># Carrier with 25 RBs, 30KHz subcarrier spacing</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">TrjChannel</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>       <span class="c1"># 8 TX antenna</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">))</span>       <span class="c1"># 2 RX antenna</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">chanCallback</span><span class="p">(</span><span class="n">seqNo</span><span class="p">,</span> <span class="n">elementNo</span><span class="p">,</span> <span class="n">channelMatrix</span><span class="p">,</span> <span class="n">channel</span><span class="p">):</span>
+    <span class="c1"># Drop the channels with total blockage</span>
+    <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">channel</span><span class="o">.</span><span class="n">totalBlockage</span> <span class="k">else</span> <span class="n">channelMatrix</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">seqCallback</span><span class="p">(</span><span class="n">seqNo</span><span class="p">,</span> <span class="n">channelSeq</span><span class="p">,</span> <span class="n">channel</span><span class="p">):</span>
+    <span class="c1"># Get the precoder matrix based on the first channel in the sequence</span>
+    <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelSeq</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c1"># Now create and return a new sequence containing the effective channels by applying</span>
+    <span class="c1"># the precoder to all channels in the sequence</span>
+    <span class="n">newSeq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">channel</span><span class="o">.</span><span class="n">getEffChannel</span><span class="p">(</span><span class="n">chanMat</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span> <span class="k">for</span> <span class="n">chanMat</span> <span class="ow">in</span> <span class="n">channelSeq</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">newSeq</span>
+
+<span class="n">chanSeqGen</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChanSeqGen</span><span class="p">(</span><span class="n">seqPeriod</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seqLen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">maxNumSeq</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                                   <span class="n">chanCallback</span><span class="o">=</span><span class="n">chanCallback</span><span class="p">,</span> <span class="n">seqCallback</span><span class="o">=</span><span class="n">seqCallback</span><span class="p">)</span>
+<span class="n">channelSequences</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">chanSeq</span> <span class="k">for</span> <span class="n">chanSeq</span> <span class="ow">in</span> <span class="n">chanSeqGen</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">channelSequences</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>   <span class="c1"># Prints: (20, 5, 14, 300, 4, 2) for (numSeq, seqLen, L, K, Nr, Nt)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(20, 5, 14, 300, 4, 2)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:

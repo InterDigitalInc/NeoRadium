@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Working with DeepMIMO Scenarios &mdash; NeoRadium 0.4.0 Documentation</title>
+  <title>Working with DeepMIMO Scenarios &mdash; NeoRadium 0.4.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.4.0
+            NeoRadium 0.4.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -105,7 +105,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.4.0</a>
+          <a href="../../../../index.html">NeoRadium 0.4.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -278,17 +278,17 @@ DeepMimoData Properties:
 <div class="highlight"><pre>
 
 Trajectory Properties:
-  start (x,y,z):         (-164.55, 39.83, 1.50)
-  No. of points:         203482
+  start (x,y,z):         (-164.55, 69.83, 1.50)
+  No. of points:         198292
   curIdx:                0 (0.00%)
-  curSpeed:              [0.85 0.85 0.  ]
-  Total distance:        244.15 meters
-  Total time:            203.481 seconds
-  Average Speed:         1.200 mps
+  curSpeed:              [1.2 0.  0. ]
+  Total distance:        237.94 meters
+  Total time:            198.291 seconds
+  Average Speed:         1.200 m/s
   Carrier Frequency:     3.5 GHz
-  Paths (Min, Avg, Max): 3, 8.87, 10
+  Paths (Min, Avg, Max): 5, 9.04, 10
   Totally blocked:       0
-  LOS percentage:        27.38%
+  LOS percentage:        54.30%
 
 </pre></div></div>
 </div>
@@ -331,40 +331,28 @@ Trajectory Properties:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Running the interactive map for &#39;asu_campus_3p5&#39;...
-Done. 32 points selected.
+Done. 20 points selected.
 Selected Points:
- [[-2.08244352e+02 -1.02666732e+02]
- [-2.13703861e+02 -2.53236924e+01]
- [-2.09154271e+02  1.97172539e+01]
- [-2.00055090e+02  4.24652066e+01]
- [-1.80036891e+02  5.88437325e+01]
- [-1.43185208e+02  7.38573813e+01]
- [-1.04058729e+02  8.20466442e+01]
- [-5.49231514e+01  8.38664805e+01]
- [ 1.26894117e-01  8.43214395e+01]
- [ 5.83616530e+01  8.20466442e+01]
- [ 1.07042272e+02  7.43123403e+01]
- [ 1.46623709e+02  5.61139782e+01]
- [ 1.60272481e+02  2.29019673e+01]
- [ 1.62092317e+02 -1.25848389e+01]
- [ 1.56632809e+02 -5.30761947e+01]
- [ 1.45713791e+02 -9.22026733e+01]
- [ 1.17961289e+02 -1.23594848e+02]
- [ 8.11096057e+01 -1.34058906e+02]
- [ 4.47128814e+01 -1.33603947e+02]
- [-1.35218775e+01 -1.27234520e+02]
- [-6.17475372e+01 -1.04031609e+02]
- [-6.44772915e+01 -9.12927552e+01]
- [-5.40132333e+01 -5.80807443e+01]
- [-5.12834789e+01 -3.39679144e+01]
- [-6.26574553e+01 -1.48596342e+01]
- [-6.58421687e+01  5.61352322e+00]
- [-5.44681923e+01  1.60775815e+01]
- [-1.07921232e+01  1.15279909e+01]
- [ 1.33207067e+01  3.79368701e+00]
- [ 3.56137003e+01 -1.84993066e+01]
- [ 3.74335365e+01 -5.44410719e+01]
- [ 3.33389050e+01 -1.01756813e+02]]
+ [[ -73.57647258 -115.86054411]
+ [ -49.91860179  -84.92332846]
+ [ -63.5673734    -3.9406169 ]
+ [-103.60377012   32.45610739]
+ [-158.19885657   42.46520657]
+ [-175.48730061   64.30324115]
+ [-171.84762818   82.5016033 ]
+ [-153.64926603   97.06029302]
+ [-110.88311498   85.23135762]
+ [ -58.10786475   84.32143951]
+ [ 128.42534726   90.69086626]
+ [ 155.72289048   61.57348683]
+ [ 150.26338183   12.43790903]
+ [ 154.81297237  -63.08529388]
+ [ 153.90305426 -114.04070789]
+ [ 126.60551104 -139.5184149 ]
+ [  58.36165299 -124.95972518]
+ [  30.15419166  -94.02250953]
+ [  29.24427355  -31.23816012]
+ [  31.06410977    6.06848228]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -389,17 +377,17 @@ Selected Points:
 <div class="highlight"><pre>
 
 Trajectory Properties:
-  start:                       -208.55  -102.17    1.50
-  No. of points:               89407
-  curIdx:                      0 (0.00%)
-  curSpeed:                    [ 0.   14.08  0.  ]
-  Total distance:              1257.01 meters
-  Total time:                  89.406 seconds
-  Average Speed:               14.060 mps
-  Carrier Frequency:           3.5 GHz
-  Num. paths (Min, Avg, Max):  3, 9.10, 10
-  Num. totally blocked points: 0
-  LOS percentage:              43.25%
+  start (x,y,z):         (-73.55, -116.17, 1.50)
+  No. of points:         76849
+  curIdx:                0 (0.00%)
+  curSpeed:              [9.9 9.9 0. ]
+  Total distance:        1080.31 meters
+  Total time:            76.848 seconds
+  Average Speed:         14.058 m/s
+  Carrier Frequency:     3.5 GHz
+  Paths (Min, Avg, Max): 4, 9.11, 10
+  Totally blocked:       0
+  LOS percentage:        54.68%
 
 </pre></div></div>
 </div>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PDSCH end-to-end communication &mdash; NeoRadium 0.4.0 Documentation</title>
+  <title>PDSCH end-to-end communication &mdash; NeoRadium 0.4.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=6c02275b"></script>
+      <script src="../../../../_static/documentation_options.js?v=c87aa342"></script>
       <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.4.0
+            NeoRadium 0.4.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -115,7 +115,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.4.0</a>
+          <a href="../../../../index.html">NeoRadium 0.4.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -438,7 +438,7 @@ Shape of rxWaveform: (2, 15447)
 <section id="Adding-Noise">
 <h2>Adding Noise<a class="headerlink" href="#Adding-Noise" title="Link to this heading"></a></h2>
 <p>We can use the <code class="docutils literal notranslate"><span class="pre">addNoise</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Waveform</span></code> class to add AWGN to the received signal. Since we are adding the noise in the time-domain, we need to provide an instance of <code class="docutils literal notranslate"><span class="pre">BandwidthPart</span></code> object to extract FFT information.</p>
-<p>Here, we calculate the noise power using the SNR value and the received signal power by setting <code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>. Please refer to the <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/Waveform.html#neoradium.waveform.Waveform.addNoise">documentation of addNoise</a> for more information about the <code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> argument.</p>
+<p>Here, we calculate the noise power using the SNR value and the received signal power by setting <code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>. Please refer to the <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/Waveform.html#neoradium.waveform.Waveform.addNoise">documentation of addNoise</a> for more information about the <code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> argument.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -502,7 +502,7 @@ rxGrid = precodedGrid.applyChannel(channelMatrix)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Perfect channel estimation (Applying the precoding to the channel matrix)</span>
-<span class="c1"># estChannelMatrix = channelMatrix @ precoder[None,...]  # Uncomment to use Perfect channel estimation.</span>
+<span class="c1"># estChannelMatrix = channel.getEffChannel(channelMatrix, precoder)</span>
 
 <span class="c1"># Least-squares channel estimation</span>
 <span class="n">estChannelMatrix</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">noisyRxGrid</span><span class="o">.</span><span class="n">estimateChannelLS</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">dmrs</span><span class="p">,</span> <span class="n">polarInt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
