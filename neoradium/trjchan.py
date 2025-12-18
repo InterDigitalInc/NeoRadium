@@ -20,6 +20,16 @@ models can also be used to generate datasets for sequential deep learning models
 #                                       * Added the new method "getChanSeqGen" that can be used to return a generator
 #                                         object that can generate sequences of channel matrices based on the given
 #                                         parameters.
+# 12/18/2025    Shahab                  * Some bug fixes.
+#                                       * Added the method "printDiscontinuities" to the "Trajectory" class
+#                                       * Added multipath interpolation inside each slot. See "interpolateSlots"
+#                                         parameter and "interpolateSlot" method of the "TrjChannel" class.
+#                                       * Added the "totalBlockage" readonly property.
+#                                       * Re-organised the code related to the "getPathGains" function. "getGains"
+#                                         method replaced the old "getLOSgains" and "getNLOSgains" methods. The
+#                                         "getDopplerFactor" method has also been updated accordingly.
+#                                       * Updated the channel sequence generation in the "getChanSeqGen" function and
+#                                         added 2 different callbacks for channels and sequences.
 # **********************************************************************************************************************
 import numpy as np
 import scipy.io
@@ -275,6 +285,7 @@ class TrjPoint:
         # then curToNext[c]=n where 'curToNext' is the returned value of this function.
         
         # Path Values: 0:phase, 1:delay, 2:power, 3:aoa, 4:zoa, 5:aod, 6:zod, 7:bounces
+        assert self.numPaths>0
         matchParams = [1,2,3,4,5,6,7]   # Use these to match paths (delay, power, aoa, zoa, aod, zod, bounces)
         p5d0 = self.pathInfo[:,None,matchParams]
         p5d1 = nextPoint.pathInfo[None,:,matchParams]
@@ -580,6 +591,24 @@ class Trajectory:
     def __getitem__(self, idx):                                         # Documented above in the __init__ function.
         return self.points[idx]
 
+    # ******************************************************************************************************************
+    def printDiscontinuities(self):
+        r"""
+        This method prints all the `discontinuities` in this trajectory. A `discontinuity` is a situation where two 
+        consecutive points on the trajectory have different sets of paths.
+        """
+        for i,p in enumerate(self.points):
+            if i==0: continue # skip the first one
+            prev = self.points[i-1]
+            curToNext = prev.matchPathInfo(p)           # Match paths between prev and p
+            commonIdxPrev = np.where(curToNext>-1)[0]   # Indexes of common paths in p0
+            commonIdxP = curToNext[curToNext!=-1]       # Indexes of common paths in p1
+            assert len(commonIdxPrev)==len(commonIdxP)
+            numCommon = len(commonIdxPrev)              # Number of common paths
+
+            if (numCommon==prev.numPaths) and (numCommon==p.numPaths): continue
+            print(f"Point {i-1:,}: {prev.numPaths} paths, Point {i:,}: {p.numPaths} paths, {numCommon} common paths.")
+
 # **********************************************************************************************************************
 class TrjChannel(ChannelModel):
     r"""
@@ -650,6 +679,10 @@ class TrjChannel(ChannelModel):
                     “Step 3” of **3GPP TR 38.901 section 8.4**. Otherwise, the original delays obtained from 
                     ray-tracing are used.
 
+                :interpolateSlots: If the default value of `True` is used, the multipath information for each slot is
+                    interpolated to derive multipath information per time symbol. Otherwise, the same multipath 
+                    information is used for all symbols in the slot, which is faster but less accurate.  
+
                 :filterLen: The length of the channel filter. The default is 16 sample.
                 
                 :delayQuantSize: The size of delay fraction quantization for the channel filter. The default is 64.
@@ -694,8 +727,10 @@ class TrjChannel(ChannelModel):
                 is `True`, the delays from the ray-tracing are normalized according to "Step 3" in **3GPP TR 38.901 
                 Section 8.4**. Note that the delay normalization (if enabled) is only applied to this property; the
                 redirected properties "delays", "losDelay", and "nlosDelays" always keep the original delay values from
-                the ray-tracing. 
+                the ray-tracing.
 
+            :totalBlockage: This read-only property returns `True` if the channel is currently at a total blockage 
+                point, indicating that there is no communication path between the transmitter and receiver.
 
         **TrjPoint Redirection**:
             
@@ -710,6 +745,8 @@ class TrjChannel(ChannelModel):
         super().__init__(bwp, **kwargs)
         self.trajectory = trajectory
         
+        self.interpolateSlots = kwargs.get('interpolateSlots', True)
+                        
         self.carrierFreq = trajectory.carrierFreq   # Set carrierFreq based on the value from ray-tracing scenario
         
         self.dopplerShift = trajectory.maxSpeed * self.carrierFreq/299792458 # Calculate based on max speed (Not used)
@@ -730,27 +767,41 @@ class TrjChannel(ChannelModel):
         self.restart()
 
     # ******************************************************************************************************************
-    @property           # This property is already documented above in the __init__ function.
-    def nrNt(self):     return (self.rxAntenna.getNumElements(), self.txAntenna.getNumElements())
+    @property                   # This property is already documented above in the __init__ function.
+    def nrNt(self):             return (self.rxAntenna.getNumElements(), self.txAntenna.getNumElements())
 
     # ******************************************************************************************************************
-    def __getattr__(self, property):                                        # Documented above in the __init__ function.
+    @property                   # This property is already documented above in the __init__ function.
+    def totalBlockage(self):    return (self.trajectory.numPaths == 0)
+
+    # ******************************************************************************************************************
+    @property                   # This property is already documented above in the __init__ function.
+    def pathPowers(self):
+        if self.totalBlockage:      return None
+        if self.interpolateSlots:
+            _, nc, n = self.intPathInfo.shape
+            return self.intPathInfo[2,nc//2]    # Return the interpolated powers in the mid point of this slot
+        return self.trajectory.powers
+
+    # ******************************************************************************************************************
+    @property                   # This property is already documented above in the __init__ function.
+    def pathDelays(self):
+        if self.totalBlockage:      return None
+        delays = self.trajectory.delays
+        if self.interpolateSlots:
+            _, nc, n = self.intPathInfo.shape
+            delays = self.intPathInfo[1,nc//2]    # Return the interpolated delays in the mid point of this slot
+        
+        # Normalizing the delays. See "Step 3" in 3GPP 3GPP TR 38.901 section 8.4 for more details.
+        if self.normalizeDelays:    return delays - delays[0]
+        return delays
+
+    # ******************************************************************************************************************
+    def __getattr__(self, property):    # Documented above in the __init__ function.
         # Get these properties from the 'cur' object
         if property not in TrjPoint.pathParamNames:
             raise ValueError("Class '%s' does not have any property named '%s'!"%(self.__class__.__name__, property))
         return getattr(self.trajectory, property)
-
-    # ******************************************************************************************************************
-    @property           # This property is already documented above in the __init__ function.
-    def pathPowers(self):                   return self.trajectory.powers
-
-    # ******************************************************************************************************************
-    @property           # This property is already documented above in the __init__ function.
-    def pathDelays(self):
-        # Normalizing the delays. See "Step 3" in 3GPP 3GPP TR 38.901 section 8.4 for more details.
-        if self.trajectory.numPaths == 0:   return None
-        if self.normalizeDelays:            return self.trajectory.delays - self.trajectory.delays[0]
-        return self.trajectory.delays
 
     # ******************************************************************************************************************
     def restart(self, restartRanGen=False, applyToBwp=True):
@@ -820,6 +871,7 @@ class TrjChannel(ChannelModel):
         repStr += indent*' ' + f"  normalizeGains:       {str(self.normalizeGains)}\n"
         repStr += indent*' ' + f"  normalizeOutput:      {str(self.normalizeOutput)}\n"
         repStr += indent*' ' + f"  normalizeDelays:      {str(self.normalizeDelays)}\n"
+        repStr += indent*' ' + f"  interpolateSlots:     {str(self.interpolateSlots)}\n"
         repStr += indent*' ' + f"  xPolPower:            {self.xPolPower:.2f} (dB)\n"
         repStr += indent*' ' + f"  filterLen:            {self.filterLen} samples\n"
         repStr += indent*' ' + f"  delayQuantSize:       {self.delayQuantSize}\n"
@@ -845,138 +897,163 @@ class TrjChannel(ChannelModel):
     # ******************************************************************************************************************
     def prepareForNextSlot(self):
         # Raise exception if at the end of trajectory. Otherwise just call base class's function.
-        if self.trajectory.remainingPoints<=0: raise ValueError("Reached end of trajectory!")
+        if self.trajectory.remainingPoints<=0:      raise ValueError("Reached end of trajectory!")
+        if self.nextSlotStart > self.curSlotStart:  return  # The parameters for this slot have already been initialized
+        if self.interpolateSlots: self.interpolateSlot()
         super().prepareForNextSlot()
+
+    # ******************************************************************************************************************
+    def interpolateSlot(self):
+        # This function returns `nc` sets of point information (nc = numSym + 1). The first set corresponds to the
+        # information at the current trajectory point, the last set corresponds to the information at the next
+        # trajectory point, and the intermediate sets contain the interpolated information for each symbol.
+        if self.totalBlockage:  return              # No interpolation is needed at total-blockage locations
+
+        symLens = self.bwp.getSymLens()                         # lengths of the next (numSyms+1) symbols
+        symStarts = np.cumsum(np.append([0], symLens[:-1]))     # Symbol start sample indices for the next nc symbols
+        nc = len(symLens)                                       # nc = numSyms+1 = len(symLens) = len(symStarts)
+        p0 = self.trajectory.cur                                # Current trajectory point
+
+        # Initialize interpolated values using the current point by repeating its information for all symbols.
+        # If anything fails in this function, the interpolation defaults to using p0 only.
+        self.intXyzs = np.array(nc*[p0.xyz])                                            # Shape: nc x 3
+        self.intPathInfo = np.transpose( np.array(nc*[p0.pathInfo]), (2,0,1))           # 8 x nc x numPaths
+        if self.trajectory.remainingPoints<=1:      return
+
+        
+        p1 = self.trajectory.points[self.trajectory.curIdx+1]   # Next trajectory point
+        if p0.hasLos != p1.hasLos:                  return      # Ensure that both points are either LOS or NLOS
+        
+        curToNext = p0.matchPathInfo(p1)                        # Match path indices between p0 and p1
+        commonIdxCur = np.where(curToNext>-1)[0]                # Indexes of common paths in p0
+        commonIdxNext = curToNext[curToNext!=-1]                # Indexes of common paths in p1
+        assert len(commonIdxCur)==len(commonIdxNext)
+        n = len(commonIdxCur)                                   # Number of common paths
+        if n==0:                                    return      # No common paths. Use p0-based interpolation only
+       
+        # Endpoints of interpolation (p0 and p1), including only the common paths
+        endPointsInfo = np.concatenate(([p0.pathInfo[commonIdxCur]], [p1.pathInfo[commonIdxNext]]))
+        # Unwrapping azimuth/phase angles: (0:Phase, 1:delay, 2:RxPower, 3:aoa, 4:zoa, 5:aod, 6:zod, 7:bounces)
+        endPointsInfo[:,:,(0,3,5)] = np.unwrap(endPointsInfo[:,:,(0,3,5)],.5, axis=0, period=360)
+        endPointsXyz = np.concatenate(([p0.xyz],[p1.xyz]))              # End points 3D coordinates. Shape: 2 x 3
+        # All endpoint information including positions:
+        endPointsInfo = np.concatenate((endPointsInfo.reshape(2,-1), endPointsXyz), axis=1) # Shape: 2 x n*8+3
+
+        # Compute the interpolated point information
+        startRatios = symStarts.reshape(-1,1)/symStarts[-1]                 # nc increasing values between 0 and 1
+        intPointInfo = endPointsInfo[0] + (endPointsInfo[1]-endPointsInfo[0])*startRatios       # nc x (n*8+3)
+
+        # Validate start and end values
+        assert np.abs(intPointInfo[-1]-endPointsInfo[1]).max()<1e-6, \
+               f"End Difference: {np.abs(intPointInfo[-1]-endPointsInfo[1]).max()}"
+        assert np.abs(intPointInfo[0]-endPointsInfo[0]).max()<1e-6, \
+               f"Start Difference: {np.abs(intPointInfo[0]-endPointsInfo[0]).max()}"
+    
+        # Store the interpolated information
+        self.intXyzs = intPointInfo[:,-3:]                                                      # Shape: nc x 3
+        self.intPathInfo = np.transpose(intPointInfo[:,:-3].reshape(nc,n,8), (2,0,1))           # 8 x nc x n
 
     # ******************************************************************************************************************
     def getPathGains(self):
         r"""
         Calculates the gains for Line-of-Sight (LOS) and Non-Line-of-Sight (NLOS) paths separately and combines the 
-        results before returning the gains between every RX/TX antenna pair, for every path, at every time instance. 
+        results before returning the gains between every RX/TX antenna pair, for every path, at every time symbol. 
         
         Returns
         -------
         NumPy array or None
-            This function returns a 4-D complex tensor of shape ``L x Nr x Nt x Np``, where ``L`` represents the 
+            This function returns a 4-D complex tensor of shape ``Ns x Nr x Nt x Np``, where ``Ns`` represents the 
             number of time symbols, ``Nr`` and ``Nt`` indicate the number of receiver and transmitter antennas
             respectively, and ``Np`` denotes the number of paths between the base station and the UE at its current
-            location along its trajectory. 
+            location along its trajectory. If the UE is at a total blockage point, this function returns `None`.
         """
-        # This function creates gain information at the times specified by "chanGainSamples": nc=len(chanGainSamples)
-        # Note that here nc is the number of symbols per slot plus 1, because we always create gains for one more
-        # symbol (The first symbol of the next slot)
+        # This function creates gain information for the next 'nc' time symbols, which is the number of time symbols
+        # per slot plus 1. We always create gains for one more symbol (The first symbol of the next slot)
+        if self.numPaths == 0:      return None                         # Total Blockage
+        
+        if self.interpolateSlots:
+            numIntPaths = self.intPathInfo.shape[-1]
+            if self.hasLos:
+                if numIntPaths==1:  return self.getGains(los=True)       # Only LOS, Shape: nc x nr x nt x 1
+                return np.concatenate((self.getGains(los=True),
+                                       self.getGains(los=False)),axis=3) # LOS & NLOS, Shape: nc x nr x nt x n
+            return self.getGains(los=False)                              # Only NLOS, Shape: nc x nr x nt x n
+        
+        # Not interpolating
         if self.numNlosPaths>0:
-            if not self.hasLos:
-                return self.getNLOSgains()                                          # Shape: nc x nr x nt x numNLOS
-            return np.concatenate((self.getLOSgains(), self.getNLOSgains()),axis=3) # Shape: nc x nr x nt x (numNLOS+1)
-        elif self.hasLos: return self.getLOSgains()                                 # Shape: nc x nr x nt x 1
-        return None                                                                 # Total Blockage
+            if self.hasLos==0:      return self.getGains(los=False)      # Only NLOS, Shape: nc x nr x nt x n
+            return np.concatenate((self.getGains(los=True),
+                                   self.getGains(los=False)),axis=3)     # LOS & NLOS, Shape: nc x nr x nt x n
+        return self.getGains(los=True)                                   # Only LOS, Shape: nc x nr x nt x 1
 
     # ******************************************************************************************************************
-    def getLOSgains(self):        # Not documented
-        # Calculates the gain for the LOS path. It must be called only if there is a LOS path between the UE and the
-        # base station at current trajectory point.
-
-        # Get the departure and arrival angles in radians. These are all 1x1 matrices (one cluster, one ray).
-        # See TR38.901 - Section 8.4 step 3.
-        phiA, thetaA, phiD, thetaD = self.trajectory.losAngles  # LOS angles at current point  4 x 1 x 1 -> 4x (1x1)
-        pN = toLinear(self.trajectory.losPower)                 # Convert from dB to linear (a single value).
-
-        nr, nt = self.nrNt
-        
-        # Get the TX field part and TX location part in TR38.901 - Eq. 7.5-29 (The 3rd and 6th terms)
-        fieldTx, locTx = self.txAntenna.getElementsFields(thetaD, phiD, self.txOrientation)
-        fieldTx, locTx = fieldTx[:,:,0,0], locTx[:,0,0]                                     # Shapes: nt x 2  &  nt
-
-        # Get the RX field part and RX location part in TR38.901 - Eq. 7.5-29 (The 1st and 5th terms)
-        fieldRx, locRx = self.rxAntenna.getElementsFields(thetaA, phiA, self.rxOrientation)
-        fieldRx, locRx = fieldRx[:,:,0,0], locRx[:,0,0]                                     # Shapes: nr x 2  &  nr
-        
-        # Get the polarization matrix part in TR38.901 - Eq. 7.5-29 (The 2nd and 4th terms combined)
-        # We need to apply the LOS phase to the polarization matrix. The LOS phase is: -2𝝅.d/𝝀 (where d is 3D
-        # distance and 𝝀 is the wavelength)
-        polMat = np.exp(1j*toRadian(self.trajectory.losPhase))*np.float64([[1,0],[0,-1]])   # Shape:  2 x 2
-        
-        # Get the doppler term in TR38.901 - Eq. 7.5-29 (The last term)
-        doppler = self.getDopplerFactor(thetaA, phiA)                                       # Shape:  nc x 1 x 1
-
-        # Now that we have built all parts of TR38.901 - Eq. 7.5-29, we need to combine all of them together. Here
-        # are shapes of different parts of TR38.901 - Eq. 7.5-29  complex tensor.
-        #       fieldRx: nr x 2
-        #       polMat:  2 x 2
-        #       fieldTx: nt x 2
-        #       locRx:   nr
-        #       locTx:   nt
-        #       doppler: nc x 1 x 1
-        # The output will be: nc x nr x nt x 1
-        
-        h = fieldRx.dot(polMat).dot(fieldTx.T)                              # Shape: nr x nt
-        # Now apply location factors
-        h *= locRx[:,None] * locTx[None,:]                                  # Shape: nr x nt
-        # Applying the doppler:
-        h = h[None,:,:]*doppler                                             # Shape: nc x nr x nt
-        # Apply the power
-        h *= np.sqrt(pN)                                                    # Shape: nc x nr x nt
-        return h[:,:,:,None]                                                # Shape: nc x nr x nt x 1
-        
-    # ******************************************************************************************************************
-    def getNLOSgains(self):       # Not documented
-        # Calculates the gain for the NLOS paths. It is called only if there are NLOS paths between the UE and the
-        # base station.
-
-        # Get the departure and arrival angles in radians for all NLOS paths. These are nx1 matrices (n=numNlosPaths)
-        phiA, thetaA, phiD, thetaD = self.trajectory.nlosAngles     # NLOS angles at current point (n x 1 matrices)
-        pN = toLinear(self.trajectory.nlosPowers)                   # Convert from dB to linear. Shape: (n,)
+    def getGains(self, los):
+        # This function calculates the gains matrix for LOS and NLOS paths (based on the `los` parameter).
+        # It is called by the `getPathGains` function and returns an nc x nr x nt x n complex NumPy array.
+        if self.interpolateSlots:
+            # Shape of self.intPathInfo: 8 x nc x n
+            # Path information indexes: 0:Phase, 1:delay, 2:RxPower, 3:aoa, 4:zoa, 5:aod, 6:zod, 7:bounces
+            if los:     # nc = number of time symbols+1, n = 1
+                phiA, thetaA, phiD, thetaD = toRadian(self.intPathInfo[3:7,:,0:1])                  # 4 x nc x n
+                pN = toLinear(self.intPathInfo[2,:,0:1])                    # Convert from dB to linear   nc x n
+                phases = toRadian(self.intPathInfo[0,:,0:1])                                            # nc x n
+            else:       # nc = number of time symbols+1, n = number of NLOS paths
+                phiA, thetaA, phiD, thetaD = toRadian(self.intPathInfo[3:7,:,self.hasLos:])         # 4 x nc x n
+                pN = toLinear(self.intPathInfo[2,:,self.hasLos:])           # Convert from dB to linear   nc x n
+                phases = toRadian(self.intPathInfo[0,:,self.hasLos:])                                   # nc x n
+        elif los:       # nc = 1, n = 1
+            phiA, thetaA, phiD, thetaD = toRadian([self.losAoa, self.losZoa,
+                                                   self.losAod, self.losZod])[:, None, None]        # 4 x nc x n
+            pN = toLinear(np.array([[self.losPower]]))                      # Convert from dB to linear   nc x n
+            phases = toRadian(self.losPhase)[None,None]                                                 # nc x n
+        else:           # nc = 1, n = number of NLOS paths
+            phiA, thetaA, phiD, thetaD = toRadian([self.nlosAoas, self.nlosZoas,
+                                                       self.nlosAods, self.nlosZods])[:,None,:]     # 4 x nc x n
+            pN = toLinear(np.array([self.nlosPowers]))                      # Convert from dB to linear   nc x n
+            phases = toRadian(self.nlosPhases)[None,:]                                                  # nc x n
 
         nr, nt = self.nrNt
 
-        # STEP-3 (See Step-3 in TR38.901 - 7.7.1) ----------------------------------------------------------------------
-        # Get the cross-polarization power ratio:
-        kappa = toLinear(self.xPolPower)    # Cross-Polarization Ratio (XPR)
+        # Get the RX field component and RX location component in:
+        #       NLOS: TR 38.901 – Eq. 7.5-28 (the 1st and 4th terms)
+        #       LOS:  TR 38.901 – Eq. 7.5-29 (the 1st and 5th terms)
+        fieldRx, locRx = self.rxAntenna.getElementsFields(thetaA, phiA, self.rxOrientation) # nrx2xncxn & nrxncxn
+        fieldRx, locRx = np.transpose(fieldRx,(2,0,1,3)), np.transpose(locRx,(1,0,2))   # nc x nr x 2 x n & nc x nr x n
 
-        # Using the same phase value for all 4 polarizations
-        phiInit = self.trajectory.nlosPhases[None,None,:]                               # Shape: 1 x 1 x n
-    
-        # Get the TX field part and TX location part in TR38.901 - Eq. 7.5-28 (The 3rd and 5th terms)
-        fieldTx, locTx = self.txAntenna.getElementsFields(thetaD, phiD, self.txOrientation)
-        fieldTx, locTx = fieldTx[...,0], locTx[...,0]                                   # Shapes: nt x 2 x n  &  nt x n
+        # Get the TX field component and TX location component in:
+        #       NLOS: TR38.901 - Eq. 7.5-28 (The 3rd and 5th terms)
+        #       LOS:  TR38.901 - Eq. 7.5-29 (The 3rd and 6th terms)
+        fieldTx, locTx = self.txAntenna.getElementsFields(thetaD, phiD, self.txOrientation) # ntx2xncxn & ntxncxn
+        fieldTx, locTx = np.transpose(fieldTx,(2,0,1,3)), np.transpose(locTx,(1,0,2))   # nc x nt x 2 x n & nc x nt x n
 
-        # Get the RX field part and RX location part in TR38.901 - Eq. 7.5-28 (The 1st and 4th terms)
-        fieldRx, locRx = self.rxAntenna.getElementsFields(thetaA, phiA, self.rxOrientation)
-        fieldRx, locRx = fieldRx[...,0], locRx[...,0]                                   # Shapes: nr x 2 x n  &  nr x n
-                
-        # Get the polarization matrix part in TR38.901 - Eq. 7.5-28 (The 2nd term)
-        polMat = np.exp(1j*phiInit) * (np.sqrt([[1, 1/kappa], [1/kappa, 1]])[:,:,None]) # Shape:  2 x 2 x n
+        if los:
+            # Get the polarization matrix term in TR 38.901 – Eq. 7.5-29 (the 2nd and 4th terms combined).
+            # We need to apply the LOS phase to the polarization matrix. The LOS phase is: -2π d/λ (where d is
+            # the 3D distance and λ is the wavelength).
+            polMat = np.exp(1j*phases[:,None,None,:])*np.float64([[1,0],[0,-1]])[None,:,:,None]      # nc x 2 x 2 x n
+        else:
+            # STEP-3 (See Step-3 in TR38.901 - 7.7.1) ------------------------------------------------------------------
+            # Get the cross-polarization power ratio:
+            k = toLinear(self.xPolPower)    # Cross-Polarization Ratio (XPR)
+            
+            # Get the polarization matrix term in TR38.901 - Eq. 7.5-28 (The 2nd term)
+            polMat = np.exp(1j*phases[:,None,None,:])*(np.sqrt([[1, 1/k], [1/k, 1]]))[None,:,:,None] # nc x 2 x 2 x n
 
-        # Get the doppler term in TR38.901 - Eq. 7.5-28 (The last term)
-        doppler = self.getDopplerFactor(thetaA, phiA)[...,0]                            # Shape:  nc x n
+        doppler = self.getDopplerFactor(thetaA, phiA)                                                           # nc x n
 
-        # Now that we have built all parts of TR38.901 - Eq. 7.5-28, we need to combine all of them together. Here
-        # are shapes of different parts of TR38.901 - Eq. 7.5-28  complex tensor.
-        #       fieldRx: nr x 2 x n
-        #       polMat:  2 x 2 x n
-        #       fieldTx: nt x 2 x n
-        #       locRx:   nr x n
-        #       locTx:   nt x n
-        #       doppler: nc x n
-        # The output will be: nc x nr x nt x n
-        
         # First fieldRx x polMat x fieldTx
-        #   fieldRx  . polMat    -> filedRxPolMat .   fieldTx    ->      hLOS
-        # (nr, 2, n) . (2, 2, n) ->  (nr, 2, n)   .  (nt, 2, n)  ->  (nr, nt, n)
-        #  0   1        0  1     ->   0   1           1   0      ->   0   1
-        h = np.matmul(np.matmul(fieldRx, polMat, axes=[(0,1),(0,1),(0,1)]),
-                      fieldTx, axes=[(0,1),(1,0),(0,1)])                                # Shape: nr x nt x n
-        # Now apply location factors
-        h *= locRx[:,None,:] * locTx[None,:,:]                                          # Shape: nr x nt x n
-        # Applying the doppler:
-        h =  h[None,:,:,:] * doppler[:,None,None,:]                                     # Shape: nc x nr x nt x n
-        # Apply the scaling
-        h *= np.sqrt(pN)[None,None,None,:]                                              # Shape: nc x nr x nt x n
-        return h                                                                        # Shape: nc x nr x nt x n
+        #   fieldRx      .      polMat    ->  fieldRx.PolMat .     fieldTx     ->       h
+        # (nc, nr, 2, n) . (nc, 2, 2, n)  ->  (nc, nr, 2, n) . (nc, nt, 2, n)  ->  (nc, nr, nt, n)
+        #      1   2            1  2      ->       1   2            2   1      ->       1   2
+        h = np.matmul(np.matmul(fieldRx, polMat, axes=[(1,2),(1,2),(1,2)]),
+                      fieldTx, axes=[(1,2),(2,1),(1,2)])                                            # nc x nr x nt x n
+        h *= locRx[:,:,None,:] * locTx[:,None,:,:]                                                  # nc x nr x nt x n
+        h =  h * doppler[:, None,None,:]                                                            # nc x nr x nt x n
+        h *= np.sqrt(pN)[:,None,None,:]                                                             # nc x nr x nt x n
+        return h
 
     # ******************************************************************************************************************
-    def getDopplerFactor(self, theta, phi):           # Not documented
+    def getDopplerFactorOld(self, theta, phi):           # Not documented
         # This function calculates the doppler term (the last term) in TR38.901 - Eq. 7.5-28 and 7.5-29
         # 'r' is the unit vector which points to the arrival direction of each path.
         r = np.array([ np.sin(theta)*np.cos(phi),
@@ -990,9 +1067,24 @@ class TrjChannel(ChannelModel):
         return np.exp(2j * np.pi * chanTimes[:,None,None] * dopplerShift[None,:,:]) # Shape: nc, n, 1 or nc, 1, 1
 
     # ******************************************************************************************************************
-    def getChanSeqGen(self, seqPeriod=1, seqLen=10, maxNumSeq=np.inf):
+    def getDopplerFactor(self, theta, phi):
+        # This function calculates the doppler term (the last term) in TR38.901 - Eq. 7.5-28 and 7.5-29
+        # 'r' is the unit vector which points to the arrival direction of each path.
+        r = np.array([ np.sin(theta)*np.cos(phi),
+                       np.sin(theta)*np.sin(phi),
+                       np.cos(theta) ])                     # Shape: 3 x nc x n
+        v = self.trajectory.cur.speed.reshape(3,1,1)        # 3D Speed vector, Shape: 3, 1, 1
+        waveLen = 299792458/self.carrierFreq                # Speed of light: 299792458 m/s
+        dopplerShift = ((r*v).sum(0)/waveLen)               # Doppler Shift (Hz), Shape: nc x n
+
+        chanTimes = self.chanGainSamples/self.sampleRate
+        return np.exp(2j * np.pi * chanTimes[:, None] * dopplerShift) # Shape: nc x n
+
+    # ******************************************************************************************************************
+    def getChanSeqGen(self, seqPeriod=1, seqLen=10, maxNumSeq=np.inf,
+                      chanCallback=None, seqCallback=None):
         r"""
-        Returns a generator object that can generate sequences of channel matrices based on the given parameters.
+        This function returns an iterable object that generates sequences of channel matrices based on the given parameters.
 
         Refer to the notebook :doc:`../Playground/Notebooks/RayTracing/ChannelSequences` for an example of
         using this method.
@@ -1001,21 +1093,86 @@ class TrjChannel(ChannelModel):
         ----------
         seqPeriod: int            
             The sampling period of channel matrices along the trajectory. The default value of ``1`` means all 
-            channel matrices are included in the sequence. For instance, if this is set to ``3``, every other three
-            channel matrices (i.e., every other three slots) are included in the sequence.
+            channel matrices are included in the sequence. For instance, if this is set to ``3``, every third 
+            channel matrix (i.e., one out of every three slots) is included in the sequence.
             
         seqLen : int
             The length of the returned sequences. The default is ``10``.
 
-        maxNumSeq: int            
-            The maximum number of sequences to generate. By default, it is set to `np.inf`, indicating no additional
-            limit for the number of sequences. In this case, the channel sequences are generated until the end of 
+        maxNumSeq: int or float           
+            The maximum number of sequences to generate. By default, it is set to ``np.inf``, indicating no additional
+            limit on the number of sequences. In this case, channel sequences are generated until the end of 
             the trajectory.
+    
+        chanCallback: function
+            If provided, this function is called when a new channel matrix is generated and before it is added to 
+            the sequence. The function may modify the channel and return the modified channel matrix. The function may 
+            also return `None`, which means the current sequence is not valid and should be dropped. In this case, 
+            the generator discards the channels collected in the current sequence and starts a new sequence beginning
+            with the next channel matrix according to ``seqPeriod``. The default is `None` which disables this channel 
+            preprocessing feature. The user-defined function receives the following parameters:
+
+                :seqNo: The sequence number, starting at zero and incremented for each sequence.
+                :elementNo: The element index within the current sequence.
+                :channelMatrix: The current channel matrix. An ``L x K x Nr x Nt`` NumPy array where ``L`` represents 
+                    the number of OFDM symbols, ``K`` denotes the number of subcarriers, ``Nr`` is the number of 
+                    receive antennas, and ``Nt`` indicates the number of transmit antennas.
+                :channel: This :py:class:`~neoradium.trjchan.TrjChannel` object.
+                            
+        seqCallback: function
+            If provided, this function is called when a new sequence of channels is generated and before it is used by
+            the sequence generator. The function may modify the channel sequence and return the modified sequence. The 
+            function may also return `None`, which means the current sequence is not valid and should be dropped. In 
+            this case, the generator discards the sequence and initiates a new one, starting with the next
+            channel matrix according to ``seqPeriod``. The default is `None` which disables this sequence preprocessing 
+            feature. The user-defined function receives the following parameters:
             
+                :seqNo: The sequence number, starting at zero and incremented for each sequence.
+                :channelSequence: The sequence of channel matrices. An ``S x L x K x Nr x Nt`` NumPy array where
+                    ``S`` is the sequence length (the ``seqLen`` parameter above), ``L`` represents the number of 
+                    OFDM symbols, ``K`` denotes the number of subcarriers, ``Nr`` is the number of receive antennas, 
+                    and ``Nt`` indicates the number of transmit antennas.
+                :channel: This :py:class:`~neoradium.trjchan.TrjChannel` object.
+        
         Returns
         -------
-        ``ChanSeqGen``, a generator object that is used to generate sequences of channel matrices.
+        ChanSeqGen
+            An iterable object that yields sequences of channel matrices.
+
+    
+        The following example creates sequences of effective channel matrixes (which includes the precoding effect)
+        that do not contain any point with total blockage.
+        
+        .. code-block:: python
+        
+            from neoradium import Carrier, PDSCH
+
+            carrier = Carrier(numRbs=25, spacing=30) # Carrier with 25 RBs, 30KHz subcarrier spacing
+            channel = TrjChannel(carrier.curBwp, trajectory,
+                                 txAntenna = AntennaPanel([2,4], polarization="x"),       # 8 TX antenna
+                                 rxAntenna = AntennaPanel([1,2], polarization="x"))       # 2 RX antenna
+            pdsch = PDSCH(carrier.curBwp, numLayers=2, nID=carrier.cellId, modulation="16QAM")
+
+            def chanCallback(seqNo, elementNo, channelMatrix, channel):
+                # Drop the channels with total blockage
+                return None if channel.totalBlockage else channelMatrix
+                
+            def seqCallback(seqNo, channelSeq, channel):
+                # Get the precoder matrix based on the first channel in the sequence
+                precoder = pdsch.getPrecodingMatrix(channelSeq[0])
+                # Now create and return a new sequence containing the effective channels by applying 
+                # the precoder to all channels in the sequence
+                newSeq = np.stack([channel.getEffChannel(chanMat, precoder) for chanMat in channelSeq])  
+                return newSeq        
+
+            chanSeqGen = channel.getChanSeqGen(seqPeriod=1, seqLen=5, maxNumSeq=20, 
+                                               chanCallback=chanCallback, seqCallback=seqCallback)
+            channelSequences = np.stack([chanSeq for chanSeq in chanSeqGen])
+            print(channelSequences.shape)   # Prints: (20, 5, 14, 300, 4, 2) for (numSeq, seqLen, L, K, Nr, Nt)
         """
+        if seqPeriod <= 0:
+            raise ValueError("'seqPeriod' must be a positive integer.")
+    
         self.restart()
         class ChanSeqGen:
             def __init__(self, channel):
@@ -1027,17 +1184,27 @@ class TrjChannel(ChannelModel):
             def __next__(self):
                 if self.numSeq >= maxNumSeq: raise StopIteration
                 
-                sequence = []
-                for s in range(seqLen):
-                    while (self.channel.trajectory.curIdx % seqPeriod) > 0:
+                sequence = None
+                while sequence is None:
+                    sequence = []
+                    while len(sequence) < seqLen:
+                        while (self.channel.trajectory.curIdx % seqPeriod) > 0:
+                            self.channel.goNext()
+                            if self.channel.trajectory.remainingPoints <=0: raise StopIteration
+                        
+                        channelMatrix = self.channel.getChannelMatrix()
+                        if chanCallback is not None:    channelMatrix = chanCallback(self.numSeq, len(sequence),
+                                                                                     channelMatrix, self.channel)
+                        if channelMatrix is None:       sequence = []   # The channel is bad, restart the sequence
+                        else:                           sequence += [ channelMatrix ]
                         self.channel.goNext()
-                        if self.channel.trajectory.remainingPoints <=0: raise StopIteration
+                        if self.channel.trajectory.remainingPoints <=0:     raise StopIteration
+
+                    sequence = np.stack(sequence)
+                    if seqCallback is not None:         sequence = seqCallback(self.numSeq, sequence, self.channel)
                     
-                    sequence += [ self.channel.getChannelMatrix() ]
-                    self.channel.goNext()
-                
                 self.numSeq += 1
-                return np.stack(sequence)
+                return sequence
 
             def reset(self):
                 self.numSeq = 0

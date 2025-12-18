@@ -18,6 +18,7 @@ an interactive map. A complete example of using the :py:class:`~neoradium.deepmi
 # 06/20/2025    Shahab                  Added the method "getChanGen" which samples random points from the current
 #                                       scenario and returns a generator object that can generate channel matrices
 #                                       corresponding to those random points.
+# 12/18/2025    Shahab                  Minor bug fixes.
 # **********************************************************************************************************************
 import numpy as np
 import os, time, json
@@ -258,8 +259,8 @@ class DeepMimoData:
         # unused params: 'transmit_power'
         # TODO: Test this with scenarios with multiple user grids
         params = scipy.io.loadmat(scenarioFolder + 'params.mat')
-        self.carrierFreq = params['carrier_freq'][0][0];
-        self.version = params['version'][0][0];
+        self.carrierFreq = params['carrier_freq'][0][0]
+        self.version = params['version'][0][0]
         
         gridInfo = params['user_grids']
         numUserGrids = len(gridInfo)
@@ -271,11 +272,11 @@ class DeepMimoData:
         startRow, endRow, usersPerRow = np.int32(gridInfo[gridId])         # Use the grid at `gridId`
         self.numGridPoints = usersPerGrid[gridId]
 
-        numBS = params['num_BS'][0][0];
+        numBS = params['num_BS'][0][0]
         if self.baseStationId > numBS:  raise ValueError("Invalid base station \"%d\"!"%(self.baseStationId))
         
-        self.dualPolarAvailable = params['dual_polar_available'][0][0];
-        self.dopplerAvailable = params['doppler_available'][0][0];
+        self.dualPolarAvailable = params['dual_polar_available'][0][0]
+        self.dopplerAvailable = params['doppler_available'][0][0]
         
         # Load the information about all UEs and the specified base station
         ueInfo = scipy.io.loadmat(scenarioFolder + 'BS%d_UE_0-%d.mat'%(self.baseStationId, self.numGridPoints))
@@ -329,8 +330,8 @@ class DeepMimoData:
         if len(dic) == 1:                   return keys[0]  # Only one item in dictionary: Return its key (Ignore "id")
         
         # Create a dictionary of number_id -> string_id (For example: 3: "grid_3")
-        try:    numKeysToKey = {int("".join([c for c in key if c.isdigit()])):key for key in keys}
-        except: numKeysToKey = None     # Happens when there is no digits in string_ids (keys) in the JSON dictionary
+        try:                numKeysToKey = {int("".join([c for c in key if c.isdigit()])):key for key in keys}
+        except ValueError:  numKeysToKey = None # If there is no digits in string_ids (keys) in the JSON dictionary
         if numKeysToKey is None:    keys = sorted(keys)     # Sort the string_ids alphabetically
         else:
             # Sort the string ids based on the digits in them. (For example: "grid_2" comes before "grid_10")
@@ -353,8 +354,8 @@ class DeepMimoData:
         # now text string instead of integers.
         with open(scenarioFolder + 'params.json', 'r') as file: metadata = json.load(file)
 
-        self.carrierFreq = metadata['rt_params']['frequency'];
-        self.version = metadata['version'];
+        self.carrierFreq = metadata['rt_params']['frequency']
+        self.version = metadata['version']
         rxGridInfo = {}
         txInfo = {}
         
@@ -548,7 +549,7 @@ class DeepMimoData:
         try:
             numKeysToKey = {int("".join([c for c in key if c.isdigit()])):key for key in keys}
             keys = [numKeysToKey[k] for k in sorted(list(numKeysToKey.keys()))]
-        except:
+        except ValueError:
             keys = sorted(keys)
         
         txId = list(txInfo.values())[0][0]
@@ -564,7 +565,7 @@ class DeepMimoData:
         try:
             numKeysToKey = {int("".join([c for c in key if c.isdigit()])):key for key in keys}
             keys = [numKeysToKey[k] for k in sorted(list(numKeysToKey.keys()))]
-        except:
+        except ValueError:
             keys = sorted(keys)
         print(f"\nBase Stations: ({len(txInfo)})")
         for bsName in keys:
@@ -725,7 +726,7 @@ class DeepMimoData:
             elif trajDir == "-X":   start = np.int32([bounds[1,0],bounds.mean(0)[1]]) # start at middle right & go left
             elif trajDir == "+Y":   start = np.int32([bounds.mean(0)[0],bounds[0,1]]) # start at center bottom & go up
             elif trajDir == "-Y":   start = np.int32([bounds.mean(0)[0],bounds[1,1]]) # start at center top & go down
-            else:                   start = np.int32([bounds.mean(0)[0],bounds[0,1]]) # start at center bottom & go up
+            else:                   start = np.int32([bounds.mean(0)[0],bounds.mean(0)[1]]) # start at the center
         else:
             # Otherwise, make sure we are in the bounds and we don't start at corners
             start = np.minimum(np.maximum(bounds[0]+[2*segLen,2*segLen], self.xyToGridXy( xyStart )),
@@ -740,7 +741,7 @@ class DeepMimoData:
         elif trajDir == "-X":   trajLen, curDir = min(trajLen,start[0]-bounds[0,0]-segLen), 180
         elif trajDir == "+Y":   trajLen, curDir = min(trajLen,bounds[1,1]-start[1]-segLen), 90
         elif trajDir == "-Y":   trajLen, curDir = min(trajLen,start[1]-bounds[0,1]-segLen), 270
-        else:                   curDir = 0
+        else:                   curDir = random.choice(np.arange(0,360,45, dtype=np.int32))
     
         # The "prob" is a tuple of 3 values for probability of turning right, going straight, and turning left.
         # [0,1,0] can be used to force it to always go straight. None means uniform distribution for each decision.
@@ -874,8 +875,8 @@ class DeepMimoData:
                 # The starting point has already been included as the last point of previous segment.
                 stepStarts = stepStarts[1:]
 
-            seqLinSpeed = segLens[i-1]*bwp.sampleRate/numSegSamples # Actual linear speed. Close to the desired speedMps
-            assert np.abs(seqLinSpeed-speedMps) < (0.1*speedMps)    # Ensure we are still close enough to original speed
+            segLinSpeed = segLens[i-1]*bwp.sampleRate/numSegSamples # Actual linear speed. Close to the desired speedMps
+            assert np.abs(segLinSpeed-speedMps) < (0.1*speedMps)    # Ensure we are still close enough to original speed
             segSpeed = (p1.xyz-p0.xyz)*bwp.sampleRate/numSegSamples # The 3D speed vector on this segment
             
             if (p0.hasLos == -1) or (p1.hasLos == -1):
@@ -884,7 +885,7 @@ class DeepMimoData:
             else:
                 # If m'th path in 'p0' matches n'th path in 'p1', then curToNext[m]=n
                 # We set the maxDiff to twice the maximum delay difference between neighboring points in
-                # nanoseconds. The matchPathInfo function does not match paths is the difference of the 6D
+                # nanoseconds. The matchPathInfo function does not match paths if the difference of the 6D
                 # path info (Delay, Power, and 4 angles) is more than this.
                 maxDiff = 2*np.linalg.norm(self.delta)*1e9/299792458
                 curToNext = p0.matchPathInfo(p1, maxDiff)                           # Match paths between p0 and p1
@@ -914,7 +915,7 @@ class DeepMimoData:
                 
                 # unwrapping azimuth/phase angles.
                 # Path Values: 0:Phase, 1:delay, 2:RxPower, 3:aoa, 4:zoa, 5:aod, 6:zod, 7:bounces
-                endPointsInfo[:,:,(0,3,5)] = np.unwrap(endPointsInfo[:,:,(0,3,5)],.5,0, period=360)
+                endPointsInfo[:,:,(0,3,5)] = np.unwrap(endPointsInfo[:,:,(0,3,5)],.5, axis=0, period=360)
                 
                 # Endpoint coordinates. Shape: (2, 3)
                 endPointsXyz = np.concatenate(([p0.xyz],[p1.xyz]))
@@ -934,7 +935,7 @@ class DeepMimoData:
                                         speed=segSpeed, sampleNo=pointSample+segStart)
                                     for xyz, pathInfo, pointSample in zip(intXyzs, intPathInfo, stepStarts) ]
             else:
-                intPoints += [ TrjPoint(xyz, los, [], bsDist=np.sqrt(np.square(xyz-self.bsXyz).sum()),
+                intPoints += [ TrjPoint(xyz, los, np.empty((0,8)), bsDist=np.sqrt(np.square(xyz-self.bsXyz).sum()),
                                         speed=segSpeed, sampleNo=pointSample+segStart)
                                     for xyz, pointSample in zip(intXyzs, stepStarts) ]
             segStart += numSegSamples
@@ -1281,7 +1282,8 @@ class DeepMimoData:
                     ax[0].plot([p0,p1], [trajectory.points[p0].delays[0], trajectory.points[p1].delays[0]], 'blue', markersize=1)
                     ax[1].plot([p0,p1], [trajectory.points[p0].powers[0], trajectory.points[p1].powers[0]], 'red', markersize=1)
         """
-        if numGraphs>3: raise("Too many graphs! (This function supports up to 3 graphs)")
+        if numGraphs>3:                 raise ValueError("Too many graphs! (This function supports up to 3 graphs)")
+        if trajectory.numPoints==0:     raise ValueError("The trajectory is empty!")
         figSize = (6, 4+4*numGraphs/3)                                  # numGraphs→Height: 0→4, 1→5.33, 2→6.66, 3→8
         if numGraphs>0:
             fig, ax = plt.subplots(1+numGraphs,1, figsize=figSize, gridspec_kw={'height_ratios': [4] + numGraphs*[1]})

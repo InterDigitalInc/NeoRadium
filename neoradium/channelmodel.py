@@ -14,6 +14,7 @@ or :py:class:`~neoradium.trjchan.TrjChannel`.
 #                                       has been redesigned to work with more general cases arising with ray-tracing
 #                                       channel models.
 # 05/07/2025    Shahab                  Completed the documentation.
+# 12/18/2025    Shahab                  Some bug fixes and added the function getEffChannel.
 # **********************************************************************************************************************
 import numpy as np
 from scipy.signal import lfilter
@@ -202,6 +203,7 @@ class ChannelModel:
         int
             The maximum delay of this channel model in number of time-domain samples for the current slot.
         """
+        if self.totalBlockage:  return None
         return int(np.ceil(self.pathDelays.max()*self.sampleRate/1e9 + self.filterDelays.max()))
 
     # ******************************************************************************************************************
@@ -214,6 +216,11 @@ class ChannelModel:
     @property
     def nrNt(self):
         raise NotImplementedError("The derived channel model classes must implement the `nrNt` property!")
+
+    # ******************************************************************************************************************
+    @property
+    def totalBlockage(self):
+        return False    # See the TrjChannel implementation of this method
 
     # ******************************************************************************************************************
     def getPathGains(self):
@@ -292,6 +299,7 @@ class ChannelModel:
     def getCoeffMatrix(self):               # Not documented
         # 'self.pathDelays' is set by the derived classes. It is an array of length numPaths containing
         # delay values in nanoseconds.
+        assert not self.totalBlockage, "'getCoeffMatrix' was called at a total blockage point!"
         numPaths = len(self.pathDelays)
         delaysInSamples = self.pathDelays * 1e-9 * self.sampleRate      # Note that pathDelays are in nanoseconds
         intDelays = np.int32(delaysInSamples)                           # Integer parts of delays
@@ -332,6 +340,19 @@ class ChannelModel:
         symLens[0] += self.bwp.nFFT                     # Fix the symLens
 
         self.chanGainSamples = self.curSlotStart+symStarts              # Calculate gains at these (nc+1) samples
+        if self.totalBlockage:
+            # We are at a "total blockage" point.
+            self.nextSlotStart = self.curSlotStart + slotLen
+            self.symLens = symLens                          # Shape: (nc+1,)
+            nc = len(symLens)-1
+            nr, nt = self.nrNt
+            self.chanGains = np.zeros((nc, nr, nt, 1))      # Shape: nc x nr x nt x pp
+            self.chanGains1 = np.zeros((nc+1, nr, nt, 1))   # Shape: (nc+1) x nr x nt x pp
+            self.coeffMatrix = np.zeros((1,1))              # Shape: pp x cl
+            self.cir = np.zeros((nc, nr, nt, 1))            # Shape: nc x nr x nt x cl
+            self.chanOffset = 0                             # A number
+            return
+
         chanGains1 = self.getChannelGains()                             # Shape: (nc+1) x nr x nt x pp
         chanGains = chanGains1[:-1]                                     # Shape: nc x nr x nt x pp
 
@@ -355,6 +376,7 @@ class ChannelModel:
 
     # ******************************************************************************************************************
     def getTimingOffset(self):
+        if self.totalBlockage:  return None
         self.prepareForNextSlot()   # Making sure the Channel Offset is ready for this slot.
         return self.chanOffset
         
@@ -377,6 +399,12 @@ class ChannelModel:
         # For better understanding of what is going on here, see the slide "Calculating Channel Matrix" in the
         # implementation notes.
         self.prepareForNextSlot()   # Making sure the Channel Gains, CIR, and Channel Offset are ready for this slot.
+        
+        if self.totalBlockage:
+            # We are at a "Total blockage" point. Return an all zeros channel matrix
+            nr, nt = self.nrNt
+            ll, kk = self.bwp.symbolsPerSlot, self.bwp.numRbs*12
+            return np.zeros((ll,kk,nr,nt), dtype=np.complex128)
         
         # Creating channel matrix using the CIR
         nc,nr,nt,cl = self.cir.shape
@@ -425,6 +453,10 @@ class ChannelModel:
         ntSig, ns = inputSignal.shape           # Number of TX antennas and input samples from the input signal
         nc, nr, nt, pp = self.chanGains.shape
 
+        if self.totalBlockage:
+            # We are at a "Total blockage" point. Return an all zeros signal
+            return Waveform(np.zeros((nr,ns), dtype=np.complex128))
+
         if ntSig != nt:
             raise ValueError(f"The number of transmit antennas in the signal does not match the channel.")
 
@@ -461,6 +493,7 @@ class ChannelModel:
         4-D complex NumPy array
             The path gains as a NumPy array of shape ``L x Nr x Nt x Np``.
         """
+        assert not self.totalBlockage, "'getChannelGains' called at a total blockage point!"
         pathGains = self.getPathGains()                                 # nc x nr x nt x pp
         if self.normalizeOutput:
             pathGains /= np.sqrt(self.nrNt[0])                          # Divide by sqrt(nr)
@@ -489,3 +522,62 @@ class ChannelModel:
         sumP = powers.sum()
         rms =  np.sqrt( np.square(powerDelay).sum()/sumP - np.square( powerDelay.sum()/sumP ) )
         self.pathDelays /= rms
+
+    # ******************************************************************************************************************
+    @classmethod
+    def getEffChannel(cls, channelMatrix, precoder):
+        r"""
+        This class method can be used to calculate the effective channel based on the given ``channelMatrix`` and the
+        ``precoder``.
+        
+        Parameters
+        ----------
+        channelMatrix : NumPy array
+            An ``L x K x Nr x Nt`` complex NumPy array representing the channel matrix, where ``L`` represents the 
+            number of OFDM symbols, ``K`` denotes the number of subcarriers, ``Nr`` is the number of receive antennas, 
+            and ``Nt`` indicates the number of transmit antennas. It can be the actual channel matrix obtained directly
+            from a channel model using the :py:meth:`~neoradium.channelmodel.ChannelModel.getChannelMatrix` method 
+            (perfect estimation), or an estimated channel matrix obtained using the 
+            :py:meth:`~neoradium.grid.Grid.estimateChannelLS` method.
+
+        precoder : List of tuples or NumPy array
+            The precoder information can take one of the following forms:
+        
+            :Wideband: ``precoder`` is an ``Nt x Nl`` matrix where ``Nt`` is the number of transmitter antennas which 
+                **must** match the number of transmitter antennas in the ``channelMatrix`` above, and ``Nl`` is the 
+                number of transmission layers. In this case, the same ``Nt x Nl`` matrix is applied to all subcarriers 
+                of the ``channelMatrix``.
+            
+            :Using PRGs: ``precoder`` is a list of tuples of the form (``groupRBs``, ``groupF``).
+                For each entry in the list, the ``Nt x Nl`` precoding matrix ``groupF`` is applied to all subcarriers
+                of the resource blocks listed in ``groupRBs``. In this case, different precoders are applied to 
+                different sub-bands of the ``channelMatrix``.
+                
+            You can use the :py:meth:`~neoradium.pdsch.PDSCH.getPrecodingMatrix` method to obtain a precoder.
+
+        Returns
+        -------
+        4-D complex NumPy array
+            The effective channel as an ``L x K x Nr x Nl`` NumPy array, where ``L`` represents the number of OFDM 
+            symbols, ``K`` denotes the number of subcarriers, ``Nr`` is the number of receive antennas, and ``Nl`` 
+            indicates the number of transmission layers.
+        """
+        # 'precoder' is either:
+        #   * a wideband Nt x Nl matrix (applied to all subcarriers), or
+        #   * a list of tuples (groupRBs, groupF) for PRG-based, frequency-selective precoding.
+        ll, kk, nr, nt = channelMatrix.shape
+        if type(precoder)==list:
+            # PRG-based precoder: build a per-subcarrier precoder matrix of shape (K, Nt, Nl).
+            nl = precoder[0][1].shape[1]
+            precoderMatrix = np.zeros((kk, nt, nl), dtype=np.complex128)   # Shape: K, Nt, Nl
+            for groupRBs, groupF in precoder:
+                # Map each RB index to its 12 subcarrier indices in frequency.
+                groupREs = np.int32([rb*12+re for rb in groupRBs for re in range(12)])
+                precoderMatrix[groupREs] = groupF
+        else:
+            if type(precoder) != np.ndarray:
+                raise ValueError("'precoder' must be a 2D NumPy array or a list of tuples.")
+            precoderMatrix = precoder
+
+        return channelMatrix @ precoderMatrix
+

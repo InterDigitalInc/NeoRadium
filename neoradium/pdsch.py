@@ -21,6 +21,7 @@ important at high carrier frequencies such as millimeter-wave bands.
 # ------------  --------------------    --------------------------------------------------------------------------------
 # 07/18/2023    Shahab Hamidi-Rad       First version of the file.
 # 12/30/2023    Shahab Hamidi-Rad       Completed the documentation
+# 12/18/2025    Shahab                  Some bug fixes related to the "getPrecodingMatrix" method.
 # **********************************************************************************************************************
 import numpy as np
 
@@ -1129,7 +1130,7 @@ class PDSCH:
             groupPrecoder = (np.conj(vH).T)[:,:self.numLayers]  # Nt x Nl
             return groupPrecoder/np.sqrt(self.numLayers)        # Normalize the group precoder
 
-        curGroup = -1
+        curGroup = 0 if self.prgSize==0 else (self.prbSet[0] + self.bwp.startRb)//self.prgSize
         curGroupRBs = []    # The RBs in the current group that are used by this PDSCH
         # The precoding matrix can take the following forms:
         # a) A single Nt x Nl matrix which is applied to the whole resource grid.
@@ -1142,8 +1143,6 @@ class PDSCH:
         for prb in self.prbSet:
             # For the "Wideband" case (prgSize=0), everything is in the same group
             group = 0 if self.prgSize==0 else (prb + self.bwp.startRb)//self.prgSize
-            curGroupRBs += [prb]
-            
             if group != curGroup:
                 # A new group is found; process the current group, then start the new group.
                 reIndexes = np.int32([rb*12+re for rb in curGroupRBs for re in range(12)])
@@ -1151,9 +1150,10 @@ class PDSCH:
                 curGroup = group
                 curGroupRBs = []
 
-        # Process the last group
-        if group != curGroup:
-            # New group, process current group first, then start the new group
+            curGroupRBs += [prb]
+
+        # The last group
+        if len(curGroupRBs)>0:
             reIndexes = np.int32([rb*12+re for rb in curGroupRBs for re in range(12)])
             f += [ (curGroupRBs, getGroupPrecoder(channelMatrix, reIndexes)) ]
 

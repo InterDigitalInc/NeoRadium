@@ -1,5 +1,5 @@
 # Copyright (c) 2024-2025, InterDigital AI Lab
-__version__='0.4.0'
+__version__='0.4.1'
 
 from .channelmodel import ChannelModel
 from .modulation import Modem

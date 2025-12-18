@@ -17,11 +17,11 @@ The **Playground** folder contains a set of tutorials demonstrating how to use v
 If you use this software in your work, please cite it using the following metadata:
 ```
 @software{Id_AILAB_NeoRadium_2024,
-author = {Hamidi-Rad, Shahab},
-month = jul,
-title = {{NeoRadium}},
-url = {https://github.com/InterDigitalInc/NeoRadium},
-version = {0.4.0},
-year = {2025}
+  author  = {Hamidi-Rad, Shahab},
+  title   = {NeoRadium},
+  version = {0.4.1},
+  year    = {2025},
+  month   = {December},
+  url     = {https://github.com/InterDigitalInc/NeoRadium}
 }
 ```
