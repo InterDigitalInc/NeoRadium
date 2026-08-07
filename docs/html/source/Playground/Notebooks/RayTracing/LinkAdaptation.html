@@ -1,0 +1,626 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Link Adaptation with CSI Feedback, HARQ, and OLLA Along a UE Trajectory &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Exploring CSI-RS Configurations" href="../CSI-RS/CSI-RS.html" />
+    <link rel="prev" title="Beam Sweeping and Probing Along a UE Trajectory" href="BeamSweepingTraj.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="DeepMimo.html">Working with DeepMIMO Scenarios</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajChannel.html">Applying a Trajectory-Based Channel in the Frequency and Time Domains</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajEndToEnd.html">End-to-End PDSCH Simulation with a Trajectory-Based Channel Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajChannelAnim.html">Animating a UE Trajectory in a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ChannelGeneration.html">Generating Random Channel Matrices from a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ChannelSequences.html">Creating Temporally and Spatially Consistent Channel-Matrix Sequences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AnimatedBER.html">Animating BER Along a UE Trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AnimatedCN.html">Animating Channel Condition Number Along a UE Trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrjBearingAngles.html">Ray-tracing BER at Various TX/RX Antenna Bearing Angles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="BeamSweeping.html">Beam Sweeping in a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="BeamSweepingTraj.html">Beam Sweeping and Probing Along a UE Trajectory</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Link Adaptation with CSI Feedback, HARQ, and OLLA Along a UE Trajectory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-coding">Channel Coding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Link Adaptation with CSI Feedback, HARQ, and OLLA Along a UE Trajectory</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/RayTracing/LinkAdaptation.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Link-Adaptation-with-CSI-Feedback,-HARQ,-and-OLLA-Along-a-UE-Trajectory">
+<h1>Link Adaptation with CSI Feedback, HARQ, and OLLA Along a UE Trajectory<a class="headerlink" href="#Link-Adaptation-with-CSI-Feedback,-HARQ,-and-OLLA-Along-a-UE-Trajectory" title="Link to this heading"></a></h1>
+<p>This notebook demonstrates several <strong>NeoRadium</strong> features in a compact end-to-end link-adaptation example. It uses a DeepMIMO scenario and shows how channel conditions along a UE trajectory affect beam selection, CQI, BLER, and throughput.</p>
+<p>The workflow starts by configuring the bandwidth part, antenna panels, trajectory-based channel, and CSI-RS resources. The receiver processes CSI-RS measurements and feeds back beam-sweeping, beam-probing, and RI/PMI/CQI reports. The transmitter then uses this feedback to select the precoder, number of layers, modulation, and code rate for PDSCH transmission.</p>
+<p>The example also includes incremental-redundancy <strong>HARQ</strong> and <strong>OLLA</strong>. HARQ handles retransmissions after failed transport blocks, while OLLA adjusts the reported CQI through a link-adaptation offset based on decoding outcomes. Together, these mechanisms illustrate how feedback and error statistics can be used to adapt the downlink transmission as the UE moves.</p>
+<p>For clarity, the simulation is intentionally simplified. It uses a fixed thermal-noise model and disables per-location channel-gain normalization so that large-scale channel variations along the trajectory remain visible. The final animation summarizes the UE movement and plots the adjusted CQI, BLER, and throughput over the trajectory. This notebook is intended as an API-focused demonstration rather than a standards-complete model of 5G NR scheduling, beam management, or CSI reporting.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">display</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeepMimoData</span><span class="p">,</span> <span class="n">TrjChannel</span><span class="p">,</span> <span class="n">BandwidthPart</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">CsiRs</span><span class="p">,</span> <span class="n">CsiRsSet</span><span class="p">,</span> <span class="n">CsiRsConfig</span><span class="p">,</span> <span class="n">CsiReport</span><span class="p">,</span> <span class="n">CsiReportMan</span><span class="p">,</span> <span class="n">OLLA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">toDb</span><span class="p">,</span> <span class="n">toLinear</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace this with the folder on your computer where you store DeepMIMO scenarios</span>
+<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">&quot;/data/RayTracing/DeepMIMO/Scenarios/V4/&quot;</span>
+<span class="n">DeepMimoData</span><span class="o">.</span><span class="n">setScenariosPath</span><span class="p">(</span><span class="n">dataFolder</span><span class="p">)</span>
+
+<span class="c1"># Create a DeepMimoData object</span>
+<span class="n">dmData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">)</span>
+<span class="n">dmData</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+DeepMimoData Properties:
+  Scenario:                   asu_campus_3p5
+  Version:                    4.0.0a3
+  UE Grid:                    rx_grid
+  Grid Size:                  411 x 321
+  Base Station:               BS (at [166. 104.  22.])
+  Total Grid Points:          131,931
+  UE Spacing:                 [1. 1.]
+  UE bounds (xyMin, xyMax)    [-225.55 -160.17], [184.45 159.83]
+  UE Height:                  1.50
+  Carrier Frequency:          3.5 GHz
+  Num. paths (Min, Avg, Max): 0, 6.21, 10
+  Num. total blockage:        46,774
+  LOS percentage:             19.71%
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">txBearingAngle</span> <span class="o">=</span> <span class="o">-</span><span class="mi">135</span>                           <span class="c1"># Point the TX panel toward the center of the map</span>
+
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>      <span class="c1"># Create a bandwidth part</span>
+
+<span class="n">trjPoints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">44</span><span class="p">,</span> <span class="mi">77</span><span class="p">],</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">52</span><span class="p">],</span> <span class="p">[</span><span class="mi">31</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="p">[</span><span class="mi">38</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="p">[</span><span class="mi">49</span><span class="p">,</span> <span class="mi">18</span><span class="p">],</span>
+                      <span class="p">[</span><span class="mi">62</span><span class="p">,</span> <span class="mi">17</span><span class="p">],</span> <span class="p">[</span><span class="mi">85</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span> <span class="p">[</span><span class="mi">103</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span> <span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">17</span><span class="p">],</span> <span class="p">[</span><span class="mi">144</span><span class="p">,</span> <span class="mi">32</span><span class="p">]])</span>
+<span class="c1"># trjPoints = np.array([[44, 77], [32, 52], [31, 32], [38, 20], [49, 18]])</span>
+
+<span class="n">trjPoints</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">83</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">47</span><span class="p">,</span> <span class="o">-</span><span class="mi">51</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">54</span><span class="p">,</span> <span class="o">-</span><span class="mi">29</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span> <span class="o">-</span><span class="mi">16</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">88</span><span class="p">,</span> <span class="o">-</span><span class="mi">14</span><span class="p">],</span>
+                      <span class="p">[</span><span class="o">-</span><span class="mi">104</span><span class="p">,</span> <span class="o">-</span><span class="mi">18</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">114</span><span class="p">,</span> <span class="o">-</span><span class="mi">29</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">116</span><span class="p">,</span> <span class="o">-</span><span class="mi">42</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">114</span><span class="p">,</span> <span class="o">-</span><span class="mi">63</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">115</span><span class="p">,</span> <span class="o">-</span><span class="mi">81</span><span class="p">]])</span>
+<span class="n">trajectory</span> <span class="o">=</span> <span class="n">dmData</span><span class="o">.</span><span class="n">trajectoryFromPoints</span><span class="p">(</span><span class="n">trjPoints</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">speedMps</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="n">trajectory</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>                              <span class="c1"># Print the trajectory information</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">dmData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>     <span class="c1"># Draw the map with the trajectory</span>
+<span class="n">dmData</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">txBearingAngle</span><span class="p">)</span>          <span class="c1"># Draw the base station antenna panel</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Trajectory Properties:
+  start (x,y,z):          (-49.55, -83.17, 1.50)
+  No. of points:          12,378
+  curIdx:                 0 (0.00%)
+  curSpeed:               [ 0.   14.93  0.  ]
+  Total distance:         185.23 meters
+  Total time:             12.377 seconds
+  Average Speed:          14.965 m/s
+  Carrier Frequency:      3.5 GHz
+  Paths (Min, Avg, Max):  4, 9.04, 10
+  Totally blocked:        0
+  LOS percentage:         0.00%
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_RayTracing_LinkAdaptation_3_1.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_LinkAdaptation_3_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                 <span class="c1"># Make results reproducible</span>
+<span class="n">numSlots</span> <span class="o">=</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span>     <span class="c1"># Total number of slots = number of points on the trajectory</span>
+<span class="n">prgSize</span> <span class="o">=</span> <span class="mi">0</span>                         <span class="c1"># Set to 0 for wideband, 2 or 4 for subband precoding</span>
+
+<span class="c1"># Note:</span>
+<span class="c1"># Since our goal is to show that different UE locations along a DeepMIMO trajectory experience different</span>
+<span class="c1"># BLER/throughput, we should not normalize the channel gain independently at each location. Per-location</span>
+<span class="c1"># gain normalization would remove exactly the large-scale variation we want to observe. So, we set</span>
+<span class="c1"># the &#39;normalizeGains&#39; to &#39;False&#39; in our channel model below and use a fixed noise power.</span>
+
+<span class="c1"># Calculating the noise power:</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mf">1.380649e-23</span>        <span class="c1"># Boltzmann constant (joules per kelvin)</span>
+<span class="n">tempK</span> <span class="o">=</span> <span class="mf">290.0</span>           <span class="c1"># Temperature in kelvin</span>
+<span class="n">nf</span> <span class="o">=</span> <span class="mi">8</span>                  <span class="c1"># Receiver noise figure (dB)</span>
+<span class="n">noiseVarFreq</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">tempK</span><span class="o">*</span><span class="n">bwp</span><span class="o">.</span><span class="n">spacing</span><span class="o">*</span><span class="mi">1000</span><span class="o">*</span><span class="n">toLinear</span><span class="p">(</span><span class="n">nf</span><span class="p">)</span>
+
+<span class="c1"># Creating a trajectory-based channel model:</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">TrjChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span>
+                     <span class="n">normalizeGains</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">),</span>     <span class="c1"># 8 TX antennas</span>
+                     <span class="n">txOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="n">txBearingAngle</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>                  <span class="c1"># BS antenna orientation</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span>      <span class="c1"># 2 RX antennas</span>
+                                              <span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">65</span><span class="p">,</span><span class="mi">360</span><span class="p">]))</span>          <span class="c1"># Omnidirectional</span>
+
+<span class="c1"># Create a typical CSI-RS configuration</span>
+<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="o">.</span><span class="n">beamformingConfig</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numPorts</span><span class="p">,</span> <span class="n">sweepsPerSlot</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="c1"># csiRsConfig.print()                   # Uncomment to print CSI-RS configuration details</span>
+
+<span class="c1"># Get the CSI resource sets for beam sweeping, beam probing, and RI/PMI/CQI feedback</span>
+<span class="n">sweepSet</span><span class="p">,</span> <span class="n">probeSet</span><span class="p">,</span> <span class="n">pmiSet</span> <span class="o">=</span> <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">csiRsSetList</span>
+
+<span class="c1"># Create CSI reports and a CsiReportMan object for the CSI-RS configuration</span>
+<span class="n">csiReportMan</span> <span class="o">=</span> <span class="n">CsiReportMan</span><span class="o">.</span><span class="n">beamformingReports</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="p">,</span> <span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="p">,</span>
+                                               <span class="n">prgSize</span><span class="o">=</span><span class="n">prgSize</span><span class="p">,</span> <span class="n">allowedRanks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">cqiTable</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># csiReportMan.print()                  # Uncomment to print CSI report configuration details</span>
+
+<span class="c1"># Get the CSI report objects for beam sweeping, beam probing, and RI/PMI/CQI feedback</span>
+<span class="n">sweepRep</span><span class="p">,</span> <span class="n">probeRep</span><span class="p">,</span> <span class="n">pmiRep</span> <span class="o">=</span> <span class="n">csiReportMan</span><span class="o">.</span><span class="n">csiReports</span>
+
+<span class="c1"># Initialize beam sweeping/probing parameters</span>
+<span class="n">numPhi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sweepSet</span><span class="p">)</span>                  <span class="c1"># Number of horizontal beams</span>
+<span class="n">numTheta</span> <span class="o">=</span> <span class="mi">1</span>                            <span class="c1"># Number of vertical beams (restrict sweeping to azimuth)</span>
+<span class="n">sweepWs</span><span class="p">,</span> <span class="n">sweepBeams</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">getSweepingBeams</span><span class="p">(</span><span class="n">numTheta</span><span class="p">,</span> <span class="n">numPhi</span><span class="p">)</span>
+<span class="n">probeWs</span><span class="p">,</span> <span class="n">probeBeams</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>                <span class="c1"># Probing weight vectors and beam angles</span>
+<span class="n">sweepCri</span><span class="p">,</span> <span class="n">probeCri</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>                 <span class="c1"># Most recent CRI for sweeping and probing</span>
+<span class="n">probePhiLocal</span><span class="p">,</span> <span class="n">probePhiGlobal</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>      <span class="c1"># Best probing beam azimuth angle</span>
+<span class="n">rawCqi</span> <span class="o">=</span> <span class="kc">None</span>                                   <span class="c1"># Most recent CQI feedback (before OLLA adjustment)</span>
+
+<span class="n">pdsch</span> <span class="o">=</span> <span class="kc">None</span>                            <span class="c1"># PDSCH is created when a CQI report is available</span>
+<span class="n">harq</span> <span class="o">=</span> <span class="kc">None</span>                             <span class="c1"># HARQ is created only once when the first CQI is received</span>
+<span class="n">olla</span> <span class="o">=</span> <span class="kc">None</span>                             <span class="c1"># OLLA is created only once when the first CQI is received</span>
+<span class="n">precoder</span> <span class="o">=</span> <span class="kc">None</span>                         <span class="c1"># The precoder based on the most recently received PMI</span>
+<span class="n">pmiW</span> <span class="o">=</span> <span class="kc">None</span>                             <span class="c1"># The steering vector used by the most recent RI/PMI/CQI CSI-RS resources</span>
+<span class="n">pdschW</span> <span class="o">=</span> <span class="kc">None</span>                           <span class="c1"># The steering vector used by PDSCH (consistent with precoder from PMI)</span>
+
+<span class="c1"># Historical values:</span>
+<span class="n">beamAngles</span> <span class="o">=</span> <span class="p">[]</span>                         <span class="c1"># Azimuth beam angles (probePhiGlobal) for each slot</span>
+<span class="n">cqiRep</span> <span class="o">=</span> <span class="p">[]</span>                             <span class="c1"># Reported CQI values</span>
+<span class="n">cqiAdj</span> <span class="o">=</span> <span class="p">[]</span>                             <span class="c1"># Adjusted CQI values</span>
+<span class="n">ris</span> <span class="o">=</span> <span class="p">[]</span>                                <span class="c1"># RI (number of layers)</span>
+<span class="n">blockErrorFlags</span> <span class="o">=</span> <span class="p">[]</span>                    <span class="c1"># 1 for each transport block error and 0 otherwise</span>
+<span class="n">rxBits</span> <span class="o">=</span> <span class="p">[]</span>                             <span class="c1"># Number of received bits for each transmission</span>
+<span class="n">minMse</span><span class="p">,</span> <span class="n">maxMse</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span>
+
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Simulating end-to-end communication for </span><span class="si">{</span><span class="n">numSlots</span><span class="si">}</span><span class="s2"> slots on the trajectory ...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Slot   TX Blk  RX Blk   BLER   Beam Ang  OLLA Ofst  CQI(Rep)  RI    Mod.   Coderate  Trj. Time  Exe. Time&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;------  ------  ------  ------  --------  ---------  --------  ---  ------  --------  ---------  ---------&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">slotNo</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSlots</span><span class="p">):</span>
+    <span class="c1"># Process CSI feedback</span>
+    <span class="n">csiReportInfo</span> <span class="o">=</span> <span class="n">csiReportMan</span><span class="o">.</span><span class="n">getFeedback</span><span class="p">()</span>              <span class="c1"># Get all available CSI reports from CsiReport objects</span>
+    <span class="k">for</span> <span class="n">reportId</span><span class="p">,</span> <span class="n">csiFeedback</span> <span class="ow">in</span> <span class="n">csiReportInfo</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>     <span class="c1"># Process the CSI feedback for each report</span>
+        <span class="k">if</span> <span class="n">reportId</span> <span class="o">==</span> <span class="n">sweepRep</span><span class="o">.</span><span class="n">reportId</span><span class="p">:</span>                   <span class="c1"># Beam-sweeping report</span>
+            <span class="n">sweepCri</span> <span class="o">=</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">cri</span><span class="o">.</span><span class="n">cri</span>                  <span class="c1"># CSI-RS resource ID of the best beam</span>
+            <span class="n">probeSet</span><span class="o">.</span><span class="n">trigger</span><span class="p">()</span>                              <span class="c1"># Trigger the probing CSI-RS resource set</span>
+            <span class="n">probeRep</span><span class="o">.</span><span class="n">trigger</span><span class="p">()</span>                              <span class="c1"># Trigger the probing report</span>
+
+        <span class="k">elif</span> <span class="n">reportId</span> <span class="o">==</span> <span class="n">probeRep</span><span class="o">.</span><span class="n">reportId</span><span class="p">:</span>                 <span class="c1"># Beam-probing report</span>
+            <span class="n">probeCri</span> <span class="o">=</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">cri</span><span class="o">.</span><span class="n">cri</span>                  <span class="c1"># CSI-RS resource ID of the best beam</span>
+            <span class="n">beamIdx</span> <span class="o">=</span> <span class="n">probeCri</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">sweepSet</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>          <span class="c1"># Index of the best beam</span>
+            <span class="n">pmiSet</span><span class="o">.</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span>                              <span class="c1"># Activate RI/PMI/CQI CSI-RS resources</span>
+            <span class="n">pmiRep</span><span class="o">.</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span>                              <span class="c1"># Activate RI/PMI/CQI measurements</span>
+
+            <span class="c1"># Update the best probing beam azimuth angle in local and global coordinates</span>
+            <span class="n">probePhiLocal</span> <span class="o">=</span> <span class="n">probeBeams</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">beamIdx</span><span class="p">]</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">probePhiGlobal</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="o">.</span><span class="n">local2Global</span><span class="p">(</span> <span class="n">probeBeams</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">beamIdx</span><span class="p">],</span>
+                                                           <span class="n">probePhiLocal</span><span class="p">,</span>
+                                                           <span class="n">channel</span><span class="o">.</span><span class="n">txOrientation</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">reportId</span> <span class="o">==</span> <span class="n">pmiRep</span><span class="o">.</span><span class="n">reportId</span><span class="p">:</span>                   <span class="c1"># RI/PMI/CQI report</span>
+            <span class="n">precoder</span> <span class="o">=</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">wbW</span> <span class="k">if</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">sbWs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">sbWs</span>
+            <span class="n">pdschW</span> <span class="o">=</span> <span class="n">pmiW</span>
+            <span class="n">numLayers</span> <span class="o">=</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">ri</span><span class="o">.</span><span class="n">ri</span>                   <span class="c1"># Set number of layers based on RI feedback</span>
+            <span class="k">if</span> <span class="s2">&quot;cqi&quot;</span> <span class="ow">in</span> <span class="n">pmiRep</span><span class="o">.</span><span class="n">quantity</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>    <span class="n">rawCqi</span> <span class="o">=</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">cqi</span><span class="o">.</span><span class="n">cqi</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Unknown report: </span><span class="si">{</span><span class="n">reportId</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># Create a transmitted resource grid</span>
+    <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numEl</span><span class="p">)</span>
+
+    <span class="c1"># If we have a CQI report, transmit PDSCH data</span>
+    <span class="k">if</span> <span class="n">rawCqi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cqi</span> <span class="o">=</span> <span class="n">rawCqi</span> <span class="k">if</span> <span class="n">olla</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">olla</span><span class="o">.</span><span class="n">adjustCqi</span><span class="p">(</span><span class="n">rawCqi</span><span class="p">)</span>    <span class="c1"># Adjust the raw CQI received in the report</span>
+        <span class="n">modulation</span><span class="p">,</span> <span class="n">coderateX1024</span> <span class="o">=</span> <span class="n">pmiRep</span><span class="o">.</span><span class="n">getModRate</span><span class="p">(</span><span class="n">cqi</span><span class="p">)</span>          <span class="c1"># Get modulation and code rate based on CQI</span>
+        <span class="n">coderate</span> <span class="o">=</span> <span class="n">coderateX1024</span><span class="o">/</span><span class="mi">1024</span>
+        <span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="n">numLayers</span><span class="p">,</span> <span class="n">csiRsConfig</span><span class="o">=</span><span class="n">csiRsConfig</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="n">modulation</span><span class="p">,</span> <span class="n">prgSize</span><span class="o">=</span><span class="n">prgSize</span><span class="p">)</span>
+        <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>                              <span class="c1"># DMRS configuration</span>
+        <span class="k">if</span> <span class="n">harq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Create HARQ and OLLA objects the first time</span>
+            <span class="n">harq</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getHarq</span><span class="p">(</span><span class="n">coderates</span> <span class="o">=</span> <span class="n">coderate</span><span class="p">,</span>              <span class="c1"># Code rate used by the LDPC codec</span>
+                                 <span class="n">harqType</span><span class="o">=</span><span class="s2">&quot;IR&quot;</span><span class="p">,</span>                     <span class="c1"># Use Incremental Redundancy</span>
+                                 <span class="n">numProc</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>                        <span class="c1"># Number of HARQ processes</span>
+            <span class="n">olla</span> <span class="o">=</span> <span class="n">OLLA</span><span class="p">(</span><span class="n">harq</span><span class="p">,</span> <span class="n">pmiRep</span><span class="o">.</span><span class="n">cqiTable</span><span class="p">,</span> <span class="n">fixedOffset</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>      <span class="c1"># Create the link adaptation object</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># We already have a HARQ and OLLA. Update HARQ&#39;s LDPC codec if needed.</span>
+            <span class="n">ldpcModulation</span> <span class="o">=</span> <span class="n">harq</span><span class="o">.</span><span class="n">ldpcCodec</span><span class="o">.</span><span class="n">modulations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">ldpcCoderate</span> <span class="o">=</span>  <span class="n">harq</span><span class="o">.</span><span class="n">ldpcCodec</span><span class="o">.</span><span class="n">coderates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">ldpcNumLayers</span> <span class="o">=</span> <span class="n">harq</span><span class="o">.</span><span class="n">ldpcCodec</span><span class="o">.</span><span class="n">cwCodecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numLayers</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">numLayers</span> <span class="o">!=</span> <span class="n">ldpcNumLayers</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">modulation</span> <span class="o">!=</span> <span class="n">ldpcModulation</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">coderate</span> <span class="o">!=</span> <span class="n">ldpcCoderate</span><span class="p">):</span>
+                <span class="n">harq</span><span class="o">.</span><span class="n">setLdpc</span><span class="p">(</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLdpcCodec</span><span class="p">(</span><span class="n">coderates</span><span class="o">=</span><span class="n">coderate</span><span class="p">)</span> <span class="p">)</span>  <span class="c1"># Update HARQ&#39;s LDPC codec</span>
+
+        <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                        <span class="c1"># Create and initialize PDSCH&#39;s internal grid</span>
+        <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>                     <span class="c1"># Number of bits available in the resource grid</span>
+        <span class="n">tbs</span> <span class="o">=</span> <span class="n">harq</span><span class="o">.</span><span class="n">ldpcCodec</span><span class="o">.</span><span class="n">txBlockSizes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                    <span class="c1"># Transport block size (for the first codeword)</span>
+        <span class="k">if</span> <span class="n">harq</span><span class="o">.</span><span class="n">needNewData</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">tbs</span><span class="p">)</span>      <span class="c1"># Create random bits for new transmissions</span>
+        <span class="k">else</span><span class="p">:</span>                   <span class="n">txBlock</span> <span class="o">=</span> <span class="kc">None</span>                  <span class="c1"># Set to None indicating a retransmission</span>
+
+        <span class="n">rateMatchedCBs</span> <span class="o">=</span> <span class="n">harq</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">txBlock</span><span class="p">,</span> <span class="n">numBits</span><span class="p">)</span>          <span class="c1"># LDPC encode the transport block</span>
+        <span class="n">pdsch</span><span class="o">.</span><span class="n">setPdschData</span><span class="p">(</span><span class="n">rateMatchedCBs</span><span class="p">)</span>                      <span class="c1"># Map/modulate the data to the resource grid</span>
+        <span class="n">pdsch</span><span class="o">.</span><span class="n">precodeTo</span><span class="p">(</span><span class="n">txGrid</span><span class="p">,</span> <span class="n">precoder</span><span class="p">,</span> <span class="n">pdschW</span><span class="p">)</span>               <span class="c1"># Precode PDSCH data into the txGrid</span>
+
+    <span class="c1"># Process and add CSI-RS to the txGrid</span>
+    <span class="n">csiRsResources</span> <span class="o">=</span> <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">getResources</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">csiSetId</span><span class="p">,</span> <span class="n">setResources</span> <span class="ow">in</span> <span class="n">csiRsResources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">csiSetId</span> <span class="o">==</span> <span class="n">sweepSet</span><span class="o">.</span><span class="n">rsId</span><span class="p">:</span>                           <span class="c1"># CSI-RS for beam sweeping</span>
+            <span class="k">for</span> <span class="n">resourceId</span><span class="p">,</span> <span class="p">(</span><span class="n">lIdx</span><span class="p">,</span> <span class="n">kIdx</span><span class="p">,</span> <span class="n">sweepReValues</span><span class="p">)</span> <span class="ow">in</span> <span class="n">setResources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">resourceId</span><span class="o">-</span><span class="mi">1</span>                                <span class="c1"># Beam index</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">sweepWs</span><span class="p">[:,</span><span class="n">b</span><span class="p">:</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>                            <span class="c1"># nt x 1</span>
+                <span class="c1"># sweepReValues is a 1 x numCsiRsRE matrix. nt x 1 * 1 x numCsiRsRE = nt x numCsiRsRE</span>
+                <span class="n">txGrid</span><span class="p">[:,</span><span class="n">lIdx</span><span class="p">,</span> <span class="n">kIdx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">sweepReValues</span><span class="p">,</span> <span class="s2">&quot;CSIRS_NZP&quot;</span><span class="p">,</span> <span class="n">resourceId</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">csiSetId</span> <span class="o">==</span> <span class="n">probeSet</span><span class="o">.</span><span class="n">rsId</span><span class="p">:</span>                         <span class="c1"># CSI-RS for beam probing</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">sweepCri</span><span class="o">-</span><span class="mi">1</span>                                      <span class="c1"># Index of best sweeping beam</span>
+            <span class="n">theta0</span><span class="p">,</span> <span class="n">phi0</span> <span class="o">=</span> <span class="n">sweepBeams</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">b</span><span class="p">],</span> <span class="n">sweepBeams</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">b</span><span class="p">]</span>   <span class="c1"># Best sweeping beam angles</span>
+            <span class="n">probeWs</span><span class="p">,</span> <span class="n">probeBeams</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">getProbingBeams</span><span class="p">(</span><span class="n">theta0</span><span class="p">,</span> <span class="n">phi0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">probeSet</span><span class="p">),</span> <span class="n">polStrategy</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">resourceId</span><span class="p">,</span> <span class="p">(</span><span class="n">lIdx</span><span class="p">,</span> <span class="n">kIdx</span><span class="p">,</span> <span class="n">probeReValues</span><span class="p">)</span> <span class="ow">in</span> <span class="n">setResources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">resourceId</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">sweepSet</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>              <span class="c1"># Beam index</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">probeWs</span><span class="p">[:,</span><span class="n">b</span><span class="p">:</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>                            <span class="c1"># nt x 1</span>
+                <span class="c1"># probeReValues is a 1 x numCsiRsRE matrix. nt x 1 * 1 x numCsiRsRE = nt x numCsiRsRE</span>
+                <span class="n">txGrid</span><span class="p">[:,</span><span class="n">lIdx</span><span class="p">,</span> <span class="n">kIdx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">probeReValues</span><span class="p">,</span> <span class="s2">&quot;CSIRS_NZP&quot;</span><span class="p">,</span> <span class="n">resourceId</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">csiSetId</span> <span class="o">==</span> <span class="n">pmiSet</span><span class="o">.</span><span class="n">rsId</span><span class="p">:</span>                           <span class="c1"># CSI-RS for RI/PMI/CQI</span>
+            <span class="c1"># Use the beamforming vector corresponding to the best probed beam. This will also be</span>
+            <span class="c1"># saved to pdschW when the report for this CSI-RS is received. pdschW is then combined with</span>
+            <span class="c1"># the PMI procoder to precode PDSCH.</span>
+            <span class="n">wIdx</span> <span class="o">=</span> <span class="n">probeCri</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">sweepSet</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>             <span class="c1"># Index of the best probing beam from CRI</span>
+            <span class="n">pmiW</span> <span class="o">=</span> <span class="n">probeWs</span><span class="p">[:,</span><span class="n">wIdx</span><span class="p">:</span><span class="n">wIdx</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>            <span class="c1"># shape: nt x 1</span>
+            <span class="k">for</span> <span class="n">resourceId</span><span class="p">,</span> <span class="p">(</span><span class="n">lIdx</span><span class="p">,</span> <span class="n">kIdx</span><span class="p">,</span> <span class="n">pmiReValues</span><span class="p">)</span> <span class="ow">in</span> <span class="n">setResources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">txGrid</span><span class="p">[:,</span><span class="n">lIdx</span><span class="p">,</span> <span class="n">kIdx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pmiW</span> <span class="o">*</span> <span class="n">pmiReValues</span><span class="p">,</span> <span class="s2">&quot;CSIRS_NZP&quot;</span><span class="p">,</span> <span class="n">resourceId</span><span class="p">)</span>
+
+    <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>                  <span class="c1"># Get channel matrix from the channel model</span>
+    <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>                 <span class="c1"># Apply the channel in the frequency domain</span>
+    <span class="n">noisyRxGrid</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">noiseVar</span><span class="o">=</span><span class="n">noiseVarFreq</span><span class="p">)</span>        <span class="c1"># Add noise</span>
+
+    <span class="c1"># Receiver side:</span>
+    <span class="k">if</span> <span class="n">pdsch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">effChannelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getEffChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">,</span> <span class="n">precoder</span><span class="p">,</span> <span class="n">pdschW</span><span class="p">)</span>   <span class="c1"># Perfect channel knowledge</span>
+        <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">noisyRxGrid</span><span class="p">,</span> <span class="n">effChannelMatrix</span><span class="p">)</span>   <span class="c1"># Equalize received PDSCH data</span>
+        <span class="n">llrs</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLLRs</span><span class="p">(</span><span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span><span class="p">)</span>                             <span class="c1"># Demodulate and get LLRs</span>
+        <span class="n">decodedTxBlocks</span><span class="p">,</span> <span class="n">crcMatches</span> <span class="o">=</span> <span class="n">harq</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>                     <span class="c1"># Use HARQ to decode the LLRs</span>
+
+        <span class="n">beamAngles</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">probePhiGlobal</span> <span class="p">]</span>                                    <span class="c1"># Record the best probe beam azimuth</span>
+        <span class="n">cqiRep</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">rawCqi</span> <span class="p">]</span>                                                <span class="c1"># Record the reported CQI</span>
+        <span class="n">cqiAdj</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">cqi</span> <span class="p">]</span>                                                   <span class="c1"># Record the adjusted CQI</span>
+        <span class="n">ris</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">numLayers</span> <span class="p">]</span>                                                <span class="c1"># Record number of layers</span>
+        <span class="n">rxBits</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">tbs</span> <span class="k">if</span> <span class="n">crcMatches</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">else</span> <span class="mi">0</span> <span class="p">]</span>                        <span class="c1"># Record successfully received bits</span>
+        <span class="n">blockErrorFlags</span> <span class="o">+=</span> <span class="p">[</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">crcMatches</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">else</span> <span class="mi">1</span> <span class="p">]</span>                 <span class="c1"># Record the block-error flag</span>
+    <span class="k">else</span><span class="p">:</span>   <span class="c1"># No PDSCH yet -&gt; use zeros</span>
+        <span class="n">beamAngles</span> <span class="o">+=</span> <span class="p">[</span> <span class="mi">0</span> <span class="p">]</span>
+        <span class="n">cqiRep</span> <span class="o">+=</span> <span class="p">[</span> <span class="mi">0</span> <span class="p">]</span>
+        <span class="n">cqiAdj</span> <span class="o">+=</span> <span class="p">[</span> <span class="mi">0</span> <span class="p">]</span>
+        <span class="n">ris</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">rxBits</span> <span class="o">+=</span> <span class="p">[</span> <span class="mi">0</span> <span class="p">]</span>
+        <span class="n">blockErrorFlags</span> <span class="o">+=</span> <span class="p">[</span> <span class="mi">0</span> <span class="p">]</span>
+
+    <span class="n">csiReportMan</span><span class="o">.</span><span class="n">processRxGrid</span><span class="p">(</span><span class="n">noisyRxGrid</span><span class="p">,</span> <span class="n">csiRsResources</span><span class="p">)</span> <span class="c1"># Process the CSI-RS resources in the &#39;noisyRxGrid&#39;</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span>                                <span class="c1"># Total time spent so far</span>
+
+    <span class="k">if</span> <span class="n">pdsch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="si">{</span><span class="n">slotNo</span><span class="o">+</span><span class="mi">1</span><span class="si">:</span><span class="s2">^6d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="mi">0</span><span class="si">:</span><span class="s2">^6d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="mi">0</span><span class="si">:</span><span class="s2">^6d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;N/A&#39;</span><span class="si">:</span><span class="s2">^6s</span><span class="si">}</span><span class="s2">  &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;N/A&#39;</span><span class="si">:</span><span class="s2">^8s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s2">&quot;N/A&quot;</span><span class="si">:</span><span class="s2">^9s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;N/A&#39;</span><span class="si">:</span><span class="s2">^8s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;N/A&#39;</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;N/A&#39;</span><span class="si">:</span><span class="s2">^6s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="s1">&#39;N/A&#39;</span><span class="si">:</span><span class="s2">^8s</span><span class="si">}</span><span class="s2">  &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">channel</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">cur</span><span class="o">.</span><span class="n">time</span><span class="si">:</span><span class="s2">^9.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s2">^9.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Note: Using bler1st, which is the first-transmission BLER</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="si">{</span><span class="n">slotNo</span><span class="o">+</span><span class="mi">1</span><span class="si">:</span><span class="s2">^6,d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">totalTxBlocks</span><span class="si">:</span><span class="s2">^6,d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">totalRxBlocks</span><span class="si">:</span><span class="s2">^6,d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">bler1st</span><span class="si">:</span><span class="s2">^6.3f</span><span class="si">}</span><span class="s2">  &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">probePhiLocal</span><span class="si">:</span><span class="s2">^8.1f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">olla</span><span class="o">.</span><span class="n">cqiOffset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">^9.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cqi</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">rawCqi</span><span class="si">}</span><span class="s1">)&#39;</span><span class="si">:</span><span class="s2">^8s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">numLayers</span><span class="si">:</span><span class="s2">^3d</span><span class="si">}</span><span class="s2">  &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">modulation</span><span class="si">:</span><span class="s2">^6s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">coderateX1024</span><span class="si">}</span><span class="s1">/1024&#39;</span><span class="si">:</span><span class="s2">^8s</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">channel</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">cur</span><span class="o">.</span><span class="n">time</span><span class="si">:</span><span class="s2">^9.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s2">^9.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+              <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>                                                <span class="c1"># Move to the next slot and trajectory point</span>
+    <span class="k">if</span> <span class="n">harq</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">harq</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>                              <span class="c1"># Go to the next HARQ process</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Simulating end-to-end communication for 12378 slots on the trajectory ...
+ Slot   TX Blk  RX Blk   BLER   Beam Ang  OLLA Ofst  CQI(Rep)  RI    Mod.   Coderate  Trj. Time  Exe. Time
+------  ------  ------  ------  --------  ---------  --------  ---  ------  --------  ---------  ---------
+12,378  12,364  11,187  9.717    -15.5      1.63       6(6)     1   16QAM   616/1024    12.38     3190.75
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prevCqiRep</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">prevCqiAdj</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">prevRi</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">prevBler</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">prevBps</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">arrow</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># Since we are averaging the angles, we need to make sure they are continuous:</span>
+<span class="c1"># Local angle range: -90 to 90</span>
+<span class="c1"># Global angle range: 135 .. -45</span>
+<span class="c1"># Adjusted global angle range: 135 .. 315  (Add 360 to the negative values)</span>
+<span class="n">beamAngles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">beamAngles</span><span class="p">)</span>
+<span class="n">beamAngles</span><span class="p">[</span><span class="n">beamAngles</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">360</span>     <span class="c1"># Range: 135 .. 315</span>
+
+<span class="c1"># Callback used to initialize and update the scenario map and the graphs below it</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">handleGraph</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">arrow</span><span class="p">,</span> <span class="n">prevCqiRep</span><span class="p">,</span> <span class="n">prevCqiAdj</span><span class="p">,</span> <span class="n">prevRi</span><span class="p">,</span> <span class="n">prevBler</span><span class="p">,</span> <span class="n">prevBps</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;Config&quot;</span><span class="p">:</span>
+        <span class="c1"># CQI</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;CQI&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Trajectory points&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="c1"># RI</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">2.2</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;RI (Number of layers)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Trajectory points&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="c1"># Use the following to show BLER in the 3rd graph</span>
+        <span class="c1"># ax[2].set_xlim(0,trajectory.numPoints)</span>
+        <span class="c1"># ax[2].set_ylim(0,22)</span>
+        <span class="c1"># ax[2].set_title(&quot;BLER (%)&quot;)</span>
+        <span class="c1"># ax[2].set_xlabel(&quot;Trajectory points&quot;)</span>
+        <span class="c1"># ax[2].grid()</span>
+
+        <span class="c1"># Use the following to show throughput in the 3rd graph</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mf">0.1e7</span><span class="p">,</span><span class="mf">2.5e7</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Throughput (bps)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Trajectory points&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;ConfigMap&quot;</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;CSI Feedback and OLLA Link Adaptation along a UE Trajectory&quot;</span><span class="p">)</span>
+        <span class="n">dmData</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">txBearingAngle</span><span class="p">)</span>   <span class="c1"># Draw TX antenna panel</span>
+
+        <span class="c1"># Create the arrow patch</span>
+        <span class="n">arrow</span> <span class="o">=</span> <span class="n">dmData</span><span class="o">.</span><span class="n">drawBeamArrow</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">txBearingAngle</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;cyan&quot;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+        <span class="n">arrow</span><span class="o">.</span><span class="n">set_animated</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;Draw&quot;</span><span class="p">:</span>
+        <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">points</span>
+        <span class="c1"># cqi = np.round(np.mean(cqiRep[p0: p1]))</span>
+        <span class="n">cqi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cqiRep</span><span class="p">[</span><span class="n">p0</span><span class="p">:</span> <span class="n">p1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">prevCqiRep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="n">prevCqiRep</span> <span class="o">=</span> <span class="n">cqi</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">],</span> <span class="p">[</span><span class="n">prevCqiRep</span><span class="p">,</span>  <span class="n">cqi</span><span class="p">],</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Reported&quot;</span><span class="p">)</span>
+        <span class="n">prevCqiRep</span> <span class="o">=</span> <span class="n">cqi</span>
+
+        <span class="c1"># cqi = np.round(np.mean(cqiAdj[p0: p1]))</span>
+        <span class="n">cqi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cqiAdj</span><span class="p">[</span><span class="n">p0</span><span class="p">:</span> <span class="n">p1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">prevCqiAdj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="n">prevCqiAdj</span> <span class="o">=</span> <span class="n">cqi</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">],</span> <span class="p">[</span><span class="n">prevCqiAdj</span><span class="p">,</span>  <span class="n">cqi</span><span class="p">],</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Adjusted&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p0</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>         <span class="c1"># First time: add the legend</span>
+        <span class="n">prevCqiAdj</span> <span class="o">=</span> <span class="n">cqi</span>
+
+        <span class="n">ri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ris</span><span class="p">[</span><span class="n">p0</span><span class="p">:</span><span class="n">p1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">prevRi</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>      <span class="n">prevRi</span> <span class="o">=</span> <span class="n">ri</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">],</span> <span class="p">[</span><span class="n">prevRi</span><span class="p">,</span>  <span class="n">ri</span><span class="p">],</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">prevRi</span> <span class="o">=</span> <span class="n">ri</span>
+
+        <span class="c1"># Use the following to show BLER in the 3rd graph</span>
+        <span class="c1"># bler = np.mean(blockErrorFlags[p0: p1])*100</span>
+        <span class="c1"># if prevBler is None:    prevBler = bler</span>
+        <span class="c1"># ax[2].plot([p0,p1], [prevBler,  bler], &#39;green&#39;, markersize=1)</span>
+        <span class="c1"># prevBler = bler</span>
+
+        <span class="c1"># Use the following to show throughput in the 3rd graph</span>
+        <span class="n">bps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">rxBits</span><span class="p">[</span><span class="n">p0</span><span class="p">:</span><span class="n">p1</span><span class="p">])</span><span class="o">/</span><span class="p">((</span><span class="n">p1</span><span class="o">-</span><span class="n">p0</span><span class="p">)</span><span class="o">/</span><span class="n">bwp</span><span class="o">.</span><span class="n">avgSlotDuration</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prevBps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>     <span class="n">prevBps</span> <span class="o">=</span> <span class="n">bps</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">],</span> <span class="p">[</span><span class="n">prevBps</span><span class="p">,</span>  <span class="n">bps</span><span class="p">],</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">prevBps</span> <span class="o">=</span> <span class="n">bps</span>
+
+    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;DrawOnMap&quot;</span><span class="p">:</span>
+        <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">points</span>
+        <span class="k">if</span> <span class="n">p0</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">meanPhi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">beamAngles</span><span class="p">[</span><span class="n">p0</span><span class="p">:</span><span class="n">p1</span><span class="p">])</span>
+            <span class="c1"># Now that we have computed the mean angle, we can remove the 360 to get</span>
+            <span class="c1"># the angle back in the correct range</span>
+            <span class="k">if</span> <span class="n">meanPhi</span><span class="o">&gt;</span><span class="mi">180</span><span class="p">:</span> <span class="n">meanPhi</span> <span class="o">-=</span> <span class="mi">360</span>
+            <span class="c1"># Update the arrow direction</span>
+            <span class="n">dmData</span><span class="o">.</span><span class="n">drawBeamArrow</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">meanPhi</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;cyan&quot;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">arrow</span><span class="o">=</span><span class="n">arrow</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">arrow</span><span class="p">,)</span>
+
+<span class="c1"># Create the animation and display it below</span>
+<span class="n">anim</span> <span class="o">=</span> <span class="n">dmData</span><span class="o">.</span><span class="n">animateTrajectory</span><span class="p">(</span><span class="n">trajectory</span><span class="p">,</span> <span class="n">numGraphs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">pointsPerFrame</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+                                <span class="n">graphCallback</span><span class="o">=</span><span class="n">handleGraph</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="s1">&#39;AnimateLA.gif&#39;</span><span class="p">,</span>
+                                <span class="n">lastFrameDur</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span>  <span class="c1"># Freeze on last frame for 3 seconds</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;![demo](AnimateLA.gif)&quot;</span><span class="p">))</span>
+
+<span class="c1"># Alternatively, the following code provides better control over running</span>
+<span class="c1"># the animation. Note that for this method to work, you should not pass a</span>
+<span class="c1"># &#39;fileName&#39; to the &#39;animateTrajectory&#39; function.</span>
+<span class="c1">#    # Increase the animation memory limit for HTML-based animation display</span>
+<span class="c1">#    matplotlib.rcParams[&#39;animation.embed_limit&#39;] = 100000000</span>
+<span class="c1">#    anim = dmData.animateTrajectory(trajectory, numGraphs=3, pointsPerFrame=100,</span>
+<span class="c1">#                                    graphCallback=handleGraph)</span>
+<span class="c1">#    HTML(anim.to_jshtml())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<p><img alt="demo" src="../../../../_images/AnimateLA.gif" /></p>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="BeamSweepingTraj.html" class="btn btn-neutral float-left" title="Beam Sweeping and Probing Along a UE Trajectory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../CSI-RS/CSI-RS.html" class="btn btn-neutral float-right" title="Exploring CSI-RS Configurations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

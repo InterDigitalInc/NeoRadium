@@ -1,0 +1,666 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSI Reporting &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Physical Channels" href="PhyChannels.html" />
+    <link rel="prev" title="Reference Signals" href="RefSig.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CSI Reporting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.csireport.CsiReport"><code class="docutils literal notranslate"><span class="pre">CsiReport</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.csireport.CsiReport.print"><code class="docutils literal notranslate"><span class="pre">CsiReport.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.csireport.CsiReport.trigger"><code class="docutils literal notranslate"><span class="pre">CsiReport.trigger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.csireport.CsiReport.isActive"><code class="docutils literal notranslate"><span class="pre">CsiReport.isActive</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.csireport.CsiReportMan"><code class="docutils literal notranslate"><span class="pre">CsiReportMan</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.csireport.CsiReportMan.print"><code class="docutils literal notranslate"><span class="pre">CsiReportMan.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.csireport.CsiReportMan.processRxGrid"><code class="docutils literal notranslate"><span class="pre">CsiReportMan.processRxGrid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.csireport.CsiReportMan.getFeedback"><code class="docutils literal notranslate"><span class="pre">CsiReportMan.getFeedback()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.csireport.CsiReportMan.makeTypicalReports"><code class="docutils literal notranslate"><span class="pre">CsiReportMan.makeTypicalReports()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.csireport.CsiReportMan.beamformingReports"><code class="docutils literal notranslate"><span class="pre">CsiReportMan.beamformingReports()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.csireport.OLLA"><code class="docutils literal notranslate"><span class="pre">OLLA</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.csireport.OLLA.reset"><code class="docutils literal notranslate"><span class="pre">OLLA.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.csireport.OLLA.update"><code class="docutils literal notranslate"><span class="pre">OLLA.update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.csireport.OLLA.adjustCqi"><code class="docutils literal notranslate"><span class="pre">OLLA.adjustCqi()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CSI Reporting</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/source/API/CsiReport.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-neoradium.csireport">
+<span id="csi-reporting"></span><h1>CSI Reporting<a class="headerlink" href="#module-neoradium.csireport" title="Link to this heading"></a></h1>
+<p>The module <code class="docutils literal notranslate"><span class="pre">csireport.py</span></code> implements the <a class="reference internal" href="#neoradium.csireport.CsiReport" title="neoradium.csireport.CsiReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiReport</span></code></a> and <a class="reference internal" href="#neoradium.csireport.CsiReportMan" title="neoradium.csireport.CsiReportMan"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiReportMan</span></code></a> classes used
+to process CSI information on the UE side and create CSI-feedback reports such as CRI, RI, PMI, and CQI.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.csireport.CsiReport">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.csireport.</span></span><span class="sig-name descname"><span class="pre">CsiReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiRsSets</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.CsiReport" title="Link to this definition"></a></dt>
+<dd><p>Represents one CSI feedback report configuration (referred to as a <cite>CSI-ReportConfig</cite> in <strong>3GPP TS 38.214</strong>) and
+the associated UE-side processing state.</p>
+<p>This class consumes CSI-RS observations from a received resource grid and generates CSI feedback
+information according to the configured report quantity. Supported feedback quantities include:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">Cri<span class="colon">:</span></dt>
+<dd class="field-odd"><p>CSI-RS Resource Indicator, channel/beam selection based on CSI-RS RSRP</p>
+</dd>
+<dt class="field-even">RiPmiCqi<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rank indicator (RI), precoding matrix indicator (PMI), and channel quality indicator (CQI), jointly
+referred to as channel-state information (CSI)</p>
+</dd>
+<dt class="field-odd">RiPmi<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Rank indicator (RI) and precoding matrix indicator (PMI)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>A report may be configured as <cite>periodic</cite>, <cite>semi-persistent-on-PUCCH</cite>, <cite>semi-persistent-on-PUSCH</cite>,
+or <cite>aperiodic</cite>. The object maintains internal measurement state across slots when needed
+(for example, when CRI requires measurements from multiple CSI-RS resources before selecting
+the best one).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csiRsSets</strong> (<a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a> or list of <a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a>) – One CSI-RS resource set or a list of CSI-RS resource sets used by this report. All resource sets are
+assumed to belong to the same bandwidth part.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – <p>Optional configuration parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">reportId<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Report identifier. If not specified, <code class="docutils literal notranslate"><span class="pre">csiRsSets[0].rsId</span> <span class="pre">+</span> <span class="pre">10</span></code> is used.</p>
+</dd>
+<dt class="field-even">reportType<span class="colon">:</span></dt>
+<dd class="field-even"><p>CSI reporting type. Supported values are <code class="docutils literal notranslate"><span class="pre">&quot;periodic&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;spOnPUCCH&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;spOnPUSCH&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;aperiodic&quot;</span></code>.</p>
+</dd>
+<dt class="field-odd">period<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Reporting period in slots for periodic and semi-persistent reporting modes. The
+default is <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p>
+</dd>
+<dt class="field-even">offset<span class="colon">:</span></dt>
+<dd class="field-even"><p>Slot offset for periodic and semi-persistent reporting modes. The default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+</dd>
+<dt class="field-odd">active<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Initial active state for semi-persistent reporting modes. The default is
+<code class="docutils literal notranslate"><span class="pre">0</span></code> (inactive)</p>
+</dd>
+<dt class="field-even">quantity<span class="colon">:</span></dt>
+<dd class="field-even"><p>Type of CSI quantity to report. Supported values are <code class="docutils literal notranslate"><span class="pre">&quot;Cri&quot;</span></code> (default),
+<code class="docutils literal notranslate"><span class="pre">&quot;RiPmiCqi&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;CriRiPmiCqi&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;RiPmi&quot;</span></code>.</p>
+</dd>
+<dt class="field-odd">txAntenna<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Transmit antenna configuration used for PMI/RI/CQI processing (An
+<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> object). This is required when
+quantity is set to <code class="docutils literal notranslate"><span class="pre">&quot;RiPmiCqi&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;RiPmi&quot;</span></code>.</p>
+</dd>
+<dt class="field-even">codebookType<span class="colon">:</span></dt>
+<dd class="field-even"><p>Precoder codebook type. Currently only <code class="docutils literal notranslate"><span class="pre">&quot;Type1SP&quot;</span></code> is supported.</p>
+</dd>
+<dt class="field-odd">allowedRanks<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of allowed transmission ranks considered during RI/PMI selection. The
+default is <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4]</span></code>.</p>
+</dd>
+<dt class="field-even">prgSize<span class="colon">:</span></dt>
+<dd class="field-even"><p>Size of precoding resource groups (PRGs). A value of 0 (default) means wideband PMI.</p>
+</dd>
+<dt class="field-odd">pmiGranularity<span class="colon">:</span></dt>
+<dd class="field-odd"><p>PMI granularity, either <code class="docutils literal notranslate"><span class="pre">&quot;wideband&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;subband&quot;</span></code>.</p>
+</dd>
+<dt class="field-even">cqiTable<span class="colon">:</span></dt>
+<dd class="field-even"><p>CQI table index as defined by <strong>3GPP TS 38.214</strong>. The default is <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csireport.CsiReport.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.CsiReport.print" title="Link to this definition"></a></dt>
+<dd><p>Prints the properties of this CSI report.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as the title for the printed information. If <cite>None</cite> (the default), the text
+“CSI Report Properties:” is used for the title.</p></li>
+<li><p><strong>getStr</strong> (<em>bool</em>) – If <cite>True</cite>, returns a string instead of printing it.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a string.
+Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csireport.CsiReport.trigger">
+<span class="sig-name descname"><span class="pre">trigger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.CsiReport.trigger" title="Link to this definition"></a></dt>
+<dd><p>Trigger an <cite>aperiodic</cite> CSI report. For reports configured with <code class="docutils literal notranslate"><span class="pre">reportType=&quot;aperiodic&quot;</span></code>, this method
+activates the report so that feedback can be generated the next time the reporting condition is met. For
+other report types, this method has no effect.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="neoradium.csireport.CsiReport.isActive">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">isActive</span></span><a class="headerlink" href="#neoradium.csireport.CsiReport.isActive" title="Link to this definition"></a></dt>
+<dd><p>Whether this CSI report is currently active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>True</cite> if the report is currently active; otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Periodic reports are always considered active.</p></li>
+<li><p>Aperiodic and semi-persistent reports depend on the current internal activation state.</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.csireport.CsiReportMan">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.csireport.</span></span><span class="sig-name descname"><span class="pre">CsiReportMan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiReports</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.CsiReportMan" title="Link to this definition"></a></dt>
+<dd><p>Manages a set of CSI reports and collects CSI feedback across slots. This class acts as a container and dispatcher
+for multiple <a class="reference internal" href="#neoradium.csireport.CsiReport" title="neoradium.csireport.CsiReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiReport</span></code></a> objects. It forwards received-grid processing to each report and aggregates the
+resulting CSI feedback.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csiReports</strong> (list of <a class="reference internal" href="#neoradium.csireport.CsiReport" title="neoradium.csireport.CsiReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiReport</span></code></a>) – CSI reports managed by this object.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – <p>Optional configuration parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">upDelay<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Uplink delay, in slots, between CSI measurement time and CSI report transmission time.
+The default is 2.</p>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csireport.CsiReportMan.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.CsiReportMan.print" title="Link to this definition"></a></dt>
+<dd><p>Prints the properties of this CSI report manager.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as the title for the printed information. If <cite>None</cite> (the default), the text
+“CSI Report Manager Properties:” is used for the title.</p></li>
+<li><p><strong>getStr</strong> (<em>bool</em>) – If <cite>True</cite>, returns a string instead of printing it.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a string.
+Otherwise, nothing is returned.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csireport.CsiReportMan.processRxGrid">
+<span class="sig-name descname"><span class="pre">processRxGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxGrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csiRsResources</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.CsiReportMan.processRxGrid" title="Link to this definition"></a></dt>
+<dd><p>Forward a received grid to all managed CSI reports for processing. Refer to the notebook
+<a class="reference internal" href="../Playground/Notebooks/CSI-Feedback/CSI-Feedback1.html"><span class="doc">Downlink CSI Feedback Using a Single Multi-Port CSI-RS</span></a> for an example of using this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rxGrid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – Received resource grid.</p></li>
+<li><p><strong>csiRsResources</strong> (<em>dict</em>) – CSI-RS resource information organized by CSI-RS resource-set ID.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csireport.CsiReportMan.getFeedback">
+<span class="sig-name descname"><span class="pre">getFeedback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.CsiReportMan.getFeedback" title="Link to this definition"></a></dt>
+<dd><p>Returns the CSI feedback generated for each configured CSI report. The returned value is a
+dictionary that maps each CSI-Report ID to a CsiFeedback object. Each entry corresponds to one
+CSI report configuration and contains the feedback quantities computed for that report, such as CRI,
+RI, PMI, and/or CQI.</p>
+<p>Refer to the notebook <a class="reference internal" href="../Playground/Notebooks/CSI-Feedback/CSI-Feedback1.html"><span class="doc">Downlink CSI Feedback Using a Single Multi-Port CSI-RS</span></a> for an example of using
+this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>Dictionary of the form: <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">reportId:</span> <span class="pre">csiFeedback</span> <span class="pre">}</span></code>, where:</p>
+<dl>
+<dt>reportId<span class="classifier">int</span></dt><dd><p>CSI-Report ID associated with a CSI report object. This ID is used  as the dictionary key
+so that the feedback for each configured CSI report can be accessed independently.</p>
+</dd>
+<dt>csiFeedback<span class="classifier">CsiFeedback</span></dt><dd><p>Dataclass containing the CSI feedback generated for the CSI report identified by reportId.
+Depending on the CSI report configuration, some feedback components may be present while
+others may be <code class="docutils literal notranslate"><span class="pre">None</span></code>. The CsiFeedback object has the following fields:</p>
+<dl>
+<dt>cri<span class="classifier">CriFeedback or None</span></dt><dd><p>CRI feedback. This field is populated when CSI-RS resource indication feedback is
+requested (e.g. the <code class="docutils literal notranslate"><span class="pre">quantity</span></code> of the <a class="reference internal" href="#neoradium.csireport.CsiReport" title="neoradium.csireport.CsiReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiReport</span></code></a> object corresponding to
+<code class="docutils literal notranslate"><span class="pre">reportId</span></code> is set to <code class="docutils literal notranslate"><span class="pre">&quot;Cri&quot;</span></code>). Otherwise, it is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>. CriFeedback
+contains:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>cri<span class="classifier">int</span></dt><dd><p>CSI-RS resource indicator. This identifies the CSI-RS resource selected by the
+receiver, corresponding to the strongest beam.</p>
+</dd>
+<dt>rsrp<span class="classifier">float</span></dt><dd><p>RSRP value (in dB) associated with the selected CSI-RS resource. This is the
+computed reference signal received power for the selected beam/resource.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>ri<span class="classifier">RiFeedback or None</span></dt><dd><p>RI feedback. This field is populated when rank indication feedback is requested (e.g. the
+<code class="docutils literal notranslate"><span class="pre">quantity</span></code> of the <a class="reference internal" href="#neoradium.csireport.CsiReport" title="neoradium.csireport.CsiReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiReport</span></code></a> object corresponding to <code class="docutils literal notranslate"><span class="pre">reportId</span></code> is set
+to <code class="docutils literal notranslate"><span class="pre">&quot;RiPmiCqi&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;RiPmi&quot;</span></code>). Otherwise, it is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>. RiFeedback contains:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>ri<span class="classifier">int</span></dt><dd><p>Selected rank, i.e., the preferred number of PDSCH transmission layers.</p>
+</dd>
+<dt>score<span class="classifier">float</span></dt><dd><p>Score associated with the selected rank which is the average of spectral
+efficiency over all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>pmi<span class="classifier">PmiFeedback or None</span></dt><dd><p>PMI feedback. This field is populated when precoder matrix indication feedback is
+requested (e.g. the <code class="docutils literal notranslate"><span class="pre">quantity</span></code> of the <a class="reference internal" href="#neoradium.csireport.CsiReport" title="neoradium.csireport.CsiReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiReport</span></code></a> object corresponding to
+<code class="docutils literal notranslate"><span class="pre">reportId</span></code> is set to <code class="docutils literal notranslate"><span class="pre">&quot;RiPmiCqi&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;RiPmi&quot;</span></code>). Otherwise, it is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p>PmiFeedback contains wideband PMI information and, when configured, subband PMI
+information. It contains:</p>
+<blockquote>
+<div><dl>
+<dt>wbPMI<span class="classifier">PmiIndex</span></dt><dd><p>Selected wideband PMI index. This describes the preferred wideband precoder
+over the CSI reporting bandwidth. PmiIndex contains:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>i1<span class="classifier">list[int]</span></dt><dd><p>First part of the PMI index. It contains the three parts of I1
+PMI index (e.g. [I11, I12, I13]).</p>
+</dd>
+<dt>i2<span class="classifier">int</span></dt><dd><p>Second part of the PMI index.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>wbW<span class="classifier">complex numpy array</span></dt><dd><p>Wideband precoding matrix corresponding to the selected wideband PMI/codebook
+entry. This matrix is the precoder associated with wbPMI.</p>
+</dd>
+<dt>sbPMIs<span class="classifier">list[PmiIndex] or None</span></dt><dd><p>List of selected subband PMI indices, one entry per reported subband. This field
+is <code class="docutils literal notranslate"><span class="pre">None</span></code> when subband PMI feedback is not configured (See <code class="docutils literal notranslate"><span class="pre">pmiGranularity</span></code>).</p>
+<p>Each element of sbPMIs is a PmiIndex object with the same structure as wbPMI above.</p>
+</dd>
+<dt>sbWs<span class="classifier">list of tuples or None</span></dt><dd><p>A list of tuples of the form (<code class="docutils literal notranslate"><span class="pre">groupRBs</span></code>, <code class="docutils literal notranslate"><span class="pre">groupW</span></code>). For each entry in the list,
+the <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code> precoding matrix <code class="docutils literal notranslate"><span class="pre">groupW</span></code> is used for all subcarriers of the
+resource blocks listed in <code class="docutils literal notranslate"><span class="pre">groupRBs</span></code>. This is the same format used by the
+<a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH.getPrecodingMatrix" title="neoradium.pdsch.PDSCH.getPrecodingMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getPrecodingMatrix()</span></code></a> and
+<a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH.precodeTo" title="neoradium.pdsch.PDSCH.precodeTo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">precodeTo()</span></code></a> methods of the
+<a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> class.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>cqi<span class="classifier">CqiFeedback or None</span></dt><dd><p>CQI feedback. This field is populated when channel quality indication feedback is
+requested (e.g. the <code class="docutils literal notranslate"><span class="pre">quantity</span></code> of the <a class="reference internal" href="#neoradium.csireport.CsiReport" title="neoradium.csireport.CsiReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiReport</span></code></a> object corresponding to
+<code class="docutils literal notranslate"><span class="pre">reportId</span></code> is set to <code class="docutils literal notranslate"><span class="pre">&quot;RiPmiCqi&quot;</span></code>). Otherwise, it is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>. CqiFeedback
+contains:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>cqis<span class="classifier">list[int]</span></dt><dd><p>CQI values reported for the corresponding CSI report. The list contains one
+CQI value per codeword. For single-codeword transmission, this list
+has length 1. For dual-codeword transmission, this list has length 2.</p>
+</dd>
+<dt>blers<span class="classifier">list[float]</span></dt><dd><p>The predicted BLER values corresponding to the CQI values in cqis. The length
+should match cqis. Each element represents the predicted BLER associated with
+the corresponding codeword CQI.</p>
+</dd>
+<dt>cqi<span class="classifier">int</span></dt><dd><p>Convenience property returning the first CQI value, equivalent to cqis[0]. This
+is useful for the common single-codeword case.</p>
+</dd>
+<dt>bler<span class="classifier">float</span></dt><dd><p>Convenience property returning the first BLER value, equivalent to blers[0]. This
+is useful for the common single-codeword case.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csireport.CsiReportMan.makeTypicalReports">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">makeTypicalReports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiRsConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">txAntenna</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prgSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowedRanks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.CsiReportMan.makeTypicalReports" title="Link to this definition"></a></dt>
+<dd><p><span class="red">DEPRECATED</span>: This method is deprecated and will be removed in future releases. Please use the
+<a class="reference internal" href="#neoradium.csireport.CsiReportMan.beamformingReports" title="neoradium.csireport.CsiReportMan.beamformingReports"><code class="xref py py-meth docutils literal notranslate"><span class="pre">beamformingReports()</span></code></a> method instead.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csireport.CsiReportMan.beamformingReports">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">beamformingReports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiRsConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">txAntenna</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.CsiReportMan.beamformingReports" title="Link to this definition"></a></dt>
+<dd><p>Creates the typical CSI report configuration for a beamforming CSI-RS
+configuration created by <a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig.beamformingConfig" title="neoradium.csirs.CsiRsConfig.beamformingConfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">beamformingConfig()</span></code></a>.
+The returned report manager contains three CSI reports:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>A periodic CRI report for beam sweeping.</p></li>
+<li><p>An aperiodic CRI report for beam probing.</p></li>
+<li><p>A semi-persistent RI/PMI/CQI report transmitted on the PUSCH.</p></li>
+</ol>
+</div></blockquote>
+<p>The report IDs are derived from the corresponding CSI-RS resource-set IDs
+by adding 10. Unless explicitly overridden, the periodic reports use the same reporting
+periods as their corresponding CSI-RS resource sets. Default report offsets
+allow two slots between CSI-RS reception and CSI reporting to accommodate
+receiver processing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>csiRsConfig</strong> (<a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a>) – <p>A CSI-RS configuration created by <a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig.beamformingConfig" title="neoradium.csirs.CsiRsConfig.beamformingConfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">beamformingConfig()</span></code></a>.
+It must contain three resource sets in the following order:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Periodic beam-sweeping resource set.</p></li>
+<li><p>Aperiodic beam-probing resource set.</p></li>
+<li><p>Semi-persistent RI/PMI/CQI resource set.</p></li>
+</ol>
+</div></blockquote>
+</p></li>
+<li><p><strong>txAntenna</strong> (<a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>) – The transmit antenna array used when computing PMI, RI, and CQI for
+the multi-port CSI report.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – <p>Optional configuration parameters.</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">sweepPeriod<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Reporting period for the periodic beam-sweeping CRI
+report. By default, the period of the beam-sweeping CSI-RS
+resource set is used.</p>
+</dd>
+<dt class="field-even">sweepOffset<span class="colon">:</span></dt>
+<dd class="field-even"><p>Slot offset of the periodic beam-sweeping CRI report.
+The default is two slots after the last beam-sweeping CSI-RS
+resource in the sweep sequence.</p>
+</dd>
+<dt class="field-odd">pmiPeriod<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Reporting period for the RI/PMI/CQI report. By default,
+the period of the RI/PMI/CQI CSI-RS resource set is used.</p>
+</dd>
+<dt class="field-even">pmiOffset<span class="colon">:</span></dt>
+<dd class="field-even"><p>Slot offset of the RI/PMI/CQI report. The default is two
+slots after the corresponding CSI-RS transmission.</p>
+</dd>
+<dt class="field-odd">rxAntenna<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The receive antenna array used for PMI, RI, and CQI
+computation. If omitted, the underlying <a class="reference internal" href="#neoradium.csireport.CsiReport" title="neoradium.csireport.CsiReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiReport</span></code></a>
+implementation assumes its default receiver configuration.</p>
+</dd>
+<dt class="field-even">prgSize<span class="colon">:</span></dt>
+<dd class="field-even"><p>Precoding Resource Group (PRG) size used for PMI
+computation. A value of <code class="docutils literal notranslate"><span class="pre">0</span></code> selects wideband PMI. The default is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+</dd>
+<dt class="field-odd">allowedRanks<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of transmission ranks considered during RI/PMI
+optimization. The default is <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2]</span></code>.</p>
+</dd>
+<dt class="field-even">cqiTable<span class="colon">:</span></dt>
+<dd class="field-even"><p>CQI table index as defined by <strong>3GPP TS 38.214</strong>. The default is <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A CSI report manager containing the periodic beam-sweeping CRI report,
+the aperiodic beam-probing CRI report, and the semi-persistent
+RI/PMI/CQI report.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neoradium.csireport.CsiReportMan" title="neoradium.csireport.CsiReportMan"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiReportMan</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The beam-probing CRI report is configured as an aperiodic report and must
+be triggered explicitly before it is transmitted. The beam-sweeping CRI
+report and the RI/PMI/CQI report are configured as periodic and
+semi-persistent reports, respectively, and follow their configured periods
+and offsets.</p>
+</div>
+<p>Please refer to the notebook <a class="reference internal" href="../Playground/Notebooks/CSI-Feedback/CSI-Feedback3.html"><span class="doc">Hierarchical Beam Management with Sweeping, Probing, and Type-I PMI Feedback</span></a> for an example of using
+this function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.csireport.OLLA">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.csireport.</span></span><span class="sig-name descname"><span class="pre">OLLA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">harq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cqiTable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minCqiOffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxCqiOffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixedOffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.OLLA" title="Link to this definition"></a></dt>
+<dd><p>Outer Loop Link Adaptation (OLLA) controller for CQI adjustment.</p>
+<p>This class maintains a CQI offset for each codeword and updates the offset based on ACK/NACK
+feedback. The adjusted CQI can then be used by the link adaptation or scheduler to select a
+more conservative or more aggressive MCS than the one indicated directly by CSI feedback.</p>
+<p>The OLLA update targets the nominal BLER associated with the selected CQI table. For CQI
+table 3, the default target BLER is 1e-5. For other CQI tables, the default target BLER is 0.1.</p>
+<p>If a HARQ object is provided, this OLLA object is registered with the
+<a class="reference internal" href="Harq.html#neoradium.harq.HarqEntity" title="neoradium.harq.HarqEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqEntity</span></code></a>, so that the HARQ object can update it
+when ACK/NACK feedback becomes available.</p>
+<p>Please refer to the notebook <a class="reference internal" href="../Playground/Notebooks/RayTracing/LinkAdaptation.html"><span class="doc">Link Adaptation with CSI Feedback, HARQ, and OLLA Along a UE Trajectory</span></a> for an
+example of using this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>harq</strong> (<a class="reference internal" href="Harq.html#neoradium.harq.HarqEntity" title="neoradium.harq.HarqEntity"><code class="xref py py-class docutils literal notranslate"><span class="pre">HarqEntity</span></code></a>, optional) – HARQ entity associated with this OLLA object. The number of codewords is taken
+from <code class="docutils literal notranslate"><span class="pre">harq.numCW</span></code>, and <code class="docutils literal notranslate"><span class="pre">harq.setLA(self)</span></code> is called to register this OLLA
+object for ACK/NACK updates.</p></li>
+<li><p><strong>cqiTable</strong> (<em>int</em><em>, </em><em>default=1</em>) – CQI table index. CQI table 3 uses a default target BLER of 1e-5 and
+more conservative CQI-offset limits. Other values use a default target
+BLER of 0.1.</p></li>
+<li><p><strong>step</strong> (<em>float</em><em>, </em><em>optional</em>) – CQI-offset update step. If not specified, the default is 0.01 for CQI
+table 3 and 0.05 for other CQI tables.</p></li>
+<li><p><strong>minCqiOffset</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum allowed CQI offset. If not specified, the default is -6 for CQI
+table 3 and -4 for other CQI tables.</p></li>
+<li><p><strong>maxCqiOffset</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum allowed CQI offset. If not specified, the default is 2 for CQI
+table 3 and 4 for other CQI tables.</p></li>
+<li><p><strong>fixedOffset</strong> (<em>int</em><em>, </em><em>default=0</em>) – Fixed CQI offset added to the dynamic OLLA offset when adjusting CQI
+values. This can be used to model known calibration mismatch or
+implementation loss between the conditions used to generate the CQI
+report and the conditions used for PDSCH transmission. This offset is
+not modified by OLLA updates and is not reset by <a class="reference internal" href="#neoradium.csireport.OLLA.reset" title="neoradium.csireport.OLLA.reset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csireport.OLLA.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.OLLA.reset" title="Link to this definition"></a></dt>
+<dd><p>Reset all CQI offsets to zero.</p>
+<p>If the CQI offsets have already been initialized, this method resets the offset of each codeword
+to zero. If the offsets have not yet been initialized, this method has no effect.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csireport.OLLA.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ack</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.OLLA.update" title="Link to this definition"></a></dt>
+<dd><p>Update the CQI offset using ACK/NACK feedback.</p>
+<p>The update follows the OLLA rule. ACK feedback increases the CQI offset by <code class="docutils literal notranslate"><span class="pre">step</span> <span class="pre">*</span> <span class="pre">targetBler</span></code>,
+making future transmissions slightly more aggressive. NACK feedback decreases the CQI offset by
+<code class="docutils literal notranslate"><span class="pre">step</span> <span class="pre">*</span> <span class="pre">(1</span> <span class="pre">-</span> <span class="pre">targetBler)</span></code>, making future transmissions more conservative. Each offset is
+clipped to the range <code class="docutils literal notranslate"><span class="pre">[minCqiOffset,</span> <span class="pre">maxCqiOffset]</span></code>.</p>
+<p>An ACK/NACK value of <code class="docutils literal notranslate"><span class="pre">-1</span></code> is treated as “no update” and can be used for events that should
+not affect OLLA, such as HARQ retransmissions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ack</strong> (<em>int</em><em>, </em><em>list</em><em>, or </em><em>tuple</em>) – <p>ACK/NACK feedback for one or more codewords. A scalar value is used for a single
+codeword. A list or tuple must contain one value per codeword. Supported values are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: ACK</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code>: NACK</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-1</span></code>: no update</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csireport.OLLA.adjustCqi">
+<span class="sig-name descname"><span class="pre">adjustCqi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cqi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csireport.OLLA.adjustCqi" title="Link to this definition"></a></dt>
+<dd><p>Apply the current OLLA offset to one or more reported CQI values.</p>
+<p>The adjusted CQI is obtained by adding the current CQI offset and the <code class="docutils literal notranslate"><span class="pre">fixedOffset</span></code> to
+the reported CQI and clipping the result to the valid CQI range from 1 to 15. A scalar input
+produces a scalar output, while a list or tuple input produces a list output with one
+adjusted CQI per codeword.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cqi</strong> (<em>int</em><em>, </em><em>list</em><em>, or </em><em>tuple</em>) – Reported CQI value or values. A scalar value is used for a single codeword. A list or
+tuple must contain one CQI value per codeword.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Adjusted CQI value or values clipped to the range 1 to 15. The return type matches
+the input: scalar input returns a scalar, and list or tuple input returns a list.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int or list of int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="RefSig.html" class="btn btn-neutral float-left" title="Reference Signals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PhyChannels.html" class="btn btn-neutral float-right" title="Physical Channels" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

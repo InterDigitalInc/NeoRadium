@@ -6,21 +6,21 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Channel timing &mdash; NeoRadium 0.4.1 Documentation</title>
+  <title>Channel Timing &mdash; NeoRadium 0.5.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=c87aa342"></script>
-      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.4.1
+            NeoRadium 0.5.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -53,24 +53,29 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MigrationGuide.html">Migration Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="ChannelMatrix.html">Channel Matrix</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Channel timing</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Channel Timing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="TdlChannel.html">TDL Channel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="CdlChannelDataset.html">Creating random CDL channels for a dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CdlChannelDataset.html">Creating Random CDL Channels for a Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CustomCdl.html">Customizing CDL Channels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CdlBearingAngles.html">Effect of Antenna Bearing Angles on PDSCH BER over CDL Channels</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-coding">Channel Coding</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with Matlab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
 </ul>
 </li>
 </ul>
@@ -81,6 +86,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/CsiReport.html">CSI Reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
@@ -89,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Utilities.html">Other Utilitiy Functions</a></li>
 </ul>
 
         </div>
@@ -97,7 +104,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.4.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -106,7 +113,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
-      <li class="breadcrumb-item active">Channel timing</li>
+      <li class="breadcrumb-item active">Channel Timing</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../_sources/source/Playground/Notebooks/Channels/cdlTiming.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -116,9 +123,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="Channel-timing">
-<h1>Channel timing<a class="headerlink" href="#Channel-timing" title="Link to this heading"></a></h1>
-<p>This notebooks shows the timing characteristics of a CDL channel model as it is applied to input signals for a duration of 100 slots.</p>
+  <section id="Channel-Timing">
+<h1>Channel Timing<a class="headerlink" href="#Channel-Timing" title="Link to this heading"></a></h1>
+<p>This notebook shows the timing characteristics of a CDL channel model when applied to input signals over a duration of 100 slots.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -137,25 +144,26 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a random grid and the corresponding TX waveform</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a random grid and the corresponding transmit (TX) waveform</span>
 <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span> <span class="c1"># 4 GHz</span>
 
-<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span> <span class="c1"># Also try other subcarrier spacing values</span>
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>     <span class="c1"># Try other subcarrier spacing values</span>
 <span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>
-<span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">numPlanes</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
-
-<span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="n">modem</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
-<span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;UNASSIGNED&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>
-
-<span class="n">bits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numRandomBits</span><span class="p">)</span>
-<span class="n">symbols</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>
-
-<span class="n">indexes</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;UNASSIGNED&quot;</span><span class="p">)</span>
-<span class="n">txGrid</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbols</span>
-
-<span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">(</span><span class="n">carrierFreq</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
+
+<span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">numPorts</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>                     <span class="c1"># Create an empty resource grid (8 antenna ports)</span>
+
+<span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>                               <span class="c1"># Get grid statistics</span>
+<span class="n">modem</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>                                  <span class="c1"># Create a Modulator/Demodulator object</span>
+<span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;UNASSIGNED&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>            <span class="c1"># Calculate total number of bits available in the grid</span>
+
+<span class="n">bits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numRandomBits</span><span class="p">)</span>                       <span class="c1"># Create random bits</span>
+<span class="n">symbols</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>                          <span class="c1"># Modulate the bits to complex symbols</span>
+
+<span class="n">indexes</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;UNASSIGNED&quot;</span><span class="p">)</span>             <span class="c1"># Get indexes of &quot;UNASSIGNED&quot; REs in the grid</span>
+<span class="n">txGrid</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbols</span>                               <span class="c1"># Set them to symbols</span>
+
+<span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">(</span><span class="n">carrierFreq</span><span class="p">)</span>           <span class="c1"># OFDM modulation: Grid -&gt; Waveform</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of transmitted signal in time domain:&quot;</span><span class="p">,</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -167,10 +175,11 @@
 <div class="highlight"><pre>
 
 Bandwidth Part Properties:
-  Resource Blocks:    25 RBs starting at 0 (300 subcarriers)
+  Resource Blocks:    24 RBs starting at 0 (288 subcarriers)
   Subcarrier Spacing: 30 kHz
   CP Type:            normal
-  Bandwidth:          9 MHz
+  Interleaving:       No
+  Bandwidth:          8.64 MHz
   symbolsPerSlot:     14
   slotsPerSubFrame:   2
   nFFT:               1024
@@ -184,7 +193,7 @@ Shape of transmitted signal in time domain: (8, 15360)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># No Channel and no noise performance: ofdmModulate -&gt; ofdmDemodulate</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Baseline performance (no channel, no noise): ofdmModulate → ofdmDemodulate</span>
 <span class="n">rxGridTD</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="n">carrierFreq</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NMSE: </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">txGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="n">rxGridTD</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MAE: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">txGrid</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="n">rxGridTD</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -196,15 +205,15 @@ Shape of transmitted signal in time domain: (8, 15360)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-NMSE: 4.082220685347875e-32
-MAE: 8.082545620880531e-16
+NMSE: 3.952488193394566e-32
+MAE: 7.108895957933346e-16
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a CDL-D channel</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a CDL-D channel model</span>
 <span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
                      <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>  <span class="c1"># 8 TX antenna</span>
                      <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>  <span class="c1"># 2 RX antenna</span>
@@ -221,68 +230,64 @@ MAE: 8.082545620880531e-16
 <div class="highlight"><pre>
 
 CDL-D Channel Properties:
-  carrierFreq:          4 GHz
-  normalizeGains:       True
-  normalizeOutput:      True
-  txDir:                Downlink
-  filterLen:            16 samples
-  delayQuantSize:       64
-  stopBandAtten:        80 dB
-  dopplerShift:         15 Hz
-  coherenceTime:        28.209 milliseconds
-  delaySpread:          300 ns
-  ueDirAZ:              0.0°, 90.0°
-  Cross Pol. Power:     11 dB
-  angleSpreads:         5° 8° 3° 3°
+  carrierFreq:              4 GHz
+  normalizeGains:           True
+  normalizeOutput:          True
+  txDir:                    Downlink
+  filterLen:                16 samples
+  delayQuantSize:           64
+  stopBandAtten:            80 dB
+  dopplerShift:             15 Hz
+  coherenceTime:            28.209 milliseconds
+  delaySpread:              300 ns
+  ueDirAZ:                  0°, 90°
+  xPolPower:                11.00 dB
+  angleSpreads:             5° 8° 3° 3°
   TX Antenna:
-    Total Elements:     8
-    spacing:            0.5𝜆, 0.5𝜆
-    shape:              2 rows x 4 columns
-    polarization:       |
+    Total Elements:         8
+    spacing:                0.5𝜆, 0.5𝜆
+    shape:                  2 rows x 4 columns
+    polarization:           |
   RX Antenna:
-    Total Elements:     2
-    spacing:            0.5𝜆, 0.5𝜆
-    shape:              1 rows x 2 columns
-    polarization:       |
-    Orientation (𝛼,𝛃,𝛄): 180° 0° 0°
-  hasLOS:               True
+    Total Elements:         2
+    spacing:                0.5𝜆, 0.5𝜆
+    shape:                  1 rows x 2 columns
+    polarization:           |
+    Orientation (𝛼,𝛃,𝛄):     180° 0° 0°
+  hasLOS:                   True
   LOS Path:
-    Delay (ns):         0.00000
-    Power (dB):         -0.20000
-    AOD (Deg):          0
-    AOA (Deg):          -3
-    ZOD (Deg):          1
-    ZOA (Deg):          1
+    Delay (ns):             0.00000
+    Power (dB):             -0.20000
+    AOD (Deg):              0.0
+    AOA (Deg):              -180.0
+    ZOD (Deg):              98.0
+    ZOA (Deg):              82.0
   NLOS Paths (13):
-    Delays (ns):        0.000 10.50 183.6 408.9 421.5 541.2 778.8 532.5 1212. 2381. 2827. 2912.
-                        3757.
-    Powers (dB):        -13.5 -18.8 -21.0 -22.8 -17.9 -20.1 -21.9 -22.9 -27.8 -23.6 -24.8 -30.0
-                        -27.7
-    AODs (Deg):         0    89   89   89   13   13   13   35   -64  -33  53   -132
-                        77
-    AOAs (Deg):         -180 89   89   89   163  163  163  -137 74   128  -120 -9
-                        -84
-    ZODs (Deg):         98   86   86   86   98   98   98   98   88   91   104  80
-                        86
-    ZOAs (Deg):         82   87   87   87   79   79   79   78   74   78   87   71
-                        73
+    Delays (ns):            0.000 10.50 183.6 408.9 421.5 541.2 778.8 532.5 1212. 2381. 2827. 2912. 3757.
+    Powers (dB):            -13.5 -18.8 -21.0 -22.8 -17.9 -20.1 -21.9 -22.9 -27.8 -23.6 -24.8 -30.0 -27.7
+    AODs (Deg):             0    89   89   89   13   13   13   35   -64  -33  53   -132 77
+    AOAs (Deg):             -180 89   89   89   163  163  163  -137 74   128  -120 -9   -84
+    ZODs (Deg):             98   86   86   86   98   98   98   98   88   91   104  80   86
+    ZOAs (Deg):             82   87   87   87   79   79   79   78   74   78   87   71   73
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply the channel in time domain:</span>
-<span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply the channel in the time domain</span>
+<span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>                         <span class="c1"># Get maximum channel delay</span>
 <span class="n">paddedTxWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>              <span class="c1"># Pad the waveform with zeros</span>
 <span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">paddedTxWaveform</span><span class="p">)</span>     <span class="c1"># Apply the channel to the waveform</span>
 
-<span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">chanOffset</span><span class="p">)</span>                 <span class="c1"># Synchronization</span>
+<span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">chanOffset</span><span class="p">)</span>     <span class="c1"># Synchronization</span>
 <span class="n">rxGridTd</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="n">carrierFreq</span><span class="p">)</span>
 
-<span class="c1"># Apply the channel in frequency domain and compare</span>
+<span class="c1"># Apply the channel in the frequency domain</span>
 <span class="n">chanMat</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>
 <span class="n">rxGridFd</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">chanMat</span><span class="p">)</span>
+
+<span class="c1"># Compare time-domain vs. frequency-domain results</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NMSE: </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">rxGridFd</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="n">rxGridTd</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <br/></pre></div>
 </div>
@@ -292,41 +297,39 @@ CDL-D Channel Properties:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-NMSE: 7.88512587715999e-06
+NMSE: 8.292828250427552e-06
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply the channel to 100 slots of input signal</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply the channel to 100 slots of the input signal</span>
 <span class="n">chanMats</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
-    <span class="c1"># Go to next slot and do it again:</span>
+    <span class="c1"># Move to the next slot</span>
     <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
 
-    <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">numPlanes</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">numPorts</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 
     <span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
     <span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;UNASSIGNED&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>
-
     <span class="n">bits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numRandomBits</span><span class="p">)</span>
     <span class="n">symbols</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>
-
     <span class="n">indexes</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;UNASSIGNED&quot;</span><span class="p">)</span>
     <span class="n">txGrid</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbols</span>
 
     <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">(</span><span class="n">carrierFreq</span><span class="p">)</span>
 
-    <span class="c1"># Apply the channel in time domain:</span>
-    <span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>
-    <span class="n">paddedTxWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>              <span class="c1"># Pad the waveform with zeros</span>
-    <span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">paddedTxWaveform</span><span class="p">)</span>     <span class="c1"># Apply the channel to the waveform</span>
+    <span class="c1"># Apply the channel in the time domain:</span>
+    <span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>                            <span class="c1"># Get maximum channel delay</span>
+    <span class="n">paddedTxWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>                 <span class="c1"># Pad the waveform with zeros</span>
+    <span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">paddedTxWaveform</span><span class="p">)</span>        <span class="c1"># Apply the channel to the waveform</span>
 
-    <span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">chanOffset</span><span class="p">)</span>                 <span class="c1"># Synchronization</span>
+    <span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">chanOffset</span><span class="p">)</span>        <span class="c1"># Synchronization</span>
     <span class="n">rxGridTd</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="n">carrierFreq</span><span class="p">)</span>
 
-    <span class="c1"># Apply the channel in frequency domain and compare</span>
+    <span class="c1"># Apply the channel in the frequency domain and compare results</span>
     <span class="n">chanMat</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>
     <span class="n">rxGridFd</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">chanMat</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">getNmse</span><span class="p">(</span><span class="n">rxGridFd</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="n">rxGridTd</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1e-3</span>

@@ -6,23 +6,23 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Playground &mdash; NeoRadium 0.4.1 Documentation</title>
+  <title>Playground &mdash; NeoRadium 0.5.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=c87aa342"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Antenna Element" href="Notebooks/Antenna/AntennaElement.html" />
-    <link rel="prev" title="Installation" href="../installation.html" /> 
+    <link rel="prev" title="Migration Guide" href="../MigrationGuide.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -34,7 +34,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.4.1
+            NeoRadium 0.5.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -50,83 +50,114 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MigrationGuide.html">Migration Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Playground</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#antenna">Antenna</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/Antenna/AntennaElement.html">Antenna Element</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/Antenna/AntennaPanel.html">Antenna Panel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/Antenna/AntennaArray.html">Antenna Array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Antenna/BeamSweeping.html">Beam Sweeping with Antenna Panels and Arrays</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#stochastic-channel-models">Stochastic Channel Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/ChannelMatrix.html">Channel Matrix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/cdlTiming.html">Channel timing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/cdlTiming.html">Channel Timing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/TdlChannel.html">TDL Channel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/CdlChannelDataset.html">Creating random CDL channels for a dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/CdlChannelDataset.html">Creating Random CDL Channels for a Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/CustomCdl.html">Customizing CDL Channels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Channels/CdlBearingAngles.html">Effect of Antenna Bearing Angles on PDSCH BER over CDL Channels</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#trajectory-based-channel-model">Trajectory-based Channel Model</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/DeepMimo.html">Working with DeepMIMO Scenarios</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/TrajChannel.html">Using the Trajectory-based Channel Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/TrajEndToEnd.html">An end-to-end PDSCH Simulation with Trajectory-based Channel Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/TrajChannelAnim.html">Animating Trajectories</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/ChannelGeneration.html">Creating random MIMO Channel Matrices from a DeepMimo Scenario</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/ChannelSequences.html">Creating temporally and spatially consistent sequences of channel matrices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/AnimatedBER.html">Studying Bit Error Rate changes while moving along a trajectory</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/AnimatedCN.html">Studying channel condition number while moving along a trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/TrajChannel.html">Applying a Trajectory-Based Channel in the Frequency and Time Domains</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/TrajEndToEnd.html">End-to-End PDSCH Simulation with a Trajectory-Based Channel Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/TrajChannelAnim.html">Animating a UE Trajectory in a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/ChannelGeneration.html">Generating Random Channel Matrices from a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/ChannelSequences.html">Creating Temporally and Spatially Consistent Channel-Matrix Sequences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/AnimatedBER.html">Animating BER Along a UE Trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/AnimatedCN.html">Animating Channel Condition Number Along a UE Trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/TrjBearingAngles.html">Ray-tracing BER at Various TX/RX Antenna Bearing Angles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/BeamSweeping.html">Beam Sweeping in a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/BeamSweepingTraj.html">Beam Sweeping and Probing Along a UE Trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/RayTracing/LinkAdaptation.html">Link Adaptation with CSI Feedback, HARQ, and OLLA Along a UE Trajectory</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/CSI-RS/CSI-RS.html">Channel State Information Reference Signals (CSI-RS) Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/CSI-RS/CSI-RS-Time.html">CSI-RS timing configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/CSI-RS/CSI-RS.html">Exploring CSI-RS Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/CSI-RS/CSI-RS-Time.html">CSI-RS Timing Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/CSI-RS/CSI-RS-Beams.html">CSI-RS Configuration for Beam Management</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#dmrs-and-ptrs">DMRS and PTRS</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/DMRS/DMRS.html">Configuring DMRS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/DMRS/CDMsWithNoData.html">Using <code class="docutils literal notranslate"><span class="pre">otherCdmGroups</span></code> parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/DMRS/PTRS.html">Configuring PTRS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#csi-feedback">CSI-Feedback</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/CSI-Feedback/CSI-Feedback1.html">Downlink CSI Feedback Using a Single Multi-Port CSI-RS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/CSI-Feedback/CSI-Feedback2.html">Downlink CSI Feedback Using Multiple Directional Multi-Port CSI-RS Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/CSI-Feedback/CSI-Feedback3.html">Hierarchical Beam Management with Sweeping, Probing, and Type-I PMI Feedback</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dm-rs-and-pt-rs">DM-RS and PT-RS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/DMRS/DMRS.html">Exploring PDSCH DM-RS Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/DMRS/CDMsWithNoData.html">Demystifying <code class="docutils literal notranslate"><span class="pre">numCdmGroupsWithoutData</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/DMRS/PTRS.html">Exploring PDSCH PT-RS Configurations</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-endToEnd.html">PDSCH end-to-end communication</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BER.html">Calculating bit error rate of PDSCH communication</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BLER.html">Calculating BER/BLER for PDSCH Communication with LDPC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-endToEnd.html">End-to-End PDSCH Communication Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BER.html">Measuring PDSCH Bit Error Rate (BER)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BLER.html">BLER Evaluation for PDSCH Communication with LDPC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/ChannelNoiseEst.html">Channel/Noise Estimation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-Throughput.html">NR PDSCH Throughput with HARQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/PDSCH/AdvancedPDSCH.html">Advanced PDSCH Configuration and End-to-End Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#channel-coding">Channel Coding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/ChanCode/LDPC.html">Low-Density Parity Check (LDPC)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/ChanCode/NumIter.html">Effect of LDPC Decoding Iterations on PDSCH BLER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/ChanCode/Polar.html">Polar Coding</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/HARQ/Harq.html">Using HARQ</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/HARQ/HarqEventCallback.html">HARQ event callback</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/HARQ/HarqEventCallback.html">HARQ Event Callback</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/HARQ/TransportChannelWithHarq.html">Modeling Transport Channel</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#a-deep-learning-case-study">A Deep Learning Case Study</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/MLChEst/MLChestDataGen.html">Generating Dataset for Channel Estimation Training</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/MLChEst/MLChestTrainTorch.html">Training A ResNet model for Channel Estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/MLChEst/MLChestDataGen.html">Generating a Dataset for Channel Estimation Training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/MLChEst/MLChestTrainTorch.html">Training a ResNet Model for Channel Estimation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="Notebooks/MLChEst/MLChestEvaluateTorch.html">Evaluating the Trained Channel Estimator</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#research-papers">Research Papers</a><ul>
-<li class="toctree-l3"><a class="reference external" href="https://github.com/InterDigitalInc/NeoRadium/tree/main/Playground/Research/SelfRefining">A Self-Refining Multi-Layer Receiver Pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">A Self-Refining Multi-Layer Receiver Pipeline</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/Research/SelfRefining/readme.html">readme.md</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/Research/SelfRefining/MLChEstDataGen.html">Generating the Dataset for Channel Estimation Training</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/Research/SelfRefining/MLChEstTrain.html">Training the Channel Estimation Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/Research/SelfRefining/MLChEstEvaluateNMSE.html">Evaluating Channel Estimation Performance Using NMSE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/Research/SelfRefining/MLChEstEvaluateBLER.html">Evaluating End-to-End Communication Performance Using BLER</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/Research/SelfRefining/MLChEstEvaluateHARQ.html">Evaluating Communication Throughput with HARQ</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#other-examples">Other Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="Notebooks/Others/SnrCalculations.html">SNR Calculations in NeoRadium</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Notebooks/Others/SnrCalculations.html">SNR Calculations in <strong>NeoRadium</strong></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#comparing-with-matlab">Comparing with Matlab</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Antenna</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaElement.html">Comparing Antenna Element Calculations with Matlab</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaPanel.html">Comparing Antenna Panel Calculations with Matlab</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaArray.html">Comparing Antenna Array Calculations with Matlab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparing-with-matlab">Comparing with MATLAB</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Antenna</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaElement.html">Comparing Antenna Element Calculations with MATLAB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaPanel.html">Comparing Antenna Panel Calculations with MATLAB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaArray.html">Comparing Antenna Array Calculations with MATLAB</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#cdl-channel-model">CDL Channel Model</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL/CDL-Matlab.html">Comparing the CDL Channel results with Matlab</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL-SISO/SisoCdl.html">Comparing SISO CDL Channel results with Matlab</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL/CDL-Matlab.html">Comparing the CDL Channel results with MATLAB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL-SISO/SisoCdl.html">Comparing SISO CDL Channel results with MATLAB</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#csi-rs">CSI-RS</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html">Comparing the CSI-RS results with Matlab</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html">Comparing the CSI-RS results with MATLAB</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pdsch">PDSCH</a><ul>
@@ -134,8 +165,8 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#ldpc-and-polar-coding">LDPC and Polar Coding</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/LDPC/LDPC-Matlab.html">Comparing the LDPC results with Matlab</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/Polar/PolarMatlab.html">Comparing the Polar Coding results with Matlab</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/LDPC/LDPC-Matlab.html">Comparing the LDPC results with MATLAB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Notebooks/CompareWithMatlab/Polar/PolarMatlab.html">Comparing the polar coding results with MATLAB</a></li>
 </ul>
 </li>
 </ul>
@@ -150,6 +181,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../API/Waveform.html">Waveform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/Modulation.html">Modulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/CsiReport.html">CSI Reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/ChanCode.html">Channel Coding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/Harq.html">HARQ</a></li>
@@ -158,6 +190,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../API/Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../API/Utilities.html">Other Utilitiy Functions</a></li>
 </ul>
 
         </div>
@@ -166,7 +199,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.4.1</a>
+          <a href="../../index.html">NeoRadium 0.5.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -186,7 +219,7 @@
              
   <section id="playground">
 <h1>Playground<a class="headerlink" href="#playground" title="Link to this heading"></a></h1>
-<p>The following pages illustrate how various APIs are utilized and provide more detailed information about <strong>NeoRadium</strong>’s capabilities. The code presented in these pages is available in the <code class="docutils literal notranslate"><span class="pre">Playgrounds</span></code> directory. You can open them in a Jupyter notebook and interact with them.</p>
+<p>This section contains example notebooks that demonstrate how <strong>NeoRadium</strong> APIs are used in practice and highlight the library’s main capabilities. The source code for these examples is available in the <code class="docutils literal notranslate"><span class="pre">Playground</span></code> directory, and each notebook can be opened and explored interactively in Jupyter.</p>
 <section id="antenna">
 <h2>Antenna<a class="headerlink" href="#antenna" title="Link to this heading"></a></h2>
 <blockquote>
@@ -195,6 +228,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/Antenna/AntennaElement.html">Antenna Element</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/Antenna/AntennaPanel.html">Antenna Panel</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/Antenna/AntennaArray.html">Antenna Array</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Antenna/BeamSweeping.html">Beam Sweeping with Antenna Panels and Arrays</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -205,9 +239,11 @@
 <div><div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/ChannelMatrix.html">Channel Matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/cdlTiming.html">Channel timing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/cdlTiming.html">Channel Timing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/TdlChannel.html">TDL Channel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/CdlChannelDataset.html">Creating random CDL channels for a dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/CdlChannelDataset.html">Creating Random CDL Channels for a Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/CustomCdl.html">Customizing CDL Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Channels/CdlBearingAngles.html">Effect of Antenna Bearing Angles on PDSCH BER over CDL Channels</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -218,13 +254,17 @@
 <div><div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/DeepMimo.html">Working with DeepMIMO Scenarios</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/TrajChannel.html">Using the Trajectory-based Channel Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/TrajEndToEnd.html">An end-to-end PDSCH Simulation with Trajectory-based Channel Model</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/TrajChannelAnim.html">Animating Trajectories</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/ChannelGeneration.html">Creating random MIMO Channel Matrices from a DeepMimo Scenario</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/ChannelSequences.html">Creating temporally and spatially consistent sequences of channel matrices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/AnimatedBER.html">Studying Bit Error Rate changes while moving along a trajectory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/AnimatedCN.html">Studying channel condition number while moving along a trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/TrajChannel.html">Applying a Trajectory-Based Channel in the Frequency and Time Domains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/TrajEndToEnd.html">End-to-End PDSCH Simulation with a Trajectory-Based Channel Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/TrajChannelAnim.html">Animating a UE Trajectory in a DeepMIMO Scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/ChannelGeneration.html">Generating Random Channel Matrices from a DeepMIMO Scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/ChannelSequences.html">Creating Temporally and Spatially Consistent Channel-Matrix Sequences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/AnimatedBER.html">Animating BER Along a UE Trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/AnimatedCN.html">Animating Channel Condition Number Along a UE Trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/TrjBearingAngles.html">Ray-tracing BER at Various TX/RX Antenna Bearing Angles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/BeamSweeping.html">Beam Sweeping in a DeepMIMO Scenario</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/BeamSweepingTraj.html">Beam Sweeping and Probing Along a UE Trajectory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/RayTracing/LinkAdaptation.html">Link Adaptation with CSI Feedback, HARQ, and OLLA Along a UE Trajectory</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -234,20 +274,33 @@
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/CSI-RS/CSI-RS.html">Channel State Information Reference Signals (CSI-RS) Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/CSI-RS/CSI-RS-Time.html">CSI-RS timing configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CSI-RS/CSI-RS.html">Exploring CSI-RS Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CSI-RS/CSI-RS-Time.html">CSI-RS Timing Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CSI-RS/CSI-RS-Beams.html">CSI-RS Configuration for Beam Management</a></li>
 </ul>
 </div>
 </div></blockquote>
 </section>
-<section id="dmrs-and-ptrs">
-<h2>DMRS and PTRS<a class="headerlink" href="#dmrs-and-ptrs" title="Link to this heading"></a></h2>
+<section id="csi-feedback">
+<h2>CSI-Feedback<a class="headerlink" href="#csi-feedback" title="Link to this heading"></a></h2>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/DMRS/DMRS.html">Configuring DMRS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/DMRS/CDMsWithNoData.html">Using <code class="docutils literal notranslate"><span class="pre">otherCdmGroups</span></code> parameter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/DMRS/PTRS.html">Configuring PTRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CSI-Feedback/CSI-Feedback1.html">Downlink CSI Feedback Using a Single Multi-Port CSI-RS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CSI-Feedback/CSI-Feedback2.html">Downlink CSI Feedback Using Multiple Directional Multi-Port CSI-RS Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CSI-Feedback/CSI-Feedback3.html">Hierarchical Beam Management with Sweeping, Probing, and Type-I PMI Feedback</a></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="dm-rs-and-pt-rs">
+<h2>DM-RS and PT-RS<a class="headerlink" href="#dm-rs-and-pt-rs" title="Link to this heading"></a></h2>
+<blockquote>
+<div><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/DMRS/DMRS.html">Exploring PDSCH DM-RS Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/DMRS/CDMsWithNoData.html">Demystifying <code class="docutils literal notranslate"><span class="pre">numCdmGroupsWithoutData</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/DMRS/PTRS.html">Exploring PDSCH PT-RS Configurations</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -257,10 +310,24 @@
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-endToEnd.html">PDSCH end-to-end communication</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BER.html">Calculating bit error rate of PDSCH communication</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BLER.html">Calculating BER/BLER for PDSCH Communication with LDPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-endToEnd.html">End-to-End PDSCH Communication Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BER.html">Measuring PDSCH Bit Error Rate (BER)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-BLER.html">BLER Evaluation for PDSCH Communication with LDPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/ChannelNoiseEst.html">Channel/Noise Estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/PDSCH-Throughput.html">NR PDSCH Throughput with HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/PDSCH/AdvancedPDSCH.html">Advanced PDSCH Configuration and End-to-End Processing</a></li>
+</ul>
+</div>
+</div></blockquote>
+</section>
+<section id="channel-coding">
+<h2>Channel Coding<a class="headerlink" href="#channel-coding" title="Link to this heading"></a></h2>
+<blockquote>
+<div><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/ChanCode/LDPC.html">Low-Density Parity Check (LDPC)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/ChanCode/NumIter.html">Effect of LDPC Decoding Iterations on PDSCH BLER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/ChanCode/Polar.html">Polar Coding</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -271,7 +338,7 @@
 <div><div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/HARQ/Harq.html">Using HARQ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/HARQ/HarqEventCallback.html">HARQ event callback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/HARQ/HarqEventCallback.html">HARQ Event Callback</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/HARQ/TransportChannelWithHarq.html">Modeling Transport Channel</a></li>
 </ul>
 </div>
@@ -282,8 +349,8 @@
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/MLChEst/MLChestDataGen.html">Generating Dataset for Channel Estimation Training</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/MLChEst/MLChestTrainTorch.html">Training A ResNet model for Channel Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/MLChEst/MLChestDataGen.html">Generating a Dataset for Channel Estimation Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/MLChEst/MLChestTrainTorch.html">Training a ResNet Model for Channel Estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Notebooks/MLChEst/MLChestEvaluateTorch.html">Evaluating the Trained Channel Estimator</a></li>
 </ul>
 </div>
@@ -291,34 +358,42 @@
 </section>
 <section id="research-papers">
 <h2>Research Papers<a class="headerlink" href="#research-papers" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3><a class="reference external" href="https://ieeexplore.ieee.org/abstract/document/11443343">A Self-Refining Multi-Layer Receiver Pipeline</a><a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/InterDigitalInc/NeoRadium/tree/main/Playground/Research/SelfRefining">A Self-Refining Multi-Layer Receiver Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Research/SelfRefining/readme.html">readme.md</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Research/SelfRefining/MLChEstDataGen.html">Generating the Dataset for Channel Estimation Training</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Research/SelfRefining/MLChEstTrain.html">Training the Channel Estimation Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Research/SelfRefining/MLChEstEvaluateNMSE.html">Evaluating Channel Estimation Performance Using NMSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Research/SelfRefining/MLChEstEvaluateBLER.html">Evaluating End-to-End Communication Performance Using BLER</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Research/SelfRefining/MLChEstEvaluateHARQ.html">Evaluating Communication Throughput with HARQ</a></li>
 </ul>
 </div>
 </div></blockquote>
+</section>
 </section>
 <section id="other-examples">
 <h2>Other Examples<a class="headerlink" href="#other-examples" title="Link to this heading"></a></h2>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/Others/SnrCalculations.html">SNR Calculations in NeoRadium</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/Others/SnrCalculations.html">SNR Calculations in <strong>NeoRadium</strong></a></li>
 </ul>
 </div>
 </div></blockquote>
 </section>
 <section id="comparing-with-matlab">
-<h2>Comparing with Matlab<a class="headerlink" href="#comparing-with-matlab" title="Link to this heading"></a></h2>
-<section id="id1">
-<h3>Antenna<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<h2>Comparing with MATLAB<a class="headerlink" href="#comparing-with-matlab" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>Antenna<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaElement.html">Comparing Antenna Element Calculations with Matlab</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaPanel.html">Comparing Antenna Panel Calculations with Matlab</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaArray.html">Comparing Antenna Array Calculations with Matlab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaElement.html">Comparing Antenna Element Calculations with MATLAB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaPanel.html">Comparing Antenna Panel Calculations with MATLAB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/Antenna/AntennaArray.html">Comparing Antenna Array Calculations with MATLAB</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -328,8 +403,8 @@
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL/CDL-Matlab.html">Comparing the CDL Channel results with Matlab</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL-SISO/SisoCdl.html">Comparing SISO CDL Channel results with Matlab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL/CDL-Matlab.html">Comparing the CDL Channel results with MATLAB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CDL-SISO/SisoCdl.html">Comparing SISO CDL Channel results with MATLAB</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -339,7 +414,7 @@
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html">Comparing the CSI-RS results with Matlab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/CSI-RS/CSI-RS-Matlab.html">Comparing the CSI-RS results with MATLAB</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -359,8 +434,8 @@
 <blockquote>
 <div><div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/LDPC/LDPC-Matlab.html">Comparing the LDPC results with Matlab</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/Polar/PolarMatlab.html">Comparing the Polar Coding results with Matlab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/LDPC/LDPC-Matlab.html">Comparing the LDPC results with MATLAB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notebooks/CompareWithMatlab/Polar/PolarMatlab.html">Comparing the polar coding results with MATLAB</a></li>
 </ul>
 </div>
 </div></blockquote>
@@ -372,7 +447,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../MigrationGuide.html" class="btn btn-neutral float-left" title="Migration Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="Notebooks/Antenna/AntennaElement.html" class="btn btn-neutral float-right" title="Antenna Element" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

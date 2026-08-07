@@ -6,17 +6,17 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>What is NeoRadium? &mdash; NeoRadium 0.4.1 Documentation</title>
+  <title>What is NeoRadium? &mdash; NeoRadium 0.5.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=c87aa342"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -33,7 +33,7 @@
           
           
           <a href="#" class="icon icon-home">
-            NeoRadium 0.4.1
+            NeoRadium 0.5.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -49,6 +49,7 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/MigrationGuide.html">Migration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/Playground/Playground.html">Playground</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
@@ -58,6 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="source/API/Waveform.html">Waveform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/Modulation.html">Modulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/API/CsiReport.html">CSI Reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/ChanCode.html">Channel Coding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/Harq.html">HARQ</a></li>
@@ -66,6 +68,7 @@
 <li class="toctree-l1"><a class="reference internal" href="source/API/Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/API/Utilities.html">Other Utilitiy Functions</a></li>
 </ul>
 
         </div>
@@ -74,7 +77,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">NeoRadium 0.4.1</a>
+          <a href="#">NeoRadium 0.5.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -92,33 +95,44 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <a class="reference internal image-reference" href="_images/NeoRadiumRect.png"><img alt="_images/NeoRadiumRect.png" class="align-center" src="_images/NeoRadiumRect.png" style="width: 300px;" />
+  <a class="reference internal image-reference" href="_images/NeoRadiumRect.png"><img alt="_images/NeoRadiumRect.png" class="align-center" src="_images/NeoRadiumRect.png" width="300" />
 </a>
 <section id="what-is-neoradium">
 <h1>What is NeoRadium?<a class="headerlink" href="#what-is-neoradium" title="Link to this heading"></a></h1>
-<p><strong>NeoRadium</strong> is a Python library designed to simplify the simulation of physical layer communication pipelines based on the latest <strong>3GPP 5G NR</strong> standard. Its object-oriented architecture effectively abstracts the complexities inherent in different stages of the communication pipeline, enabling rapid development and execution of end-to-end simulations on any standard computer.</p>
-<p>Wireless communication research often focuses on specific blocks or modules within the end-to-end communication pipeline, such as equalization. However, implementing an entire 3GPP-compliant pipeline solely for the purpose of testing a single block can be both time-consuming and cumbersome. This is where <strong>NeoRadium</strong> proves invaluable. It provides comprehensive end-to-end communication pipeline functionality based on 3GPP standards, empowering researchers to effortlessly customize, study, and evaluate the performance of their unique implementations. All these capabilities are delivered without requiring high-end hardware, complex setups, or costly GPUs. As long as your computer operates with Python 3.8+ and a basic configuration, you are ready to begin.</p>
-<p><strong>NeoRadium</strong> includes a comprehensive <a class="reference internal" href="source/Playground/Playground.html"><span class="doc">Playground</span></a>, offering numerous examples for experimentation. These examples are presented as <a class="reference external" href="https://jupyter.org">Jupyter Notebooks</a> and provide detailed explanations of API functionalities and their application in practical contexts.</p>
+<p><strong>NeoRadium</strong> is a Python library for simulating physical-layer communication pipelines based on the latest <strong>3GPP 5G NR</strong> standards. Its object-oriented design abstracts much of the complexity of the underlying communication chain, making it easier to build, run, and analyze end-to-end simulations on standard computing hardware.</p>
+<p>In wireless communication research, it is often necessary to evaluate a specific block within a larger pipeline, such as channel estimation, equalization, or CSI feedback. Building a complete 3GPP-compliant simulation environment from scratch for that purpose can be time-consuming and difficult to maintain. <strong>NeoRadium</strong> addresses this problem by providing a comprehensive end-to-end framework that researchers can readily customize and extend for their own work.</p>
+<p>With <strong>NeoRadium</strong>, users can focus on developing and evaluating new algorithms rather than re-implementing the surrounding infrastructure. No specialized hardware, complex system setup, or GPU resources are required. A standard computer with Python 3.10 or later is sufficient to get started.</p>
+<p><strong>NeoRadium</strong> also includes a comprehensive <a class="reference internal" href="source/Playground/Playground.html"><span class="doc">Playground</span></a> with many practical examples. These examples are provided as <a class="reference external" href="https://jupyter.org">Jupyter Notebooks</a> and demonstrate both the API and common usage patterns in realistic scenarios.</p>
+<a class="reference external image-reference" href="source/Playground/Notebooks/RayTracing/BeamSweepingTraj.html"><img alt="_images/AnimateCRI.gif" class="align-center" src="_images/AnimateCRI.gif" />
+</a>
 </section>
 <section id="key-features">
 <h1>Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h1>
-<p><strong>NeoRadium</strong> offers a versatile suite of functionalities engineered to streamline 5G NR physical layer research and development. Below is a summary of the capabilities available in the current version. New features are continually being added to further expand its scope.</p>
+<p><strong>NeoRadium</strong> provides a broad set of tools for 5G NR physical-layer research and development. The current release includes the following capabilities, with additional functionality continuing to be added over time.</p>
 <ul class="simple">
-<li><p><strong>Channel Coding</strong>: Efficient transport block encoding and decoding utilizing Polar and LDPC coding algorithms, in accordance with TS 38.212 specifications.</p></li>
-<li><p><strong>Carriers and Bandwidth Parts</strong>: Precise timing calculations for Cyclic Prefix, OFDM symbols, slots, subframes, and frames.</p></li>
-<li><p><strong>Reference Signal Generation</strong>: Includes DMRS, PT-RS, and CSI-RS generation as specified in TS 38.211, TS 38.212, and TS 38.214.</p></li>
-<li><p><strong>Resource Grid Functionality</strong>: Encompasses resource mapping, OFDM modulation/demodulation, and precoding, aligned with TS 38.101, TS 38.104, and TS 38.211.</p></li>
-<li><p><strong>Channel Estimation, Noise Estimation, and Equalization</strong>.</p></li>
-<li><p><strong>Resource Grid Visualization</strong>: Provides valuable insights through visualized resource grid contents.</p></li>
-<li><p><strong>PDSCH Communication Pipeline</strong>: Simulates the complete PDSCH end-to-end communication pipeline, including modulation/demodulation, mapping/de-mapping, interleaving/de-interleaving, scrambling/descrambling, and transport block size calculations, as specified in TS 38.211 and TS 38.214.</p></li>
-<li><p><strong>Antenna Array Implementation and Simulation</strong>: Based on TR 38.901.</p></li>
-<li><p><strong>Antenna Field Analysis</strong>: Calculates antenna field power and directivity, offering 2D/3D visualization.</p></li>
-<li><p><strong>Channel Modeling</strong>: Applies CDL or TDL channel models to time-domain or frequency-domain signals.</p></li>
-<li><p><strong>DeepMIMO Integration</strong> <span class="red">(New)</span>: Enables the import of DeepMIMO ray-tracing scenarios for creating user trajectories.</p></li>
-<li><p><strong>Trajectory-based Channel Models</strong> <span class="red">(New)</span>: Facilitates the creation of spatially and temporally consistent sequences of channels based on user trajectories, for use in end-to-end communication pipelines.</p></li>
-<li><p><strong>Channel Datasets</strong> <span class="red">(New)</span>: Introduces new functionality to generate datasets of channel matrices based on CDL channel models or temporally and spatially consistent sequences of channel matrices derived from DeepMIMO trajectories.</p></li>
-<li><p><strong>HARQ</strong> <span class="red">(New)</span>: Support for Hybrid Automatic Repeat reQuest (HARQ).</p></li>
+<li><p><strong>Channel Coding</strong>: Transport block encoding and decoding using Polar and LDPC codes in accordance with TS 38.212.</p></li>
+<li><p><strong>Carriers and Bandwidth Parts</strong>: Timing calculations for cyclic prefix, OFDM symbols, slots, subframes, and frames.</p></li>
+<li><p><strong>Reference Signal Generation</strong>: Support for DM-RS, PT-RS, and CSI-RS generation according to TS 38.211, TS 38.212, and TS 38.214.</p></li>
+<li><p><strong>Resource Grid Functionality</strong>: Resource mapping and OFDM modulation aligned with TS 38.101, TS 38.104, and TS 38.211.</p></li>
+<li><p><strong>Resource Grid Visualization</strong>: Visualization tools for inspecting resource-grid contents.</p></li>
+<li><p><strong>PDSCH Communication Pipeline</strong>: End-to-end PDSCH simulation including modulation and demodulation, mapping and demapping, interleaving and de-interleaving, scrambling and descrambling, transport block size calculation, precoding, channel estimation, and equalization in accordance with TS 38.211 and TS 38.214.</p></li>
+<li><p><strong>Antenna Array Modeling and Simulation</strong>: Based on TR 38.901.</p></li>
+<li><p><strong>Antenna Field Analysis</strong>: Calculation of antenna field power and directivity, with 2D and 3D visualization.</p></li>
+<li><p><strong>Channel Modeling</strong>: Application of CDL and TDL channel models to both time-domain and frequency-domain signals.</p></li>
+<li><p><strong>DeepMIMO Integration</strong>: Import of DeepMIMO ray-tracing scenarios for building user trajectories.</p></li>
+<li><p><strong>Trajectory-Based Channel Models</strong>: Generation of spatially and temporally consistent channel sequences based on user trajectories for end-to-end simulations.</p></li>
+<li><p><strong>Channel Datasets</strong>: Creation of channel-matrix datasets using CDL models or temporally and spatially consistent sequences of channel matrices derived from DeepMIMO trajectories.</p></li>
+<li><p><strong>HARQ</strong>: Support for Hybrid Automatic Repeat reQuest (HARQ).</p></li>
+<li><p><strong>CSI Feedback Simulation</strong> <span class="red">(New)</span>: Including CSI-RS and CDI report configuration, as well as CRI, RI, PMI, and CQI calculation.</p></li>
+<li><p><strong>Link adaptation</strong> <span class="red">(New)</span>: An outer loop link adaptation (OLLA), which can be used as a lightweight link adaptation algorithm for illustrative and simulation-oriented workflows.</p></li>
+<li><p><strong>CQI Lookup Tables</strong> <span class="red">(New)</span>: Using Exponential Effective SINR Mapping (EESM), pre-calibrated AWGN SNR-BLER curves, and beta and delta lookup tables for CQI reporting.</p></li>
+<li><p><strong>Beam Sweeping and Probing</strong> <span class="red">(New)</span>: Creation of beam-sweeping and beam-probing CSI-RS resources and associated CSI reports.</p></li>
 </ul>
+</section>
+<section id="changes-in-version-0-5-0">
+<h1>Changes in Version 0.5.0<a class="headerlink" href="#changes-in-version-0-5-0" title="Link to this heading"></a></h1>
+<p>Version 0.5.0 introduces major API improvements and internal restructuring in <strong>NeoRadium</strong>. Although most previously available functionality remains supported, users are strongly encouraged to update existing code to the newer APIs for improved clarity, performance, and long-term compatibility.</p>
+<p>Please refer to the <a class="reference internal" href="source/MigrationGuide.html"><span class="doc">Migration Guide</span></a> for a summary of the required changes.</p>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">

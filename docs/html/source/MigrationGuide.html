@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Migration Guide &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Playground" href="Playground/Playground.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="API/Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Migration Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/MigrationGuide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="migration-guide">
+<h1>Migration Guide<a class="headerlink" href="#migration-guide" title="Link to this heading"></a></h1>
+<p>This release of <strong>NeoRadium</strong> introduces a significant reorganization of classes and functions to make the API simpler and more consistent to use. All example notebooks in <a class="reference internal" href="Playground/Playground.html"><span class="doc">Playground</span></a> have been updated to reflect the new API. The documentation has also been revised to clearly mark deprecated classes and functions and to point to their recommended replacements. In addition, the documentation for the new APIs includes examples that show how to update existing code.</p>
+<p>Most deprecated functionality remains available for now to ease the transition. However, <strong>NeoRadium</strong> may emit warning messages to remind users to migrate to the new API.</p>
+<p>The only deprecated classes are <a class="reference internal" href="API/ChanCode.html#neoradium.ldpc.LdpcBase" title="neoradium.ldpc.LdpcBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">LdpcBase</span></code></a>, <a class="reference internal" href="API/ChanCode.html#neoradium.ldpc.LdpcEncoder" title="neoradium.ldpc.LdpcEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">LdpcEncoder</span></code></a>, and <a class="reference internal" href="API/ChanCode.html#neoradium.ldpc.LdpcDecoder" title="neoradium.ldpc.LdpcDecoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">LdpcDecoder</span></code></a>. These classes have been replaced by <a class="reference internal" href="API/ChanCode.html#neoradium.ldpccodec.LdpcCodec" title="neoradium.ldpccodec.LdpcCodec"><code class="xref py py-class docutils literal notranslate"><span class="pre">LdpcCodec</span></code></a>, whose documentation includes a dedicated section on <a class="reference internal" href="API/ChanCode.html#ldpccodec-migration-guide"><span class="std std-ref">migrating existing code</span></a>.</p>
+<p>The table below lists deprecated functions and their recommended replacements.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Deprecated functions and replacements</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Deprecated</p></th>
+<th class="head"><p>Use instead</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="API/Grid.html#neoradium.grid.Grid.precode" title="neoradium.grid.Grid.precode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Grid.precode</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.precodeTo" title="neoradium.pdsch.PDSCH.precodeTo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.precodeTo</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="API/Grid.html#neoradium.grid.Grid.equalize" title="neoradium.grid.Grid.equalize"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Grid.equalize</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.equalize" title="neoradium.pdsch.PDSCH.equalize"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.equalize</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="API/Grid.html#neoradium.grid.Grid.estimateChannelLS" title="neoradium.grid.Grid.estimateChannelLS"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Grid.estimateChannelLS</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.estimateChannel" title="neoradium.pdsch.PDSCH.estimateChannel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.estimateChannel</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="API/Modulation.html#neoradium.modulation.Modem.getLLRsFromSymbols" title="neoradium.modulation.Modem.getLLRsFromSymbols"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Modem.getLLRsFromSymbols</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/Modulation.html#neoradium.modulation.Modem.getLLRs" title="neoradium.modulation.Modem.getLLRs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Modem.getLLRs</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.getGrid" title="neoradium.pdsch.PDSCH.getGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.getGrid</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.initGrid" title="neoradium.pdsch.PDSCH.initGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.initGrid</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.getReIndexes" title="neoradium.pdsch.PDSCH.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.getReIndexes</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/Grid.html#neoradium.grid.Grid.getReIndexes" title="neoradium.grid.Grid.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Grid.getReIndexes</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.getBitSizes" title="neoradium.pdsch.PDSCH.getBitSizes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.getBitSizes</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.getBitCapacity" title="neoradium.pdsch.PDSCH.getBitCapacity"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.getBitCapacity</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.populateGrid" title="neoradium.pdsch.PDSCH.populateGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.populateGrid</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.setPdschData" title="neoradium.pdsch.PDSCH.setPdschData"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.setPdschData</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.getLLRsFromGrid" title="neoradium.pdsch.PDSCH.getLLRsFromGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.getLLRsFromGrid</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.getLLRs" title="neoradium.pdsch.PDSCH.getLLRs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.getLLRs</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.getHardBitsFromGrid" title="neoradium.pdsch.PDSCH.getHardBitsFromGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.getHardBitsFromGrid</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/PhyChannels.html#neoradium.pdsch.PDSCH.getHardBits" title="neoradium.pdsch.PDSCH.getHardBits"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDSCH.getHardBits</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="API/Harq.html#neoradium.harq.HarqEntity.getRateMatchedCodeBlocks" title="neoradium.harq.HarqEntity.getRateMatchedCodeBlocks"><code class="xref py py-meth docutils literal notranslate"><span class="pre">HarqEntity.getRateMatchedCodeBlocks</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/Harq.html#neoradium.harq.HarqEntity.encode" title="neoradium.harq.HarqEntity.encode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">HarqEntity.encode</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="API/Harq.html#neoradium.harq.HarqEntity.decodeLLRs" title="neoradium.harq.HarqEntity.decodeLLRs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">HarqEntity.decodeLLRs</span></code></a></p></td>
+<td><p><a class="reference internal" href="API/Harq.html#neoradium.harq.HarqEntity.decode" title="neoradium.harq.HarqEntity.decode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">HarqEntity.decode</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Playground/Playground.html" class="btn btn-neutral float-right" title="Playground" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

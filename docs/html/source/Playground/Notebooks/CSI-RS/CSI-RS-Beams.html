@@ -1,0 +1,516 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSI-RS Configuration for Beam Management &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Downlink CSI Feedback Using a Single Multi-Port CSI-RS" href="../CSI-Feedback/CSI-Feedback1.html" />
+    <link rel="prev" title="CSI-RS Timing Configurations" href="CSI-RS-Time.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="CSI-RS.html">Exploring CSI-RS Configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CSI-RS-Time.html">CSI-RS Timing Configurations</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CSI-RS Configuration for Beam Management</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Using-beamformingConfig">Using <code class="docutils literal notranslate"><span class="pre">beamformingConfig</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Timing-Aspects-of-CSI-RS-Resources">Timing Aspects of CSI-RS Resources</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-coding">Channel Coding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">CSI-RS Configuration for Beam Management</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/CSI-RS/CSI-RS-Beams.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="CSI-RS-Configuration-for-Beam-Management">
+<h1>CSI-RS Configuration for Beam Management<a class="headerlink" href="#CSI-RS-Configuration-for-Beam-Management" title="Link to this heading"></a></h1>
+<p>This notebook demonstrates how <strong>NeoRadium</strong> can be used to configure and visualize CSI-RS resources for 5G NR beam-management procedures.</p>
+<p>The example uses a multi-antenna CDL channel and the <code class="docutils literal notranslate"><span class="pre">CsiRsConfig.beamformingConfig</span></code> utility to create a set of CSI-RS resources representative of a practical beamforming workflow. These resources are organized into multiple CSI-RS resource sets that support different stages of beam management:</p>
+<ul class="simple">
+<li><p><strong>Periodic beam sweeping</strong>, used to identify candidate transmission beams.</p></li>
+<li><p><strong>Aperiodic beam probing</strong>, used to refine beam selection around the best sweeping beam.</p></li>
+<li><p><strong>Semi-persistent CSI feedback measurements</strong>, used for PMI, RI, and CQI reporting.</p></li>
+</ul>
+<p>The notebook first creates and examines the CSI-RS configuration generated by <code class="docutils literal notranslate"><span class="pre">beamformingConfig</span></code>. It then visualizes how the different CSI-RS resource sets are scheduled over time, illustrating the interaction between periodic, aperiodic, and semi-persistent CSI-RS transmissions.</p>
+<p>By following the examples and animations, you can see how CSI-RS resources are distributed across slots and how <strong>NeoRadium</strong> models CSI-RS signaling for beam sweeping, beam refinement, and CSI feedback in a beam-management scenario.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.animation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">animation</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">display</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">BandwidthPart</span><span class="p">,</span> <span class="n">CsiRsConfig</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a &#39;BandwidthPart&#39; and a CDL-C channel object:</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">52</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                     <span class="n">txAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">65</span><span class="p">,</span><span class="mi">65</span><span class="p">]),</span>
+                     <span class="n">rxAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">65</span><span class="p">,</span><span class="mi">360</span><span class="p">]),</span>
+                     <span class="n">rxOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+CDL-C Channel Properties:
+  carrierFreq:              4 GHz
+  normalizeGains:           True
+  normalizeOutput:          True
+  txDir:                    Downlink
+  filterLen:                16 samples
+  delayQuantSize:           64
+  stopBandAtten:            80 dB
+  dopplerShift:             5 Hz
+  coherenceTime:            84.628 milliseconds
+  delaySpread:              30 ns
+  ueDirAZ:                  0°, 90°
+  xPolPower:                7.00 dB
+  angleSpreads:             2° 15° 3° 7°
+  TX Antenna:
+    Total Elements:         8
+    spacing:                0.5𝜆, 0.5𝜆
+    shape:                  1 rows x 4 columns
+    polarization:           x
+  RX Antenna:
+    Total Elements:         4
+    spacing:                0.5𝜆, 0.5𝜆
+    shape:                  1 rows x 2 columns
+    polarization:           x
+    Orientation (𝛼,𝛃,𝛄):     180° 0° 0°
+  hasLOS:                   False
+  NLOS Paths (24):
+    Delays (ns):            0.000 6.297 6.657 6.987 6.528 19.09 19.34 19.68 19.75 23.80 24.63 28.00
+                            36.85 39.24 65.11 81.31 127.7 138.0 164.7 168.2 189.1 199.1 211.2 259.5
+    Powers (dB):            -4.40 -1.20 -3.50 -5.20 -2.50 0.000 -2.20 -3.90 -7.40 -7.10 -10.7 -11.1
+                            -5.10 -6.80 -8.70 -13.2 -13.9 -13.9 -15.8 -17.1 -16.0 -15.7 -21.6 -22.8
+    AODs (Deg):             -47  -23  -23  -23  -41  0    0    0    73   -64  80   -97
+                            -55  -64  -78  103  99   89   -102 92   93   107  120  -124
+    AOAs (Deg):             -101 120  120  120  -128 170  170  170  55   66   -48  47
+                            68   -69  82   31   -16  4    -14  10   6    1    -22  34
+    ZODs (Deg):             97   99   99   99   101  99   99   99   105  95   106  94
+                            104  104  93   104  95   93   92   107  93   93   105  108
+    ZOAs (Deg):             88   72   72   72   70   75   75   75   67   64   71   60
+                            91   60   61   101  62   67   53   62   52   62   58   57
+
+</pre></div></div>
+</div>
+<section id="Using-beamformingConfig">
+<h2>Using <code class="docutils literal notranslate"><span class="pre">beamformingConfig</span></code><a class="headerlink" href="#Using-beamformingConfig" title="Link to this heading"></a></h2>
+<p>The utility class method <code class="docutils literal notranslate"><span class="pre">beamformingConfig</span></code> creates a <code class="docutils literal notranslate"><span class="pre">CsiRsConfig</span></code> object suitable for typical FR1 beamforming experiments. It creates three CSI-RS resource sets:</p>
+<ul class="simple">
+<li><p>A <strong>periodic sweeping set</strong> of 1-port resources used to obtain a coarse CRI.</p></li>
+<li><p>An <strong>aperiodic probing set</strong> of 1-port resources used to refine the CRI around the best sweep beam.</p></li>
+<li><p>A <strong>semi-persistent multi-port set</strong> used to measure PMI, RI, and CQI.</p></li>
+</ul>
+<p>Sweeping and probing CSI-RS are transmitted on OFDM symbol 4, while the PMI CSI-RS is sent on OFDM symbol 6. Up to four 1-port CSI-RS resources are packed into a slot.</p>
+<p><strong>Notes:</strong></p>
+<ol class="arabic simple">
+<li><p>This method uses a simple static beam sweeping/probing approach. In practice, adaptive beam sweeping can be used by incorporating the previously selected probing beam into the subsequent sweeping set and centering future sweeps around it. This approach resembles a wider beam probing around the current best beam, including a few wider beams to detect beam drift and prevent getting stuck in a local maximum.</p></li>
+<li><p>The <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/CsiReport.html#neoradium.csireport.CsiReportMan.beamformingReports">beamformingReports</a> class method may be used to create a <code class="docutils literal notranslate"><span class="pre">CsiReportMan</span></code> object containing CSI report information corresponding to the CSI-RS resources created by <code class="docutils literal notranslate"><span class="pre">beamformingConfig</span></code>.</p></li>
+</ol>
+<p>For more details, refer to the documentation of <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/RefSig.html#neoradium.csirs.CsiRsConfig.beamformingConfig">beamformingConfig</a>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="o">.</span><span class="n">beamformingConfig</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numPorts</span><span class="p">,</span> <span class="n">sweepsPerSlot</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+CSI-RS Configuration: (3 Resource Sets)
+  CSI-RS Resource Set 1:(8 NZP resources)
+    Resource Set ID:      1
+    Resource Type:        periodic
+    Resource Blocks:      52 RBs starting at 0
+    Slot Period:          20
+    Num CSI-RS:           8
+    CSI-RS 1:
+      resourceId:         1
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         2
+      Symbol Indices:     4
+      Table Row:          2
+      Slot Offset:        0
+      Power:              0 dB
+      scramblingID:       0
+    CSI-RS 2:
+      resourceId:         2
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         3
+      Symbol Indices:     4
+      Table Row:          2
+      Slot Offset:        0
+      Power:              0 dB
+      scramblingID:       0
+    CSI-RS 3:
+      resourceId:         3
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         4
+      Symbol Indices:     4
+      Table Row:          2
+      Slot Offset:        0
+      Power:              0 dB
+      scramblingID:       0
+    CSI-RS 4:
+      resourceId:         4
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         5
+      Symbol Indices:     4
+      Table Row:          2
+      Slot Offset:        0
+      Power:              0 dB
+      scramblingID:       0
+    CSI-RS 5:
+      resourceId:         5
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         2
+      Symbol Indices:     4
+      Table Row:          2
+      Slot Offset:        1
+      Power:              0 dB
+      scramblingID:       0
+    CSI-RS 6:
+      resourceId:         6
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         3
+      Symbol Indices:     4
+      Table Row:          2
+      Slot Offset:        1
+      Power:              0 dB
+      scramblingID:       0
+    CSI-RS 7:
+      resourceId:         7
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         4
+      Symbol Indices:     4
+      Table Row:          2
+      Slot Offset:        1
+      Power:              0 dB
+      scramblingID:       0
+    CSI-RS 8:
+      resourceId:         8
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         5
+      Symbol Indices:     4
+      Table Row:          2
+      Slot Offset:        1
+      Power:              0 dB
+      scramblingID:       0
+  CSI-RS Resource Set 2:(4 NZP resources)
+    Resource Set ID:      2
+    Resource Type:        aperiodic
+    Resource Blocks:      52 RBs starting at 0
+    active:               False
+    Num CSI-RS:           4
+    CSI-RS 9:
+      resourceId:         9
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         2
+      Symbol Indices:     4
+      Table Row:          2
+      Power:              0 dB
+      scramblingID:       0
+    CSI-RS 10:
+      resourceId:         10
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         3
+      Symbol Indices:     4
+      Table Row:          2
+      Power:              0 dB
+      scramblingID:       0
+    CSI-RS 11:
+      resourceId:         11
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         4
+      Symbol Indices:     4
+      Table Row:          2
+      Power:              0 dB
+      scramblingID:       0
+    CSI-RS 12:
+      resourceId:         12
+      numPorts:           1
+      cdmSize:            1 (noCDM)
+      density:            1
+      RE Indices:         5
+      Symbol Indices:     4
+      Table Row:          2
+      Power:              0 dB
+      scramblingID:       0
+  CSI-RS Resource Set 3:(1 NZP resources)
+    Resource Set ID:      3
+    Resource Type:        semiPersistent
+    Resource Blocks:      52 RBs starting at 0
+    Slot Period:          10
+    active:               False
+    Num CSI-RS:           1
+    CSI-RS 13:
+      resourceId:         13
+      numPorts:           8
+      cdmSize:            2 (fd-CDM2)
+      density:            1
+      RE Indices:         6  8
+      Symbol Indices:     5
+      Table Row:          7
+      Slot Offset:        0
+      Power:              0 dB
+      scramblingID:       0
+
+</pre></div></div>
+</div>
+</section>
+<section id="Timing-Aspects-of-CSI-RS-Resources">
+<h2>Timing Aspects of CSI-RS Resources<a class="headerlink" href="#Timing-Aspects-of-CSI-RS-Resources" title="Link to this heading"></a></h2>
+<p>The following code illustrates CSI-RS resources on a grid map for the first 40 slots of communication. As the animation runs, observe the following:</p>
+<ul class="simple">
+<li><p>CSI-RS for sweeping beams is transmitted every 20 slots. The first four beams are sent at slots 0 and 20, while the next four beams are transmitted on slots 1 and 21.</p></li>
+<li><p>CSI-RS for beam probing is aperiodic. In the following code, they are triggered on slots <code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">15,</span> <span class="pre">27,</span> <span class="pre">32]</span></code> (hard-coded for this example).</p></li>
+<li><p>The CSI-RS resource set for CSI feedback (e.g., PMI, RI, CQI) is semi-persistent. It is activated at slot 18. With a period of 10, it appears on slots 20 and 30.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">csiRsConfig</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">active</span><span class="o">=</span><span class="kc">False</span>
+<span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="o">.</span><span class="n">numPorts</span><span class="p">)</span>
+<span class="n">csiRsConfig</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">txGrid</span><span class="p">)</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
+<span class="n">rsIdStrs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;CSIRS_NZP&quot;</span> <span class="ow">in</span> <span class="n">key</span> <span class="p">]</span>
+
+<span class="n">axes</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+                      <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Grid map for slot </span><span class="si">{</span><span class="mi">0</span><span class="si">}</span><span class="s2"> with CSI-RS Resource IDs: </span><span class="si">{</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rsIdStrs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Callback function to update the grid map</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">updateMap</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="n">bwp</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">=</span> <span class="n">frame</span>
+
+    <span class="k">if</span> <span class="n">bwp</span><span class="o">.</span><span class="n">slotNo</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">32</span><span class="p">]:</span> <span class="n">csiRsConfig</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">trigger</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">bwp</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">==</span> <span class="mi">18</span><span class="p">:</span>              <span class="n">csiRsConfig</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span>
+
+    <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="o">.</span><span class="n">numPorts</span><span class="p">)</span>
+    <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">txGrid</span><span class="p">)</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
+    <span class="n">rsIdStrs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;CSIRS_NZP&quot;</span> <span class="ow">in</span> <span class="n">key</span> <span class="p">]</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Grid map for slot </span><span class="si">{</span><span class="n">frame</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="s1">&#39;No CSI-RS resources&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">rsIdStrs</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;CSI-RS Resource IDs: &#39;</span><span class="o">+</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rsIdStrs</span><span class="p">))</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="n">txGrid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">()</span>
+
+<span class="c1"># Create the animation</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+<span class="n">anim</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">updateMap</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>  <span class="n">interval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>      <span class="c1"># Prevent duplicate static plots</span>
+
+<span class="n">anim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;CsiRsBeams.gif&quot;</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="n">animation</span><span class="o">.</span><span class="n">PillowWriter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>      <span class="c1"># Show one frames per second</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;![demo](CsiRsBeams.gif)&quot;</span><span class="p">))</span>
+
+<span class="c1"># Another option is to use the following command which gives you more controls for running</span>
+<span class="c1"># the animation.</span>
+<span class="c1"># HTML(anim.to_jshtml())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<p><img alt="demo" src="../../../../_images/CsiRsBeams.gif" /></p>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CSI-RS-Time.html" class="btn btn-neutral float-left" title="CSI-RS Timing Configurations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../CSI-Feedback/CSI-Feedback1.html" class="btn btn-neutral float-right" title="Downlink CSI Feedback Using a Single Multi-Port CSI-RS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

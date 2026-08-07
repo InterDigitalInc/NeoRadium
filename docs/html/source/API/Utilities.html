@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Other Utilitiy Functions &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="SnrScheduler" href="SnrHelper.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Other Utilitiy Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.utils.toRadian"><code class="docutils literal notranslate"><span class="pre">toRadian()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.utils.toDegrees"><code class="docutils literal notranslate"><span class="pre">toDegrees()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.utils.toLinear"><code class="docutils literal notranslate"><span class="pre">toLinear()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.utils.toDb"><code class="docutils literal notranslate"><span class="pre">toDb()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.utils.herm"><code class="docutils literal notranslate"><span class="pre">herm()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.utils.getMse"><code class="docutils literal notranslate"><span class="pre">getMse()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.utils.getNmse"><code class="docutils literal notranslate"><span class="pre">getNmse()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Other Utilitiy Functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/source/API/Utilities.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-neoradium.utils">
+<span id="other-utilitiy-functions"></span><h1>Other Utilitiy Functions<a class="headerlink" href="#module-neoradium.utils" title="Link to this heading"></a></h1>
+<p>The module <code class="docutils literal notranslate"><span class="pre">utils.py</span></code> contains utility classes and functions used by other modules in <strong>NeoRadium</strong>.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="neoradium.utils.toRadian">
+<span class="sig-prename descclassname"><span class="pre">neoradium.utils.</span></span><span class="sig-name descname"><span class="pre">toRadian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.utils.toRadian" title="Link to this definition"></a></dt>
+<dd><p>Converts an angle (or array of angles) from degrees to radians. Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> unchanged so
+that optional-angle parameters can be passed through transparently.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>angle</strong> (<em>float</em><em>, </em><em>NumPy array</em><em>, or </em><em>None</em>) – The angle(s) in degrees.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The same input converted to radians, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if <code class="docutils literal notranslate"><span class="pre">angle</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float, NumPy array, or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neoradium.utils.toDegrees">
+<span class="sig-prename descclassname"><span class="pre">neoradium.utils.</span></span><span class="sig-name descname"><span class="pre">toDegrees</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.utils.toDegrees" title="Link to this definition"></a></dt>
+<dd><p>Converts an angle (or array of angles) from radians to degrees. Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> unchanged so
+that optional-angle parameters can be passed through transparently.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>angle</strong> (<em>float</em><em>, </em><em>NumPy array</em><em>, or </em><em>None</em>) – The angle(s) in radians.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The same input converted to degrees, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if <code class="docutils literal notranslate"><span class="pre">angle</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float, NumPy array, or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neoradium.utils.toLinear">
+<span class="sig-prename descclassname"><span class="pre">neoradium.utils.</span></span><span class="sig-name descname"><span class="pre">toLinear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.utils.toLinear" title="Link to this definition"></a></dt>
+<dd><p>Converts a value (or array of values) from decibels (dB) to linear scale using <span class="math notranslate nohighlight">\(10^{x/10}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em><em> or </em><em>NumPy array</em>) – Value(s) in dB.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The corresponding linear value(s).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or NumPy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neoradium.utils.toDb">
+<span class="sig-prename descclassname"><span class="pre">neoradium.utils.</span></span><span class="sig-name descname"><span class="pre">toDb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.utils.toDb" title="Link to this definition"></a></dt>
+<dd><p>Converts a value (or array of values) from linear scale to decibels (dB) using
+<span class="math notranslate nohighlight">\(10\log_{10}(x)\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em><em> or </em><em>NumPy array</em>) – Linear value(s). Must be positive; <code class="docutils literal notranslate"><span class="pre">toDb(0)</span></code> returns <code class="docutils literal notranslate"><span class="pre">-inf</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The corresponding value(s) in dB.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or NumPy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neoradium.utils.herm">
+<span class="sig-prename descclassname"><span class="pre">neoradium.utils.</span></span><span class="sig-name descname"><span class="pre">herm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.utils.herm" title="Link to this definition"></a></dt>
+<dd><p>Returns the Hermitian (conjugate) transpose of <code class="docutils literal notranslate"><span class="pre">x</span></code> along its last two axes — i.e.,
+<span class="math notranslate nohighlight">\(x^H\)</span> for batched matrix operations where leading dimensions broadcast and only the
+trailing two axes are transposed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>NumPy array</em>) – Input array of shape <code class="docutils literal notranslate"><span class="pre">(...,</span> <span class="pre">M,</span> <span class="pre">N)</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of shape <code class="docutils literal notranslate"><span class="pre">(...,</span> <span class="pre">N,</span> <span class="pre">M)</span></code> containing the conjugate transpose of <code class="docutils literal notranslate"><span class="pre">x</span></code> along the last
+two axes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NumPy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neoradium.utils.getMse">
+<span class="sig-prename descclassname"><span class="pre">neoradium.utils.</span></span><span class="sig-name descname"><span class="pre">getMse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hEst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.utils.getMse" title="Link to this definition"></a></dt>
+<dd><p>Returns the <em>Mean Squared Error</em> between an estimate and a reference:</p>
+<div class="math notranslate nohighlight">
+\[\text{MSE} = \frac{1}{N} \sum |\hat{h} - h|^2\]</div>
+<p>where the sum runs over all elements of the input arrays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h</strong> (<em>NumPy array</em>) – The reference (true) values.</p></li>
+<li><p><strong>hEst</strong> (<em>NumPy array</em>) – The estimated values. Must have the same shape as <code class="docutils literal notranslate"><span class="pre">h</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mean squared error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neoradium.utils.getNmse">
+<span class="sig-prename descclassname"><span class="pre">neoradium.utils.</span></span><span class="sig-name descname"><span class="pre">getNmse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uEst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.utils.getNmse" title="Link to this definition"></a></dt>
+<dd><p>Returns the <em>Normalized Mean Squared Error</em> between an estimate <code class="docutils literal notranslate"><span class="pre">uEst</span></code> and a reference <code class="docutils literal notranslate"><span class="pre">u</span></code>,
+following the definition used by MATLAB’s
+<a class="reference external" href="https://www.mathworks.com/help/ident/ref/goodnessoffit.html">goodnessoffit</a>:</p>
+<div class="math notranslate nohighlight">
+\[\text{NMSE} = \frac{\sum |\hat{u} - u|^2}{\sum |\bar{u} - u|^2}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\bar{u}\)</span> is the mean of the reference. NMSE is dimensionless and equals <code class="docutils literal notranslate"><span class="pre">1.0</span></code> for
+a trivial estimator that just returns the reference mean.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> (<em>NumPy array</em>) – The reference values.</p></li>
+<li><p><strong>uEst</strong> (<em>NumPy array</em>) – The estimated values. Must have the same shape as <code class="docutils literal notranslate"><span class="pre">u</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normalized mean squared error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="SnrHelper.html" class="btn btn-neutral float-left" title="SnrScheduler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

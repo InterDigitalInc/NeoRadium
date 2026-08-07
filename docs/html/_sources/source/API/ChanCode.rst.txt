@@ -10,8 +10,8 @@ Channel Coding
 
 LDPC
 ----
-.. automodule:: neoradium.ldpc
-   :members: LdpcBase, LdpcEncoder, LdpcDecoder
+.. automodule:: neoradium.ldpccodec
+   :members: LdpcCodec, LdpcCodecCW
    :member-order: bysource
    :special-members:
    :exclude-members: __init__, __repr__, __weakref__, __dict__, __getitem__
@@ -22,6 +22,16 @@ Polar Coding
 ------------
 .. automodule:: neoradium.polar
    :members: PolarBase, PolarEncoder, PolarDecoder
+   :member-order: bysource
+   :special-members:
+   :exclude-members: __init__, __repr__, __weakref__, __dict__, __getitem__
+
+-----------------------------------------------
+
+LDPC (Legacy)
+-------------
+.. automodule:: neoradium.ldpc
+   :members: LdpcBase, LdpcEncoder, LdpcDecoder
    :member-order: bysource
    :special-members:
    :exclude-members: __init__, __repr__, __weakref__, __dict__, __getitem__

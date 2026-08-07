@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Effect of LDPC Decoding Iterations on PDSCH BLER &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Polar Coding" href="Polar.html" />
+    <link rel="prev" title="Low-Density Parity Check (LDPC)" href="LDPC.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#channel-coding">Channel Coding</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="LDPC.html">Low-Density Parity Check (LDPC)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Effect of LDPC Decoding Iterations on PDSCH BLER</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Polar.html">Polar Coding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Effect of LDPC Decoding Iterations on PDSCH BLER</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/ChanCode/NumIter.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Effect-of-LDPC-Decoding-Iterations-on-PDSCH-BLER">
+<h1>Effect of LDPC Decoding Iterations on PDSCH BLER<a class="headerlink" href="#Effect-of-LDPC-Decoding-Iterations-on-PDSCH-BLER" title="Link to this heading"></a></h1>
+<p>This notebook evaluates how the number of LDPC decoding iterations, controlled by <code class="docutils literal notranslate"><span class="pre">numIter</span></code>, affects the block error rate (BLER) of a 5G NR PDSCH link-level simulation.</p>
+<p>For each value of <code class="docutils literal notranslate"><span class="pre">numIter</span></code>, the simulation runs an end-to-end PDSCH transmission over a CDL channel across a range of SNR values. The resulting BLER curves are then compared to show the trade-off between decoding performance and computational complexity.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">BandwidthPart</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">SnrScheduler</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numSlots</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">snrScheduler</span> <span class="o">=</span> <span class="n">SnrScheduler</span><span class="p">(</span><span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">fastStep</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># Start at -12 dB, use increments of 0.1 dB</span>
+
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>          <span class="c1"># Create the BandwidthPart object</span>
+
+<span class="c1"># Create a PDSCH object</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">additionalPos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Create an LDPC codec</span>
+<span class="n">ldpc</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLdpcCodec</span><span class="p">(</span><span class="n">coderates</span><span class="o">=</span><span class="mi">490</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">numIter</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]:</span>
+    <span class="n">results</span><span class="p">[</span><span class="n">numIter</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ldpc</span><span class="o">.</span><span class="n">cwCodecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numIter</span> <span class="o">=</span> <span class="n">numIter</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Simulating end-to-end with numIter = </span><span class="si">{</span><span class="n">numIter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SNR(dB)    Total Blocks  Block Errors  BLER(%)  Time(Sec.)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---------  ------------  ------------  -------  ----------&quot;</span><span class="p">)</span>
+    <span class="n">snrScheduler</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrScheduler</span><span class="p">:</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                             <span class="c1"># Make the results reproducible for each SNR</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>                           <span class="c1"># Start time for each SNR</span>
+        <span class="n">bwp</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Create a CdlChannel object</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                             <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="c1"># 16 TX antenna elements</span>
+                             <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">))</span> <span class="c1"># 4 RX antenna elements</span>
+
+        <span class="n">blockErrors</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">totalBlocks</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">slotNo</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSlots</span><span class="p">):</span>
+            <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                                    <span class="c1"># Create and initialize the PDSCH grid</span>
+            <span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">ldpc</span><span class="o">.</span><span class="n">txBlockSizes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>                         <span class="c1"># Random transport block</span>
+            <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()</span>                                    <span class="c1"># Bit capacity of the PDSCH grid</span>
+
+            <span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">txBlock</span><span class="p">,</span> <span class="n">numBits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>            <span class="c1"># LDPC rate-matching and encoding</span>
+            <span class="n">pdsch</span><span class="o">.</span><span class="n">setPdschData</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">)</span>                           <span class="c1"># Map/modulate encoded code blocks</span>
+
+            <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>                          <span class="c1"># Get the channel matrix</span>
+            <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>                  <span class="c1"># Precoder matrix</span>
+
+            <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="p">))</span>                     <span class="c1"># Create a transmitted grid</span>
+            <span class="n">pdsch</span><span class="o">.</span><span class="n">precodeTo</span><span class="p">(</span><span class="n">txGrid</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>                                   <span class="c1"># Precode data into txGrid</span>
+
+            <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>                         <span class="c1"># Apply the channel</span>
+            <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">)</span>                               <span class="c1"># Add noise</span>
+
+            <span class="n">estChannelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getEffChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>   <span class="c1"># Get effective channel</span>
+
+            <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">,</span> <span class="n">estChannelMatrix</span><span class="p">)</span>        <span class="c1"># Equalization</span>
+            <span class="n">llrs</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLLRs</span><span class="p">(</span><span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span><span class="p">)</span>                             <span class="c1"># Demodulation (to LLRs)</span>
+            <span class="n">decodedTxBlock</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>                        <span class="c1"># LDPC rate-recovery and decoding</span>
+            <span class="n">blockErrors</span> <span class="o">+=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">crcMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">else</span> <span class="mi">1</span>                           <span class="c1"># Update transport block errors</span>
+            <span class="n">totalBlocks</span> <span class="o">+=</span> <span class="mi">1</span>                                                    <span class="c1"># Update number of transport blocks</span>
+            <span class="n">bler</span> <span class="o">=</span> <span class="n">blockErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBlocks</span>                                  <span class="c1"># BLER in percent</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="si">{</span><span class="n">snrDb</span><span class="si">:</span><span class="s2">^9.1f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">totalBlocks</span><span class="si">:</span><span class="s2">^12d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">blockErrors</span><span class="si">:</span><span class="s2">^12d</span><span class="si">}</span><span class="s2">  &quot;</span>
+                  <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bler</span><span class="si">:</span><span class="s2">^7.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="si">:</span><span class="s2">^10.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
+
+        <span class="n">snrScheduler</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">bler</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="n">numIter</span><span class="p">]</span> <span class="o">=</span> <span class="n">snrScheduler</span><span class="o">.</span><span class="n">getSnrsAndData</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Simulating end-to-end with numIter = 3
+SNR(dB)    Total Blocks  Block Errors  BLER(%)  Time(Sec.)
+---------  ------------  ------------  -------  ----------
+  -12.0        200           200       100.00     47.749
+  -11.0        200           200       100.00     48.129
+  -10.0        200           152        76.00     48.385
+  -10.1        200           171        85.50     47.930
+  -10.2        200           177        88.50     50.028
+  -10.3        200           185        92.50     49.731
+  -10.4        200           190        95.00     48.801
+  -10.5        200           199        99.50     48.800
+  -10.6        200           200       100.00     49.082
+  -10.7        200           200       100.00     48.801
+  -9.9         200           126        63.00     49.032
+  -9.8         200           112        56.00     48.697
+  -9.7         200            89        44.50     49.137
+  -9.6         200            69        34.50     48.395
+  -9.5         200            53        26.50     49.073
+  -9.4         200            43        21.50     48.865
+  -9.3         200            29        14.50     48.663
+  -9.2         200            16        8.00      48.562
+  -9.1         200            9         4.50      49.055
+  -9.0         200            6         3.00      49.214
+  -8.9         200            3         1.50      48.992
+  -8.8         200            3         1.50      49.416
+  -8.7         200            2         1.00      48.679
+  -8.6         200            1         0.50      49.091
+  -8.5         200            1         0.50      49.189
+  -8.4         200            0         0.00      48.632
+  -8.3         200            0         0.00      48.859
+
+Simulating end-to-end with numIter = 5
+SNR(dB)    Total Blocks  Block Errors  BLER(%)  Time(Sec.)
+---------  ------------  ------------  -------  ----------
+  -12.0        200           126        63.00     52.318
+  -12.1        200           148        74.00     52.423
+  -12.2        200           172        86.00     52.315
+  -12.3        200           188        94.00     52.186
+  -12.4        200           194        97.00     52.333
+  -12.5        200           198        99.00     52.376
+  -12.6        200           199        99.50     52.575
+  -12.7        200           200       100.00     52.544
+  -12.8        200           200       100.00     52.821
+  -11.9        200            90        45.00     52.602
+  -11.8        200            61        30.50     52.404
+  -11.7        200            25        12.50     52.434
+  -11.6        200            15        7.50      52.354
+  -11.5        200            5         2.50      52.079
+  -11.4        200            2         1.00      52.287
+  -11.3        200            1         0.50      52.222
+  -11.2        200            1         0.50      52.031
+  -11.1        200            1         0.50      53.185
+  -11.0        200            0         0.00      53.111
+  -10.9        200            0         0.00      52.540
+
+Simulating end-to-end with numIter = 10
+SNR(dB)    Total Blocks  Block Errors  BLER(%)  Time(Sec.)
+---------  ------------  ------------  -------  ----------
+  -12.0        200            0         0.00      61.648
+  -13.0        200            5         2.50      61.457
+  -13.1        200            23        11.50     61.306
+  -13.2        200            70        35.00     61.472
+  -13.3        200           116        58.00     61.484
+  -13.4        200           156        78.00     61.636
+  -13.5        200           177        88.50     61.783
+  -13.6        200           193        96.50     61.788
+  -13.7        200           198        99.00     61.447
+  -13.8        200           200       100.00     61.277
+  -13.9        200           200       100.00     61.647
+  -12.9        200            0         0.00      61.282
+  -12.8        200            0         0.00      61.075
+
+Simulating end-to-end with numIter = 20
+SNR(dB)    Total Blocks  Block Errors  BLER(%)  Time(Sec.)
+---------  ------------  ------------  -------  ----------
+  -12.0        200            0         0.00      78.873
+  -13.0        200            0         0.00      79.292
+  -14.0        200           190        95.00     79.669
+  -14.1        200           199        99.50     79.571
+  -14.2        200           200       100.00     82.799
+  -14.3        200           200       100.00     85.502
+  -13.9        200           166        83.00     82.014
+  -13.8        200           137        68.50     79.516
+  -13.7        200            86        43.00     78.345
+  -13.6        200            34        17.00     78.748
+  -13.5        200            8         4.00      82.770
+  -13.4        200            1         0.50      83.424
+  -13.3        200            0         0.00      81.942
+  -13.2        200            0         0.00      79.204
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare the results in a plot</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">numIter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">numIter</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="n">numIter</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;numIter=</span><span class="si">{</span><span class="n">numIter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;BLER for Different Numbers of LDPC Decoding Iterations&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;SNR (dB)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;BLER (%)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_ChanCode_NumIter_3_0.png" src="../../../../_images/source_Playground_Notebooks_ChanCode_NumIter_3_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="LDPC.html" class="btn btn-neutral float-left" title="Low-Density Parity Check (LDPC)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Polar.html" class="btn btn-neutral float-right" title="Polar Coding" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

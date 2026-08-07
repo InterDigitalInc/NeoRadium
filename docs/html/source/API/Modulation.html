@@ -6,17 +6,17 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modulation &mdash; NeoRadium 0.4.1 Documentation</title>
+  <title>Modulation &mdash; NeoRadium 0.5.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=c87aa342"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -34,7 +34,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.4.1
+            NeoRadium 0.5.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -50,6 +50,7 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MigrationGuide.html">Migration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
@@ -61,6 +62,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#neoradium.modulation.Modem"><code class="docutils literal notranslate"><span class="pre">Modem</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.modulation.Modem.print"><code class="docutils literal notranslate"><span class="pre">Modem.print()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.modulation.Modem.modulate"><code class="docutils literal notranslate"><span class="pre">Modem.modulate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.modulation.Modem.getLLRs"><code class="docutils literal notranslate"><span class="pre">Modem.getLLRs()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.modulation.Modem.getLLRsFromSymbols"><code class="docutils literal notranslate"><span class="pre">Modem.getLLRsFromSymbols()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.modulation.Modem.demodulate"><code class="docutils literal notranslate"><span class="pre">Modem.demodulate()</span></code></a></li>
 </ul>
@@ -68,6 +70,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CsiReport.html">CSI Reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
@@ -76,6 +79,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Other Utilitiy Functions</a></li>
 </ul>
 
         </div>
@@ -84,7 +88,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.4.1</a>
+          <a href="../../index.html">NeoRadium 0.5.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -104,18 +108,18 @@
              
   <section id="module-neoradium.modulation">
 <span id="modulation"></span><h1>Modulation<a class="headerlink" href="#module-neoradium.modulation" title="Link to this heading"></a></h1>
-<p>This module implements the modulation and demodulation functionality based on <strong>3GPP TR 38.211</strong>. The <a class="reference internal" href="#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a>
-class is implemented to handle modulation and demodulation of bitstreams to and from complex symbols.</p>
+<p>This module implements the modulation and demodulation functionality based on <strong>3GPP TS 38.211</strong>. The <a class="reference internal" href="#neoradium.modulation.Modem" title="neoradium.modulation.Modem"><code class="xref py py-class docutils literal notranslate"><span class="pre">Modem</span></code></a>
+class handles modulation and demodulation of bitstreams to and from complex symbols.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.modulation.Modem">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.modulation.</span></span><span class="sig-name descname"><span class="pre">Modem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modulation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'QPSK'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.modulation.</span></span><span class="sig-name descname"><span class="pre">Modem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modulation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'QPSK'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem" title="Link to this definition"></a></dt>
 <dd><p>This class handles the process of modulating a bitstream to an array of complex symbols (Modulation) as
-well as extracting Log-Likelihood ratios (LLRs) from an array of complex symbols (Demodulation). This
-implementation is based on <strong>3GPP TR 38.211 section 7.3.1.2</strong>.</p>
+well as extracting log-likelihood ratios (LLRs) from an array of complex symbols during demodulation. This
+implementation is based on <strong>3GPP TS 38.211 section 5.1</strong>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>modulation</strong> (<em>str</em>) – <p>The modulation scheme based on table 7.3.1.2-1 in <strong>3GPP TR 38.211</strong>. Here is a list of supported
-modulation schemes:</p>
+<dd class="field-odd"><p><strong>modulation</strong> (<em>str</em>) – <p>The modulation scheme based on Section 5.1 in <strong>3GPP TS 38.211</strong>. The supported modulation schemes
+are:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Modulation Scheme</p></th>
@@ -151,7 +155,7 @@ modulation schemes:</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">qm<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The modulation order. This is the number of bits per modulated symbol. See <strong>3GPP TR 38.211,
+<dd class="field-odd"><p>The modulation order. This is the number of bits per modulated symbol. See <strong>3GPP TS 38.211,
 Table 7.3.1.2-1</strong> for more details.</p>
 </dd>
 <dt class="field-even">constellation<span class="colon">:</span></dt>
@@ -168,13 +172,13 @@ bits from the input bitstream to a complex symbol.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as the title for the printed information. If <cite>None</cite> (the default), the text
 “Modem Properties:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>bool</em>) – If <cite>True</cite>, returns a string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -186,7 +190,7 @@ Otherwise, nothing is returned.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.modulation.Modem.modulate">
 <span class="sig-name descname"><span class="pre">modulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitstreams</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem.modulate" title="Link to this definition"></a></dt>
-<dd><p>Modulates the given bitstream to an array(s) of complex symbols using current modulation scheme.</p>
+<dd><p>Modulates the given bitstream into one or more arrays of complex symbols using the current modulation scheme.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>bitstreams</strong> (<em>NumPy array</em><em> of </em><em>bits</em>) – A 1-D (one code block) or 2-D (several code blocks) array of bits.</p>
@@ -201,9 +205,9 @@ Otherwise, nothing is returned.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="neoradium.modulation.Modem.getLLRsFromSymbols">
-<span class="sig-name descname"><span class="pre">getLLRsFromSymbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem.getLLRsFromSymbols" title="Link to this definition"></a></dt>
-<dd><p>This function calculates the Log Likelihood Ratios (LLRs) for each bit from the received noisy symbols. The
+<dt class="sig sig-object py" id="neoradium.modulation.Modem.getLLRs">
+<span class="sig-name descname"><span class="pre">getLLRs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem.getLLRs" title="Link to this definition"></a></dt>
+<dd><p>This function calculates the log-likelihood ratios (LLRs) for each bit from the received noisy symbols. The
 LLR values can then be used by <code class="xref py py-class docutils literal notranslate"><span class="pre">PolarDecoder</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">LdpcDecoder</span></code> to extract the decoded
 bitstream.</p>
 <dl class="field-list simple">
@@ -213,43 +217,50 @@ bitstream.</p>
 each code block. If it is a 1-D array, it means there is only one code block to demodulate.</p></li>
 <li><p><strong>noiseVar</strong> (<em>float</em>) – The noise variance obtained using noise estimation or using the actual noise variance value used in
 simulation.</p></li>
-<li><p><strong>useMax</strong> (<em>Boolean</em>) – If <cite>True</cite> (the default), this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the calculation of the LLR
+<li><p><strong>useMax</strong> (<em>bool</em>) – If <cite>True</cite> (the default), this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the calculation of the LLR
 values. This is faster but uses an approximation and is slightly less accurate than the actual Log
 Likelihood method which uses logarithm and exponential functions. If <cite>False</cite>, the slower more accurate
 method is used.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A 1-D or 2-D NumPy array of LLR values depending on the dimensionality of <code class="docutils literal notranslate"><span class="pre">symbols</span></code>. In case of 2-D array,
-the return value is an <code class="docutils literal notranslate"><span class="pre">m``x``l</span></code> array of LLR values where <code class="docutils literal notranslate"><span class="pre">l=</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">qm</span></code>. In case of 1-D array, the
-output is a 1-D array of <code class="docutils literal notranslate"><span class="pre">l</span></code> LLR values.</p>
+<dd class="field-even"><p>A 1-D or 2-D NumPy array of LLR values depending on the dimensionality of <code class="docutils literal notranslate"><span class="pre">symbols</span></code>. In the case of a 2-D
+array, the return value is an <code class="docutils literal notranslate"><span class="pre">m``x``l</span></code> array of LLR values where <code class="docutils literal notranslate"><span class="pre">l=</span> <span class="pre">n</span> <span class="pre">*</span> <span class="pre">qm</span></code>. In case of 1-D array,
+the output is a 1-D array of <code class="docutils literal notranslate"><span class="pre">l</span></code> LLR values.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>NumPy array of floating point</p>
+<dd class="field-odd"><p>NumPy array of floating-point values</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="neoradium.modulation.Modem.getLLRsFromSymbols">
+<span class="sig-name descname"><span class="pre">getLLRsFromSymbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem.getLLRsFromSymbols" title="Link to this definition"></a></dt>
+<dd><p><span class="red">DEPRECATED</span>: This method is deprecated and will be removed in future releases. Please use the
+<a class="reference internal" href="#neoradium.modulation.Modem.getLLRs" title="neoradium.modulation.Modem.getLLRs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getLLRs()</span></code></a> method instead.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="neoradium.modulation.Modem.demodulate">
 <span class="sig-name descname"><span class="pre">demodulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.modulation.Modem.demodulate" title="Link to this definition"></a></dt>
-<dd><p>Demodulates the received noisy symbols to a bitstream using “hard decision” to convert Log Likelihood Ratios
-(LLRs) to bits. This function first calls the <a class="reference internal" href="#neoradium.modulation.Modem.getLLRsFromSymbols" title="neoradium.modulation.Modem.getLLRsFromSymbols"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Modem.getLLRsFromSymbols()</span></code></a> method to get the
+<dd><p>Demodulates the received noisy symbols to a bitstream using hard decisions to convert log-likelihood ratios
+(LLRs) to bits. This function first calls the <a class="reference internal" href="#neoradium.modulation.Modem.getLLRs" title="neoradium.modulation.Modem.getLLRs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Modem.getLLRs()</span></code></a> method to get the
 LLR values, and then uses “hard decision” to convert LLRs to bits.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>symbols</strong> (<em>2-D complex NumPy array</em>) – A <code class="docutils literal notranslate"><span class="pre">m``x``n</span></code> complex NumPy array where <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of coded blocks and <code class="docutils literal notranslate"><span class="pre">n</span></code> is the length of
-each code block.</p></li>
+<li><p><strong>symbols</strong> (<em>1-D</em><em> or </em><em>2-D Complex NumPy array</em>) – An <code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">x</span> <span class="pre">n</span></code> complex NumPy array where <code class="docutils literal notranslate"><span class="pre">m</span></code> is the number of coded blocks and <code class="docutils literal notranslate"><span class="pre">n</span></code> is the length of
+each code block. If it is a 1-D array, it means there is only one code block to demodulate.</p></li>
 <li><p><strong>noiseVar</strong> (<em>float</em>) – The noise variance obtained using noise estimation or using the actual noise variance value used in
 simulation.</p></li>
-<li><p><strong>useMax</strong> (<em>Boolean</em>) – If <cite>True</cite>, this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the calculation of the LLR values. This is
+<li><p><strong>useMax</strong> (<em>bool</em>) – If <cite>True</cite>, this implementation uses the <code class="docutils literal notranslate"><span class="pre">Max</span></code> function in the calculation of the LLR values. This is
 faster but uses an approximation and is slightly less accurate than the actual Log Likelihood method which
 uses logarithm and exponential functions. If <cite>False</cite>, the slower more accurate method is used.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Returns a 2-D array of demodulated bits.</p>
+<dd class="field-even"><p>Returns a 1-D or 2-D NumPy array of demodulated bits, depending on the dimensionality of symbols.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NumPy array of bit values</p>

@@ -1,0 +1,226 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Self-Refining Multi-Layer Receiver Pipeline &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="Generating the Dataset for Channel Estimation Training" href="MLChEstDataGen.html" />
+    <link rel="prev" title="Evaluating the Trained Channel Estimator" href="../../MLChEst/MLChestEvaluateTorch.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#channel-coding">Channel Coding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#research-papers">Research Papers</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../Playground.html#id1">A Self-Refining Multi-Layer Receiver Pipeline</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">readme.md</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MLChEstDataGen.html">Generating the Dataset for Channel Estimation Training</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MLChEstTrain.html">Training the Channel Estimation Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MLChEstEvaluateNMSE.html">Evaluating Channel Estimation Performance Using NMSE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MLChEstEvaluateBLER.html">Evaluating End-to-End Communication Performance Using BLER</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MLChEstEvaluateHARQ.html">Evaluating Communication Throughput with HARQ</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#other-examples">Other Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">A Self-Refining Multi-Layer Receiver Pipeline</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../_sources/source/Playground/Notebooks/Research/SelfRefining/readme.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="a-self-refining-multi-layer-receiver-pipeline">
+<h1>A Self-Refining Multi-Layer Receiver Pipeline<a class="headerlink" href="#a-self-refining-multi-layer-receiver-pipeline" title="Link to this heading"></a></h1>
+<p>This repository contains the Python modules and Jupyter notebooks used to reproduce the experiments presented in:</p>
+<blockquote>
+<div><p><strong><a class="reference external" href="https://ieeexplore.ieee.org/abstract/document/11443343">A Self-Refining Multi-Layer Receiver Pipeline</a></strong><br />
+<em>2025 59th Asilomar Conference on Signals, Systems, and Computers</em><br />
+https://ieeexplore.ieee.org/abstract/document/11443343</p>
+</div></blockquote>
+<p>The project implements a deep learning-based channel estimation framework for multi-layer MIMO communication systems and evaluates its impact on end-to-end receiver performance.</p>
+<hr class="docutils" />
+<p><strong>Workflow Overview</strong></p>
+<p>The experiments are organized into five stages:</p>
+<ol class="arabic simple">
+<li><p>Dataset Generation – Generate training, validation, and test datasets.</p></li>
+<li><p>Model Training – Train the channel estimation neural network.</p></li>
+<li><p>NMSE Evaluation – Measure channel estimation accuracy.</p></li>
+<li><p>BLER Evaluation – Measure end-to-end communication reliability.</p></li>
+<li><p>HARQ Evaluation – Measure end-to-end communication throughput.</p></li>
+</ol>
+<p>The notebooks should generally be executed in this order.</p>
+<hr class="docutils" />
+<p><strong>Dataset Generation</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">MLChEstDataGen.ipynb</span></code>: Generates the training, validation, and test datasets used throughout the experiments. The notebook simulates a multi-layer MIMO communication system and creates supervised learning samples consisting of:</p>
+<ul class="simple">
+<li><p>Received resource grids and DMRS information (inputs)</p></li>
+<li><p>Ground-truth channel responses (targets)</p></li>
+</ul>
+<blockquote>
+<div><p>⚠️ The generated datasets require approximately <strong>30 GB</strong> of disk space.</p>
+</div></blockquote>
+<hr class="docutils" />
+<p><strong>Model Training</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">MLChEstTrain.ipynb</span></code>: Trains the deep neural network used for multi-layer channel estimation. The notebook:</p>
+<ul class="simple">
+<li><p>Loads the generated datasets</p></li>
+<li><p>Initializes the channel estimation network</p></li>
+<li><p>Trains the model using supervised learning</p></li>
+<li><p>Selects the best model based on validation performance</p></li>
+<li><p>Saves the trained model to the <code class="docutils literal notranslate"><span class="pre">Models</span></code> directory</p></li>
+</ul>
+<p>An already-trained model is included with the repository. You may either train a new model or proceed directly to the evaluation notebooks using the provided model.</p>
+<hr class="docutils" />
+<p><strong>Model Evaluation</strong></p>
+<p>Three complementary evaluation notebooks are provided:</p>
+<p><code class="docutils literal notranslate"><span class="pre">MLChEstEvaluateNMSE.ipynb</span></code>: Evaluates channel estimation accuracy using Normalized Mean Squared Error (NMSE). This notebook compares the predicted channel estimates against the corresponding ground-truth channels and provides a direct measure of estimation performance.</p>
+<p><code class="docutils literal notranslate"><span class="pre">MLChEstEvaluateBLER.ipynb</span></code>: Evaluates end-to-end communication performance using Block Error Rate (BLER). The notebook compares multiple channel estimation methods across a range of signal-to-noise ratio (SNR) values and measures the probability of unsuccessful block decoding. BLER provides a practical measure of communication reliability and demonstrates how channel estimation quality affects receiver performance.</p>
+<p><code class="docutils literal notranslate"><span class="pre">MLChEstEvaluateHARQ.ipynb</span></code>: Evaluates end-to-end communication throughput using Hybrid Automatic Repeat reQuest (HARQ). The notebook compares multiple channel estimation methods while accounting for retransmissions and measures the resulting throughput across different SNR values. Throughput reflects the combined effects of channel estimation accuracy, decoding performance, and HARQ retransmissions, making it a useful system-level performance metric.</p>
+<hr class="docutils" />
+<p><strong>Core Modules</strong></p>
+<p><code class="docutils literal notranslate"><span class="pre">ChEstNet.py</span></code>: Defines:</p>
+<ul class="simple">
+<li><p>The dataset class used by the training and evaluation notebooks</p></li>
+<li><p>The deep residual neural network architecture used for multi-layer channel estimation</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">ChEstUtils.py</span></code>: Provides utility functions shared across the notebooks, including:</p>
+<ul class="simple">
+<li><p>Channel estimation helpers</p></li>
+<li><p>Evaluation utilities</p></li>
+<li><p>Plotting and analysis functions</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>Notes</strong></p>
+<ul class="simple">
+<li><p>All experiments were developed and tested using <strong>Python</strong> and <strong>PyTorch</strong>.</p></li>
+<li><p>Dataset generation is the most storage-intensive step and requires approximately <strong>30 GB</strong> of free disk space.</p></li>
+<li><p>Running the BLER and HARQ evaluations may require a significant amount of computation time, depending on the number of simulated transmissions and SNR points.</p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../MLChEst/MLChestEvaluateTorch.html" class="btn btn-neutral float-left" title="Evaluating the Trained Channel Estimator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MLChEstDataGen.html" class="btn btn-neutral float-right" title="Generating the Dataset for Channel Estimation Training" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

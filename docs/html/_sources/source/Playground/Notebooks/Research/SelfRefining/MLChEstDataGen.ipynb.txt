@@ -1,0 +1,211 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "b47caa67",
+   "metadata": {},
+   "source": [
+    "# Generating the Dataset for Channel Estimation Training\n",
+    "\n",
+    "The first step in this project is generating the datasets used for training, validation, and testing. In this notebook, we construct an OFDM communication pipeline and generate input/output pairs for supervised learning. The inputs consist of received resource grids together with transmitted DMRS information, while the outputs are the corresponding ground-truth channel labels.\n",
+    "\n",
+    "The experiments assume a two-layer MIMO configuration with 16 transmit antennas and 4 receive antennas. Under this configuration, each slot may contain up to four code blocks. Each dataset sample is represented as a **6 × 14 × 540** tensor, and the corresponding ground-truth label is a **4 × 14 × 540** tensor.\n",
+    "\n",
+    "The figure below illustrates the dataset generation process. Communication over a single slot produces four dataset samples, one for each receive antenna. In this work, we use:\n",
+    "\n",
+    "- $N_L = 2$: number of layers\n",
+    "- $L = 14$: number of OFDM symbols per slot\n",
+    "- $K = 540$: number of subcarriers\n",
+    "- $N_r = 4$: number of receive antennas\n",
+    "\n",
+    "Because DMRS-based channel estimation is used throughout the pipeline, the effective channel includes the impact of precoding.\n",
+    "\n",
+    "![Data Generation Pipeline](ModelIO.png)\n",
+    "\n",
+    "We begin by importing the required modules from **NeoRadium**."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "2415601e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import time, os\n",
+    "\n",
+    "from neoradium import BandwidthPart, PDSCH, CdlChannel, AntennaPanel, Grid, random\n",
+    "from ChEstUtils import getRandomPilotInfo, getModelIn, getLabels"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "89f76984",
+   "metadata": {},
+   "source": [
+    "The ``makeDataset`` function below runs the pipeline and creates samples with 0, 1, 2, or 3 successfully decoded code blocks. When 0 code blocks are used, the sample contains DMRS only. Please refer to the ``ChEstUtils.py`` file for the implementation details of the functions ``getRandomPilotInfo``, ``getModelIn``, and ``getLabels``."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "a21d14fc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def makeDataset(numSlots, snrDbs, seed, pdsch, fileName=None, freqDomain=True):\n",
+    "    bwp = pdsch.bwp                       # The only bandwidth part in the carrier\n",
+    "\n",
+    "    # We don't need to use channel coding in the pipeline during dataset generation. However, we need\n",
+    "    # to know the code-block sizes to be able to find the corresponding REs in the grid. The following \n",
+    "    # code calculates the code-block sizes for each of the four code blocks.\n",
+    "    ldpc = pdsch.getLdpcCodec(coderates=490/1024)\n",
+    "\n",
+    "    pdsch.initGrid()                                            # Create and initialize PDSCH's internal grid\n",
+    "    numBits = pdsch.getBitCapacity()                            # number of bits available in the resource grid\n",
+    "    txBlock = random.bits(ldpc.txBlockSizes[0])                 # Create random binary data for txBlock\n",
+    "    rateMatchedCBs = ldpc.encode(txBlock, numBits[0], concatCBs=False)\n",
+    "    cbSizes = [len(cb) for cb in rateMatchedCBs]                # Code block sizes\n",
+    "\n",
+    "    # Create a random CDL channel-matrix generator \n",
+    "    chanGen = CdlChannel.getChanGen(numSlots, bwp,              # Number of channels and bandwidth part\n",
+    "                                    profiles=\"ABCDE\",           # Randomly pick a CDL profile\n",
+    "                                    delaySpread=300,            # 300 ns\n",
+    "                                    ueSpeed=0.5,                # 0.5 m/s ≈ 6.7 Hz Doppler\n",
+    "                                    carrierFreq=4e9,            # Carrier frequency\n",
+    "                                    txAntenna=AntennaPanel([2,4], polarization=\"x\"),  # 16 TX antennas\n",
+    "                                    rxAntenna=AntennaPanel([1,2], polarization=\"x\"),  # 4 RX antennas\n",
+    "                                    seed=seed)\n",
+    "    \n",
+    "    samples, labels = [], []                        # Initialize samples and labels\n",
+    "    t0 = time.monotonic()                           # Start time for time estimation\n",
+    "    random.setSeed(seed)\n",
+    "    print(f\"Making dataset for {numSlots:,} slots\")\n",
+    "    for s, channelMatrix in enumerate(chanGen):\n",
+    "        pdsch.initGrid()                            # Create and initialize PDSCH's internal grid\n",
+    "        numBits = pdsch.getBitCapacity()[0]         # Number of bits available in the resource grid\n",
+    "        txBits = random.bits(numBits)               # Create random binary data\n",
+    "        \n",
+    "        pdsch.setPdschData(txBits)                  # Map/modulate the data to the resource grid\n",
+    "\n",
+    "        precoder = pdsch.getPrecodingMatrix(channelMatrix)      # Get the precoder matrix\n",
+    "        txGrid = bwp.createGrid(channelMatrix.shape[3])         # Create the transmitted resource grid\n",
+    "        pdsch.precodeTo(txGrid, precoder)                       # Precode PDSCH data into the txGrid\n",
+    "\n",
+    "        snrDb = snrDbs[s%len(snrDbs)]               # Get next SNR value\n",
+    "\n",
+    "        if freqDomain:\n",
+    "            rxGrid = txGrid.applyChannel(channelMatrix)         # Apply the channel in the frequency domain\n",
+    "            noisyRxGrid = rxGrid.addNoise(snrDb=snrDb)          # Add noise\n",
+    "        else:\n",
+    "            channel = chanGen.curChan                           # Get the channel model\n",
+    "            txWaveform = txGrid.ofdmModulate()                  # OFDM modulation\n",
+    "            maxDelay = channel.getMaxDelay()                    # Calculate the maximum channel delay\n",
+    "            txWaveform = txWaveform.pad(maxDelay)               # Pad the waveform with zeros\n",
+    "            rxWaveform = channel.applyToSignal(txWaveform)      # Apply the channel to the waveform\n",
+    "            noisyRxWaveform = rxWaveform.addNoise(snrDb=snrDb, bwp=bwp) # Add noise\n",
+    "            offset = channel.getTimingOffset()                  # Get the timing offset for synchronization\n",
+    "            syncedWaveform = noisyRxWaveform.sync(offset)       # Synchronize the received waveform\n",
+    "            noisyRxGrid = syncedWaveform.ofdmDemodulate(bwp)    # OFDM demodulate the synchronized waveform\n",
+    "        \n",
+    "        # pilotIdx contains the inices in the txGrid with known values. Known values could include DMRS\n",
+    "        # and a number of successfully decoded code blocks (0..numCBs-1)\n",
+    "        pilotIdx = getRandomPilotInfo(pdsch, cbSizes)\n",
+    "        newSamples = getModelIn(pilotIdx, pdsch.grid, noisyRxGrid, 10000)   # rr x 2*(pp+1) x ll x kk\n",
+    "        effChannel = CdlChannel.getEffChannel(channelMatrix, precoder)      # Get ground-truth effective channel\n",
+    "        newLabels = getLabels( effChannel )                                 # rr x 2*pp x ll x kk\n",
+    "\n",
+    "        samples += [ newSamples ]\n",
+    "        labels += [ newLabels ]\n",
+    "\n",
+    "        dt = time.monotonic()-t0                                # Calculate the elapsed time\n",
+    "        percentDone = (s+1)*100/numSlots                        # Calculate the completion percentage\n",
+    "\n",
+    "        # Print progress messages\n",
+    "        remainTime = int(np.round(100*dt/percentDone-dt))       # Estimated remaining time\n",
+    "        print(f\"  {int(percentDone)}% done in {int(np.round(dt)):,} Sec., Remaining time: {remainTime:,} Sec.\",\n",
+    "              end='            \\r')\n",
+    "\n",
+    "    # n: Number of samples in the dataset, pp: Number of ports, ll: Number of OFDM symbols, kk: Number of subcarriers\n",
+    "    samples = np.concatenate(samples, axis=0)       # n x 2*(pp+1) x ll x kk\n",
+    "    labels = np.concatenate(labels, axis=0)         # n x 2*pp x ll x kk\n",
+    "\n",
+    "    if fileName is not None:\n",
+    "        np.save(fileName, np.concatenate([samples,labels],axis=1))   # Save the dataset to the specified file\n",
+    "        print(f\"\\r  Done. ({dt:.2f} Sec.) Saved to \\\"{fileName}\\\".                       \")\n",
+    "    else:\n",
+    "        print(f\"\\r  Done. ({dt:.2f} Sec.)                                                \")\n",
+    "\n",
+    "    return samples, labels"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "0d0dfbbf-1d49-472b-b7c0-c21f296f0970",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Making dataset for 17,500 slots\n",
+      "  Done. (3135.66 Sec.) Saved to \"/data/datasets/SelfRefine/Train.npy\".                       \n",
+      "Making dataset for 2,500 slots\n",
+      "  Done. (445.14 Sec.) Saved to \"/data/datasets/SelfRefine/Valid.npy\".                       \n",
+      "Making dataset for 5,000 slots\n",
+      "  Done. (892.34 Sec.) Saved to \"/data/datasets/SelfRefine/Test.npy\".                       \n"
+     ]
+    }
+   ],
+   "source": [
+    "\n",
+    "bwp = BandwidthPart(numRbs=45, spacing=30)  # Create a BandwidthPart object\n",
+    "\n",
+    "# Create a 2-layer PDSCH object with type-2 DMRS on symbols 2 and 11\n",
+    "pdsch = PDSCH(bwp, numLayers=2, modulation=\"16QAM\")\n",
+    "pdsch.setDMRS(configType=2, additionalPos=1)\n",
+    "\n",
+    "dataPath = \"/data/datasets/SelfRefine/\"     # Replace with the location of your data files\n",
+    "os.makedirs(dataPath, exist_ok=True)        # Create the data folder if it does not exist\n",
+    "   \n",
+    "snrDbs = np.arange(-15,-9,.5)               # Set the range of SNR values (in dB)\n",
+    "\n",
+    "# Create training, validation, and test dataset files (About 30 GB of disk space needed):\n",
+    "makeDataset(17500, snrDbs, seed=123, pdsch=pdsch, fileName=os.path.join(dataPath,\"Train.npy\"))\n",
+    "makeDataset(2500,  snrDbs, seed=456, pdsch=pdsch, fileName=os.path.join(dataPath,\"Valid.npy\"))\n",
+    "makeDataset(5000,  snrDbs, seed=789, pdsch=pdsch, fileName=os.path.join(dataPath,\"Test.npy\"));"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b233c660-c778-43a9-80d7-24434c7a5b8e",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

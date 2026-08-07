@@ -1,0 +1,528 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Downlink CSI Feedback Using Multiple Directional Multi-Port CSI-RS Resources &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Hierarchical Beam Management with Sweeping, Probing, and Type-I PMI Feedback" href="CSI-Feedback3.html" />
+    <link rel="prev" title="Downlink CSI Feedback Using a Single Multi-Port CSI-RS" href="CSI-Feedback1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#csi-feedback">CSI-Feedback</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="CSI-Feedback1.html">Downlink CSI Feedback Using a Single Multi-Port CSI-RS</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Downlink CSI Feedback Using Multiple Directional Multi-Port CSI-RS Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CSI-Feedback3.html">Hierarchical Beam Management with Sweeping, Probing, and Type-I PMI Feedback</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-coding">Channel Coding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Downlink CSI Feedback Using Multiple Directional Multi-Port CSI-RS Resources</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/CSI-Feedback/CSI-Feedback2.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Downlink-CSI-Feedback-Using-Multiple-Directional-Multi-Port-CSI-RS-Resources">
+<h1>Downlink CSI Feedback Using Multiple Directional Multi-Port CSI-RS Resources<a class="headerlink" href="#Downlink-CSI-Feedback-Using-Multiple-Directional-Multi-Port-CSI-RS-Resources" title="Link to this heading"></a></h1>
+<p>This example demonstrates a codebook-based downlink CSI feedback procedure in which the gNB transmits multiple <strong>directional multi-port CSI-RS resources</strong>. Each CSI-RS resource uses the same multi-port transmission structure but applies a different steering vector, allowing the UE to evaluate several beam directions in a single CSI reporting procedure.</p>
+<p>For each directional CSI-RS resource, the UE estimates the effective MIMO channel and evaluates the corresponding transmission performance. It then reports:</p>
+<ul class="simple">
+<li><p><strong>CSI-RS Resource Indicator (CRI):</strong> identifies the preferred directional CSI-RS resource (beam);</p></li>
+<li><p><strong>Rank Indicator (RI):</strong> the recommended number of transmission layers for the selected beam;</p></li>
+<li><p><strong>Precoding Matrix Indicator (PMI):</strong> the preferred Type-I single-panel codebook precoder for the selected beam; and</p></li>
+<li><p><strong>Channel Quality Indicator (CQI):</strong> the recommended modulation and code-rate operating point.</p></li>
+</ul>
+<p>After receiving the CSI report, the gNB configures the PDSCH using the reported RI and CQI. The transmitted PDSCH uses a <strong>composite precoder</strong> formed by combining:</p>
+<ol class="arabic simple">
+<li><p>the steering vector associated with the selected CRI; and</p></li>
+<li><p>the Type-I codebook precoder indicated by the reported PMI.</p></li>
+</ol>
+<p>The same steering transformation applied to the selected multi-port CSI-RS is also applied to the PDSCH. Consequently, the effective channel observed by the UE during CSI measurement matches the effective channel experienced by the precoded data transmission.</p>
+<p>The simulation includes:</p>
+<ol class="arabic simple">
+<li><p>periodic transmission of multiple directional multi-port CSI-RS resources;</p></li>
+<li><p>UE-side CRI, RI, PMI, and CQI calculation;</p></li>
+<li><p>gNB-side PDSCH reconfiguration based on the reported CSI;</p></li>
+<li><p>formation of a composite precoder by combining the selected steering vector and PMI precoder;</p></li>
+<li><p>PDSCH transmission using the composite precoder; and</p></li>
+<li><p>receiver equalization, LDPC decoding, and transport-block CRC verification.</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">BandwidthPart</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">CsiRsConfig</span><span class="p">,</span> <span class="n">CsiRsSet</span><span class="p">,</span> <span class="n">CsiRs</span><span class="p">,</span> <span class="n">CsiReport</span><span class="p">,</span> <span class="n">CsiReportMan</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">toLinear</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numSlots</span> <span class="o">=</span> <span class="mi">100</span>                          <span class="c1"># Number of slots in the communication loop</span>
+<span class="n">snrDb</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>                             <span class="c1"># SNR in dB</span>
+<span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>                    <span class="c1"># Make results reproducible</span>
+<span class="n">prgSize</span> <span class="o">=</span> <span class="mi">0</span>                             <span class="c1"># Set to 0 for wideband, 2 or 4 for subband precoding</span>
+
+<span class="c1"># Create a bandwidth part with 24 resource blocks and 15 kHz subcarrier spacing</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="c1"># Create a CDL channel model</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                     <span class="n">txAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">),</span>   <span class="c1"># 16 TX antennas</span>
+                     <span class="n">rxAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">),</span>   <span class="c1"># 4 RX antennas</span>
+                     <span class="n">rxOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Multiple multi-port CSI-RS (For 16 ports)</span>
+<span class="n">csiRsList</span> <span class="o">=</span> <span class="p">[</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">resourceId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numPorts</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;001111&quot;</span><span class="p">,</span> <span class="n">cdmSize</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+              <span class="n">CsiRs</span><span class="p">(</span><span class="n">resourceId</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numPorts</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;001111&quot;</span><span class="p">,</span> <span class="n">cdmSize</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+              <span class="n">CsiRs</span><span class="p">(</span><span class="n">resourceId</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numPorts</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;001111&quot;</span><span class="p">,</span> <span class="n">cdmSize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+              <span class="n">CsiRs</span><span class="p">(</span><span class="n">resourceId</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numPorts</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;001111&quot;</span><span class="p">,</span> <span class="n">cdmSize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+              <span class="n">CsiRs</span><span class="p">(</span><span class="n">resourceId</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numPorts</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;001111&quot;</span><span class="p">,</span> <span class="n">cdmSize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+              <span class="n">CsiRs</span><span class="p">(</span><span class="n">resourceId</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numPorts</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;001111&quot;</span><span class="p">,</span> <span class="n">cdmSize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+              <span class="n">CsiRs</span><span class="p">(</span><span class="n">resourceId</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numPorts</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;001111&quot;</span><span class="p">,</span> <span class="n">cdmSize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+              <span class="n">CsiRs</span><span class="p">(</span><span class="n">resourceId</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numPorts</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;001111&quot;</span><span class="p">,</span> <span class="n">cdmSize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="p">]</span>
+
+<span class="n">csiRsSet</span> <span class="o">=</span> <span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">resourceType</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="n">rsId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="p">(</span><span class="n">bwp</span><span class="o">.</span><span class="n">u</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">csiRsList</span><span class="o">=</span><span class="n">csiRsList</span><span class="p">)</span>
+<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">csiRsSet</span><span class="p">])</span>
+<span class="c1"># csiRsConfig.print()                   # Uncomment to print CSI-RS configuration details</span>
+
+<span class="n">csiRep</span> <span class="o">=</span> <span class="n">CsiReport</span><span class="p">(</span><span class="n">csiRsSet</span><span class="p">,</span> <span class="n">reportId</span><span class="o">=</span><span class="n">csiRsSet</span><span class="o">.</span><span class="n">rsId</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="s2">&quot;CriRiPmiCqi&quot;</span><span class="p">,</span> <span class="n">reportType</span><span class="o">=</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span>
+                   <span class="n">period</span><span class="o">=</span><span class="mi">20</span><span class="o">*</span><span class="p">(</span><span class="n">bwp</span><span class="o">.</span><span class="n">u</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">offset</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">prgSize</span><span class="o">=</span><span class="n">prgSize</span><span class="p">,</span> <span class="n">allowedRanks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
+                   <span class="n">txAntenna</span><span class="o">=</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="p">,</span> <span class="n">rxAntenna</span><span class="o">=</span><span class="n">channel</span><span class="o">.</span><span class="n">rxAntenna</span><span class="p">)</span>
+<span class="n">csiReportMan</span> <span class="o">=</span> <span class="n">CsiReportMan</span><span class="p">([</span><span class="n">csiRep</span><span class="p">])</span>
+<span class="c1"># csiReportMan.print()                  # Uncomment to print CSI report configuration details</span>
+
+<span class="n">numPhi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">csiRsSet</span><span class="p">)</span>                  <span class="c1"># Number of beams to sweep horizontally</span>
+<span class="n">numTheta</span> <span class="o">=</span> <span class="mi">1</span>                            <span class="c1"># Number of beams to sweep vertically (Restrict sweeping to azimuth)</span>
+<span class="n">ws</span><span class="p">,</span> <span class="n">beams</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">getSweepingBeams</span><span class="p">(</span><span class="n">numTheta</span><span class="p">,</span> <span class="n">numPhi</span><span class="p">)</span>
+
+<span class="c1"># The PDSCH object is created once we have the first CRI/RI/PMI/CQI feedback and</span>
+<span class="c1"># recreated later if the reported RI or CQI changes.</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">precoder</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">pdschW</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">failedSlots</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">slotNo</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSlots</span><span class="p">):</span>
+    <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>
+
+    <span class="c1"># Retrieve CSI feedback generated from previous CSI-RS occasions</span>
+    <span class="n">csiReportInfo</span> <span class="o">=</span> <span class="n">csiReportMan</span><span class="o">.</span><span class="n">getFeedback</span><span class="p">()</span>              <span class="c1"># Get all available CSI reports from CsiReport objects</span>
+    <span class="k">for</span> <span class="n">reportId</span><span class="p">,</span> <span class="n">csiFeedback</span> <span class="ow">in</span> <span class="n">csiReportInfo</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>     <span class="c1"># Get the CSI feedback for each report</span>
+        <span class="k">if</span> <span class="n">reportId</span> <span class="o">==</span> <span class="n">csiRep</span><span class="o">.</span><span class="n">reportId</span><span class="p">:</span>
+            <span class="n">cri</span> <span class="o">=</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">cri</span><span class="o">.</span><span class="n">cri</span>                  <span class="c1"># CSI-RS resource ID of the best beam</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Slot </span><span class="si">{</span><span class="n">slotNo</span><span class="si">}</span><span class="s2">: Received CRI/RI/PMI/CQI (ReportID: </span><span class="si">{</span><span class="n">reportId</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  CRI: </span><span class="si">{</span><span class="n">cri</span><span class="si">}</span><span class="s2">, best beam: 𝛳=</span><span class="si">{</span><span class="n">beams</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">cri</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">°, 𝝋=</span><span class="si">{</span><span class="n">beams</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">cri</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">°&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  RI: </span><span class="si">{</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">ri</span><span class="o">.</span><span class="n">ri</span><span class="si">}</span><span class="s2"> (Score:</span><span class="si">{</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">ri</span><span class="o">.</span><span class="n">score</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  WB PMI: </span><span class="si">{</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">wbPMI</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  WB precoder shape: </span><span class="si">{</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">wbW</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">sbWs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">sbWs</span><span class="p">)</span><span class="si">}</span><span class="s2"> SB precoders: &quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">rbIdx</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">sbWs</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    RBs: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">rbIdx</span><span class="p">)</span><span class="si">:</span><span class="s2">&lt;20</span><span class="si">}</span><span class="s2"> precoder shape: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2"> PMI: </span><span class="si">{</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">sbPMIs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;cqi&quot;</span> <span class="ow">in</span> <span class="n">csiRep</span><span class="o">.</span><span class="n">quantity</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  CQI: </span><span class="si">{</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">cqi</span><span class="o">.</span><span class="n">cqi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">modulation</span><span class="p">,</span> <span class="n">coderateX1024</span> <span class="o">=</span> <span class="n">csiRep</span><span class="o">.</span><span class="n">getModRate</span><span class="p">(</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">cqi</span><span class="o">.</span><span class="n">cqi</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Modulation: </span><span class="si">{</span><span class="n">modulation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Coderate: </span><span class="si">{</span><span class="n">coderateX1024</span><span class="si">}</span><span class="s2">/1024&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  CQI BLER: </span><span class="si">{</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">cqi</span><span class="o">.</span><span class="n">bler</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> %&quot;</span><span class="p">)</span>
+
+            <span class="n">precoder</span> <span class="o">=</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">wbW</span> <span class="k">if</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">sbWs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">pmi</span><span class="o">.</span><span class="n">sbWs</span>
+            <span class="n">pdschW</span> <span class="o">=</span> <span class="n">ws</span><span class="p">[:,</span><span class="n">cri</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">cri</span><span class="p">]</span>   <span class="c1"># steering vector for PDSCH</span>
+            <span class="k">if</span> <span class="n">pdsch</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># First RI/PMI/CQI feedback -&gt; create PDSCH and LDPC codec objects</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Slot </span><span class="si">{</span><span class="n">slotNo</span><span class="si">}</span><span class="s2">: Starting PDSCH (Mod:</span><span class="si">{</span><span class="n">modulation</span><span class="si">}</span><span class="s2">, &quot;</span>
+                      <span class="sa">f</span><span class="s2">&quot;Coderate:</span><span class="si">{</span><span class="n">coderateX1024</span><span class="si">}</span><span class="s2">/1024)&quot;</span><span class="p">)</span>
+                <span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">ri</span><span class="o">.</span><span class="n">ri</span><span class="p">,</span> <span class="n">csiRsConfig</span><span class="o">=</span><span class="n">csiRsConfig</span><span class="p">,</span>
+                              <span class="n">modulation</span><span class="o">=</span><span class="n">modulation</span><span class="p">,</span> <span class="n">prgSize</span><span class="o">=</span><span class="n">csiRep</span><span class="o">.</span><span class="n">prgSize</span><span class="p">)</span>
+                <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">ldpc</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLdpcCodec</span><span class="p">(</span><span class="n">coderates</span> <span class="o">=</span> <span class="n">coderateX1024</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="p">(</span> <span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">modems</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">modulation</span> <span class="o">!=</span> <span class="n">modulation</span><span class="p">)</span> <span class="ow">or</span>
+                   <span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">numLayers</span> <span class="o">!=</span> <span class="n">csiFeedback</span><span class="o">.</span><span class="n">ri</span><span class="o">.</span><span class="n">ri</span><span class="p">)</span> <span class="p">):</span>
+                <span class="c1"># Modulation or number of layers changed -&gt; Recreate PDSCH and LDPC codec objects</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Slot </span><span class="si">{</span><span class="n">slotNo</span><span class="si">}</span><span class="s2">: CQI/RI changed -&gt; Mod:</span><span class="si">{</span><span class="n">modulation</span><span class="si">}</span><span class="s2">, &quot;</span>
+                      <span class="sa">f</span><span class="s2">&quot;Coderate:</span><span class="si">{</span><span class="n">coderateX1024</span><span class="si">}</span><span class="s2">/1024&quot;</span><span class="p">)</span>
+                <span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="n">csiFeedback</span><span class="o">.</span><span class="n">ri</span><span class="o">.</span><span class="n">ri</span><span class="p">,</span> <span class="n">csiRsConfig</span><span class="o">=</span><span class="n">csiRsConfig</span><span class="p">,</span>
+                              <span class="n">modulation</span><span class="o">=</span><span class="n">modulation</span><span class="p">,</span> <span class="n">prgSize</span><span class="o">=</span><span class="n">csiRep</span><span class="o">.</span><span class="n">prgSize</span><span class="p">)</span>
+                <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">ldpc</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLdpcCodec</span><span class="p">(</span><span class="n">coderates</span> <span class="o">=</span> <span class="n">coderateX1024</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">coderates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="p">(</span><span class="n">coderateX1024</span><span class="o">/</span><span class="mi">1024</span><span class="p">):</span>
+                <span class="c1"># Coderate changed -&gt; Recreate the LDPC codec object only</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Slot </span><span class="si">{</span><span class="n">slotNo</span><span class="si">}</span><span class="s2">: CQI changed -&gt; Coderate:</span><span class="si">{</span><span class="n">coderateX1024</span><span class="si">}</span><span class="s2">/1024&quot;</span><span class="p">)</span>
+                <span class="n">ldpc</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLdpcCodec</span><span class="p">(</span><span class="n">coderates</span> <span class="o">=</span> <span class="n">coderateX1024</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown report: </span><span class="si">{</span><span class="n">reportId</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create a transmitted resource grid.</span>
+    <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numEl</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pdsch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Create random data, LDPC encode it, and put it in the PDSCH&#39;s internal resource grid.</span>
+        <span class="c1"># Then precode the PDSCH into the transmitted resource grid - txGrid.</span>
+        <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
+        <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">ldpc</span><span class="o">.</span><span class="n">txBlockSizes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">txBlock</span><span class="p">,</span> <span class="n">numBits</span><span class="p">)</span>
+        <span class="n">pdsch</span><span class="o">.</span><span class="n">setPdschData</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">)</span>
+
+        <span class="c1"># Now we are using a precoder which is a combination of precoder and pdschW</span>
+        <span class="n">pdsch</span><span class="o">.</span><span class="n">precodeTo</span><span class="p">(</span><span class="n">txGrid</span><span class="p">,</span> <span class="n">precoder</span><span class="p">,</span> <span class="n">pdschW</span><span class="p">)</span>
+        <span class="c1"># pdsch.precodeTo(txGrid, precoder)</span>
+
+    <span class="c1"># Map any CSI-RS resources scheduled in the current slot</span>
+    <span class="n">csiRsResources</span> <span class="o">=</span> <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">getResources</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">csiSetId</span><span class="p">,</span> <span class="n">setResources</span> <span class="ow">in</span> <span class="n">csiRsResources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">csiSetId</span> <span class="o">==</span> <span class="n">csiRsSet</span><span class="o">.</span><span class="n">rsId</span><span class="p">:</span>                             <span class="c1"># CSI-RS for RI/PMI/CQI:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Slot </span><span class="si">{</span><span class="n">slotNo</span><span class="si">}</span><span class="s2">: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:</span><span class="si">{</span><span class="n">csiRsSet</span><span class="o">.</span><span class="n">rsId</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="c1"># Get a set of beam angles and precoders (weight vectors) for each beam</span>
+            <span class="k">for</span> <span class="n">resourceId</span><span class="p">,</span> <span class="p">(</span><span class="n">lIdx</span><span class="p">,</span> <span class="n">kIdx</span><span class="p">,</span> <span class="n">reValues</span><span class="p">)</span> <span class="ow">in</span> <span class="n">setResources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># Simulation note:</span>
+                <span class="c1"># Scale the CSI-RS to keep its aggregate transmit power approximately</span>
+                <span class="c1"># consistent with the PDSCH. This avoids unintentionally reducing the</span>
+                <span class="c1"># effective PDSCH SNR in this simulation, where the noise variance is</span>
+                <span class="c1"># derived from the average received signal power. This is a simulation</span>
+                <span class="c1"># convenience only; it is **NOT** a 3GPP requirement or recommendation</span>
+                <span class="c1"># and is not representative of how practical systems necessarily</span>
+                <span class="c1"># implement CSI-RS transmission.</span>
+                <span class="n">csiRs</span> <span class="o">=</span> <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">getById</span><span class="p">(</span><span class="n">csiSetId</span><span class="p">,</span> <span class="n">resourceId</span><span class="p">)</span>
+                <span class="n">pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">csiRs</span><span class="o">.</span><span class="n">numPorts</span><span class="o">/</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="o">.</span><span class="n">numEl</span><span class="o">*</span><span class="n">csiRs</span><span class="o">.</span><span class="n">cdmSize</span><span class="p">))</span>  <span class="c1"># Power factor</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="n">resourceId</span><span class="o">-</span><span class="mi">1</span>                                <span class="c1"># Beam Index</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">ws</span><span class="p">[:,</span><span class="n">b</span><span class="p">:</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>                                 <span class="c1"># nt x 1</span>
+                <span class="c1"># reValues is a nt x numCsiRsRE matrix. nt x 1 * nt x numCsiRsRE = nt x numCsiRsRE</span>
+                <span class="n">txGrid</span><span class="p">[:,</span><span class="n">lIdx</span><span class="p">,</span> <span class="n">kIdx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">reValues</span> <span class="o">*</span> <span class="n">pf</span><span class="p">,</span> <span class="s2">&quot;CSIRS_NZP&quot;</span><span class="p">,</span> <span class="n">resourceId</span><span class="p">)</span>
+
+    <span class="c1"># Apply the channel model and add AWGN noise</span>
+    <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>
+    <span class="n">noisyRxGrid</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">)</span>            <span class="c1"># Add noise</span>
+
+    <span class="c1"># UE processing of the received resource grid to generate reports</span>
+    <span class="n">csiReportMan</span><span class="o">.</span><span class="n">processRxGrid</span><span class="p">(</span><span class="n">noisyRxGrid</span><span class="p">,</span> <span class="n">csiRsResources</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pdsch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Receiver side processing of the PDSCH: equalization and LDPC decoding</span>
+        <span class="c1"># Using the same precoder combination as in transmitter side</span>
+        <span class="n">effChannelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getEffChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">,</span> <span class="n">precoder</span><span class="p">,</span> <span class="n">pdschW</span><span class="p">)</span>
+        <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">noisyRxGrid</span><span class="p">,</span> <span class="n">effChannelMatrix</span><span class="p">)</span>
+        <span class="n">llrs</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLLRs</span><span class="p">(</span><span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span><span class="p">)</span>
+        <span class="n">decodedTxBlocks</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Slot </span><span class="si">{</span><span class="n">slotNo</span><span class="si">}</span><span class="s2">: TxBlock CRC Match: </span><span class="si">{</span><span class="n">crcMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">failedSlots</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">crcMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Go to the next channel instance for the next slot</span>
+    <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">failedSlots</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">numSlots</span><span class="si">}</span><span class="s2"> slots failed.&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Slot 0: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 1: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 2: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 3: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 7: Received CRI/RI/PMI/CQI (ReportID: 11)
+  CRI: 7, best beam: 𝛳=90.00°, 𝝋=38.21°
+  RI: 2 (Score:2.385)
+  WB PMI: (I1:[9, 3, 0], I2:0)
+  WB precoder shape: (16, 2)
+  CQI: 4
+  Modulation: QPSK
+  Coderate: 308/1024
+  CQI BLER: 1.35 %
+Slot 7: Starting PDSCH (Mod:QPSK, Coderate:308/1024)
+Slot 7: TxBlock CRC Match: True
+Slot 8: TxBlock CRC Match: True
+Slot 9: TxBlock CRC Match: True
+Slot 10: TxBlock CRC Match: True
+Slot 11: TxBlock CRC Match: True
+Slot 12: TxBlock CRC Match: True
+Slot 13: TxBlock CRC Match: True
+Slot 14: TxBlock CRC Match: True
+Slot 15: TxBlock CRC Match: True
+Slot 16: TxBlock CRC Match: True
+Slot 17: TxBlock CRC Match: True
+Slot 18: TxBlock CRC Match: True
+Slot 19: TxBlock CRC Match: True
+Slot 20: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 20: TxBlock CRC Match: True
+Slot 21: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 21: TxBlock CRC Match: True
+Slot 22: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 22: TxBlock CRC Match: True
+Slot 23: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 23: TxBlock CRC Match: True
+Slot 24: TxBlock CRC Match: True
+Slot 25: TxBlock CRC Match: True
+Slot 26: TxBlock CRC Match: True
+Slot 27: Received CRI/RI/PMI/CQI (ReportID: 11)
+  CRI: 7, best beam: 𝛳=90.00°, 𝝋=38.21°
+  RI: 2 (Score:2.302)
+  WB PMI: (I1:[9, 2, 0], I2:0)
+  WB precoder shape: (16, 2)
+  CQI: 4
+  Modulation: QPSK
+  Coderate: 308/1024
+  CQI BLER: 1.35 %
+Slot 27: TxBlock CRC Match: True
+Slot 28: TxBlock CRC Match: True
+Slot 29: TxBlock CRC Match: True
+Slot 30: TxBlock CRC Match: True
+Slot 31: TxBlock CRC Match: True
+Slot 32: TxBlock CRC Match: True
+Slot 33: TxBlock CRC Match: True
+Slot 34: TxBlock CRC Match: True
+Slot 35: TxBlock CRC Match: True
+Slot 36: TxBlock CRC Match: True
+Slot 37: TxBlock CRC Match: True
+Slot 38: TxBlock CRC Match: True
+Slot 39: TxBlock CRC Match: True
+Slot 40: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 40: TxBlock CRC Match: True
+Slot 41: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 41: TxBlock CRC Match: True
+Slot 42: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 42: TxBlock CRC Match: True
+Slot 43: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 43: TxBlock CRC Match: True
+Slot 44: TxBlock CRC Match: True
+Slot 45: TxBlock CRC Match: True
+Slot 46: TxBlock CRC Match: True
+Slot 47: Received CRI/RI/PMI/CQI (ReportID: 11)
+  CRI: 3, best beam: 𝛳=90.00°, 𝝋=-21.79°
+  RI: 2 (Score:2.333)
+  WB PMI: (I1:[9, 7, 0], I2:0)
+  WB precoder shape: (16, 2)
+  CQI: 4
+  Modulation: QPSK
+  Coderate: 308/1024
+  CQI BLER: 1.35 %
+Slot 47: TxBlock CRC Match: True
+Slot 48: TxBlock CRC Match: True
+Slot 49: TxBlock CRC Match: True
+Slot 50: TxBlock CRC Match: True
+Slot 51: TxBlock CRC Match: True
+Slot 52: TxBlock CRC Match: True
+Slot 53: TxBlock CRC Match: True
+Slot 54: TxBlock CRC Match: True
+Slot 55: TxBlock CRC Match: True
+Slot 56: TxBlock CRC Match: True
+Slot 57: TxBlock CRC Match: True
+Slot 58: TxBlock CRC Match: True
+Slot 59: TxBlock CRC Match: True
+Slot 60: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 60: TxBlock CRC Match: True
+Slot 61: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 61: TxBlock CRC Match: True
+Slot 62: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 62: TxBlock CRC Match: True
+Slot 63: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 63: TxBlock CRC Match: True
+Slot 64: TxBlock CRC Match: True
+Slot 65: TxBlock CRC Match: True
+Slot 66: TxBlock CRC Match: True
+Slot 67: Received CRI/RI/PMI/CQI (ReportID: 11)
+  CRI: 7, best beam: 𝛳=90.00°, 𝝋=38.21°
+  RI: 2 (Score:2.417)
+  WB PMI: (I1:[9, 3, 0], I2:0)
+  WB precoder shape: (16, 2)
+  CQI: 4
+  Modulation: QPSK
+  Coderate: 308/1024
+  CQI BLER: 1.35 %
+Slot 67: TxBlock CRC Match: True
+Slot 68: TxBlock CRC Match: True
+Slot 69: TxBlock CRC Match: True
+Slot 70: TxBlock CRC Match: True
+Slot 71: TxBlock CRC Match: True
+Slot 72: TxBlock CRC Match: True
+Slot 73: TxBlock CRC Match: True
+Slot 74: TxBlock CRC Match: True
+Slot 75: TxBlock CRC Match: True
+Slot 76: TxBlock CRC Match: True
+Slot 77: TxBlock CRC Match: True
+Slot 78: TxBlock CRC Match: True
+Slot 79: TxBlock CRC Match: True
+Slot 80: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 80: TxBlock CRC Match: True
+Slot 81: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 81: TxBlock CRC Match: True
+Slot 82: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 82: TxBlock CRC Match: True
+Slot 83: Sending CSI resources for CRI/RI/PMI/CQI (Set ID:1)
+Slot 83: TxBlock CRC Match: True
+Slot 84: TxBlock CRC Match: True
+Slot 85: TxBlock CRC Match: True
+Slot 86: TxBlock CRC Match: True
+Slot 87: Received CRI/RI/PMI/CQI (ReportID: 11)
+  CRI: 3, best beam: 𝛳=90.00°, 𝝋=-21.79°
+  RI: 2 (Score:2.354)
+  WB PMI: (I1:[9, 7, 0], I2:1)
+  WB precoder shape: (16, 2)
+  CQI: 4
+  Modulation: QPSK
+  Coderate: 308/1024
+  CQI BLER: 1.35 %
+Slot 87: TxBlock CRC Match: True
+Slot 88: TxBlock CRC Match: True
+Slot 89: TxBlock CRC Match: True
+Slot 90: TxBlock CRC Match: True
+Slot 91: TxBlock CRC Match: True
+Slot 92: TxBlock CRC Match: True
+Slot 93: TxBlock CRC Match: True
+Slot 94: TxBlock CRC Match: True
+Slot 95: TxBlock CRC Match: True
+Slot 96: TxBlock CRC Match: True
+Slot 97: TxBlock CRC Match: True
+Slot 98: TxBlock CRC Match: True
+Slot 99: TxBlock CRC Match: True
+0 of 100 slots failed.
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CSI-Feedback1.html" class="btn btn-neutral float-left" title="Downlink CSI Feedback Using a Single Multi-Port CSI-RS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CSI-Feedback3.html" class="btn btn-neutral float-right" title="Hierarchical Beam Management with Sweeping, Probing, and Type-I PMI Feedback" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

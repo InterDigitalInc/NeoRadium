@@ -5,25 +5,33 @@
    "id": "c29aa093",
    "metadata": {},
    "source": [
-    "# PDSCH end-to-end communication\n",
-    "This notebook shows how an end-to-end communication through a 5G Physical Downlink Shared Channel (PDSCH) can be simulated in **NeoRadium** based on 3GPP NR standard. It demonstrates the following steps:\n",
+    "# End-to-End PDSCH Communication Simulation\n",
     "\n",
-    "- Creating LDPC encoder object, which performs transport block segmentation, LDPC encoding, and rate matching based on 3GPP TS 38.212.\n",
-    "- Creating a ``PDSCH`` object and using it to populate a transmitted resource grid based on the encoded transport blocks. During this process, the PDSCH adds DMRS reference signals to the resource grid based on 3GPP TS 38.211 and TS 38.214.\n",
-    "- Creating a CDL channel model as specified in 3GPP TR 38.901 using the ``CdlChannel`` class. This class and the resource grid created by the ``PDSCH``, are used to calculate a precoding matrix which is then used to precode the resource grid.\n",
-    "- Converting the precoded resource grid to a time-domain (transmitted) waveform through OFDM modulation performed by the ``ofdmModulate`` method of the ``Grid`` class.\n",
-    "- Applying the CDL channel to the transmitted waveform to obtain the received waveform.\n",
-    "- Synchronizing the received waveform by calculating the timing offset using the CdlChannel object.\n",
-    "- Applying OFDM demodulation to the synchronized received waveform to get a received resource grid.\n",
-    "- Estimating the channel matrix using the DMRS reference signals.\n",
-    "- Equalizing the received resource grid using minimum mean-squared error (MMSE) equalization to cancel the effects of the communication channel.\n",
-    "- Using the ``getLLRsFromGrid`` function of ``PDSCH`` class to extract log-likelihood ratios (LLRs) from the received resource grid.\n",
-    "- Performing rate-recovery and LDPC-decoding on the log-likelihood ratios.\n",
-    "- Comparing the received bitstream with the original values used at the beginning of the pipeline.\n",
+    "This notebook demonstrates how to simulate an end-to-end 5G NR Physical Downlink Shared Channel (PDSCH) communication link in **NeoRadium**, following relevant 3GPP NR specifications.\n",
+    "\n",
+    "The simulation walks through the full transmit and receive chain, including PDSCH configuration, LDPC channel coding, resource-grid mapping, CDL channel modeling, OFDM modulation and demodulation, channel estimation, MMSE equalization, LLR extraction, LDPC decoding, and final transport-block comparison.\n",
+    "\n",
+    "The main steps are:\n",
+    "\n",
+    "- Create a `PDSCH` object and use it to populate a transmit resource grid with encoded transport-block data.\n",
+    "- Add DMRS reference signals to the resource grid based on 3GPP TS 38.211 and TS 38.214.\n",
+    "- Create an LDPC codec object for LDPC encoding, decoding, rate matching, and rate recovery based on 3GPP TS 38.212.\n",
+    "- Create a CDL channel model, as specified in 3GPP TR 38.901, using the `CdlChannel` class.\n",
+    "- Use the channel matrix to calculate a precoding matrix and precode PDSCH data into transmit resource grid.\n",
+    "- Convert the precoded resource grid to a time domain waveform using OFDM modulation.\n",
+    "- Apply the CDL channel model to the transmitted waveform.\n",
+    "- Add additive white Gaussian noise (AWGN) to the received waveform.\n",
+    "- Synchronize the received waveform by estimating the timing offset.\n",
+    "- Apply OFDM demodulation to obtain the received resource grid.\n",
+    "- Estimate the channel matrix using the DMRS reference signals.\n",
+    "- Equalize the received resource grid using minimum mean-squared error (MMSE) equalization.\n",
+    "- Extract log-likelihood ratios (LLRs) from the equalized resource grid.\n",
+    "- Perform LDPC rate recovery and decoding.\n",
+    "- Compare the decoded transport block with the original transmitted transport block.\n",
     "\n",
     "![PDSCH-Pipeline](PDSCH-Pipeline.png)\n",
     "\n",
-    "Let's get started by importing the **NeoRadium** modules used in the notebook."
+    "Let's begin by importing the **NeoRadium** modules used in this notebook."
    ]
   },
   {
@@ -36,7 +44,8 @@
     "import numpy as np\n",
     "import time\n",
     "\n",
-    "from neoradium import Carrier, PDSCH, CdlChannel, AntennaPanel, LdpcEncoder, Grid, random"
+    "from neoradium import BandwidthPart, PDSCH, CdlChannel, AntennaPanel, random\n",
+    "from neoradium.utils import getNmse"
    ]
   },
   {
@@ -44,8 +53,8 @@
    "id": "e3afe2dd",
    "metadata": {},
    "source": [
-    "### Carrier Configuration\n",
-    "Here, using the Carrier class, we define a carrier with a 30 kHz subcarrier spacing and 51 resource blocks. The print function prints information about the carrier. Please note that by default a single bandwidth part is defined which covers the whole carrier. Additional bandwidth parts can be added to the carrier if needed."
+    "### Carrier and Bandwidth Part Configuration\n",
+    "Here, we use the `BandwidthPart` class to define a bandwidth part with 30 kHz subcarrier spacing and 52 resource blocks. The class internally creates a `Carrier` object and returns the only bandwidth part in that carrier."
    ]
   },
   {
@@ -59,28 +68,24 @@
      "output_type": "stream",
      "text": [
       "\n",
-      "Carrier Properties:\n",
-      "  Cell Id:              1\n",
-      "  Bandwidth Parts:      1\n",
-      "  Active BWP:           0\n",
-      "  Bandwidth Part 0:\n",
-      "    Resource Blocks:    51 RBs starting at 0 (612 subcarriers)\n",
-      "    Subcarrier Spacing: 30 kHz\n",
-      "    CP Type:            normal\n",
-      "    Bandwidth:          18.36 MHz\n",
-      "    symbolsPerSlot:     14\n",
-      "    slotsPerSubFrame:   2\n",
-      "    nFFT:               1024\n",
-      "    frameNo:            0\n",
-      "    slotNo:             0\n",
+      "Bandwidth Part Properties:\n",
+      "  Resource Blocks:    52 RBs starting at 0 (624 subcarriers)\n",
+      "  Subcarrier Spacing: 30 kHz\n",
+      "  CP Type:            normal\n",
+      "  Interleaving:       No\n",
+      "  Bandwidth:          18.72 MHz\n",
+      "  symbolsPerSlot:     14\n",
+      "  slotsPerSubFrame:   2\n",
+      "  nFFT:               1024\n",
+      "  frameNo:            0\n",
+      "  slotNo:             0\n",
       "\n"
      ]
     }
    ],
    "source": [
-    "carrier = Carrier(numRbs=51, spacing=30)  # 51*12*30000 = 18,360,000 for 20 MHz Bandwidth\n",
-    "carrier.print()\n",
-    "bwp = carrier.curBwp                      # The only bandwidth part in the carrier"
+    "bwp = BandwidthPart(numRbs=52, spacing=30)\n",
+    "bwp.print()"
    ]
   },
   {
@@ -89,9 +94,9 @@
    "metadata": {},
    "source": [
     "### PDSCH and DMRS Configuration\n",
-    "Now let's use the ``PDSCH`` class to configure the PDSCH communication parameters. Here we choose \"Mapping Type A\" and \"QAM16\" modulation (by default). We also set the number of layers to 2 and disable interleaving by setting ``interleavingBundleSize`` to zero.\n",
+    "Next, we use the `PDSCH` class to configure the PDSCH communication parameters. In this example, we use mapping type A and `\"16QAM\"` modulation, which is the default. We also set the number of layers to 2.\n",
     "\n",
-    "Next, we set the DMRS configuration using the ``setDMRS`` method of the ``PDSCH`` class. Here we use DMRS ``configType`` set to 2 with 2 additional symbol time allocations (``additionalPos=2``). Although **NeoRadium** supports both wide band and narrow band precoding, we set the \"Precoding RB Group (PRG)\" size to 0, which means the same precoding is applied to all subcarriers (wideband precoding)"
+    "Next, we set the DMRS configuration using the ``setDMRS`` method of the ``PDSCH`` class. Here, we set the DMRS `configType` to 2 and use two additional DMRS symbol positions by setting `additionalPos=2`."
    ]
   },
   {
@@ -106,50 +111,39 @@
      "text": [
       "\n",
       "PDSCH Properties:\n",
-      "  mappingType: A\n",
-      "  nID: 1\n",
-      "  rnti: 1\n",
-      "  numLayers: 2\n",
-      "  numCodewords: 1\n",
-      "  modulation: 16QAM\n",
-      "  portSet: [0, 1]\n",
-      "  symSet:   0   1   2   3   4   5   6   7   8   9  10  11  12  13\n",
-      "  prbSet:   0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19\n",
-      "           20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39\n",
-      "           40  41  42  43  44  45  46  47  48  49  50\n",
-      "  interleavingBundleSize: 0\n",
-      "  PRG Size: Wideband\n",
-      "  Bandwidth Part:\n",
-      "    Resource Blocks:    51 RBs starting at 0 (612 subcarriers)\n",
-      "    Subcarrier Spacing: 30 kHz\n",
-      "    CP Type:            normal\n",
-      "    Bandwidth:          18.36 MHz\n",
-      "    symbolsPerSlot:     14\n",
-      "    slotsPerSubFrame:   2\n",
-      "    nFFT:               1024\n",
-      "    frameNo:            0\n",
-      "    slotNo:             0\n",
+      "  mappingType:               A\n",
+      "  nID:                       1\n",
+      "  rnti:                      1\n",
+      "  numLayers:                 2\n",
+      "  numCodewords:              1\n",
+      "  modulation:                16QAM\n",
+      "  PRG Size:                  Wideband\n",
+      "  portSet:                   0   1  \n",
+      "  symSet:                    0   1   2   3   4   5   6   7   8   9   10  11  12  13 \n",
+      "  prbSet:                    0   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19 \n",
+      "                             20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39 \n",
+      "                             40  41  42  43  44  45  46  47  48  49  50  51 \n",
       "  DMRS:\n",
-      "    configType: 2\n",
-      "    nIDs: []\n",
-      "    scID: 0\n",
-      "    sameSeq: 1\n",
-      "    symbols: Single\n",
-      "    typeA1stPos: 2\n",
-      "    additionalPos: 2\n",
-      "    cdmGroups: [0, 0]\n",
-      "    deltaShifts: [0, 0]\n",
-      "    allCdmGroups: [0]\n",
-      "    symSet: [ 2  7 11]\n",
-      "    REs (before shift): [0, 1, 6, 7]\n",
-      "    epreRatioDb: 0 (dB)\n",
+      "    configType:              2\n",
+      "    nIDs:                    []\n",
+      "    scID:                    0\n",
+      "    sameSeq:                 True\n",
+      "    symbols:                 Single\n",
+      "    typeA1stPos:             2\n",
+      "    additionalPos:           2\n",
+      "    cdmGroups (port:cdm):    0:0  1:0 \n",
+      "    deltaShifts (port:cdm):  0:0  1:0 \n",
+      "    numCdmGroupsWithoutData: 1\n",
+      "    symSet:                  2   7  11\n",
+      "    REs (before shift):      0 1 6 7\n",
+      "    epreRatioDb:             0 (dB)\n",
       "\n"
      ]
     }
    ],
    "source": [
-    "pdsch = PDSCH(bwp, interleavingBundleSize=0, numLayers=2, nID=carrier.cellId)\n",
-    "pdsch.setDMRS(prgSize=0, configType=2, additionalPos=2)\n",
+    "pdsch = PDSCH(bwp, numLayers=2)\n",
+    "pdsch.setDMRS(configType=2, additionalPos=2)\n",
     "pdsch.print()"
    ]
   },
@@ -159,7 +153,7 @@
    "metadata": {},
    "source": [
     "### Channel Coding Configuration\n",
-    "Now it’s time to define the parameters for LDPC channel coding. **NeoRadium** provides the ``LdpcEncoder`` and ``LdpcDecoder`` classes. These classes can be used to perform data segmentation and de-segmentation, rate matching and rate recovery, and encoding and decoding. Here we first set our desired code rate, then create an ``LdpcEncoder`` object that will be used for LDPC encoding."
+    "Next, we create an LDPC codec object for LDPC encoding and decoding. The easiest way to do this is to use the `getLdpcCodec` method of the `PDSCH` class."
    ]
   },
   {
@@ -167,11 +161,32 @@
    "execution_count": 4,
    "id": "8f27e815",
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "LDPC Encode/Decode Properties:\n",
+      "  Num layers:         2\n",
+      "  Num codewords:      1\n",
+      "  numIter:            5\n",
+      "  nRef:               0\n",
+      "  Modulation:         16QAM\n",
+      "  Coderate:           490/1024\n",
+      "  TBS:                31240\n",
+      "  numLayers:          2\n",
+      "  Base Graph:         1\n",
+      "  Code Block Size:    8448\n",
+      "  Num Code Blocks:    4\n",
+      "  Lifting Size:       384\n",
+      "\n"
+     ]
+    }
+   ],
    "source": [
-    "codeRate = 490/1024\n",
-    "ldpcEncoder = LdpcEncoder(baseGraphNo=1, modulation=pdsch.modems[0].modulation, \n",
-    "                          txLayers=pdsch.numLayers, targetRate=codeRate)\n"
+    "ldpc = pdsch.getLdpcCodec(coderates=490/1024)\n",
+    "ldpc.print()"
    ]
   },
   {
@@ -180,19 +195,17 @@
    "metadata": {},
    "source": [
     "### Resource Grid Creation and Mapping\n",
-    "Now that we have created the PDSCH and LDPC encoder objects, we can use them to perform channel coding and resource mapping. In the following cell, we first create a resource grid object using the ``getGrid`` method of the ``PDSCH`` object. This creates a resource grid, generates the DMRS reference signals, and places them in their specified locations within the grid.\n",
+    "Now that we have created the PDSCH and LDPC codec objects, we can use them to perform channel coding and resource mapping. In the following cell, we first create and initialize the PDSCH's internal resource grid object using the ``initGrid`` method of the ``PDSCH`` object. This creates a resource grid, generates the DMRS reference signals, and places them in their specified locations within the grid.\n",
     "\n",
-    "The method ``getTxBlockSize`` is used to calculate the transport block size(s) based on the resources available in the grid for data transmission at the specified code rate. This function calculates the transport block size based on 3GPP TS 38.214.\n",
+    "We can get the transport block size (TBS) directly from the LDPC codec object. Here, we use it to create random bits for transmission using the utility function `random.bits`.\n",
     "\n",
-    "Once we have the transport block size, we create random bits for transmission using the utility function ``makeRandomBits``.\n",
+    "The function ``getBitCapacity`` returns the total bit capacity of the resource grid for each codeword. This is the total number of encoded data bits that can be transmitted using all PDSCH resources in the grid. It is used to perform rate matching.\n",
     "\n",
-    "The function ``getBitSizes`` returns the total bit capacity of the resource grid for each codeword. This is the total number of encoded data bits that can be transmitted using the resource grid. It is used to perform rate-matching by the ``LdpcEncoder`` class.\n",
+    "The `encode` method of the `LdpcCodec` class performs segmentation, rate matching, and LDPC encoding in a single call.\n",
     "\n",
-    "The function ``getRateMatchedCodeBlocks`` performs segmentation, rate-matching, and LDPC encoding in a single call. \n",
+    "Once we have the rate-matched encoded bits, we can map them to the available resources in the resource grid. This is exactly what the ``setPdschData`` method of the ``PDSCH`` class does. This function first converts bits to complex symbols using the specified modulation scheme and then assigns the symbols to the resource elements available to this PDSCH in the resource grid across different time, frequency, and layer locations.\n",
     "\n",
-    "Once we have the rate-matched encoded bits, we can map them to the available resources in the resource grid. This is exactly what the ``populateGrid`` method of the ``PDSCH`` class does. This function first converts bits to complex symbols using the QAM modulation and then assigns the symbols to the available resource elements in the resource grid across different time, frequency, and layer locations.\n",
-    "\n",
-    "The ``drawMap`` method of the ``Grid`` class is used here to show the allocation of data and DMRS in the resource grid."
+    "The `drawMap` method of the `Grid` class is used here to show the PDSCH and DMRS allocations in the resource grid."
    ]
   },
   {
@@ -205,20 +218,20 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "TX Block Size: 30216\n",
-      "Number of bits: 63648\n",
-      "Size of the rate-matched coded block: 63648\n",
+      "TX Block Size:                        31240\n",
+      "Resource grid capacity (bits):        64896\n",
+      "Size of the rate-matched coded block: 64896\n",
       "Grid Allocation Stats:\n",
-      "  GridSize: 17136\n",
-      "  DMRS: 1224\n",
-      "  PDSCH: 15912\n"
+      "  GridSize:  17472\n",
+      "  PDSCH:     16224\n",
+      "  DMRS:      1248\n"
      ]
     },
     {
      "data": {
-      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAjMAAAJ/CAYAAACNyFLVAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjEwLjgsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvwVt1zgAAAAlwSFlzAAAPYQAAD2EBqD+naQAAXKdJREFUeJzt3QuczHX////XIkuy61ByWoeolIoIl1IhkaRzSSqRq67SwaXTtRU6XFJdnSMqXaXzUTonieQKoXSOlMOWJMouqnWa/+35/v4+859dM3uc3Zn37uN+u32smfnMzHs+8zm85v1+vd/vlFAoFDIAAABPVUl0AQAAAEqDYAYAAHiNYAYAAHiNYAYAAHiNYAYAAHiNYAYAAHiNYAYAAHiNYAYAAHiNYAYAAHitQgcz3bt3t5SUFLvxxhsTXRREWL16tQ0ZMsSaNWtm1atXd99RnTp1Kv02Ov/889220N/K6vHHH3fboEWLFokuCiqwI4880u1nCxYsSHRRYGb/+Mc/3Pfx6KOPVtxgRrMtvPjii3bKKadY8+bNrWbNmrbHHntYq1atrFu3bjZy5Eh75ZVXLCcnp9zKNG3aNBcg6W88Ll7BMn/+/EKfc9BBB+V5jm+ys7PtiCOOcBetrKws23333W3vvfd2C1DRbd261e6++27r1KmTpaenu3PZwQcfbGPGjLFNmzaV+HV1POmcNHv2bEuUP/74w95++23797//baeeeqo7XwfnqaL8oNy4caO9+uqrNnr0aDvhhBOsUaNG4efr88XLyy+/bHPnzrXjjz/eunTpssvjxSkzdr1eKyBRsFivXj13vd5vv/3cdfqXX36xWK677jr3w1bfvfajEgklsd9//z109NFHa+6o8FKtWrVQvXr13N/I+x977LFdnh88d8yYMXEt1+DBg93r6m88XidYLrzwwgLXnz9/fp71k/zri2rixImu3HXr1g198803iS5OUonXfuWzqVOnhvbff/9Qz549QxXNb7/9Fjr00EPDx25qampo9913D99u3rx5aOXKlSV67bI61xXHrFmzdjk/BUtRyqVzeKznRzu/l8TWrVtDrVq1cq/58ccfR12nOGXG/++vv/4K9enTJ8+1eo899gjfrl+/fmjRokWhWC666CK33k033RQqiaSumTnvvPPsgw8+sKpVq9qVV15py5Yts9zcXNuwYYP9+eef9tlnn9ntt99u7dq1M5+puUW/BJ5//nn3uWJ57LHH3F+fq+C/+OIL97dnz57Wpk2bRBcHSUY1sN9++63NnDnTKppBgwbZp59+amlpae5Y1y/QLVu22LvvvutqIVatWmX9+/e3HTt2mK/q1q1rxxxzjF199dX27LPPWsOGDYv1fK3ft29fu/76623q1KlxL59qZb7//ns77LDDXO0Y4uef//ynTZ8+3XbbbTcbP36827dV27hw4UJ3rtd1WzVusVpR1NQk999/v7vOF1fSBjPfffedvf766+7/qra88847bd9997UqVf6vyNWqVbNDDjnErrnmGluyZIkNGDDAfNWyZUs76qijXBOMDrZoFOQ899xzLuhRkOeroApR1etAZaHgTE0w8tBDD9mZZ54ZPpcde+yx4eNewX48m1TKk5oWfvvtN3vvvffsjjvusLPOOstSU1OL/Pxzzz3Xfv75Z3vrrbfcOV+BbbxNmjTJ/T3nnHPi/tqV2bJly+zhhx92/7/55ptt+PDhrtlIFDi++eabrslp7dq19p///Cfqa7Rv397atm3rgp6XXnqp4gQzClACJ510UqHra0OVhKJ/RYvK2dDG11/dVh5OfmqPVjAxZcoUd1t/I/NXtJS0zVoJsZG1L/npZKdgR0nNCn4Kotyba6+91p1c1G5do0YNl2D7t7/9zdVkbd68OeZzIz+HdrxLL73UvZ9eQ7+a9OtSv5xLmowdnKjzb7v8J3B9Vh0UHTp0cL9k9f0qmL344ovthx9+KFL5161b59pq1War3Jzi5hjpV4ba/ps2ber2DZVjn332sd69e7vgWifu4ibwFjXBVbXdOvF27tzZva8W5Yg988wzhZZbuUgK8nVyUF6Gtp1yzHQcPfHEE/bXX3/lWX/FihVuvzjuuOPctqpVq5YLNg888EAbMWKES9guSpL9tm3b7K677nInL+1vkceDPm/wPWv/U9u4ckVq167t7l+5cmWRt49+7d12223WtWtX1y6vC2ZGRoa7eM6bNy/qc/T6wb6h/+vX+YUXXuj2bT0///up5kQ1BDof6JemPo/2vxNPPNEmTJiwyzYsTHDO0P4T7YeXPou2peg7Kqpge6kGW2666aZdzknBtg2o5ue///2vqx3dc8893edv0qSJnXHGGaXKuVENemmU9vlFueBqO2mbaF+Jt5Kcd9955x1XHv04X7Nm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f2ChuZuuu+461+Opa9eupX0rAACA+AYzS5cudVMIbN682SX8DhgwINw1e+XKla5rtoIcjUfz8ccfW5s2bUrzdgAAAPENZkaPHu0CGQ2Md8cdd+zSnHTrrbfaNddcY/fdd5+NGTPGBTcAAABJkwCs2bI1H9I999wTNS9mt912c2PPaB2tCwAAkFTBzJYtW6xz584x50MSPaaxaLQuAABAUgUz++yzj61fv77Q9TZs2BDOpQEAAEiaYOa8886zDz74wL766quY6+gxddk+99xzS/NWAAAA8Q9mrrzySjvhhBOsZ8+eNn78eDd5Y0D/nzBhgh1zzDHWv39/lwgMAACQ0N5MalaK5tdff7UrrrjCLXXq1HH3bdy4Mfz44sWLbd9997Xvv/++tOUFAADIIyVUjCF0q1QpeUWOEoF37NhhyUI1R+np6YkuBgAA3srOzra0tDS/amZWrFhRdiUBAAAo62CmefPmJXkPAACA5J5o0nfDJmywZDJ5eP3w/ykb24x9LbmOA45Pthv7muU5DrzvzQQAAOB9MPPDDz/YRRddZK1bt7bdd9/dqlatGnWpVo1KIAAAEH+lijA+/fRT6969u5tssrBOUcXoNAUAAFA+NTPXXnutbdq0yU499VQ3loy6O+/cuTPmAgAAkFQ1M/PmzbP999/fXnjhhQInmwQAAEjKmpnddtvN2rdvTyADAAD8DGY6dOhgP/74Y/xKAwAAUJ7BzFVXXeWamjQrNgAAgHc5M8cdd5zdd999dtJJJ9kll1xiffv2tWbNmsWcw0mPAQAAxFOpB39RU1Pjxo3tjjvucEssShDevn27xctPP/3kelO9/fbb9scff7hxbh577DE77LDD4vYeAACgggczc+fOtd69e9tff/3lbtevX9/22GMPK2u///67HXHEEdajRw8XzOy111723XffWd26dcv8vQEAQAUKZm644QYXyIwcOdKuv/76cgsmbr/9dsvIyHA1MYGWLVuWy3sDAIAKlAD8ySef2KGHHmp33nlnudaKvPbaa6456YwzzrAGDRq4MjzyyCMFPic3N9cN6he5AACASh7MVK9e3Q2aV940H9TEiRNt3333tenTp9vFF19sl19+uU2ZMiXmc8aNG2fp6enhRTU7AACgkgczXbp0sWXLlll509QISjy+9dZbXa3MhRdeaH//+99t0qRJMZ+TmZlp2dnZ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26xVq1Z2yy23uBFfk4FGndV+37x5c1e+ww8/3BYuXJh051htr9GjR1ujRo1cOXv16mXfffddwss1depU6927tzsm9PiSJUusIiCYKaXnn3/eRo4c6bq7ffLJJ9auXTvr06ePrVu3zhJpy5YtriwKtJLNBx984E7a8+fPtxkzZti2bdvcwaUyJ5JGhFaQsHjxYnfB69mzp5100kn21VdfWTLRifuhhx5ygVeyaNu2rf3888/hZe7cuYkukv3+++92xBFH2G677eaC0q+//truuusuq1u3blJ8h5HbS8eBnHHGGYkumt1+++0usB8/frx988037vYdd9xhDzzwgCWDYcOGue315JNP2hdffOHOHQoUFLgm0zlW2+z++++3SZMm2YIFC6xWrVru2vDXX38ltFxbtmyxbt26ue+1QlHXbJRc586dQ8OHDw/f3rFjR6hx48ahcePGJc1m1df8yiuvhJLVunXrXBk/+OCDULKpW7duaPLkyaFksWnTptC+++4bmjFjRujoo48OXXHFFYkuUmjMmDGhdu3ahZLNtddeG+rWrVvIB/oeW7VqFdq5c2eiixLq169faOjQoXnuO/XUU0ODBg0KJdoff/wRqlq1auiNN97Ic3+HDh1C119/fdKcY/U9NmzYMPSf//wnfN/GjRtDqampoWeffTZh5Yq0YsUK9/inn34aqgiomSmFrVu3ul/x+lUQOeeTbs+bNy8esWalkJ2d7f7Wq1fPkoWq2p977jn3K0bNTclCNVr9+vXLs88lA1Wfq1p7n332sUGDBtnq1asTXSR77bXX7LDDDnO1HWrOPPTQQ+2RRx6xZDyPPPXUUzZ06NBST3obD2q2mTlzpi1btszd/uyzz1xNW9++fRNdNNu+fbs7NtWkH0nNOMlQGxhYsWKFrV27Ns9xqnmMlIbAtaFsVNqJJuNh/fr17sDae++989yv299++23CyuXb7OVq/1ZzwEEHHZTo4rhqawUvqgreY4897JVXXrEDDzzQkoGCKzVlJiI/oCA6QT/++OO2//77uyaTm266yY488kj78ssvXV5Uovzwww+uuUTNwNddd53bbpdffrlVr17dBg8ebMlCOQ0bN260888/35LBv/71Lze7svKeqlat6s5xY8eOdUFqoml/0vGpHJ4DDjjAnWufffZZFyC0bt3akoUCGYl2bQgeQ3wRzCDhNQ266CXLrypdkJUQp9qil156yV30lOOT6IAmKyvLrrjiCpcrkP9XaaJF/mJXHo+CGyVnvvDCC3bBBRckNFBWzcytt97qbqtmRvuachiSKZh59NFH3TZUzVYy0Pf29NNP2zPPPONyoXQ86AeHypcM2025MqrFatKkiQu2OnToYAMHDnS15Ki8aGYqhT333NMdTL/88kue+3W7YcOGpf1uKrxLL73U3njjDZs1a5ZLvk0G+tWuX3gdO3Z0va6USHffffcluljuRK2kcp24q1Wr5hYFWUow1P/16zlZ1KlTx/bbbz9bvnx5QsuhXiT5g1D9mk+GJrDAqlWr7L333nNJrcni6quvdrUzZ511luv9de6559o///lPdzwkA/Wu0r6/efNmF+Sr96g6EaiJM1kE53+uDeWHYKaUFz5d9NS+HPlrULeTKc8i2SgvTYGMmnDef/991wU0Wen7zM3NTXQx7JhjjnFNYPqVHCyqdVDVv/6voDpZ6CLz/fffu2AikdR0mb/Lv/JAVGuULB577DGXz6M8qGTxxx9/uNy/SNq/dCwkE/UO0j6mXmvTp093PQ+Thc5pCmgirw1qulOvJq4NZYNmplJSe7yqXnVh6dy5s917770uaXTIkCGW6AtK5C9jJaTpoqck22bNmiW8aUlV2K+++qprAw/akJUgp0S+RMnMzHTV/do+GstCZZw9e7Y7USaatlP+nCKdzDVWRKJzja666io3roWChDVr1rhhCnTxU9V/Iqk2QcmsamY688wz3S/4hx9+2C3JQMGBghmdP1S7liz0XSpHRseBmpk+/fRTu/vuu13TTjLQ8agfRGoS1jlONUnK7ynvc25h51g1zf373/+2fffd1wU3GrtHTXUaVyuR5frtt99c7aSOVQkCfgVfXrcoJLo7VUXwwAMPhJo1axaqXr2666o9f/78RBcpNGvWLNftLv8yePDgRBctarm0PPbYYwktl7qjNm/e3H2Pe+21V+iYY44Jvfvuu6FklSxdswcMGBBq1KiR225NmjRxt5cvXx5KBq+//nrooIMOcl1i27RpE3r44YdDyWL69Oluv1+6dGkomeTk5Lj9Sue0GjVqhPbZZx/X7Tk3NzeUDJ5//nlXJu1v6v6soTHU7TnZzrHqnj1q1KjQ3nvv7fY/nU/K47ueVUi5dJ6N9riGWPBZiv5JdEAFAABQUuTMAAAArxHMAAAArxHMAAAArxHMAAAArxHMAAAArxHMAAAArxHMAAAArxHMAAAArxHMAJ747rvv3JxWmjxRUxlo9mxN0NmpUyd3/8svvxyX9+nevbulpKS4qRwqshtvvNF9Tv0F4LfkmRAEQExTp061s88+2016qfmYNIniXnvt5SbZ07wrEyZMsOeee85OO+00tiKASodgBkhyv/zyi5uMUIHMlVde6SavU61MpMWLF9tLL72UsDL6SLVZZ511lu25556JLgqAUiKYAZLcG2+84WbC1Yy7d955Z9R1Onbs6BYUnYIYAhmgYiBnBvCgZkbUrFQcygfRUprcmA8++MB69+5t9erVs9133906d+5sTz75ZIHv+/7779sZZ5zh8nlSU1NduZXXM2bMGNuwYUN4vW3bttlTTz1lgwYNsjZt2lhaWprVrFnT9t9/f7v88sttzZo1hZb7ww8/tP79+7v3qFKlij3++ONunRYtWrh1Vq5caa+++qr17NnTfYbIz1tYzsyyZcvsoosuslatWrmasPT0dDvqqKNcmUtarp07d9rDDz/smgnr1Klju+22mzVo0MDatWtnl112mSsvgOIjmAGSXLNmzdzfL7/80mbOnFlu7/vKK6+4IOCnn36yPn36uIBEzVnnnXeea+6KRkHIMccc45q8dCE/9dRT3fN+++03u/nmm+2LL77IE6Sde+659uabb1rdunXtuOOOc++nWqgHHnjA2rdvb8uXL49ZvhdffNEFED/88IP16tXLjj32WBc8Rbrrrrvs5JNPtk2bNrnXP/roo61q1aqFfna9tgIMBR7Vq1e3448/3g477DD75JNPXJmHDh1aonINGzbMBUh6HW0XBX0dOnSwP//808aPH+/ynwCUQAhAUtu0aVOoSZMmIR2uKSkpoe7du4duueWW0Jtvvhlat25dzOdp/YIO8aOPPto9PmvWrKj3a7n11lvzPDZ79uxQzZo13WPvvPNOnsfuv/9+d3/9+vVD77///i7vt2DBgtDq1avDt3NyckKvvvpqKDc3N896W7duDWVmZrrXOv7442OWW8uECROifrbmzZu7x6tWrereI5oxY8a4dfQ30ueffx5KTU0N1ahRI/Tyyy/neWzlypWhgw8+2D1vypQpxSrXqlWr3GNNmzYN/fzzz7s8/vXXX7t1ABQfwQzggW+//TbUpUuX8MUycmnfvn1o4sSJoe3bt8c1mDn00EOjPu/KK690jx977LHh+7Zt2xbaa6+93P35A4CSaty4cahKlSou6IlWvp49e8Z8bhDMDB06NOY6sYKZAQMGuPvvvPPOqM/7+OOP3eMdO3YsVrmC55144okxywSgZEgABjygPJL58+fbxx9/7JplFixY4Joqfv31V9c0cfHFF7txZvSYmkXiQc1J0ahnlZpv5s6dazt27HDNNmp+UlmUUHvKKacU630+++wz13y2YsUK27Jli8srke3bt7v/q6np0EMP3eV5p59+eqGvXZR1Iun93n77bff/AQMGRF1HzU177LGHffrpp/bXX3/t0rMs1nsqL6h27dr21ltv2dixY11X+5YtWxarfACiI5gBPKIEXC2iyhddUP/zn/+4MWbee+89u+++++zqq6+Oy3vFutAG9yvPQwm9SmBdtWpVOOgqKOk4kgIX5Z8oN6cgOTk5Ue9Xkm9hirJOJH2e4P0yMjKKtH6TJk2K9J4KZB577DEbMmSI3XDDDW5p1KiR/e1vf3P5PApuFCQBKD6CGcBTChqUPPrss8/aH3/8Ya+99ppNmzatyMFMUANSGv/XmlUymZmZLpBRjcVtt93mEmJVsxPULB1++OE2b968mO+hnk+FKco6sbaJaqAKkz/huLD31KCGSgrWd6UeT//73//cNtAyevRomzFjhh188MHFKjMAghmgQlD3aV0g169fH75P3X7V/Vk9eVQrkF9QmxKLmn2iCboPq3lFoxFH9rhSd2YFH0WpnXnhhRfc3+eff94OOeSQqNM3lDcFUwpGVOukMX3KYhwadfFWjZQWycrKct2y1YVcA/mpOzyA4qFrNpDkilL7sXr1avdXY7sEguaPb775Zpf1P//8c3cRLUis8VSeeOIJ97dbt25WrVq1cB6JLvzKm1HtUFGou7Y0b958l8emT5+eJzArL8r/UVfqyGCrrKk566abbnL/p2s2UDIEM0CSe/DBB12Tx0cffRQ10NG8TRqjRDQ8f0DNGaILpaZCiKxZ0esVFiQpqfeOO+7Ic5+SfjUPlPzzn/8M36+g5vrrr3f/v/DCC23OnDm7vN7ChQvtxx9/DN8+4IAD3F+NKRNp6dKl9o9//MMSRYP7qalLzXVTpkyJ2hynMX+03YtD+U2qhVKtT36vv/56zMAOQOHImQGSnJqKVBuiRQPRqWePakE2btxoX3/9dbjZ55xzzrELLrgg/LzrrrvODV6n3jP77befy0lRzYmCCo1Aq5yUaAFS5AB4ymvR+6oZSCPyKs9DF/crrrjCDSQXSfcpEJk0aZIbnE7lVEKwEmq//fZbN4jcrFmzwrVHChrU82fUqFGuFqRt27a2bt069x5HHnmkm76hoPKVFeUhqVbq/PPPd4sSdTVTuba9apM08J+CMvV20qCARaVmPQWbasbSe6hGRj229Hrabgqg8gePAIqGmhkgySlAUdON8irUk0gBjEaZVWCgZpGBAwe67sSaZkBD5we0roIBXXCVN6M5njTqrmpQFOAop6Yg6mKthNSGDRu69dUtXBdhDc1/77337rK+8mQmTpzoynLSSSe54EfdxRU8KfhSDVFkbozKpfwQjRj8888/u5wfBTOaXkCvUVj5ypJG5v3qq69c7ZOmHVCirj6Ltn3r1q1dwrK6VxeHei3peT169HDbRp/33Xffdd/h8OHDXdOfejUBKL4UDTZTgucBAAAkBWpmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA1whmAACA16olugA+CIVCtmPHDtu+fXuiiwKgFHbbbTerWrUq2xCoYAhmCgliNm7caL/++qsLZgD4r06dOtawYUNLSUlJdFEAxAnBTAHWrl3rgpm0tDS3VKtWjRMg4PGPkz/++MPWrVvnbjdq1CjRRQIQJwQzMagmJjs72/baay/bc88947W9ASRQzZo13V8FNA0aNKDJCaggSACOYdu2be6XXK1atcr3GwFQpnbffffwMQ6gYiCYKQTt6kDFwjENVDwEMwAAwGsEMwAAwGsEMwAAwGv0Ziqh1atX2/r16y2R1MuqWbNmJXru448/bkOGDAnfTk1NtXr16tnBBx9s/fr1c4/Vrl07/PiNN95oN910k8s3WLVqlWVkZOR5vZycHNt7773tr7/+suHDh9v48ePd/StXrrSWLVuG19PzNc5Hly5dbPTo0da1a9ddyjZ37lwbO3asff7557ZhwwbX66Rdu3Y2cOBAO/vssy1ZJMM+UBb7gV6rd+/eNmrUKPedzp4923r06BFep3r16u47POCAA9x6f//7312vv/y++OILt88sXLjQfvnlF6tfv74deOCBduKJJ9pll122S+/BJ554wqZMmeK+9y1btriu03pf7U+HHXZYnvLqNYP7InXv3t19J19++WWJtgcAPxHMlPAiphO5xqxIdK+Mb775psQXMrn55ptdsKGeHRpXRxeuESNG2N13322vvfaaHXLIIXnW18Xu2WeftWuuuSbP/VOnTi3wfRSIHH/88e6itWzZMnvwwQfdhUoXJQVQgRdffNEGDBhg7du3tyuuuMLq1q1rK1assDlz5tgjjzySNMGM9oE2bQ6wP/9M7D4gNWvubt9+G5/9QMGogsmJEyfaW2+9lScouPzyy61Tp07uO9RAkh999JGNGTPG7SsvvPCC9ezZM7yuHtP3qzIp2NEgdVlZWTZ//ny777778gQzf/75p5166qn2zjvv2FFHHWXXXXedC6wVCOt1FeBoezdt2rQUWwlARUYwUwL65adA5qnrb7YDmv//tQ7l6ZtVK+ycsaNdWUpzEevbt2+eX7iZmZn2/vvv2wknnOB+QStYCsbmEAUk0YKZZ555xtXovPzyy1Hfp0OHDnbOOeeEbx955JHuvXXRVGATWQOkX++66KkGIFIw2Fky0HZXINN98CSr03C/hJVj49plNnvKP+K6HwwbNszVoihIefXVV8ODy+k7O/300/M877PPPnO1M6eddpp9/fXX4XVVs5aenu6CVdXiFPQ9Xn311S6Queeee1wgHUnBku4HgIIQzJSCApkO+7Wxika/sNXEoF/ITz31lPtlHVDNiC5o3377rbVp83+fXTU6CoD0KzpWMJOfLozy/fff57lft1WLkz+QETU3JRsFMns2a2cVcR9QMKNasYJGylXz37333uv2CzUtKogJvse2bdvuEsjk/x5//PFHe+ihh+zYY4/dJZARzaN01VVXxe1zAaiYSABGVOeee677++677+a5X80Aqu5XTUzg+eeftz322MPVzBSVmhBEzUiRmjdvbjNnznQXOSROEGSqhqYwCm5Vexe5r+h7XLx4caG5K2+//babwDXY34pKo3OrNir/wkB4QOVEMIOoFLComSB/zYkSeM866yzX1BR4+umnXc6D8mliUbOcLjZKBFVORpB0mr/Z4tprr3W5Fa1atXK1A0oS1vo7d+7kmypDQXCgIFLBqXJoFKCoubEoM1Hvt99+efYV1aboO1fu0+GHH+6+VwU7+YMNNWNKZN5UUfTq1cslHedflKsDoPIhmEFMqm3ZtGnTLverSWH58uUuHyL4W1hirnIfdLFRIqiamHQRu+uuu3YJZoYOHeryJ9QrRUHMLbfc4tbfd999uVCVoSA4UC81Bav67l955RVr0qRJifYVNRvNmzfP5V0pr+aOO+6wPn36uNdTYnlkLziJ7DlXFBMmTLAZM2bssuRPWAdQOZAzg5g2b94cNU/l0EMPdfkyampSToQClMieLNFceOGFdsYZZ7jeMsqvuf/++12vmGh00dOiX/ZqqlBNwaRJk1wtgXJ1kjF3xncKDlS7opnh1R17//33typVqhRrX8kfkKjnk3q5bd261QU0Co6UzKsAdsmSJS7RW7PRS7SguSCdO3eO2jVbzZbJ0F0eQPkimEFUam5Q00Pr1q2jPq6aGPVE0gVMXakLu/CpZkW//kVBiRI7//Wvf7nuu9EuSkHXc9XKaNFYKhqzRDkWgwcP5luLs1jBQVGo6Ujd7Q866KCojyuZW4GNFgVMamJUF3zV1gVJ5BqTRk1SAFASNDMhqieffNL9VQ1JrGDm559/dhexkoz9cv3117tA6IYbbijS+sGFVu+J5PLSSy+5sWJi7SsFfY/qEq7AVr3mAKCkCGawCzUDKVdFg6gNGjQo6hZSgq665I4bN879qi8uNU9ddNFFNn36dNfkEFBPpmg0gJuo+QPJQ81H6lKt5h2N1BuYNWuWhUKhQr9H5eio67+Sgx944IFd1lfit3Kr6N0GoCA0M5Vy4Drf31vNNspDUfdY9TRSIKNESnWtVaJmjRo1Yj5XI/SWhp6vgOi2226z5557zt130kknuSCqf//+LmDSsPbvvfeevf76666ZQvcnEw1aV1ne/8MPP3Q5T8p10jQT//vf/9w+ol5vyodR7lRAI/wq5+mUU05xTUnKm1FPI+U/tWjRIs8UCgpW1BNKIwwrx0bNkAqONOqvmqO0fyopGQBiIZgpAeVvKJ9DI/AmksqgspSGuj4HeQ3B3EwKMPLPzVQWGjdu7Jqo1KSli5mCl8mTJ7tRZzUA35o1a9yv+3322cc1S6l7rxJUk4G2u6YR0Oi7iaZylHY/KAolbQddsYO5mZTHFG1upjvvvNMFIqqJefjhh10woxGKL7nkEte0GDmYnvZjBdWad0lTF6hWUIGQ9g8llqvrf1F7VQGonFJC0eqC4X6BavRT1RJEq51IhkkGSzPBIEovGfYBYT+I77ENwD/J8TPXQwoiCCQqN/YBAEgOJAADAACvEcwAAACvEcwAAACvEcwAAACvEcwAAACvEcwUgp7rQMXCMQ1UPAQzMWhgsJSUFDcCLYCKQwPyBcc4gIqBcWZi0OR3Gqb9119/tdzcXEtLS3OjzyrAAeBnjYwCmXXr1rkRiHWMA6gYGAG4kJNfdna2O/lpPhoA/lMgo3mk+GECVBwEM0UMahTMaDJGAP5S0xI1MkDFQzADAAC8RgIwAADwGsEMAADwGsEMAADwGsEMAADwGsEMAADwGsEMAADwGsEMAAAwn/1/4OXXo9Leh2YAAAAASUVORK5CYII=",
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAApUAAAJjCAYAAABdmuqjAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjExLjEsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvctoD+AAAAAlwSFlzAAAPYQAAD2EBqD+naQAAY2FJREFUeJzt3Qd4U2X7+PG7rAKFFhmyy1QZKoIoAgoIDhAFVNygDAfLV8WB1VdxI6K4cCCKKKACskRFfBUURRQHCDJdLAHZLbMUOP/rfv6/k6sjadOepsmTfD/XdUg5OUmeM5LcuZ8V5ziOIwAAAIAHxbw8GAAAACCoBAAAQKEgUwkAAADPCCoBAADgGUElAAAAPCOoBAAAgGcElQAAAPCMoBIAAACelfD+FEBoPP7447J27Vq56qqrpHv37hzmCLJy5UqZOXOmbNiwQQ4fPiw6h8KoUaOkevXq4S4aoszNN99srrG77rpLzjzzzHw//p577pFt27aZ5+nQoYPYvj9AJItjRh2E2u7du+XTTz+V5cuXy65du6R06dIm+Khdu7b5kK9Tp47fx5177rmyaNEiE1z+97//LbTyPPjggyYYuv766+WSSy4p8PO89NJLsmTJEt//X3jhBalcuXKuj3nooYfk77//9v1/0qRJYpuXX35Z7rzzTjl+/HiW9atXr5ZGjRqFrVyITuXKlZMDBw6YHzE9evTI9+MbNmwof/75p4wbN84EdLbvTzAWL14sn332mfzzzz/m9Zo1ayZXXHGFJCUlheT1ABeZSoTMsWPH5OGHH5bnnntO0tPTA253yimnyPTp06Vp06ZFcjY++eQT+fXXX+WMM87wFFQuXLjQlNvVokULGTp0aMDtNZh88sknTVbP1qByx44dcu+995qA8sILLzRfiomJiea+GjVqhLt4QEzTH+29evUyAWV2+r596623qPVBSBFUImRuu+028yGmatWqJVdffbXJSpYpU0a2bNkiGzdulK+++spUcWuwYisNqtLS0kwmJLeg8s033zQBpbu9jb799lvzA6Fs2bLy0UcfmawzgPDLyMiQyy67zGQpixcvLjfddJOcc845snPnTvM5rNlabUo0b948Of/888NdXEQpgkqExIoVK3wBZf/+/WXs2LHmg86fdevWScWKFa09E/rB/fvvv8uaNWtM0KXV9tkdPXpU3n77bfO3Vru//vrrYiP9glLVqlUjoAQiiH6maECppk6daqq7XUOGDJF27drJsmXLZODAgfLbb79JiRJ8/aPwcVUhJLRq2PX0008HDCjVySefXODX2b9/v3z88cfy448/yp49e6RChQrSsmVL84u9fPnyWbbVdp3vvfeeyZCq999/33zIZv9g1jZI+REXF2faamlbTc1W+gsqtYxbt26Vs846y7RvysuhQ4fkyy+/NB/+mzdvNtlBDeT0ubXauVixYrl2SujXr5907NjRtEnVzIRmhnW/2rZta6q/SpUqla991GOlzQY0eFbbt2831Wyurl27ynXXXVfgcxOo/D/99JOpytNjoO3Qnn32WalatWqe5c3v8+i50bJqByTNIlepUsV8CXfu3DngtatNABYsWGCudW27pse0Zs2apl2pHo/csrhaHj0vei3q9VO3bl3TFOP000/P9fg3b95c7r77br/bfP/99zJmzBhznPU2s/nz58v48ePNNaT7ru2cNdOszUD0b23b3LdvX9/2mlHXWgTdN712SpYsaWoZ2rdvL2effXbA/dJjoq+lj9NjqsdEj4cGOHpsvNJy6fPre+Pff/81+6pl1+Md6D0RDL0+9Xjo50FqaqpUqlRJWrVqZZ5Xa1byKlNBjlUgP/zwgzl/+rz6XtXsYrBtnVW3bt2yBJRK32/aBlyvaa0Z0mtP9w0odNpRByhszz77rDYcNMu2bdsK9Bxt27Y1j3/88cf93j9z5kznxBNP9L1O5qVy5crO1KlTs2w/atQov9tmXnbs2BF0+a688krzmIsvvtjZsmWLU6JECadMmTLOnj17cmx7ySWXmG3feOMN57XXXvO9nj8jR450ypYtG7CMTZs2dVatWuX3sQ0aNDDbPPfcc86ll17q9/FNmjRx/vjjDyc/7r777lyPm97v5dxkL//o0aOdK664Isdj165dG1R5g32eY8eOOQ8++KATHx/vt6ynnnqq39fcvHmz07Jly4DHIykpyfnkk09yPG737t0Bz4su11xzjbNv376Ax79r164B9/n9998321StWjXHfe41p8dl2rRpToUKFbK87i233OLb9vvvvzfXWKAytmjRwu/rL1myxFxb/h6jx/eZZ55xCiIhIcE8x1tvveWcd955fp+/VatWAT9n3Gth3Lhxfu8fP368OV/+nrdWrVrO//73v4BlK8ixcvdH3yPZffzx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6gTJbUOpGUoA0cl9f9NmGgDyj6Ayn6jyBqIX728AKDiCSgAAAHhGUAkAAADP6KhTSDZu3Cg7d+6UcKpcubIkJycX6LE33XSTHDhwwFcFmJCQII0aNZIbbrhBateu7Xe7YsWKSfny5U1P2TPPPFM6d+7s6+yQ3a+//iozZ86UDRs2+J77qquukqpVq/rdfvPmzTJr1ixZvny56ZVbo0YN85iePXtKYmJilvI0aNBAHn744RzPsWnTJrnrrrvk6quvNkukiKZrJdhrwH3M2WefLffdd1+O+9etWycPPPCA+XvgwIHSqVOngNemtns85ZRT5Prrr5e6desWyvUGACgEDoJy6NAhZ9WqVeY2uw0bNjhlypR19HCGc9EyaFkKIikpyTnttNOcadOmmeWFF15wTjrpJKds2bLOl19+GXC7t99+20lJSTHbVqhQwRk7dmyO5x40aJBTvHhx54YbbnDeeOMNs027du2ckiVLOhMmTMiy7fHjx53HHnvMKVWqlNOpUydTjsmTJztPPfWU06RJEychIcGZP39+lvLodv6sWLHCHJfhw4c7kULPjx7TcF8rWobCulaCuQb0MXFxceb87du3L8f99957r7lfyzZu3LhcX++ll15ymjZt6pQuXdqZN2+ep+stP+9zAEDuyFQWAs06HTp0UDrc9LpUqHayhMPebevkq3cGmLIUNAOlw6hoJtB17bXXykknnST/+c9/5Lfffgu4nXr88cdNVvC2226T48ePy4ABA8z6L774Ql599VV56KGH5LHHHvNtf+utt8rLL78sW7ZsyfE8w4cPl9dff908V2aa4dKMpDuWoI30/GjmddKDj0njOvXCUobVG/6WXk8+XKjXSm7XgKt169by448/yocffih9+vTJMlzXpEmTpF27dvL1118H9XqapdQM9dChQ7Ncm/m93gAAhYegshBpQFk5uZlEC60qbN68uSxcuFAOHz4spUuXDritjun3wgsvyP/+9z9TjXnjjTeaasply5aZ+zNXZ7puv/12SUtLy1Ll/eSTT0r37t1zBJTua+j9+/btE9tpQNni5EYSTQJdA64qVapIly5dZMKECVmCys8++0y2bt0qTz31VMCgMjsdK7ZZs2bm2kxPT5f4+HizPj/XGwCgcNFRB7nSAE7nRNYlz4upWDHTdnHPnj3yzTffmHX169c3t+7/s8vcPlLbwB05ckR69eqV6+toGz5EJn/XQGYaTGog+Pfff/vWvf3223LeeedJw4YN8/Va+/fvl1KlSmW5NvNzvQEACheZSgSkGSTN/Fx22WVBzy6iHSLU77//LhdffLHJOrZv395UR2ow0bVrV5NhOuecc3JkPleuXGlumzZtmq+zsmLFihxVsYqsVHhkvwYyu/TSS02W8Z133pFHHnlEdu3aJXPmzJHXXnstX6+h2dClS5ea866BrCs/1xsAoHARVMJvcKZtz77//nvp0KGDjBs3Luij5Pb81XaDSoNRbeem7ehmz55t2rv9+eefJsN03XXXyTPPPOOb9tJ9TKAe5LlV02v7T3+9vzX4QNHKfg1kpllFbQ/57rvvmrazkydPNuu0Z7b22A7m2tSq8h9++MGc8+zBaH6uNwBA4SKoRI7gTIdt0cCgcePGUq9e/jqT7N6929xm/uIuUaKEeV438NPslAaqDz74oBlKRjNK+pruY/T+QEPFBNtpRGXuwIGi4+8ayKxv377y0ksvmfaTWvV95ZVX5tmkwb02tQPQH3/8YbKg//zzT5YsZX6vNwBA4SKoRJ7BWX5oBkm1bNky4DYabNx///2man3KlCmmfZ22hWvTpo3p6LF48WIz5iHslNc1cMYZZ5gq6WHDhplr4Pnnn8/3takdfnTMSx3TUnuO5ybQ9QYAKFx01EGh0WrJDz74QFq0aGGCBqVDyGiHCn8qVKhgbt37u3XrJrVq1ZIxY8aYHr2BOg65bS9hxzXgj3bYWbJkicmEaxvI/NJRCTSg1Orz7777zrc+P9cbAKBwEVSiUPz0009y0UUXmepIHTLGtWjRItNJQm8z05lypk2bZnr8nnrqqWadDgujQYLOOKNVotu2bcvyGO2YoWMZavs62HMNBKoC1/M/derUAldFa3W2zpaTkpJSoOsNAFC4qP4u5AHIY+G1M3ea0OnztJ3av//+a9Z9+umnWaZ11PECv/32W3OrVY46YLVu+/PPP5vBsMePH5+lXZwGjZp50kGt69SpY6pQtfpSp9tbvXq16d171llnie10AHKbXzs/14A/SUlJnptaaDtLHXvy6aeflnnz5pme5vm93gAAhSdOp9UpxOeLWjr4t7bF0uq67EOTaGatUaPGZladcCpTpqysWbO6QLOkfPTRR3LCCSeY8QLz2k7HklT65ayZopo1a5phZLSDRCBa5bh27VrTucLtBKRV3bnRmXM0eNFexPoaGiBoMBJsuXVIoc8//1yaNGlilkig14ruu7+e0UVJByXXIL2g10p+rwF9jA5+roFdINqhZsGCBeaHROaOWrmd49TUVNPDX7fP3IazINdbXu9zAEDuCCqDlNeXjQYLOu1dOFWuXLnA0+6h6HCtRC6CSgAoOKq/C4kGcwR04FoBAMQqGhcBAADAM4JKAAAAeEZQCQAAAM8IKgEAAOAZQSUAAAA8I6jMJ4b1BKIX728AKDiCyiCVLFnS3IZ70GoAoeO+v933OwAgeIxTGaTixYtLhQoVzCwv7owkBZ2zGEDkZSg1oNT3t77P9f0OAMgfZtTJ5xfPtm3bZO/evfk8zABsoAFltWrV+MEIAAVAUFkAx44dk4yMjII8FECE0ipvMpQAUHAElQAAAPCMjjoAAADwjKASAAAAnhFUAgAAgKASAAAA4UemEgAAAJ4RVAIAAMAzgkoAAACIV/8PuX/v00IdtVsAAAAASUVORK5CYII=",
       "text/plain": [
-       "<Figure size 600x600 with 1 Axes>"
+       "<Figure size 650x600 with 1 Axes>"
       ]
      },
      "metadata": {},
@@ -226,34 +239,29 @@
     }
    ],
    "source": [
-    "random.setSeed(123)                          # Making the results reproducible.\n",
-    "grid = pdsch.getGrid()                       # Create a resource grid already populated with DMRS \n",
-    "txBlockSize = pdsch.getTxBlockSize(codeRate) # Calculate the Transport Block Size based on 3GPP TS 38.214 \n",
-    "txBlock = random.bits(txBlockSize[0])        # Create random binary data\n",
-    "        \n",
-    "numBits = pdsch.getBitSizes(grid)            # Actual number of bits available in the resource grid\n",
+    "random.setSeed(123)                          # Make the results reproducible\n",
+    "pdsch.initGrid()                             # Create and initialize the internal PDSCH resource grid\n",
+    "txBlock = random.bits(ldpc.txBlockSizes[0])  # Generate random bits. txBlockSizes[0] is the TBS for the first codeword\n",
+    "numBits = pdsch.getBitCapacity()             # Number of bits available in the PDSCH resource grid\n",
     "\n",
-    "# Now perform the segmentation, rate-matching, and encoding in one call:\n",
-    "rateMatchedCodeBlocks = ldpcEncoder.getRateMatchedCodeBlocks(txBlock, numBits[0])\n",
+    "# Perform segmentation, rate matching, and encoding in one call\n",
+    "rateMatchedCodeBlocks = ldpc.encode(txBlock, numBits[0])\n",
     "\n",
-    "# Now populate the resource grid with coded data. This includes QAM modulation and resource mapping.\n",
-    "pdsch.populateGrid(grid, rateMatchedCodeBlocks)\n",
+    "# Populate the PDSCH resource grid with the coded data. This includes QAM modulation and resource mapping.\n",
+    "pdsch.setPdschData(rateMatchedCodeBlocks)\n",
     "\n",
-    "# Store the indexes of the PDSCH data in pdschIndexes to be used later.\n",
-    "pdschIndexes = pdsch.getReIndexes(grid, \"PDSCH\")   \n",
+    "print(f\"TX Block Size:                        {ldpc.txBlockSizes[0]}\")\n",
+    "print(f\"Resource grid capacity (bits):        {numBits[0]}\")\n",
+    "print(f\"Size of the rate-matched coded block: {rateMatchedCodeBlocks.shape[0]}\")\n",
     "\n",
-    "print(\"TX Block Size:\", txBlockSize[0])\n",
-    "print(\"Number of bits:\", numBits[0])\n",
-    "print(\"Size of the rate-matched coded block:\", rateMatchedCodeBlocks.shape[0])\n",
-    "\n",
-    "# Get statistics about the grid resource allocation\n",
-    "gridStats = grid.getStats()\n",
+    "# Get statistics for the resource-grid allocation\n",
+    "gridStats = pdsch.grid.getStats()\n",
     "print(\"Grid Allocation Stats:\")\n",
     "for key, value in gridStats.items():\n",
-    "    print(\"  %s: %d\"%(key, value))\n",
+    "    print(f\"  {key+\":\":<10s} {value}\")\n",
     "    \n",
-    "# Draw the map of grid showing the data and DMRS in the first RB of the BWP.\n",
-    "grid.drawMap()"
+    "# Draw a resource-grid map showing the data and DMRS in the first RB of the BWP\n",
+    "pdsch.grid.drawMap();"
    ]
   },
   {
@@ -262,15 +270,17 @@
    "metadata": {},
    "source": [
     "### Channel Simulation and Precoding\n",
-    "The next step in the pipeline is the precoding process. In practice the precoding information is extracted at the UE side (The receiver in this case) from the estimated channel. Since we are demonstrating only downlink communication here, we assume that the precoding matrix is somehow available. \n",
+    "The next step in the pipeline is the precoding process. For this experiment, we assume the channel information is available and derive the precoding matrix from the channel matrix.\n",
     "\n",
-    "To calculate the precoding matrix we first need to define the channel model. Here we use a CDL channel model as specified in 3GPP TR 38.901. The ``CdlChannel`` class is used to create a channel model object. Here we are using a CDL-C model which simulates NLOS communication. We use delay spread of 300 ns and a doppler shift of 5 Hz. We also use a small MIMO configuration with 8 transmit antennas and 2 receive antennas. The ``print`` function of the ``CdlChannel`` class can be used to show all properties of the CDL channel model.\n",
     "\n",
-    "To calculate the precoding matrix, we first get the channel matrix from the ``CdlChannel`` object. The channel matrix is a 4-D complex tensor of size ``l``x``k``x ``Nr``x``Nt``. Where ``l``, ``k``, ``Nr``, and ``Nt`` are the number of time symbols (14), the number of subcarriers (51x12=612), the number of receiver antenna (2), and the number of transmitter antenna (8) respectively. \n",
+    "\n",
+    "Here we use a CDL channel model as specified in 3GPP TR 38.901. The ``CdlChannel`` class is used to create a channel model object. We use a CDL-C model, which simulates NLOS communication. We use a delay spread of 300 ns and a Doppler shift of 5 Hz. We also use a MIMO configuration with 8 transmit antennas and 2 receive antennas. The ``print`` function of the ``CdlChannel`` class can be used to show all properties of the CDL channel model.\n",
+    "\n",
+    "To calculate the precoding matrix, we first get the channel matrix from the ``CdlChannel`` object. The channel matrix is a 4-D complex tensor of size `l × k × Nr × Nt`. Here, `l`, `k`, `Nr`, and `Nt` are the number of OFDM symbols, the number of subcarriers, the number of receive antennas, and the number of transmit antennas, respectively. In this example, these values are 14, 624 (=52×12), 2, and 8.\n",
     "\n",
     "Once we have the channel matrix, the ``getPrecodingMatrix`` method of the ``PDSCH`` class is called to calculate and return the precoding matrix.\n",
     "\n",
-    "To precode the resource grid, we simply call the ``precode`` method of the ``Grid`` class passing in the precoding matrix."
+    "To precode the resource grid, we first create a transmit resource grid. Then, we use the `precodeTo` method of the `PDSCH` class to map the precoded PDSCH data into that grid, passing in both the transmit resource grid and the precoding matrix."
    ]
   },
   {
@@ -283,28 +293,29 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Shape of Channel Matrix:         (14, 612, 2, 8)\n",
-      "Shape of Resource Grid:          (2, 14, 612)\n",
-      "Shape of Precoded Resource Grid: (8, 14, 612)\n"
+      "Shape of channel matrix:         (14, 624, 2, 8)\n",
+      "Shape of resource grid:          (2, 14, 624)\n",
+      "Shape of precoded resource grid: (8, 14, 624)\n"
      ]
     }
    ],
    "source": [
-    "# Creating a CdlChannel object:\n",
-    "f0 = 4e9  # Carrier Frequency\n",
-    "channel = CdlChannel(bwp, 'C', delaySpread=300, carrierFreq=f0, dopplerShift=5,\n",
-    "                     txAntenna = AntennaPanel([2,4], polarization=\"|\"),  # 8 TX antenna\n",
-    "                     rxAntenna = AntennaPanel([1,2], polarization=\"|\"))  # 2 RX antenna\n",
+    "# Create a CdlChannel object\n",
+    "channel = CdlChannel(bwp, 'C', delaySpread=300, carrierFreq=4e9, dopplerShift=5,\n",
+    "                     txAntenna = AntennaPanel([2,4], polarization=\"|\"),  # 8 TX antennas\n",
+    "                     rxAntenna = AntennaPanel([1,2], polarization=\"|\"))  # 2 RX antennas\n",
     "# channel.print()                                       # Uncomment to print all channel information\n",
     "\n",
-    "# Getting the Precoding Matrix, and precoding the resource grid\n",
+    "# Get the precoding matrix and precode the resource grid\n",
     "channelMatrix = channel.getChannelMatrix()              # Get the channel matrix\n",
-    "precoder = pdsch.getPrecodingMatrix(channelMatrix)      # Get the precoder matrix from the PDSCH object\n",
-    "precodedGrid = grid.precode(precoder)                   # Perform the precoding\n",
+    "precoder = pdsch.getPrecodingMatrix(channelMatrix)      # Get the precoding matrix from the PDSCH object\n",
     "\n",
-    "print(\"Shape of Channel Matrix:        \", channelMatrix.shape)\n",
-    "print(\"Shape of Resource Grid:         \", grid.shape)\n",
-    "print(\"Shape of Precoded Resource Grid:\", precodedGrid.shape)\n"
+    "txGrid = bwp.createGrid(len(channel.txAntenna))         # Create the transmit resource grid\n",
+    "pdsch.precodeTo(txGrid, precoder)                       # Perform the precoding\n",
+    "\n",
+    "print(f\"Shape of channel matrix:         {channelMatrix.shape}\")\n",
+    "print(f\"Shape of resource grid:          {pdsch.grid.shape}\")\n",
+    "print(f\"Shape of precoded resource grid: {txGrid.shape}\")"
    ]
   },
   {
@@ -313,7 +324,7 @@
    "metadata": {},
    "source": [
     "### OFDM Modulation\n",
-    "To transmit the precoded resource grid, it must first be transformed into the time domain. The method ``ofdmModulate`` of the ``Grid`` class converts the precoded grid into a set of time-domain waveforms for each transmit antenna. The output of the OFDM modulation is a ``Waveform`` class that contains the time-domain waveforms for each transmit antenna."
+    "To transmit the precoded resource grid, it must first be transformed into the time domain. The method ``ofdmModulate`` of the ``Grid`` class converts the precoded resource grid into a set of time domain waveforms for each transmit antenna. The output of OFDM modulation is a `Waveform` object that contains the time domain waveform for each transmit antenna."
    ]
   },
   {
@@ -331,9 +342,9 @@
     }
    ],
    "source": [
-    "txWaveform = precodedGrid.ofdmModulate()\n",
-    "# txWaveform contains the waveforms in time domain for each transmitter antenna\n",
-    "print(\"Shape of txWaveform:\", txWaveform.shape)"
+    "txWaveform = txGrid.ofdmModulate()\n",
+    "# txWaveform contains the time domain waveform for each transmit antenna\n",
+    "print(f\"Shape of txWaveform: {txWaveform.shape}\")"
    ]
   },
   {
@@ -341,10 +352,13 @@
    "id": "3ba7b40d",
    "metadata": {},
    "source": [
-    "### Applying the channel model to the transmitted waveform\n",
-    "Now we need to pass the transmitted waveform through our CDL channel model. Because channel models typically delay signals, we append zeros to the end of the waveform to ensure the entire signal is captured at the channel output. The number of these zeros depend on the maximum channel delay that can be obtained using the ``getMaxDelay`` method of the ``CdlChannel`` class. The ``pad`` method of the ``Waveform`` class appends zeros to the end of waveform.\n",
+    "### Applying the Channel Model to the Transmitted Waveform\n",
+    "Now we need to pass the transmitted waveform through our CDL channel model. Because channel models typically delay signals, we append zeros to the end of the waveform to ensure the entire signal is captured at the channel output. The number of zeros depends on the maximum channel delay, which can be obtained using the `getMaxDelay` method of the `CdlChannel` class. The `pad` method of the `Waveform` class appends zeros to the end of the waveform.\n",
     "\n",
-    "Now the channel model can be applied to the transmitted waveform to obtain the received waveform. This is exactly what the ``applyToSignal`` method of the ``CdlChannel`` class does. The output is another ``Waveform`` object containing the received waveform for each receiver antenna."
+    "Now the channel model can be applied to the transmitted waveform to obtain the received waveform. This is exactly what the ``applyToSignal`` method of the ``CdlChannel`` class does. The output is another ``Waveform`` object containing the received waveform for each receive antenna.\n",
+    "\n",
+    "\n",
+    "The number of zeros depends on the maximum channel delay, which can be obtained using the `getMaxDelay` method of the `CdlChannel` class."
    ]
   },
   {
@@ -357,20 +371,20 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Max Channel Delay:   87\n",
-      "Shape of rxWaveform: (2, 15447)\n"
+      "Maximum channel delay: 87\n",
+      "Shape of rxWaveform:   (2, 15447)\n"
      ]
     }
    ],
    "source": [
-    "# Need to append zeros to the end of signal based on the maximum channel filter delay\n",
+    "# Append zeros to the end of the signal based on the maximum channel filter delay\n",
     "maxDelay = channel.getMaxDelay()\n",
-    "print(\"Max Channel Delay:  \", maxDelay)\n",
+    "print(f\"Maximum channel delay: {maxDelay}\")\n",
     "txWaveform = txWaveform.pad(maxDelay)\n",
     "\n",
-    "# Applying channel to the transmitted signal\n",
+    "# Apply the channel to the transmitted signal\n",
     "rxWaveform = channel.applyToSignal(txWaveform)\n",
-    "print(\"Shape of rxWaveform:\", rxWaveform.shape)"
+    "print(f\"Shape of rxWaveform:   {rxWaveform.shape}\")"
    ]
   },
   {
@@ -379,9 +393,7 @@
    "metadata": {},
    "source": [
     "### Adding Noise\n",
-    "We can use the ``addNoise`` method of the ``Waveform`` class to add AWGN to the received signal. Since we are adding the noise in the time-domain, we need to provide an instance of ``BandwidthPart`` object to extract FFT information.\n",
-    "\n",
-    "Here, we calculate the noise power using the SNR value and the received signal power by setting ``useRxPower`` to ``True``. Please refer to the [documentation of addNoise](https://interdigitalinc.github.io/NeoRadium/html/source/API/Waveform.html#neoradium.waveform.Waveform.addNoise) for more information about the ``useRxPower`` argument."
+    "We can use the ``addNoise`` method of the ``Waveform`` class to add AWGN to the received signal. Since we are adding noise in the time domain, we need to provide a `BandwidthPart` object so that the required FFT information can be extracted."
    ]
   },
   {
@@ -391,8 +403,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "from neoradium.utils import toLinear\n",
-    "noisyRxWaveform = rxWaveform.addNoise(snrDb=20, bwp=bwp, useRxPower=False)"
+    "noisyRxWaveform = rxWaveform.addNoise(snrDb=20, bwp=bwp)"
    ]
   },
   {
@@ -401,9 +412,11 @@
    "metadata": {},
    "source": [
     "### Synchronization and OFDM Demodulation\n",
-    "Because of multiple path delays involved in the channel model, we need to find the best starting point in the received waveform. This is usually done by finding the position of maximum correlation between the received signal and reference signals. The function ``getTimingOffset`` of the ``CdlChannel`` provides this \"timing offset\" which is the number of samples we need to skip from the beginning of the received waveform.\n",
+    "Because of the multipath delays introduced by the channel model, we need to find the best starting point in the received waveform. This is usually done by finding the position of maximum correlation between the received signal and reference signals. \n",
     "\n",
-    "After synchronization, the waveform can be used for OFDM demodulation to obtain the received resource grid. The class method ``ofdmDemodulate`` creates a ``Grid`` class instance containing the noisy received resource grid."
+    "The `getTimingOffset` method of `CdlChannel` provides this timing offset, which is the number of samples to skip from the beginning of the received waveform.\n",
+    "\n",
+    "After synchronization, the waveform can be used for OFDM demodulation to obtain the received resource grid. The method ``ofdmDemodulate`` creates a ``Grid`` object containing the noisy received resource grid."
    ]
   },
   {
@@ -417,19 +430,19 @@
      "output_type": "stream",
      "text": [
       "Timing Offset:                   13\n",
-      "Shape of received resource grid: (2, 14, 612)\n"
+      "Shape of received resource grid: (2, 14, 624)\n"
      ]
     }
    ],
    "source": [
-    "# Synchronization: Get the timing offset\n",
+    "# Synchronization: get the timing offset\n",
     "offset = channel.getTimingOffset()\n",
     "syncedWaveform = noisyRxWaveform.sync(offset)\n",
-    "print(\"Timing Offset:                  \", offset)\n",
+    "print(f\"Timing Offset:                   {offset}\")\n",
     "\n",
-    "# OFDM Demodulation\n",
+    "# OFDM demodulation\n",
     "noisyRxGrid = syncedWaveform.ofdmDemodulate(bwp)\n",
-    "print(\"Shape of received resource grid:\", noisyRxGrid.shape)"
+    "print(f\"Shape of received resource grid: {noisyRxGrid.shape}\")"
    ]
   },
   {
@@ -437,29 +450,56 @@
    "id": "cd234418",
    "metadata": {},
    "source": [
-    "### Applying channel in Frequency Domain\n",
-    "You can also use a shortcut method of applying the channel model to the transmitted grid directly without going to time domain.\n",
+    "### Applying the Channel in the Frequency Domain\n",
+    "As a shortcut, the channel model can also be applied directly to the transmit resource grid without converting the signal to the time domain.\n",
     "\n",
-    "The method ``applyChannel`` of the ``Grid`` class can be used to apply a channel matrix to a resource grid. For example:\n",
-    "\n",
-    "```\n",
-    "    # Applying the channel matrix to the precoded grid\n",
-    "    rxGrid = precodedGrid.applyChannel(channelMatrix)\n",
-    "```\n",
-    "\n",
-    "### Channel Estimation\n",
-    "The input to the channel estimation process is the received resource grid and the known reference signals (in this case DMRS) and the output is the estimated channel. Note that in this case the estimated channel includes the precoding process. This is because the DMRS reference signals were inserted into the resource grid **before** precoding.\n",
-    "\n",
-    "#### Perfect Channel Estimation\n",
-    "For perfect channel estimation, we need to apply precoding to the channel matrix. This can be done by a simple matrix multiplication as shown in the following cell.\n",
-    "\n",
-    "#### Practical Channel Estimation\n",
-    "The method ``estimateChannelLS`` of the ``Grid`` class can be used to estimate the channel matrix. This method performs CDM averaging, least-squares channel estimation at pilot locations, and applying interpolation to get the whole channel matrix. \n"
+    "The method ``applyChannel`` of the ``Grid`` class can be used to apply a channel matrix to a resource grid."
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 11,
+   "id": "54492e6e-1710-4dc7-a7ee-4bd8db99b2db",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "NMSE between received grids in the time and frequency domains: 0.001305\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Apply the channel model in the frequency domain\n",
+    "rxGridFreq = txGrid.applyChannel(channelMatrix)\n",
+    "\n",
+    "# Add noise in the frequency domain\n",
+    "noisyRxGridFreq = rxGridFreq.addNoise(snrDb=20)\n",
+    "\n",
+    "# Compare the noisy received resource grids in the time and frequency domains.\n",
+    "# Note that the difference is partly because of different noise values.\n",
+    "print(f\"NMSE between received grids in the time and frequency domains: {getNmse(noisyRxGridFreq.grid, noisyRxGrid.grid):.6f}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "929ca612-0201-43d2-9936-e66fd51f3eca",
+   "metadata": {},
+   "source": [
+    "### Channel Estimation\n",
+    "The inputs to the channel estimation process are the received resource grid and the known reference signals. The output is the estimated channel matrix. Note that, in this case, the estimated channel includes the effect of precoding. This is because the DMRS reference signals were inserted into the resource grid **before** precoding.\n",
+    "\n",
+    "#### Perfect Channel Knowledge\n",
+    "For perfect channel estimation, we need to apply precoding to the channel matrix. This can be done using the ``getEffChannel`` method of the channel model object.\n",
+    "\n",
+    "#### Practical Channel Estimation\n",
+    "The method ``estimateChannel`` of the ``PDSCH`` class can be used to estimate the channel matrix. This method performs CDM averaging, least-squares channel estimation at pilot locations, and applying interpolation to get the whole channel matrix. Note that this function also returns `errVar`, which is the variance of the effective residual uncertainty associated with the estimated channel. This value is used in the next step: equalization."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
    "id": "220df01a",
    "metadata": {},
    "outputs": [
@@ -467,18 +507,20 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Shape of estimated channel: (14, 612, 2, 2)\n"
+      "Shape of perfect channel matrix:   (14, 624, 2, 2)\n",
+      "Shape of estimated channel matrix: (14, 624, 2, 2)\n"
      ]
     }
    ],
    "source": [
-    "# Perfect channel estimation (Applying the precoding to the channel matrix)\n",
-    "# estChannelMatrix = channel.getEffChannel(channelMatrix, precoder)\n",
-    " \n",
-    "# Least-squares channel estimation\n",
-    "estChannelMatrix, _ = noisyRxGrid.estimateChannelLS(pdsch.dmrs, polarInt=True, kernel='linear')\n",
+    "# Perfect channel estimation: apply precoding to the channel matrix\n",
+    "perfectChannelMatrix = channel.getEffChannel(channelMatrix, precoder)\n",
     "\n",
-    "print(\"Shape of estimated channel:\", estChannelMatrix.shape)"
+    "# Least-squares channel estimation\n",
+    "estChannelMatrix, errVar = pdsch.estimateChannel(noisyRxGrid)\n",
+    "\n",
+    "print(f\"Shape of perfect channel matrix:   {perfectChannelMatrix.shape}\") \n",
+    "print(f\"Shape of estimated channel matrix: {estChannelMatrix.shape}\")"
    ]
   },
   {
@@ -487,14 +529,16 @@
    "metadata": {},
    "source": [
     "### Equalization\n",
-    "Now that we have an estimate of the channel matrix, we can use it for equalization. The method ``equalize`` of the ``Grid`` class uses the Minimum mean-squared error (MMSE) equalization algorithm to mitigate the effects of the channel in the received resource grid.\n",
+    "Now that we have an estimate of the channel matrix, we can use it for equalization. The `equalize` method of the `PDSCH` class uses minimum mean-squared error (MMSE) equalization to mitigate the effects of the channel on the received resource grid.\n",
     "\n",
-    "It outputs a ``Grid`` object containing the equalized received resource grid and the LLR scaling values which is used later to scale the log-likelihood ratios from the demodulation process.\n"
+    "It outputs a `Grid` object containing the equalized received resource grid, along with LLR scaling values that are used later to scale the log-likelihood ratios from the demodulation process.\n",
+    "\n",
+    "In the following cell we use both our perfect channel matrix and the estimated channel matrix to equalize the received resource grid and compare the results."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 12,
+   "execution_count": 13,
    "id": "6f4600d1",
    "metadata": {},
    "outputs": [
@@ -502,15 +546,24 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Shape of equalized grid: (2, 14, 612)\n",
-      "Shape of LLR Scales:     (2, 14, 612)\n"
+      "Shape of equalized grid (perfect):                   (2, 14, 624)\n",
+      "Shape of equalized grid (estimated):                 (2, 14, 624)\n",
+      "NMSE between equalized grids (perfect vs estimated): 0.012428\n",
+      "Shape of LLR Scales:                                 (2, 14, 624)\n"
      ]
     }
    ],
    "source": [
-    "eqGrid, llrScales = noisyRxGrid.equalize(estChannelMatrix)\n",
-    "print(\"Shape of equalized grid:\", eqGrid.shape)\n",
-    "print(\"Shape of LLR Scales:    \", llrScales.shape)"
+    "# Using the perfect channel matrix\n",
+    "eqGridPerf, llrScales = pdsch.equalize(noisyRxGrid, perfectChannelMatrix)\n",
+    "print(f\"Shape of equalized grid (perfect):                   {eqGridPerf.shape}\")\n",
+    "\n",
+    "# Using the estimated channel matrix\n",
+    "eqGridEst, llrScalesEst = pdsch.equalize(noisyRxGrid, estChannelMatrix, errVar)\n",
+    "print(f\"Shape of equalized grid (estimated):                 {eqGridEst.shape}\")\n",
+    "\n",
+    "print(f\"NMSE between equalized grids (perfect vs estimated): {getNmse(eqGridPerf.grid, eqGridEst.grid):.6f}\")\n",
+    "print(f\"Shape of LLR Scales:                                 {llrScales.shape}\")"
    ]
   },
   {
@@ -518,13 +571,13 @@
    "id": "88a80e54",
    "metadata": {},
    "source": [
-    "### Demodulation, De-mapping, Descrambling\n",
-    "The method ``getLLRsFromGrid`` of the ``PDSCH`` object performs demodulation, de-mapping, and descrambling of the received grid in one call. The output of this process is a set of log-likelihood ratios (LLRs) extracted from the received resource grid for the each codeword. Note that in this example there is only one codeword."
+    "### Demodulation, Layer Demapping, and Descrambling\n",
+    "The method ``getLLRs`` of the ``PDSCH`` class performs demodulation, de-mapping, and descrambling of the received grid in one call. The output of this process is a set of log-likelihood ratios (LLRs) extracted from the received resource grid for each codeword. Note that in this example there is only one codeword."
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 13,
+   "execution_count": 14,
    "id": "0b7e7530",
    "metadata": {},
    "outputs": [
@@ -532,13 +585,13 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Length of LLRs for the first codeword: 63648\n"
+      "Length of LLRs for the first codeword: 64896\n"
      ]
     }
    ],
    "source": [
-    "llrs = pdsch.getLLRsFromGrid(eqGrid, pdschIndexes, llrScales)\n",
-    "print(\"Length of LLRs for the first codeword:\", llrs[0].shape[0])"
+    "llrs = pdsch.getLLRs(eqGridPerf, llrScales)\n",
+    "print(f\"Length of LLRs for the first codeword: {llrs[0].shape[0]}\")"
    ]
   },
   {
@@ -546,17 +599,14 @@
    "id": "30b4299a",
    "metadata": {},
    "source": [
-    "### Rate Recovery and LDPC decoding\n",
-    "We are close to the end of the pipeline. We just need to decode the LLRs to the actual transport blocks. To do this, we need an LDPC decoder object. The method ``getDecoder`` of the ``LdpcEncoder`` class conveniently creates a  decoder object matching the parameters of the encoder.\n",
-    "\n",
-    "The function ``recoverRate`` of the LDPC decoder object can then be used to recover the rate of LDPC code blocks based on the transport block size. This is based on the procedure specified in 3GPP TS 38.212.\n",
-    "\n",
-    "The rate-recovered coded blocks are then ready to be LDPC-decoded using the ``decode`` method of the ``LdpcDecoder`` class (Each coded block is decoded separately). The output is a set of the decoded blocks.\n"
+    "### Rate Recovery and LDPC Decoding\n",
+    "We are close to the end of the pipeline. We now need to decode the LLRs to recover the original transport blocks. To do this, we use the ``decode`` method of the ``LdpcCodec`` class. This method performs rate recovery, decodes the code blocks, checks the CRCs, and merges the decoded code blocks back into a single transport block for each codeword. The output of this method for each codeword is the decoded transport block as well as an array of CRC match flags. The first flag indicates whether the CRC matches for the whole transport block, and the remaining flags indicate whether the CRC matches for each code block.\n",
+    "\n"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 14,
+   "execution_count": 15,
    "id": "392219a7",
    "metadata": {},
    "outputs": [
@@ -564,59 +614,17 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Shape of rxCodedBlocks:  (4, 23232)\n",
-      "Shape of Decoded Blocks: (4, 7744)\n"
+      "Shape of decoded transport block: (31240,)\n",
+      "Transport block CRC match:        True\n",
+      "CRC match for each decoded block: [ True  True  True  True]\n"
      ]
     }
    ],
    "source": [
-    "# Create an LDPC Decoder object using the same parameters used to create the encoder. \n",
-    "ldpcDecoder = ldpcEncoder.getDecoder()\n",
-    "\n",
-    "# Do rate recovery (Note: We have only one codeword in this example)\n",
-    "rxCodedBlocks = ldpcDecoder.recoverRate(llrs[0], txBlockSize[0])\n",
-    "print(\"Shape of rxCodedBlocks: \", rxCodedBlocks.shape)\n",
-    "\n",
-    "# LDPC-Decoding\n",
-    "decodedBlocks = ldpcDecoder.decode(rxCodedBlocks, numIter=20)\n",
-    "print(\"Shape of Decoded Blocks:\", decodedBlocks.shape)\n",
-    "\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "56d5bece",
-   "metadata": {},
-   "source": [
-    "### CRC checking and De-segmentation\n",
-    "The CRC of each decoded block must be checked and then the decoded blocks need to be merged (de-segmented) to provide the transport blocks. The method ``checkCrcAndMerge`` of the ``LdpcDecoder`` class does exactly this. The output of this method is a decoded transport block which also contains a transport block CRC appended at the end.\n",
-    "\n",
-    "The ``checkCrc`` method of the ``LdpcDecoder`` class can be used to check the transport block CRC."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 15,
-   "id": "6d11d60f",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Shape of decoded transport block: (30240,)\n",
-      "CRC Match for each decoded block: [ True  True  True  True]\n",
-      "Transport block CRC Match:        True\n"
-     ]
-    }
-   ],
-   "source": [
-    "decodedTxBlockWithCRC, crcMatch = ldpcDecoder.checkCrcAndMerge(decodedBlocks)\n",
-    "print(\"Shape of decoded transport block:\", decodedTxBlockWithCRC.shape)\n",
-    "print(\"CRC Match for each decoded block:\", crcMatch)\n",
-    "\n",
-    "txBlockCrcMatch = ldpcDecoder.checkCrc(decodedTxBlockWithCRC,'24A')\n",
-    "print(\"Transport block CRC Match:       \", txBlockCrcMatch)\n"
+    "decodedTxBlocks, crcMatch = ldpc.decode(llrs)\n",
+    "print(f\"Shape of decoded transport block: {decodedTxBlocks[0].shape}\")  # decodedTxBlocks[0] -> first codeword\n",
+    "print(f\"Transport block CRC match:        {crcMatch[0][0]}\")            # crcMatch[0] -> CRC match flags for the first codeword\n",
+    "print(f\"CRC match for each decoded block: {crcMatch[0][1:]}\")"
    ]
   },
   {
@@ -624,8 +632,8 @@
    "id": "5aae1774",
    "metadata": {},
    "source": [
-    "### Comparing the decoded transport block with the original\n",
-    "We can get the decoded transport block by removing the 24-bit CRC at the end. Then, we can compare the results with the original transport block that was randomly generated at the beginning of this pipeline."
+    "### Comparing the Decoded Transport Block with the Original\n",
+    "Now we can compare the results with the original transport block that was randomly generated at the beginning of this pipeline."
    ]
   },
   {
@@ -638,22 +646,14 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "The number of bit mismatches between the decoded transport block and original: 0\n"
+      "Number of bit mismatches between the decoded and original transport blocks: 0\n"
      ]
     }
    ],
    "source": [
-    "decodedTxBlock = decodedTxBlockWithCRC[:-24]  # remove the transport block CRC\n",
-    "print(\"The number of bit mismatches between the decoded transport block and original:\",np.abs(decodedTxBlock-txBlock).sum())\n"
+    "print(f\"Number of bit mismatches between the decoded and original transport blocks: \"\n",
+    "      f\"{np.abs(decodedTxBlocks[0]-txBlock).sum()}\")\n"
    ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "78d4d52a",
-   "metadata": {},
-   "outputs": [],
-   "source": []
   },
   {
    "cell_type": "code",

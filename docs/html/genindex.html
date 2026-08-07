@@ -5,17 +5,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; NeoRadium 0.4.1 Documentation</title>
+  <title>Index &mdash; NeoRadium 0.5.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=c87aa342"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
@@ -31,7 +31,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            NeoRadium 0.4.1
+            NeoRadium 0.5.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -47,6 +47,7 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="source/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/MigrationGuide.html">Migration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/Playground/Playground.html">Playground</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
@@ -56,6 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="source/API/Waveform.html">Waveform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/Modulation.html">Modulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/API/CsiReport.html">CSI Reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/ChanCode.html">Channel Coding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/Harq.html">HARQ</a></li>
@@ -64,6 +66,7 @@
 <li class="toctree-l1"><a class="reference internal" href="source/API/Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="source/API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/API/Utilities.html">Other Utilitiy Functions</a></li>
 </ul>
 
         </div>
@@ -72,7 +75,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">NeoRadium 0.4.1</a>
+          <a href="index.html">NeoRadium 0.5.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -109,6 +112,7 @@
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#W"><strong>W</strong></a>
  
 </div>
@@ -129,6 +133,8 @@
         <li><a href="source/API/Waveform.html#neoradium.waveform.Waveform.addNoise">(neoradium.waveform.Waveform method)</a>
 </li>
       </ul></li>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.OLLA.adjustCqi">adjustCqi() (neoradium.csireport.OLLA method)</a>
+</li>
       <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaArray.allElements">allElements() (neoradium.antenna.AntennaArray method)</a>
 
       <ul>
@@ -172,6 +178,12 @@
       <li><a href="source/API/Carrier.html#neoradium.carrier.BandwidthPart">BandwidthPart (class in neoradium.carrier)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/API/RefSig.html#neoradium.csirs.CsiRsConfig.beamformingConfig">beamformingConfig() (neoradium.csirs.CsiRsConfig class method)</a>
+</li>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.CsiReportMan.beamformingReports">beamformingReports() (neoradium.csireport.CsiReportMan class method)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="C">C</h2>
@@ -183,12 +195,18 @@
 </li>
       <li><a href="source/API/ChanCode.html#neoradium.chancodebase.ChanCodeBase">ChanCodeBase (class in neoradium.chancodebase)</a>
 </li>
+      <li><a href="source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.channelForPoints">channelForPoints() (neoradium.deepmimo.DeepMimoData method)</a>
+</li>
       <li><a href="source/API/Channels.html#neoradium.channelmodel.ChannelModel">ChannelModel (class in neoradium.channelmodel)</a>
 </li>
       <li><a href="source/API/ChanCode.html#neoradium.chancodebase.ChanCodeBase.checkCrc">checkCrc() (neoradium.chancodebase.ChanCodeBase class method)</a>
 </li>
       <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcDecoder.checkCrcAndMerge">checkCrcAndMerge() (neoradium.ldpc.LdpcDecoder method)</a>
+
+      <ul>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodecCW.checkCrcAndMerge">(neoradium.ldpccodec.LdpcCodecCW method)</a>
 </li>
+      </ul></li>
       <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaElement.clone">clone() (neoradium.antenna.AntennaElement method)</a>
 
       <ul>
@@ -205,6 +223,10 @@
         <li><a href="source/API/Carrier.html#neoradium.carrier.Carrier.createGrid">(neoradium.carrier.Carrier method)</a>
 </li>
       </ul></li>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.CsiReport">CsiReport (class in neoradium.csireport)</a>
+</li>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.CsiReportMan">CsiReportMan (class in neoradium.csireport)</a>
+</li>
       <li><a href="source/API/RefSig.html#neoradium.csirs.CsiRs">CsiRs (class in neoradium.csirs)</a>
 </li>
       <li><a href="source/API/RefSig.html#neoradium.csirs.CsiRsConfig">CsiRsConfig (class in neoradium.csirs)</a>
@@ -217,12 +239,22 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcDecoder.decode">decode() (neoradium.ldpc.LdpcDecoder method)</a>
+      <li><a href="source/API/Harq.html#neoradium.harq.HarqEntity.decode">decode() (neoradium.harq.HarqEntity method)</a>
 
       <ul>
+        <li><a href="source/API/Harq.html#neoradium.harq.HarqProcess.decode">(neoradium.harq.HarqProcess method)</a>
+</li>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcDecoder.decode">(neoradium.ldpc.LdpcDecoder method)</a>
+</li>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodec.decode">(neoradium.ldpccodec.LdpcCodec method)</a>
+</li>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodecCW.decode">(neoradium.ldpccodec.LdpcCodecCW method)</a>
+</li>
         <li><a href="source/API/ChanCode.html#neoradium.polar.PolarDecoder.decode">(neoradium.polar.PolarDecoder method)</a>
 </li>
       </ul></li>
+      <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodecCW.decodeCodeBlocks">decodeCodeBlocks() (neoradium.ldpccodec.LdpcCodecCW method)</a>
+</li>
       <li><a href="source/API/Harq.html#neoradium.harq.HarqEntity.decodeLLRs">decodeLLRs() (neoradium.harq.HarqEntity method)</a>
 
       <ul>
@@ -231,19 +263,25 @@
       </ul></li>
       <li><a href="source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData">DeepMimoData (class in neoradium.deepmimo)</a>
 </li>
-      <li><a href="source/API/Modulation.html#neoradium.modulation.Modem.demodulate">demodulate() (neoradium.modulation.Modem method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/API/Modulation.html#neoradium.modulation.Modem.demodulate">demodulate() (neoradium.modulation.Modem method)</a>
+</li>
       <li><a href="source/API/RefSig.html#neoradium.dmrs.DMRS">DMRS (class in neoradium.dmrs)</a>
 </li>
       <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcEncoder.doSegmentation">doSegmentation() (neoradium.ldpc.LdpcEncoder method)</a>
 
       <ul>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodecCW.doSegmentation">(neoradium.ldpccodec.LdpcCodecCW method)</a>
+</li>
         <li><a href="source/API/ChanCode.html#neoradium.polar.PolarEncoder.doSegmentation">(neoradium.polar.PolarEncoder method)</a>
 </li>
       </ul></li>
       <li><a href="source/API/Channels.html#neoradium.trjchan.Trajectory.draw">draw() (neoradium.trjchan.Trajectory method)</a>
+</li>
+      <li><a href="source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.drawBeamArrow">drawBeamArrow() (neoradium.deepmimo.DeepMimoData method)</a>
+</li>
+      <li><a href="source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.drawBsPanel">drawBsPanel() (neoradium.deepmimo.DeepMimoData method)</a>
 </li>
       <li><a href="source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.drawMap">drawMap() (neoradium.deepmimo.DeepMimoData method)</a>
 
@@ -259,15 +297,31 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcEncoder.encode">encode() (neoradium.ldpc.LdpcEncoder method)</a>
+      <li><a href="source/API/Harq.html#neoradium.harq.HarqEntity.encode">encode() (neoradium.harq.HarqEntity method)</a>
 
       <ul>
+        <li><a href="source/API/Harq.html#neoradium.harq.HarqProcess.encode">(neoradium.harq.HarqProcess method)</a>
+</li>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcEncoder.encode">(neoradium.ldpc.LdpcEncoder method)</a>
+</li>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodec.encode">(neoradium.ldpccodec.LdpcCodec method)</a>
+</li>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodecCW.encode">(neoradium.ldpccodec.LdpcCodecCW method)</a>
+</li>
         <li><a href="source/API/ChanCode.html#neoradium.polar.PolarEncoder.encode">(neoradium.polar.PolarEncoder method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodecCW.encodeCodeBlocks">encodeCodeBlocks() (neoradium.ldpccodec.LdpcCodecCW method)</a>
+</li>
       <li><a href="source/API/Grid.html#neoradium.grid.Grid.equalize">equalize() (neoradium.grid.Grid method)</a>
+
+      <ul>
+        <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.equalize">(neoradium.pdsch.PDSCH method)</a>
+</li>
+      </ul></li>
+      <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.estimateChannel">estimateChannel() (neoradium.pdsch.PDSCH method)</a>
 </li>
       <li><a href="source/API/Grid.html#neoradium.grid.Grid.estimateChannelLS">estimateChannelLS() (neoradium.grid.Grid method)</a>
 </li>
@@ -285,7 +339,17 @@
         <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaPanel.getAllPositions">(neoradium.antenna.AntennaPanel method)</a>
 </li>
       </ul></li>
+      <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcBase.getBaseGraphNo">getBaseGraphNo() (neoradium.ldpc.LdpcBase class method)</a>
+
+      <ul>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodec.getBaseGraphNo">(neoradium.ldpccodec.LdpcCodec class method)</a>
+</li>
+      </ul></li>
+      <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getBitCapacity">getBitCapacity() (neoradium.pdsch.PDSCH method)</a>
+</li>
       <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getBitSizes">getBitSizes() (neoradium.pdsch.PDSCH method)</a>
+</li>
+      <li><a href="source/API/RefSig.html#neoradium.csirs.CsiRsConfig.getById">getById() (neoradium.csirs.CsiRsConfig method)</a>
 </li>
       <li><a href="source/API/Channels.html#neoradium.cdl.CdlChannel.getChanGen">getChanGen() (neoradium.cdl.CdlChannel class method)</a>
 
@@ -329,6 +393,8 @@
       </ul></li>
       <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaBase.getElementsFields">getElementsFields() (neoradium.antenna.AntennaBase method)</a>
 </li>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.CsiReportMan.getFeedback">getFeedback() (neoradium.csireport.CsiReportMan method)</a>
+</li>
       <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaBase.getField">getField() (neoradium.antenna.AntennaBase method)</a>
 
       <ul>
@@ -341,22 +407,32 @@
 </li>
       <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getGrid">getGrid() (neoradium.pdsch.PDSCH method)</a>
 </li>
+      <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getHardBits">getHardBits() (neoradium.pdsch.PDSCH method)</a>
+</li>
       <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getHardBitsFromGrid">getHardBitsFromGrid() (neoradium.pdsch.PDSCH method)</a>
 </li>
+      <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getHarq">getHarq() (neoradium.pdsch.PDSCH method)</a>
+</li>
+      <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getLdpcCodec">getLdpcCodec() (neoradium.pdsch.PDSCH method)</a>
+</li>
+      <li><a href="source/API/Modulation.html#neoradium.modulation.Modem.getLLRs">getLLRs() (neoradium.modulation.Modem method)</a>
+
+      <ul>
+        <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getLLRs">(neoradium.pdsch.PDSCH method)</a>
+</li>
+      </ul></li>
       <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getLLRsFromGrid">getLLRsFromGrid() (neoradium.pdsch.PDSCH method)</a>
 </li>
       <li><a href="source/API/Modulation.html#neoradium.modulation.Modem.getLLRsFromSymbols">getLLRsFromSymbols() (neoradium.modulation.Modem method)</a>
 </li>
-      <li><a href="source/API/Channels.html#neoradium.channelmodel.ChannelModel.getMaxDelay">getMaxDelay() (neoradium.channelmodel.ChannelModel method)</a>
-</li>
-      <li><a href="source/API/Grid.html#neoradium.grid.Grid.getNoiseStd">getNoiseStd() (neoradium.grid.Grid method)</a>
-
-      <ul>
-        <li><a href="source/API/Waveform.html#neoradium.waveform.Waveform.getNoiseStd">(neoradium.waveform.Waveform method)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/API/Channels.html#neoradium.channelmodel.ChannelModel.getMaxDelay">getMaxDelay() (neoradium.channelmodel.ChannelModel method)</a>
+</li>
+      <li><a href="source/API/Utilities.html#neoradium.utils.getMse">getMse() (in module neoradium.utils)</a>
+</li>
+      <li><a href="source/API/Utilities.html#neoradium.utils.getNmse">getNmse() (in module neoradium.utils)</a>
+</li>
       <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaArray.getNumElements">getNumElements() (neoradium.antenna.AntennaArray method)</a>
 
       <ul>
@@ -387,6 +463,8 @@
       </ul></li>
       <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getPrecodingMatrix">getPrecodingMatrix() (neoradium.pdsch.PDSCH method)</a>
 </li>
+      <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaBase.getProbingBeams">getProbingBeams() (neoradium.antenna.AntennaBase method)</a>
+</li>
       <li><a href="source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getRandomTrajectory">getRandomTrajectory() (neoradium.deepmimo.DeepMimoData method)</a>
 </li>
       <li><a href="source/API/Harq.html#neoradium.harq.HarqEntity.getRateMatchedCodeBlocks">getRateMatchedCodeBlocks() (neoradium.harq.HarqEntity method)</a>
@@ -403,9 +481,11 @@
         <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getReIndexes">(neoradium.pdsch.PDSCH method)</a>
 </li>
       </ul></li>
+      <li><a href="source/API/RefSig.html#neoradium.csirs.CsiRsConfig.getResources">getResources() (neoradium.csirs.CsiRsConfig method)</a>
+</li>
       <li><a href="source/API/Grid.html#neoradium.grid.Grid.getReValues">getReValues() (neoradium.grid.Grid method)</a>
 </li>
-      <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaBase.getRotationMatrix">getRotationMatrix() (neoradium.antenna.AntennaBase method)</a>
+      <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaBase.getRotationMatrix">getRotationMatrix() (neoradium.antenna.AntennaBase class method)</a>
 </li>
       <li><a href="source/API/Carrier.html#neoradium.carrier.BandwidthPart.getSlotLen">getSlotLen() (neoradium.carrier.BandwidthPart method)</a>
 </li>
@@ -415,9 +495,13 @@
 </li>
       <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaBase.getSteeringVector">getSteeringVector() (neoradium.antenna.AntennaBase method)</a>
 </li>
+      <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaBase.getSweepingBeams">getSweepingBeams() (neoradium.antenna.AntennaBase method)</a>
+</li>
       <li><a href="source/API/Carrier.html#neoradium.carrier.BandwidthPart.getSymLens">getSymLens() (neoradium.carrier.BandwidthPart method)</a>
 </li>
       <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.getTxBlockSize">getTxBlockSize() (neoradium.pdsch.PDSCH method)</a>
+</li>
+      <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaBase.global2Local">global2Local() (neoradium.antenna.AntennaBase class method)</a>
 </li>
       <li><a href="source/API/Carrier.html#neoradium.carrier.Carrier.goNext">goNext() (neoradium.carrier.Carrier method)</a>
 
@@ -441,11 +525,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/API/Harq.html#neoradium.harq.HarqCW">HarqCW (class in neoradium.harq)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/API/Harq.html#neoradium.harq.HarqEntity">HarqEntity (class in neoradium.harq)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/API/Harq.html#neoradium.harq.HarqProcess">HarqProcess (class in neoradium.harq)</a>
+</li>
+      <li><a href="source/API/Utilities.html#neoradium.utils.herm">herm() (in module neoradium.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -453,12 +539,20 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.initGrid">initGrid() (neoradium.pdsch.PDSCH method)</a>
+</li>
       <li><a href="source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.interactiveTrajPoints">interactiveTrajPoints() (neoradium.deepmimo.DeepMimoData method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcBase.isValidCodedBlock">isValidCodedBlock() (neoradium.ldpc.LdpcBase method)</a>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.CsiReport.isActive">isActive (neoradium.csireport.CsiReport property)</a>
 </li>
+      <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcBase.isValidCodedBlock">isValidCodedBlock() (neoradium.ldpc.LdpcBase method)</a>
+
+      <ul>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodecCW.isValidCodedBlock">(neoradium.ldpccodec.LdpcCodecCW method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -467,11 +561,17 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcBase">LdpcBase (class in neoradium.ldpc)</a>
 </li>
+      <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodec">LdpcCodec (class in neoradium.ldpccodec)</a>
+</li>
+      <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodecCW">LdpcCodecCW (class in neoradium.ldpccodec)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcDecoder">LdpcDecoder (class in neoradium.ldpc)</a>
 </li>
       <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcEncoder">LdpcEncoder (class in neoradium.ldpc)</a>
+</li>
+      <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaBase.local2Global">local2Global() (neoradium.antenna.AntennaBase class method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -479,6 +579,10 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.CsiReportMan.makeTypicalReports">makeTypicalReports() (neoradium.csireport.CsiReportMan class method)</a>
+</li>
+      <li><a href="source/API/RefSig.html#neoradium.csirs.CsiRsConfig.makeTypicalResources">makeTypicalResources() (neoradium.csirs.CsiRsConfig class method)</a>
+</li>
       <li><a href="source/API/Modulation.html#neoradium.modulation.Modem">Modem (class in neoradium.modulation)</a>
 </li>
       <li><a href="source/API/Modulation.html#neoradium.modulation.Modem.modulate">modulate() (neoradium.modulation.Modem method)</a>
@@ -497,6 +601,8 @@
 </li>
         <li><a href="source/API/Channels.html#module-neoradium.channelmodel">neoradium.channelmodel</a>
 </li>
+        <li><a href="source/API/CsiReport.html#module-neoradium.csireport">neoradium.csireport</a>
+</li>
         <li><a href="source/API/RefSig.html#module-neoradium.csirs">neoradium.csirs</a>
 </li>
         <li><a href="source/API/DeepMIMO.html#module-neoradium.deepmimo">neoradium.deepmimo</a>
@@ -508,6 +614,8 @@
         <li><a href="source/API/Harq.html#module-neoradium.harq">neoradium.harq</a>
 </li>
         <li><a href="source/API/ChanCode.html#module-neoradium.ldpc">neoradium.ldpc</a>
+</li>
+        <li><a href="source/API/ChanCode.html#module-neoradium.ldpccodec">neoradium.ldpccodec</a>
 </li>
         <li><a href="source/API/Modulation.html#module-neoradium.modulation">neoradium.modulation</a>
 </li>
@@ -522,6 +630,8 @@
         <li><a href="source/API/Channels.html#module-neoradium.tdl">neoradium.tdl</a>
 </li>
         <li><a href="source/API/Channels.html#module-neoradium.trjchan">neoradium.trjchan</a>
+</li>
+        <li><a href="source/API/Utilities.html#module-neoradium.utils">neoradium.utils</a>
 </li>
         <li><a href="source/API/Waveform.html#module-neoradium.waveform">neoradium.waveform</a>
 </li>
@@ -568,6 +678,13 @@
 </li>
       </ul></li>
       <li>
+    neoradium.csireport
+
+      <ul>
+        <li><a href="source/API/CsiReport.html#module-neoradium.csireport">module</a>
+</li>
+      </ul></li>
+      <li>
     neoradium.csirs
 
       <ul>
@@ -609,6 +726,13 @@
 
       <ul>
         <li><a href="source/API/ChanCode.html#module-neoradium.ldpc">module</a>
+</li>
+      </ul></li>
+      <li>
+    neoradium.ldpccodec
+
+      <ul>
+        <li><a href="source/API/ChanCode.html#module-neoradium.ldpccodec">module</a>
 </li>
       </ul></li>
       <li>
@@ -661,6 +785,13 @@
 </li>
       </ul></li>
       <li>
+    neoradium.utils
+
+      <ul>
+        <li><a href="source/API/Utilities.html#module-neoradium.utils">module</a>
+</li>
+      </ul></li>
+      <li>
     neoradium.waveform
 
       <ul>
@@ -678,6 +809,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/API/Grid.html#neoradium.grid.Grid.ofdmModulate">ofdmModulate() (neoradium.grid.Grid method)</a>
+</li>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.OLLA">OLLA (class in neoradium.csireport)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -709,6 +842,8 @@
 </li>
       <li><a href="source/API/Grid.html#neoradium.grid.Grid.precode">precode() (neoradium.grid.Grid method)</a>
 </li>
+      <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.precodeTo">precodeTo() (neoradium.pdsch.PDSCH method)</a>
+</li>
       <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaArray.print">print() (neoradium.antenna.AntennaArray method)</a>
 
       <ul>
@@ -723,6 +858,10 @@
         <li><a href="source/API/Channels.html#neoradium.cdl.CdlChannel.print">(neoradium.cdl.CdlChannel method)</a>
 </li>
         <li><a href="source/API/Channels.html#neoradium.channelmodel.ChannelModel.print">(neoradium.channelmodel.ChannelModel method)</a>
+</li>
+        <li><a href="source/API/CsiReport.html#neoradium.csireport.CsiReport.print">(neoradium.csireport.CsiReport method)</a>
+</li>
+        <li><a href="source/API/CsiReport.html#neoradium.csireport.CsiReportMan.print">(neoradium.csireport.CsiReportMan method)</a>
 </li>
         <li><a href="source/API/RefSig.html#neoradium.csirs.CsiRs.print">(neoradium.csirs.CsiRs method)</a>
 </li>
@@ -745,6 +884,8 @@
         <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcDecoder.print">(neoradium.ldpc.LdpcDecoder method)</a>
 </li>
         <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcEncoder.print">(neoradium.ldpc.LdpcEncoder method)</a>
+</li>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodec.print">(neoradium.ldpccodec.LdpcCodec method)</a>
 </li>
         <li><a href="source/API/Modulation.html#neoradium.modulation.Modem.print">(neoradium.modulation.Modem method)</a>
 </li>
@@ -771,6 +912,8 @@
 </li>
       <li><a href="source/API/Harq.html#neoradium.harq.HarqEntity.printStats">printStats() (neoradium.harq.HarqEntity method)</a>
 </li>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.CsiReportMan.processRxGrid">processRxGrid() (neoradium.csireport.CsiReportMan method)</a>
+</li>
       <li><a href="source/API/RefSig.html#neoradium.dmrs.PTRS">PTRS (class in neoradium.dmrs)</a>
 </li>
   </ul></td>
@@ -784,28 +927,40 @@
       <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcEncoder.rateMatch">rateMatch() (neoradium.ldpc.LdpcEncoder method)</a>
 
       <ul>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodecCW.rateMatch">(neoradium.ldpccodec.LdpcCodecCW method)</a>
+</li>
         <li><a href="source/API/ChanCode.html#neoradium.polar.PolarEncoder.rateMatch">(neoradium.polar.PolarEncoder method)</a>
 </li>
       </ul></li>
       <li><a href="source/API/ChanCode.html#neoradium.ldpc.LdpcDecoder.recoverRate">recoverRate() (neoradium.ldpc.LdpcDecoder method)</a>
 
       <ul>
+        <li><a href="source/API/ChanCode.html#neoradium.ldpccodec.LdpcCodecCW.recoverRate">(neoradium.ldpccodec.LdpcCodecCW method)</a>
+</li>
         <li><a href="source/API/ChanCode.html#neoradium.polar.PolarDecoder.recoverRate">(neoradium.polar.PolarDecoder method)</a>
 </li>
       </ul></li>
-      <li><a href="source/API/Harq.html#neoradium.harq.HarqEntity.reset">reset() (neoradium.harq.HarqEntity method)</a>
+      <li><a href="source/API/Carrier.html#neoradium.carrier.ReservedPrbSet">ReservedPrbSet (class in neoradium.carrier)</a>
+</li>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.OLLA.reset">reset() (neoradium.csireport.OLLA method)</a>
 
       <ul>
+        <li><a href="source/API/Harq.html#neoradium.harq.HarqEntity.reset">(neoradium.harq.HarqEntity method)</a>
+</li>
         <li><a href="source/API/Harq.html#neoradium.harq.HarqProcess.reset">(neoradium.harq.HarqProcess method)</a>
+</li>
+        <li><a href="source/API/Random.html#neoradium.random.RanGen.reset">(neoradium.random.RanGen method)</a>
 </li>
         <li><a href="source/API/SnrHelper.html#neoradium.snrhelper.SnrScheduler.reset">(neoradium.snrhelper.SnrScheduler method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/API/Channels.html#neoradium.cdl.CdlChannel.restart">restart() (neoradium.cdl.CdlChannel method)</a>
+      <li><a href="source/API/Carrier.html#neoradium.carrier.Carrier.restart">restart() (neoradium.carrier.Carrier method)</a>
 
       <ul>
+        <li><a href="source/API/Channels.html#neoradium.cdl.CdlChannel.restart">(neoradium.cdl.CdlChannel method)</a>
+</li>
         <li><a href="source/API/Channels.html#neoradium.channelmodel.ChannelModel.restart">(neoradium.channelmodel.ChannelModel method)</a>
 </li>
         <li><a href="source/API/Channels.html#neoradium.tdl.TdlChannel.restart">(neoradium.tdl.TdlChannel method)</a>
@@ -815,6 +970,8 @@
         <li><a href="source/API/Channels.html#neoradium.trjchan.TrjChannel.restart">(neoradium.trjchan.TrjChannel method)</a>
 </li>
       </ul></li>
+      <li><a href="source/API/Grid.html#neoradium.grid.Grid.reTypeAndObjIdAt">reTypeAndObjIdAt() (neoradium.grid.Grid method)</a>
+</li>
       <li><a href="source/API/Grid.html#neoradium.grid.Grid.reTypeAt">reTypeAt() (neoradium.grid.Grid method)</a>
 </li>
   </ul></td>
@@ -829,16 +986,22 @@
 </li>
       <li><a href="source/API/ChanCode.html#neoradium.polar.PolarBase.setIoSizes">setIoSizes() (neoradium.polar.PolarBase method)</a>
 </li>
+      <li><a href="source/API/Harq.html#neoradium.harq.HarqEntity.setLA">setLA() (neoradium.harq.HarqEntity method)</a>
+</li>
+      <li><a href="source/API/Harq.html#neoradium.harq.HarqEntity.setLdpc">setLdpc() (neoradium.harq.HarqEntity method)</a>
+</li>
+      <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.setPdschData">setPdschData() (neoradium.pdsch.PDSCH method)</a>
+</li>
       <li><a href="source/API/RefSig.html#neoradium.dmrs.DMRS.setPTRS">setPTRS() (neoradium.dmrs.DMRS method)</a>
 
       <ul>
         <li><a href="source/API/PhyChannels.html#neoradium.pdsch.PDSCH.setPTRS">(neoradium.pdsch.PDSCH method)</a>
 </li>
       </ul></li>
-      <li><a href="source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.setScenariosPath">setScenariosPath() (neoradium.deepmimo.DeepMimoData class method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.setScenariosPath">setScenariosPath() (neoradium.deepmimo.DeepMimoData class method)</a>
+</li>
       <li><a href="source/API/Random.html#neoradium.random.RanGen.setSeed">setSeed() (neoradium.random.RanGen method)</a>
 </li>
       <li><a href="source/API/Antenna.html#neoradium.antenna.AntennaArray.showElements">showElements() (neoradium.antenna.AntennaArray method)</a>
@@ -861,15 +1024,37 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/API/Channels.html#neoradium.tdl.TdlChannel">TdlChannel (class in neoradium.tdl)</a>
 </li>
-      <li><a href="source/API/Channels.html#neoradium.trjchan.Trajectory">Trajectory (class in neoradium.trjchan)</a>
+      <li><a href="source/API/Utilities.html#neoradium.utils.toDb">toDb() (in module neoradium.utils)</a>
+</li>
+      <li><a href="source/API/Utilities.html#neoradium.utils.toDegrees">toDegrees() (in module neoradium.utils)</a>
+</li>
+      <li><a href="source/API/Utilities.html#neoradium.utils.toLinear">toLinear() (in module neoradium.utils)</a>
+</li>
+      <li><a href="source/API/Utilities.html#neoradium.utils.toRadian">toRadian() (in module neoradium.utils)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/API/Channels.html#neoradium.trjchan.Trajectory">Trajectory (class in neoradium.trjchan)</a>
+</li>
       <li><a href="source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.trajectoryFromPoints">trajectoryFromPoints() (neoradium.deepmimo.DeepMimoData method)</a>
 </li>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.CsiReport.trigger">trigger() (neoradium.csireport.CsiReport method)</a>
+
+      <ul>
+        <li><a href="source/API/RefSig.html#neoradium.csirs.CsiRsSet.trigger">(neoradium.csirs.CsiRsSet method)</a>
+</li>
+      </ul></li>
       <li><a href="source/API/Channels.html#neoradium.trjchan.TrjChannel">TrjChannel (class in neoradium.trjchan)</a>
 </li>
       <li><a href="source/API/Channels.html#neoradium.trjchan.TrjPoint">TrjPoint (class in neoradium.trjchan)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/API/CsiReport.html#neoradium.csireport.OLLA.update">update() (neoradium.csireport.OLLA method)</a>
 </li>
   </ul></td>
 </tr></table>

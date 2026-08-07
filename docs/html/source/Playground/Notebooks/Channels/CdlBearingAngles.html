@@ -1,0 +1,642 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Effect of Antenna Bearing Angles on PDSCH BER over CDL Channels &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Working with DeepMIMO Scenarios" href="../RayTracing/DeepMimo.html" />
+    <link rel="prev" title="Customizing CDL Channels" href="CustomCdl.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ChannelMatrix.html">Channel Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cdlTiming.html">Channel Timing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TdlChannel.html">TDL Channel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CdlChannelDataset.html">Creating Random CDL Channels for a Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CustomCdl.html">Customizing CDL Channels</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Effect of Antenna Bearing Angles on PDSCH BER over CDL Channels</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Different-TX-Bearing-Angles">Different TX Bearing Angles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Different-RX-Bearing-Angles">Different RX Bearing Angles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#TX-Bearing-Angles-in-MISO-with-an-Omnidirectional-RX-Antenna">TX Bearing Angles in MISO with an Omnidirectional RX Antenna</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-coding">Channel Coding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Effect of Antenna Bearing Angles on PDSCH BER over CDL Channels</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/Channels/CdlBearingAngles.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Effect-of-Antenna-Bearing-Angles-on-PDSCH-BER-over-CDL-Channels">
+<h1>Effect of Antenna Bearing Angles on PDSCH BER over CDL Channels<a class="headerlink" href="#Effect-of-Antenna-Bearing-Angles-on-PDSCH-BER-over-CDL-Channels" title="Link to this heading"></a></h1>
+<p>This notebook studies the impact of transmit and receive antenna bearing angles on the bit error rate (BER) of a 5G NR PDSCH link-level simulation.</p>
+<p>For each CDL channel profile, the simulation sweeps either the TX or RX bearing angle while keeping the other side fixed. The BER results are compared across multiple random seeds to illustrate how antenna orientation and CDL channel conditions affect PDSCH performance.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">AntennaElement</span><span class="p">,</span> <span class="n">Grid</span><span class="p">,</span> <span class="n">random</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># A multipurpose function for calculating BER with different configurations</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">getBitrateInfo</span><span class="p">(</span><span class="n">numSlots</span><span class="p">,</span> <span class="n">snrDbs</span><span class="p">,</span> <span class="n">pdsc</span><span class="p">,</span> <span class="n">cdlProfile</span><span class="p">,</span> <span class="n">txAlphas</span><span class="p">,</span> <span class="n">rxAlphas</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">rxOmni</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>                <span class="c1"># Dictionary for storing the results</span>
+    <span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrDbs</span><span class="p">:</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>    <span class="c1"># Make the results reproducible</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">snrDb</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">txAlpha</span> <span class="ow">in</span> <span class="n">txAlphas</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlpha</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">rxAlpha</span> <span class="ow">in</span> <span class="n">rxAlphas</span><span class="p">:</span>
+
+                <span class="c1"># Create a CDL channel model</span>
+                <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaElement</span><span class="p">(</span><span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">60</span><span class="p">,</span><span class="mi">360</span><span class="p">])</span> <span class="k">if</span> <span class="n">rxOmni</span> <span class="k">else</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">cdlProfile</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]),</span>       <span class="c1"># 8 TX antenna elements</span>
+                                     <span class="n">txOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="n">txAlpha</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">rxAntenna</span><span class="p">,</span>
+                                     <span class="n">rxOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="n">rxAlpha</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                                     <span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span><span class="p">)</span>
+                <span class="n">bitErrors</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">totalBits</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="c1"># Use the same channel for numSlots transmissions with different data bits</span>
+                <span class="k">for</span> <span class="n">slotNo</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSlots</span><span class="p">):</span>
+                    <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                             <span class="c1"># Create and initialize the internal PDSCH grid</span>
+                    <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>          <span class="c1"># Number of bits available in the PDSCH grid</span>
+                    <span class="n">txBits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numBits</span><span class="p">)</span>                <span class="c1"># Generate random binary data</span>
+                    <span class="n">pdsch</span><span class="o">.</span><span class="n">setPdschData</span><span class="p">(</span><span class="n">txBits</span><span class="p">)</span>                   <span class="c1"># Map the bitstream to the resource elements</span>
+
+                    <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>              <span class="c1"># Get the channel matrix</span>
+                    <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>      <span class="c1"># Get the precoding matrix</span>
+
+                    <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">nrNt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>                <span class="c1"># Create the transmit resource grid</span>
+                    <span class="n">pdsch</span><span class="o">.</span><span class="n">precodeTo</span><span class="p">(</span><span class="n">txGrid</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>                       <span class="c1"># Precode the PDSCH into txGrid</span>
+
+                    <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>             <span class="c1"># Apply the channel in the frequency domain</span>
+                    <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">)</span>                   <span class="c1"># Add noise</span>
+
+                    <span class="n">effChanMat</span> <span class="o">=</span> <span class="n">channelMatrix</span> <span class="o">@</span> <span class="n">precoder</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>         <span class="c1"># Effective channel matrix</span>
+
+                    <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">,</span> <span class="n">effChanMat</span><span class="p">)</span>  <span class="c1"># Equalization</span>
+                    <span class="n">rxBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getHardBits</span><span class="p">(</span><span class="n">eqGrid</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>                   <span class="c1"># Demodulation</span>
+                    <span class="n">bitErrors</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBits</span><span class="o">-</span><span class="n">txBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>                <span class="c1"># Calculate the number of bit errors</span>
+                    <span class="n">totalBits</span> <span class="o">+=</span> <span class="n">numBits</span>
+
+                <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span>                                    <span class="c1"># Total runtime for this SNR</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlpha</span><span class="p">][</span><span class="n">rxAlpha</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;totalBits&quot;</span><span class="p">:</span><span class="n">totalBits</span><span class="p">,</span>
+                                                    <span class="s2">&quot;bitErrors&quot;</span><span class="p">:</span><span class="n">bitErrors</span><span class="p">,</span>
+                                                    <span class="s2">&quot;BER&quot;</span><span class="p">:</span>      <span class="n">bitErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBits</span><span class="p">,</span>
+                                                    <span class="s2">&quot;Time&quot;</span><span class="p">:</span>     <span class="n">dt</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+<br/></pre></div>
+</div>
+</div>
+<section id="Different-TX-Bearing-Angles">
+<h2>Different TX Bearing Angles<a class="headerlink" href="#Different-TX-Bearing-Angles" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>    <span class="c1"># Carrier with 24 resource blocks and 30 kHz subcarrier spacing</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>                        <span class="c1"># The only bandwidth part in the carrier</span>
+
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span> <span class="c1"># Create a PDSCH object</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>        <span class="c1"># DMRS configuration</span>
+
+<span class="n">txAlphas</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">rxAlphas</span><span class="o">=</span><span class="p">[</span><span class="mi">180</span><span class="p">]</span>
+
+<span class="n">snrDb</span><span class="o">=</span><span class="mi">20</span>
+<span class="n">seeds</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="mi">12345</span><span class="p">]</span>
+<span class="n">allResults</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">cdl</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">seeds</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running with seed </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2"> for CDL-</span><span class="si">{</span><span class="n">cdl</span><span class="si">}</span><span class="s2"> ...&quot;</span><span class="p">)</span>
+        <span class="n">allResults</span><span class="p">[</span><span class="n">seed</span><span class="p">]</span> <span class="o">=</span> <span class="n">getBitrateInfo</span><span class="p">(</span><span class="n">numSlots</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">snrDbs</span><span class="o">=</span><span class="p">[</span><span class="n">snrDb</span><span class="p">],</span> <span class="n">pdsc</span><span class="o">=</span><span class="n">pdsch</span><span class="p">,</span> <span class="n">cdlProfile</span><span class="o">=</span><span class="n">cdl</span><span class="p">,</span>
+                                          <span class="n">txAlphas</span><span class="o">=</span><span class="n">txAlphas</span><span class="p">,</span> <span class="n">rxAlphas</span><span class="o">=</span><span class="n">rxAlphas</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rxAlphas</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>   <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">allResults</span><span class="p">[</span><span class="n">seed</span><span class="p">][</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlpha</span><span class="p">][</span><span class="n">rxAlphas</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">txAlpha</span> <span class="ow">in</span> <span class="n">txAlphas</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>                  <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">allResults</span><span class="p">[</span><span class="n">seed</span><span class="p">][</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlphas</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">rxAlpha</span><span class="p">][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">rxAlpha</span> <span class="ow">in</span> <span class="n">rxAlphas</span><span class="p">]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">bers</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Seed=</span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;BER for Different </span><span class="si">{</span><span class="s1">&#39;TX&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">rxAlphas</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;RX&#39;</span><span class="si">}</span><span class="s2"> Bearing Angles over CDL-</span><span class="si">{</span><span class="n">cdl</span><span class="si">}</span><span class="s2"> at SNR = </span><span class="si">{</span><span class="n">snrDb</span><span class="si">}</span><span class="s2"> dB&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Bearing Angle (degrees)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;BER (%)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running with seed 12 for CDL-A ...
+Running with seed 123 for CDL-A ...
+Running with seed 1234 for CDL-A ...
+Running with seed 12345 for CDL-A ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_4_1.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_4_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Running with seed 12 for CDL-B ...
+Running with seed 123 for CDL-B ...
+Running with seed 1234 for CDL-B ...
+Running with seed 12345 for CDL-B ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_4_3.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_4_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Running with seed 12 for CDL-C ...
+Running with seed 123 for CDL-C ...
+Running with seed 1234 for CDL-C ...
+Running with seed 12345 for CDL-C ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_4_5.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_4_5.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Running with seed 12 for CDL-D ...
+Running with seed 123 for CDL-D ...
+Running with seed 1234 for CDL-D ...
+Running with seed 12345 for CDL-D ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_4_7.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_4_7.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Running with seed 12 for CDL-E ...
+Running with seed 123 for CDL-E ...
+Running with seed 1234 for CDL-E ...
+Running with seed 12345 for CDL-E ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_4_9.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_4_9.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+</section>
+<section id="Different-RX-Bearing-Angles">
+<h2>Different RX Bearing Angles<a class="headerlink" href="#Different-RX-Bearing-Angles" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">txAlphas</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">rxAlphas</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">snrDb</span><span class="o">=</span><span class="mi">20</span>
+<span class="n">seeds</span> <span class="o">=</span> <span class="p">[</span><span class="mi">56</span><span class="p">,</span> <span class="mi">567</span><span class="p">,</span> <span class="mi">5678</span><span class="p">,</span> <span class="mi">56789</span><span class="p">]</span>
+<span class="n">allResults</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">cdl</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">seeds</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running with seed </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2"> for CDL-</span><span class="si">{</span><span class="n">cdl</span><span class="si">}</span><span class="s2"> ...&quot;</span><span class="p">)</span>
+        <span class="n">allResults</span><span class="p">[</span><span class="n">seed</span><span class="p">]</span> <span class="o">=</span> <span class="n">getBitrateInfo</span><span class="p">(</span><span class="n">numSlots</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">snrDbs</span><span class="o">=</span><span class="p">[</span><span class="n">snrDb</span><span class="p">],</span> <span class="n">pdsc</span><span class="o">=</span><span class="n">pdsch</span><span class="p">,</span> <span class="n">cdlProfile</span><span class="o">=</span><span class="n">cdl</span><span class="p">,</span>
+                                          <span class="n">txAlphas</span><span class="o">=</span><span class="n">txAlphas</span><span class="p">,</span> <span class="n">rxAlphas</span><span class="o">=</span><span class="n">rxAlphas</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rxAlphas</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>   <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">allResults</span><span class="p">[</span><span class="n">seed</span><span class="p">][</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlpha</span><span class="p">][</span><span class="n">rxAlphas</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">txAlpha</span> <span class="ow">in</span> <span class="n">txAlphas</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>                  <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">allResults</span><span class="p">[</span><span class="n">seed</span><span class="p">][</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlphas</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">rxAlpha</span><span class="p">][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">rxAlpha</span> <span class="ow">in</span> <span class="n">rxAlphas</span><span class="p">]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">bers</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Seed=</span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;BER for Different </span><span class="si">{</span><span class="s1">&#39;TX&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">rxAlphas</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;RX&#39;</span><span class="si">}</span><span class="s2"> Bearing Angles over CDL-</span><span class="si">{</span><span class="n">cdl</span><span class="si">}</span><span class="s2"> at SNR = </span><span class="si">{</span><span class="n">snrDb</span><span class="si">}</span><span class="s2"> dB&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Bearing Angle (degrees)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;BER (%)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running with seed 56 for CDL-A ...
+Running with seed 567 for CDL-A ...
+Running with seed 5678 for CDL-A ...
+Running with seed 56789 for CDL-A ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_6_1.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_6_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running with seed 56 for CDL-B ...
+Running with seed 567 for CDL-B ...
+Running with seed 5678 for CDL-B ...
+Running with seed 56789 for CDL-B ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_6_3.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_6_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running with seed 56 for CDL-C ...
+Running with seed 567 for CDL-C ...
+Running with seed 5678 for CDL-C ...
+Running with seed 56789 for CDL-C ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_6_5.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_6_5.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running with seed 56 for CDL-D ...
+Running with seed 567 for CDL-D ...
+Running with seed 5678 for CDL-D ...
+Running with seed 56789 for CDL-D ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_6_7.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_6_7.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running with seed 56 for CDL-E ...
+Running with seed 567 for CDL-E ...
+Running with seed 5678 for CDL-E ...
+Running with seed 56789 for CDL-E ...
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_6_9.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_6_9.png" />
+</div>
+</div>
+</section>
+<section id="TX-Bearing-Angles-in-MISO-with-an-Omnidirectional-RX-Antenna">
+<h2>TX Bearing Angles in MISO with an Omnidirectional RX Antenna<a class="headerlink" href="#TX-Bearing-Angles-in-MISO-with-an-Omnidirectional-RX-Antenna" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the carrier:</span>
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>    <span class="c1"># Carrier with 14 resource blocks and 30 kHz subcarrier spacing</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>                        <span class="c1"># The only bandwidth part in the carrier</span>
+
+<span class="c1"># Create a PDSCH object</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>     <span class="c1"># Specify the DMRS configuration</span>
+
+<span class="n">txAlphas</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">rxAlphas</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">snrDb</span><span class="o">=</span><span class="mi">20</span>
+<span class="n">seeds</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="mi">12345</span><span class="p">]</span>
+<span class="n">allResults</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">cdl</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">seeds</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running with seed </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2"> for CDL-</span><span class="si">{</span><span class="n">cdl</span><span class="si">}</span><span class="s2"> ...&quot;</span><span class="p">)</span>
+        <span class="n">allResults</span><span class="p">[</span><span class="n">seed</span><span class="p">]</span> <span class="o">=</span> <span class="n">getBitrateInfo</span><span class="p">(</span><span class="n">numSlots</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">snrDbs</span><span class="o">=</span><span class="p">[</span><span class="n">snrDb</span><span class="p">],</span> <span class="n">pdsc</span><span class="o">=</span><span class="n">pdsch</span><span class="p">,</span> <span class="n">cdlProfile</span><span class="o">=</span><span class="n">cdl</span><span class="p">,</span>
+                                          <span class="n">txAlphas</span><span class="o">=</span><span class="n">txAlphas</span><span class="p">,</span> <span class="n">rxAlphas</span><span class="o">=</span><span class="n">rxAlphas</span><span class="p">,</span>
+                                          <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">rxOmni</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rxAlphas</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>   <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">allResults</span><span class="p">[</span><span class="n">seed</span><span class="p">][</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlpha</span><span class="p">][</span><span class="n">rxAlphas</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">txAlpha</span> <span class="ow">in</span> <span class="n">txAlphas</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>                  <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">allResults</span><span class="p">[</span><span class="n">seed</span><span class="p">][</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlphas</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">rxAlpha</span><span class="p">][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">rxAlpha</span> <span class="ow">in</span> <span class="n">rxAlphas</span><span class="p">]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">bers</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Seed=</span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;BER vs. TX Bearing Angle with Omnidirectional RX, CDL-</span><span class="si">{</span><span class="n">cdl</span><span class="si">}</span><span class="s2">, SNR = </span><span class="si">{</span><span class="n">snrDb</span><span class="si">}</span><span class="s2"> dB&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Bearing Angle (degrees)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;BER (%)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running with seed 12 for CDL-A ...
+Running with seed 123 for CDL-A ...
+Running with seed 1234 for CDL-A ...
+Running with seed 12345 for CDL-A ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_8_1.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_8_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running with seed 12 for CDL-B ...
+Running with seed 123 for CDL-B ...
+Running with seed 1234 for CDL-B ...
+Running with seed 12345 for CDL-B ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_8_3.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_8_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running with seed 12 for CDL-C ...
+Running with seed 123 for CDL-C ...
+Running with seed 1234 for CDL-C ...
+Running with seed 12345 for CDL-C ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_8_5.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_8_5.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running with seed 12 for CDL-D ...
+Running with seed 123 for CDL-D ...
+Running with seed 1234 for CDL-D ...
+Running with seed 12345 for CDL-D ...
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_8_7.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_8_7.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running with seed 12 for CDL-E ...
+Running with seed 123 for CDL-E ...
+Running with seed 1234 for CDL-E ...
+Running with seed 12345 for CDL-E ...
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_8_9.png" src="../../../../_images/source_Playground_Notebooks_Channels_CdlBearingAngles_8_9.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CustomCdl.html" class="btn btn-neutral float-left" title="Customizing CDL Channels" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../RayTracing/DeepMimo.html" class="btn btn-neutral float-right" title="Working with DeepMIMO Scenarios" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

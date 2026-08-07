@@ -1,0 +1,478 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ray-tracing BER at Various TX/RX Antenna Bearing Angles &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Beam Sweeping in a DeepMIMO Scenario" href="BeamSweeping.html" />
+    <link rel="prev" title="Animating Channel Condition Number Along a UE Trajectory" href="AnimatedCN.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="DeepMimo.html">Working with DeepMIMO Scenarios</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajChannel.html">Applying a Trajectory-Based Channel in the Frequency and Time Domains</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajEndToEnd.html">End-to-End PDSCH Simulation with a Trajectory-Based Channel Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajChannelAnim.html">Animating a UE Trajectory in a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ChannelGeneration.html">Generating Random Channel Matrices from a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ChannelSequences.html">Creating Temporally and Spatially Consistent Channel-Matrix Sequences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AnimatedBER.html">Animating BER Along a UE Trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AnimatedCN.html">Animating Channel Condition Number Along a UE Trajectory</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Ray-tracing BER at Various TX/RX Antenna Bearing Angles</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Different-TX-Bearing-Angles">Different TX Bearing Angles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Different-RX-Bearing-Angles">Different RX Bearing Angles</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="BeamSweeping.html">Beam Sweeping in a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="BeamSweepingTraj.html">Beam Sweeping and Probing Along a UE Trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LinkAdaptation.html">Link Adaptation with CSI Feedback, HARQ, and OLLA Along a UE Trajectory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-coding">Channel Coding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Ray-tracing BER at Various TX/RX Antenna Bearing Angles</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/RayTracing/TrjBearingAngles.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Ray-tracing-BER-at-Various-TX/RX-Antenna-Bearing-Angles">
+<h1>Ray-tracing BER at Various TX/RX Antenna Bearing Angles<a class="headerlink" href="#Ray-tracing-BER-at-Various-TX/RX-Antenna-Bearing-Angles" title="Link to this heading"></a></h1>
+<p>This notebook runs an end-to-end simulation of communication through ray-tracing channel models and measures the bit error rate (BER) at different bearing angles for both the transmit and receive antennas.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeepMimoData</span><span class="p">,</span> <span class="n">TrjChannel</span><span class="p">,</span> <span class="n">Trajectory</span><span class="p">,</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">Grid</span><span class="p">,</span> <span class="n">random</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace this with the folder on your computer where you store DeepMIMO scenarios</span>
+<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">&quot;/data/RayTracing/DeepMIMO/Scenarios/V4/&quot;</span>
+<span class="n">DeepMimoData</span><span class="o">.</span><span class="n">setScenariosPath</span><span class="p">(</span><span class="n">dataFolder</span><span class="p">)</span>
+
+<span class="c1"># Create a DeepMimoData object</span>
+<span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">)</span>
+<span class="n">deepMimoData</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+DeepMimoData Properties:
+  Scenario:                   asu_campus_3p5
+  Version:                    4.0.0a3
+  UE Grid:                    rx_grid
+  Grid Size:                  411 x 321
+  Base Station:               BS (at [166. 104.  22.])
+  Total Grid Points:          131,931
+  UE Spacing:                 [1. 1.]
+  UE bounds (xyMin, xyMax)    [-225.55 -160.17], [184.45 159.83]
+  UE Height:                  1.50
+  Carrier Frequency:          3.5 GHz
+  Num. paths (Min, Avg, Max): 0, 6.21, 10
+  Num. total blockage:        46,774
+  LOS percentage:             19.71%
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We create channels between the base station and these four points</span>
+<span class="n">points</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span><span class="mi">75</span><span class="p">],</span> <span class="p">[</span><span class="mi">150</span><span class="p">,</span><span class="o">-</span><span class="mi">125</span><span class="p">],</span> <span class="p">[</span><span class="mi">140</span><span class="p">,</span><span class="mi">150</span><span class="p">],</span> <span class="p">[</span><span class="mi">120</span><span class="p">,</span><span class="mi">60</span><span class="p">]]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cyan&quot;</span><span class="p">,</span> <span class="s2">&quot;darkgray&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;magenta&quot;</span><span class="p">]</span>
+<span class="c1"># Create the carrier:</span>
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span> <span class="c1"># Carrier with 25 Resource Blocks, 15KHz subcarrier spacing</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>                                <span class="c1"># The only bandwidth part in the carrier</span>
+
+<span class="c1"># Let&#39;s draw the map and show the above four points on the map with small blue circles</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">point</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">,</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+<span class="c1"># Create 1-point trajectories. Each trajectory contains only one point. Since we just want to study the bearing</span>
+<span class="c1"># angles, we don&#39;t need a real trajectory.</span>
+<span class="n">trajectories</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
+    <span class="n">gridXy</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">xyToGridXy</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+    <span class="n">gridIdx</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">gridXyToIndex</span><span class="p">(</span><span class="n">gridXy</span><span class="p">)</span>
+    <span class="n">trajPoint</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="p">[</span><span class="n">gridIdx</span><span class="p">]</span>
+    <span class="n">trajPoint</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">14.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">])</span>
+    <span class="n">trajPoint</span><span class="o">.</span><span class="n">sampleNo</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">trajectories</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Trajectory</span><span class="p">([</span><span class="n">deepMimoData</span><span class="p">[</span><span class="n">gridIdx</span><span class="p">]],</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">carrierFreq</span><span class="p">)]</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_RayTracing_TrjBearingAngles_3_0.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_TrjBearingAngles_3_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">getBitrateInfo</span><span class="p">(</span><span class="n">numSlots</span><span class="p">,</span> <span class="n">snrDbs</span><span class="p">,</span> <span class="n">freqDomain</span><span class="p">,</span> <span class="n">pdsc</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span> <span class="n">txAlphas</span><span class="p">,</span> <span class="n">rxAlphas</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>                <span class="c1"># Dictionary to save the results</span>
+    <span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrDbs</span><span class="p">:</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>    <span class="c1"># Making the results reproducible.</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">snrDb</span><span class="p">]</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Simulating end-to-end at SNR=</span><span class="si">{</span><span class="n">snrDb</span><span class="si">}</span><span class="s2"> db in </span><span class="si">{</span><span class="s1">&#39;frequency&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">freqDomain</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;time&#39;</span><span class="si">}</span><span class="s2"> domain for different TX/RX antenna orientations.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TxAlpha   RxAlpha   Total Bits   Bit Errors   BER(%)   Slot     time(Sec.)&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------   -------   ----------   ----------   ------   -----    ----------&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">txAlpha</span> <span class="ow">in</span> <span class="n">txAlphas</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlpha</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">rxAlpha</span> <span class="ow">in</span> <span class="n">rxAlphas</span><span class="p">:</span>
+                <span class="n">channel</span> <span class="o">=</span> <span class="n">TrjChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span>
+                                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]),</span>       <span class="c1"># 8 TX antenna</span>
+                                     <span class="n">txOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="n">txAlpha</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]),</span>       <span class="c1"># 2 RX antenna</span>
+                                     <span class="n">rxOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="n">rxAlpha</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                                     <span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span><span class="p">)</span>
+
+                <span class="n">bitErrors</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">totalBits</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">for</span> <span class="n">slotNo</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSlots</span><span class="p">):</span>
+                    <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                             <span class="c1"># Create and initialize PDSCH&#39;s internal grid</span>
+                    <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>          <span class="c1"># Actual number of bits available in the resource grid</span>
+                    <span class="n">txBits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numBits</span><span class="p">)</span>                <span class="c1"># Create random binary data</span>
+
+                    <span class="c1"># Now populate the resource grid with coded data. This includes QAM modulation and resource mapping.</span>
+                    <span class="n">pdsch</span><span class="o">.</span><span class="n">setPdschData</span><span class="p">(</span><span class="n">txBits</span><span class="p">)</span>
+
+                    <span class="c1"># Getting the Precoding Matrix, and precoding the resource grid</span>
+                    <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>              <span class="c1"># Get the channel matrix</span>
+                    <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>      <span class="c1"># Get the precoder matrix from PDSCH object</span>
+
+                    <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">nrNt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>                <span class="c1"># Create the transmitted resource grid</span>
+                    <span class="n">pdsch</span><span class="o">.</span><span class="n">precodeTo</span><span class="p">(</span><span class="n">txGrid</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>                       <span class="c1"># Perform precoding</span>
+
+                    <span class="k">if</span> <span class="n">freqDomain</span><span class="p">:</span>
+                        <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>         <span class="c1"># Apply the channel in frequency domain</span>
+                        <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">)</span>               <span class="c1"># Add noise</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>                  <span class="c1"># OFDM Modulation</span>
+                        <span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>                    <span class="c1"># Get the max. channel delay</span>
+                        <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>               <span class="c1"># Pad with zeros</span>
+                        <span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">)</span>      <span class="c1"># Apply channel in time domain</span>
+                        <span class="n">noisyRxWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">)</span>     <span class="c1"># Add noise</span>
+                        <span class="n">offset</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getTimingOffset</span><span class="p">()</span>                  <span class="c1"># Get timing info for synchronization</span>
+                        <span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">noisyRxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>       <span class="c1"># Synchronization</span>
+                        <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>         <span class="c1"># OFDM demodulation</span>
+
+                    <span class="n">estChannelMatrix</span> <span class="o">=</span> <span class="n">channelMatrix</span> <span class="o">@</span> <span class="n">precoder</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>   <span class="c1"># Perfect Channel Estimation</span>
+
+                    <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">,</span> <span class="n">estChannelMatrix</span><span class="p">)</span><span class="c1"># Equalization</span>
+                    <span class="n">rxBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getHardBits</span><span class="p">(</span><span class="n">eqGrid</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>                       <span class="c1"># Demodulation</span>
+                    <span class="n">bitErrors</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBits</span><span class="o">-</span><span class="n">txBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>                    <span class="c1"># Calculating number of bit errors</span>
+                    <span class="n">totalBits</span> <span class="o">+=</span> <span class="n">numBits</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2"> </span><span class="si">%4d</span><span class="s2">     </span><span class="si">%4d</span><span class="s2">      </span><span class="si">%8d</span><span class="s2">     </span><span class="si">%8d</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">  </span><span class="si">%6d</span><span class="s2">      </span><span class="si">%6.2f</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">txAlpha</span><span class="p">,</span> <span class="n">rxAlpha</span><span class="p">,</span> <span class="n">totalBits</span><span class="p">,</span> <span class="n">bitErrors</span><span class="p">,</span>
+                                                                                          <span class="n">bitErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBits</span><span class="p">,</span> <span class="n">slotNo</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                                                                                          <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+                <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span>                         <span class="c1"># Total time for this SNR</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlpha</span><span class="p">][</span><span class="n">rxAlpha</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;totalBits&quot;</span><span class="p">:</span><span class="n">totalBits</span><span class="p">,</span>
+                                                    <span class="s2">&quot;bitErrors&quot;</span><span class="p">:</span><span class="n">bitErrors</span><span class="p">,</span>
+                                                    <span class="s2">&quot;BER&quot;</span><span class="p">:</span>      <span class="n">bitErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBits</span><span class="p">,</span>
+                                                    <span class="s2">&quot;Time&quot;</span><span class="p">:</span>     <span class="n">dt</span><span class="p">}</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2"> </span><span class="si">%4d</span><span class="s2">     </span><span class="si">%4d</span><span class="s2">      </span><span class="si">%8d</span><span class="s2">     </span><span class="si">%8d</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">  </span><span class="si">%6d</span><span class="s2">      </span><span class="si">%6.2f</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">txAlpha</span><span class="p">,</span> <span class="n">rxAlpha</span><span class="p">,</span> <span class="n">totalBits</span><span class="p">,</span> <span class="n">bitErrors</span><span class="p">,</span>
+                                                                                      <span class="n">bitErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBits</span><span class="p">,</span> <span class="n">slotNo</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dt</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">results</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<section id="Different-TX-Bearing-Angles">
+<h2>Different TX Bearing Angles<a class="headerlink" href="#Different-TX-Bearing-Angles" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a PDSCH object</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">prgSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>     <span class="c1"># Specify the DMRS configuration</span>
+
+<span class="n">txAlphas</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">rxAlphas</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Draw the map and the four points again for the reference</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">ax0</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+<span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">point</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">):</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">,</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+<span class="n">snrDb</span><span class="o">=</span><span class="mi">5</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">trj</span> <span class="ow">in</span>  <span class="nb">enumerate</span><span class="p">(</span><span class="n">trajectories</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running at UE position P</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: (</span><span class="si">{</span><span class="n">trj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">trj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">) ...&quot;</span><span class="p">)</span>
+    <span class="n">allResults</span> <span class="o">=</span> <span class="n">getBitrateInfo</span><span class="p">(</span><span class="n">numSlots</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">snrDbs</span><span class="o">=</span><span class="p">[</span><span class="n">snrDb</span><span class="p">],</span> <span class="n">freqDomain</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="n">pdsc</span><span class="o">=</span><span class="n">pdsch</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="n">trj</span><span class="p">,</span> <span class="n">txAlphas</span><span class="o">=</span><span class="n">txAlphas</span><span class="p">,</span> <span class="n">rxAlphas</span><span class="o">=</span><span class="n">rxAlphas</span><span class="p">,</span>
+                                <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rxAlphas</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>   <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">allResults</span><span class="p">[</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlpha</span><span class="p">][</span><span class="n">rxAlphas</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">txAlpha</span> <span class="ow">in</span> <span class="n">txAlphas</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>                  <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">allResults</span><span class="p">[</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlphas</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">rxAlpha</span><span class="p">][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">rxAlpha</span> <span class="ow">in</span> <span class="n">rxAlphas</span><span class="p">]</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">bers</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bit Error Rate at different </span><span class="si">{</span><span class="s1">&#39;TX&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">rxAlphas</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;RX&#39;</span><span class="si">}</span><span class="s2"> bearing angles at different UE positions with SNR=</span><span class="si">{</span><span class="n">snrDb</span><span class="si">}</span><span class="s2"> db&quot;</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Bearing Angle (Deg.)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;BER (%)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running at UE position P1: (-199.55, 74.83) ...
+Running at UE position P2: (150.45, -125.17) ...
+Running at UE position P3: (140.45, 149.83) ...
+Running at UE position P4: (120.45, 59.83) ...
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_RayTracing_TrjBearingAngles_6_1.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_TrjBearingAngles_6_1.png" />
+</div>
+</div>
+</section>
+<section id="Different-RX-Bearing-Angles">
+<h2>Different RX Bearing Angles<a class="headerlink" href="#Different-RX-Bearing-Angles" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">txAlphas</span><span class="o">=</span><span class="p">[</span><span class="mi">180</span><span class="p">]</span>
+<span class="n">rxAlphas</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Draw the map and the four points again for the reference</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+
+<span class="n">ax0</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>          <span class="c1"># Draw the Map with the trajectory</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+<span class="n">ax0</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">point</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">):</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">,</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+<span class="n">snrDb</span><span class="o">=</span><span class="mi">5</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">trj</span> <span class="ow">in</span>  <span class="nb">enumerate</span><span class="p">(</span><span class="n">trajectories</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running at UE position P</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: (</span><span class="si">{</span><span class="n">trj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">trj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">) ...&quot;</span><span class="p">)</span>
+    <span class="n">allResults</span> <span class="o">=</span> <span class="n">getBitrateInfo</span><span class="p">(</span><span class="n">numSlots</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">snrDbs</span><span class="o">=</span><span class="p">[</span><span class="n">snrDb</span><span class="p">],</span> <span class="n">freqDomain</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="n">pdsc</span><span class="o">=</span><span class="n">pdsch</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="n">trj</span><span class="p">,</span> <span class="n">txAlphas</span><span class="o">=</span><span class="n">txAlphas</span><span class="p">,</span> <span class="n">rxAlphas</span><span class="o">=</span><span class="n">rxAlphas</span><span class="p">,</span>
+                                <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rxAlphas</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>   <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">allResults</span><span class="p">[</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlpha</span><span class="p">][</span><span class="n">rxAlphas</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">txAlpha</span> <span class="ow">in</span> <span class="n">txAlphas</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>                  <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">allResults</span><span class="p">[</span><span class="n">snrDb</span><span class="p">][</span><span class="n">txAlphas</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">rxAlpha</span><span class="p">][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">rxAlpha</span> <span class="ow">in</span> <span class="n">rxAlphas</span><span class="p">]</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span><span class="mi">181</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">bers</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bit Error Rate at different </span><span class="si">{</span><span class="s1">&#39;TX&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">rxAlphas</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;RX&#39;</span><span class="si">}</span><span class="s2"> bearing angles at different UE positions with SNR=</span><span class="si">{</span><span class="n">snrDb</span><span class="si">}</span><span class="s2"> db&quot;</span><span class="p">);</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Bearing Angle (Deg.)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;BER (%)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Running at UE position P1: (-199.55, 74.83) ...
+Running at UE position P2: (150.45, -125.17) ...
+Running at UE position P3: (140.45, 149.83) ...
+Running at UE position P4: (120.45, 59.83) ...
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_RayTracing_TrjBearingAngles_8_1.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_TrjBearingAngles_8_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="AnimatedCN.html" class="btn btn-neutral float-left" title="Animating Channel Condition Number Along a UE Trajectory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="BeamSweeping.html" class="btn btn-neutral float-right" title="Beam Sweeping in a DeepMIMO Scenario" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

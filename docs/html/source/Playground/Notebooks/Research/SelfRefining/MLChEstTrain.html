@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training the Channel Estimation Model &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="Evaluating Channel Estimation Performance Using NMSE" href="MLChEstEvaluateNMSE.html" />
+    <link rel="prev" title="Generating the Dataset for Channel Estimation Training" href="MLChEstDataGen.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#channel-coding">Channel Coding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#research-papers">Research Papers</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../Playground.html#id1">A Self-Refining Multi-Layer Receiver Pipeline</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="readme.html">readme.md</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MLChEstDataGen.html">Generating the Dataset for Channel Estimation Training</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Training the Channel Estimation Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MLChEstEvaluateNMSE.html">Evaluating Channel Estimation Performance Using NMSE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MLChEstEvaluateBLER.html">Evaluating End-to-End Communication Performance Using BLER</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MLChEstEvaluateHARQ.html">Evaluating Communication Throughput with HARQ</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#other-examples">Other Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Training the Channel Estimation Model</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../_sources/source/Playground/Notebooks/Research/SelfRefining/MLChEstTrain.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Training-the-Channel-Estimation-Model">
+<h1>Training the Channel Estimation Model<a class="headerlink" href="#Training-the-Channel-Estimation-Model" title="Link to this heading"></a></h1>
+<p>This notebook trains the deep neural network used for multi-layer channel estimation. It loads the training, validation, and test datasets generated in the previous step, initializes the <code class="docutils literal notranslate"><span class="pre">ChEstNet</span></code> model, and optimizes the network using mean squared error (MSE) loss.</p>
+<p>During training, the learning rate decays exponentially from the initial value to the final value over the specified number of epochs. After each epoch, the model is evaluated on the validation dataset. The checkpoint with the lowest validation loss is saved to the <code class="docutils literal notranslate"><span class="pre">Models</span></code> directory and reloaded at the end of training.</p>
+<p>An already-trained model is included in the <code class="docutils literal notranslate"><span class="pre">Models</span></code> directory. You may either run this notebook to train a new model or proceed directly to the evaluation notebooks using the provided model.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim.lr_scheduler</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExponentialLR</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ChEstNet</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChEstNet</span><span class="p">,</span> <span class="n">ChEstDataset</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the datasets:</span>
+<span class="n">dataPath</span> <span class="o">=</span> <span class="s2">&quot;/data/datasets/SelfRefine&quot;</span>      <span class="c1"># Replace with the path to your dataset files</span>
+<span class="n">batchSize</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">trainDS</span> <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">&quot;Train.npy&quot;</span><span class="p">),</span> <span class="n">batchSize</span> <span class="p">)</span>
+<span class="n">validDS</span> <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">&quot;Valid.npy&quot;</span><span class="p">),</span> <span class="n">batchSize</span> <span class="p">)</span>
+<span class="n">testDS</span> <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">&quot;Test.npy&quot;</span><span class="p">),</span> <span class="n">batchSize</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">modelFileName</span> <span class="o">=</span> <span class="s2">&quot;Models/Trained.pth&quot;</span>        <span class="c1"># Output filename for the trained model</span>
+<span class="n">numEpochs</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">lrStart</span><span class="p">,</span> <span class="n">lrEnd</span> <span class="o">=</span> <span class="mf">0.002</span><span class="p">,</span> <span class="mf">0.00002</span>             <span class="c1"># Learning rate decays exponentially from &#39;lrStart&#39; to &#39;lrEnd&#39;</span>
+<span class="n">device</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;cuda:0&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;mps&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ChEstNet</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>                    <span class="c1"># Create the model</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lrStart</span><span class="p">)</span>
+<span class="n">lrScheduler</span> <span class="o">=</span> <span class="n">ExponentialLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">lrEnd</span><span class="o">/</span><span class="n">lrStart</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">numEpochs</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+<span class="n">lossFunction</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Main training loop:</span>
+<span class="n">lowestLoss</span><span class="p">,</span> <span class="n">bestEpoch</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+<span class="n">validLoss</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch   Learning Rate   Training Loss   Validation Loss&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-----   -------------   -------------   ---------------&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numEpochs</span><span class="p">):</span>
+    <span class="n">curLr</span> <span class="o">=</span> <span class="n">lrScheduler</span><span class="o">.</span><span class="n">get_last_lr</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="si">:</span><span class="s2">-4d</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">curLr</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">      &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Train one epoch</span>
+    <span class="n">lossMin</span><span class="p">,</span> <span class="n">lossMean</span><span class="p">,</span> <span class="n">lossMax</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">trainEpoch</span><span class="p">(</span><span class="n">trainDS</span><span class="p">,</span> <span class="n">lossFunction</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">lossMean</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">      &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">validLoss</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">validDS</span><span class="p">,</span> <span class="n">lossFunction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lowestLoss</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">lowestLoss</span><span class="p">,</span> <span class="n">bestEpoch</span> <span class="o">=</span> <span class="n">validLoss</span><span class="p">,</span> <span class="n">epoch</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">saveParams</span><span class="p">(</span><span class="n">modelFileName</span><span class="p">)</span>     <span class="c1"># Save the best model so far</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">validLoss</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">   &quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">validLoss</span><span class="o">&lt;</span><span class="n">lowestLoss</span><span class="p">:</span>
+        <span class="n">lowestLoss</span><span class="p">,</span> <span class="n">bestEpoch</span> <span class="o">=</span> <span class="n">validLoss</span><span class="p">,</span> <span class="n">epoch</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">saveParams</span><span class="p">(</span><span class="n">modelFileName</span><span class="p">)</span>     <span class="c1"># Save the best model so far</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">validLoss</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2"> * &quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">validLoss</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">   &quot;</span><span class="p">)</span>
+    <span class="n">lrScheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">loadParams</span><span class="p">(</span><span class="n">modelFileName</span><span class="p">)</span>             <span class="c1"># Load the best model</span>
+<span class="n">validLoss</span> <span class="o">=</span> <span class="n">lowestLoss</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch   Learning Rate   Training Loss   Validation Loss
+-----   -------------   -------------   ---------------
+    1       0.002000        0.593710        0.388976
+    2       0.001909        0.276281        0.240636 *
+    3       0.001822        0.225470        0.194113 *
+    4       0.001739        0.191013        0.177125 *
+    5       0.001660        0.174355        0.196268
+    6       0.001585        0.162672        0.139205 *
+    7       0.001513        0.151027        0.153683
+    8       0.001444        0.144716        0.140416
+    9       0.001379        0.137015        0.119776 *
+   10       0.001316        0.130708        0.102059 *
+   11       0.001256        0.127196        0.107508
+   12       0.001199        0.122850        0.111060
+   13       0.001144        0.121160        0.110864
+   14       0.001092        0.117182        0.106913
+   15       0.001043        0.115687        0.098550 *
+   16       0.000995        0.113761        0.102031
+   17       0.000950        0.111562        0.103003
+   18       0.000907        0.110321        0.100105
+   19       0.000866        0.109446        0.101697
+   20       0.000826        0.107634        0.097564 *
+   21       0.000789        0.105831        0.095171 *
+   22       0.000753        0.104648        0.094937 *
+   23       0.000719        0.103204        0.096389
+   24       0.000686        0.102920        0.092838 *
+   25       0.000655        0.101974        0.091227 *
+   26       0.000625        0.101095        0.091867
+   27       0.000597        0.100181        0.089986 *
+   28       0.000570        0.099703        0.088168 *
+   29       0.000544        0.098449        0.088144 *
+   30       0.000519        0.097884        0.087780 *
+   31       0.000495        0.097204        0.086695 *
+   32       0.000473        0.096963        0.086214 *
+   33       0.000451        0.096408        0.090265
+   34       0.000431        0.095796        0.086883
+   35       0.000411        0.095553        0.087128
+   36       0.000393        0.095162        0.088318
+   37       0.000375        0.094596        0.086862
+   38       0.000358        0.094252        0.086169 *
+   39       0.000341        0.093961        0.084881 *
+   40       0.000326        0.093534        0.085342
+   41       0.000311        0.093005        0.084186 *
+   42       0.000297        0.092960        0.085097
+   43       0.000283        0.092543        0.083574 *
+   44       0.000271        0.092341        0.084721
+   45       0.000258        0.092323        0.084242
+   46       0.000247        0.091788        0.083811
+   47       0.000235        0.091534        0.084309
+   48       0.000225        0.091448        0.083943
+   49       0.000214        0.091001        0.083925
+   50       0.000205        0.090791        0.083822
+   51       0.000195        0.090719        0.082809 *
+   52       0.000187        0.090252        0.083022
+   53       0.000178        0.090632        0.083907
+   54       0.000170        0.090226        0.083190
+   55       0.000162        0.089889        0.082961
+   56       0.000155        0.089700        0.082639 *
+   57       0.000148        0.089480        0.082727
+   58       0.000141        0.089512        0.082371 *
+   59       0.000135        0.089439        0.082200 *
+   60       0.000129        0.089024        0.082607
+   61       0.000123        0.089087        0.082157 *
+   62       0.000117        0.089033        0.081656 *
+   63       0.000112        0.088912        0.081966
+   64       0.000107        0.088967        0.081855
+   65       0.000102        0.088824        0.081713
+   66       0.000097        0.088641        0.081922
+   67       0.000093        0.088577        0.081618 *
+   68       0.000089        0.088507        0.082051
+   70       0.000081        0.088252        0.081858
+   71       0.000077        0.088167        0.081529 *
+   72       0.000074        0.088039        0.081552
+   73       0.000070        0.088081        0.081714
+   74       0.000067        0.088052        0.081313 *
+   75       0.000064        0.087745        0.081495
+   76       0.000061        0.087764        0.081391
+   77       0.000058        0.087846        0.081122 *
+   78       0.000056        0.087613        0.081238
+   79       0.000053        0.087572        0.081253
+   80       0.000051        0.087519        0.081218
+   81       0.000048        0.087531        0.081289
+   82       0.000046        0.087567        0.081146
+   83       0.000044        0.087631        0.081352
+   84       0.000042        0.087436        0.081125
+   85       0.000040        0.087425        0.081201
+   86       0.000038        0.087305        0.081191
+   87       0.000037        0.087241        0.081107 *
+   88       0.000035        0.087375        0.081080 *
+   89       0.000033        0.087215        0.081038 *
+   90       0.000032        0.087309        0.081036 *
+   91       0.000030        0.087294        0.081164
+   92       0.000029        0.087123        0.081232
+   93       0.000028        0.087042        0.080875 *
+   94       0.000026        0.087075        0.081113
+   95       0.000025        0.086979        0.080928
+   96       0.000024        0.086935        0.080861 *
+   97       0.000023        0.087059        0.080926
+   98       0.000022        0.086853        0.080815 *
+   99       0.000021        0.086966        0.080932
+  100       0.000020        0.086941        0.080734 *
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="MLChEstDataGen.html" class="btn btn-neutral float-left" title="Generating the Dataset for Channel Estimation Training" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MLChEstEvaluateNMSE.html" class="btn btn-neutral float-right" title="Evaluating Channel Estimation Performance Using NMSE" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -6,21 +6,24 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SnrScheduler &mdash; NeoRadium 0.4.1 Documentation</title>
+  <title>SnrScheduler &mdash; NeoRadium 0.5.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=c87aa342"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Other Utilitiy Functions" href="Utilities.html" />
     <link rel="prev" title="DeepMIMO and UE Trajectories" href="DeepMIMO.html" /> 
 </head>
 
@@ -33,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.4.1
+            NeoRadium 0.5.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -49,6 +52,7 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MigrationGuide.html">Migration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
@@ -58,6 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Waveform.html">Waveform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Modulation.html">Modulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CsiReport.html">CSI Reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
@@ -74,6 +79,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Other Utilitiy Functions</a></li>
 </ul>
 
         </div>
@@ -82,7 +88,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.4.1</a>
+          <a href="../../index.html">NeoRadium 0.5.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -105,7 +111,7 @@
 <p>The module <code class="docutils literal notranslate"><span class="pre">snrhelper.py</span></code> implements the adaptive SNR iterator <a class="reference internal" href="#neoradium.snrhelper.SnrScheduler" title="neoradium.snrhelper.SnrScheduler"><code class="xref py py-class docutils literal notranslate"><span class="pre">SnrScheduler</span></code></a>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.snrhelper.SnrScheduler">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.snrhelper.</span></span><span class="sig-name descname"><span class="pre">SnrScheduler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">snr0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxSnrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loSnrVal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hiSnrVal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.snrhelper.SnrScheduler" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.snrhelper.</span></span><span class="sig-name descname"><span class="pre">SnrScheduler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">snr0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loSnrVal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hiSnrVal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fastStep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxSnrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.snrhelper.SnrScheduler" title="Link to this definition"></a></dt>
 <dd><p>Use this class as an adaptive SNR iterator to step through SNR values while measuring a metric such as
 Bit Error Rate (BER), Block Error Rate (BLER), or throughput. Starting from an initial SNR guess, it adaptively
 searches until it brackets a usable range and then traverses from the low to the high operating point.</p>
@@ -116,12 +122,15 @@ at the current SNR.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>snr0</strong> (<em>float</em>) – Initial SNR in dB. Pick a mid-range guess if possible (default: 0.0).</p></li>
 <li><p><strong>step</strong> (<em>float</em>) – SNR increment in dB used when moving up/down (default: 1.0).</p></li>
-<li><p><strong>maxSnrs</strong> (<em>int</em>) – Hard cap on the number of recorded SNR points; used as a safeguard against non-monotonic behavior or
-failure to converge (default: 500).</p></li>
 <li><p><strong>loSnrVal</strong> (<em>float</em>) – Target metric value associated with the <em>low</em> SNR operating point.
 Example for BLER (%): 100. (default: 100)</p></li>
 <li><p><strong>hiSnrVal</strong> (<em>float</em>) – Target metric value associated with the <em>high</em> SNR operating point.
 Example for BLER (%): 0. (default: 0)</p></li>
+<li><p><strong>fastStep</strong> (<em>float</em><em> or </em><em>None</em>) – If specified, the <code class="docutils literal notranslate"><span class="pre">fastStep</span></code> is used during initial searching until we find a point inside the range
+specified by loSnrVal and hiSnrVal. Once a point is found in the range, the <code class="docutils literal notranslate"><span class="pre">step</span></code> parameter is used.
+If not specified, it is set to <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">step</span></code>.</p></li>
+<li><p><strong>maxSnrs</strong> (<em>int</em>) – Hard cap on the number of recorded SNR points; used as a safeguard against non-monotonic behavior or
+failure to converge (default: 100).</p></li>
 </ul>
 </dd>
 </dl>
@@ -133,7 +142,9 @@ Example for BLER (%): 0. (default: 0)</p></li>
 </ul>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Examples</span><a class="headerlink" href="#id1" title="Link to this code"></a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start at -8 dB, use increments of 0.2 dB for BLER using default values (loSnrVal=100, hiSnrVal=0)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Start at -8 dB, use increments of 0.2 dB for BLER using default values (loSnrVal=100, hiSnrVal=0).</span>
+<span class="c1"># The defaults are oriented for decreasing-with-SNR metrics like BLER/BER: at low SNR the metric is</span>
+<span class="c1"># near 100%, at high SNR it approaches 0%. Hence loSnrVal &gt; hiSnrVal.</span>
 <span class="n">snrScheduler</span> <span class="o">=</span> <span class="n">SnrScheduler</span><span class="p">(</span><span class="n">snr0</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
 
 <span class="c1"># Start at 0 dB, use increments of 0.5 dB for BER in the range %10 to %45</span>
@@ -155,7 +166,7 @@ Example for BLER (%): 0. (default: 0)</p></li>
 <dt class="sig sig-object py" id="neoradium.snrhelper.SnrScheduler.setData">
 <span class="sig-name descname"><span class="pre">setData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">otherValues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.snrhelper.SnrScheduler.setData" title="Link to this definition"></a></dt>
 <dd><p>Record the metric(s) for the current SNR and advance the internal state.</p>
-<p>You MUST call this at the end of each loop iteration; otherwise a ValueError is raised on the next iteration.</p>
+<p>You MUST call this at the end of each loop iteration; otherwise, a ValueError is raised on the next iteration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -188,19 +199,26 @@ by <a class="reference internal" href="#neoradium.snrhelper.SnrScheduler.getSnrs
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.snrhelper.SnrScheduler.getSnrsAndData">
 <span class="sig-name descname"><span class="pre">getSnrsAndData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.snrhelper.SnrScheduler.getSnrsAndData" title="Link to this definition"></a></dt>
-<dd><p>Return recorded SNRs and their associated metric arrays.</p>
+<dd><p>Return recorded SNRs and their associated metric arrays. Only SNRs within the converged
+bracket <span class="math notranslate nohighlight">\([curLo, curHi]\)</span> are returned; the bracketing-phase endpoints outside that
+range are silently dropped.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><p>A list of numpy arrays:</p>
+<dd class="field-odd"><p><p><code class="docutils literal notranslate"><span class="pre">None</span></code> if no iterations have been run yet (i.e., <a class="reference internal" href="#neoradium.snrhelper.SnrScheduler.setData" title="neoradium.snrhelper.SnrScheduler.setData"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setData()</span></code></a> was never called).
+Otherwise a list <code class="docutils literal notranslate"><span class="pre">l</span></code> of length <code class="docutils literal notranslate"><span class="pre">n+2</span></code>, where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the number of parameters in
+the <code class="docutils literal notranslate"><span class="pre">otherValues</span></code> argument of <a class="reference internal" href="#neoradium.snrhelper.SnrScheduler.setData" title="neoradium.snrhelper.SnrScheduler.setData"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setData()</span></code></a>:</p>
 <ul class="simple">
-<li><p>index 0: sorted SNR values inside the finalized [Lo, Hi] bracket</p></li>
-<li><p>index 1: primary metric values aligned with the SNRs</p></li>
-<li><p>index 2+: additional arrays for each <cite>otherValues</cite> stream</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">l[0]</span></code>: 1-D <code class="docutils literal notranslate"><span class="pre">float32</span></code> NumPy array of SNR values, sorted ascending.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">l[1]</span></code>: 1-D <code class="docutils literal notranslate"><span class="pre">float32</span></code> NumPy array of the primary metric (e.g. BLER) values
+corresponding to <code class="docutils literal notranslate"><span class="pre">l[0]</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">l[i+2]</span></code> (<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">i</span> <span class="pre">&lt;</span> <span class="pre">n</span></code>): a Python list of values for the i’th <code class="docutils literal notranslate"><span class="pre">otherValues</span></code>
+parameter, ordered to match <code class="docutils literal notranslate"><span class="pre">l[0]</span></code>. Elements may be scalars or NumPy arrays of
+variable shape (NumPy can’t always stack them, so a list is returned).</p></li>
 </ul>
 </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>list[np.ndarray]</p>
+<dd class="field-even"><p>list or None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -214,6 +232,7 @@ by <a class="reference internal" href="#neoradium.snrhelper.SnrScheduler.getSnrs
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="DeepMIMO.html" class="btn btn-neutral float-left" title="DeepMIMO and UE Trajectories" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Utilities.html" class="btn btn-neutral float-right" title="Other Utilitiy Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -11,8 +11,8 @@ CSI-RS
 
 -----------------------------------------------
 
-DMRS and PTRS
--------------
+DM-RS and PT-RS
+---------------
 .. automodule:: neoradium.dmrs
    :members: DMRS, PTRS
    :member-order: bysource

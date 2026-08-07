@@ -6,26 +6,26 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Using otherCdmGroups parameter &mdash; NeoRadium 0.4.1 Documentation</title>
+  <title>Demystifying numCdmGroupsWithoutData &mdash; NeoRadium 0.5.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=c87aa342"></script>
-      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="Configuring PTRS" href="PTRS.html" />
-    <link rel="prev" title="Configuring DMRS" href="DMRS.html" /> 
+    <link rel="next" title="Exploring PDSCH PT-RS Configurations" href="PTRS.html" />
+    <link rel="prev" title="Exploring PDSCH DM-RS Configurations" href="DMRS.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.4.1
+            NeoRadium 0.5.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -53,23 +53,26 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MigrationGuide.html">Migration Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="DMRS.html">Configuring DMRS</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Using <code class="docutils literal notranslate"><span class="pre">otherCdmGroups</span></code> parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="PTRS.html">Configuring PTRS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="DMRS.html">Exploring PDSCH DM-RS Configurations</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Demystifying <code class="docutils literal notranslate"><span class="pre">numCdmGroupsWithoutData</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="PTRS.html">Exploring PDSCH PT-RS Configurations</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-coding">Channel Coding</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with Matlab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
 </ul>
 </li>
 </ul>
@@ -80,6 +83,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/CsiReport.html">CSI Reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
@@ -88,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Utilities.html">Other Utilitiy Functions</a></li>
 </ul>
 
         </div>
@@ -96,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.4.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -105,7 +110,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
-      <li class="breadcrumb-item active">Using <code class="docutils literal notranslate"><span class="pre">otherCdmGroups</span></code> parameter</li>
+      <li class="breadcrumb-item active">Demystifying <code class="docutils literal notranslate"><span class="pre">numCdmGroupsWithoutData</span></code></li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../_sources/source/Playground/Notebooks/DMRS/CDMsWithNoData.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -115,9 +120,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="Using-otherCdmGroups-parameter">
-<h1>Using <code class="docutils literal notranslate"><span class="pre">otherCdmGroups</span></code> parameter<a class="headerlink" href="#Using-otherCdmGroups-parameter" title="Link to this heading"></a></h1>
-<p>This notebook shows how to set the “otherCdmGroups” parameter to let the PDSCH know that some CDM groups are used by other devices and therefore data should not be assigned in those CDM groups. (CDM Groups without data)</p>
+  <section id="Demystifying-numCdmGroupsWithoutData">
+<h1>Demystifying <code class="docutils literal notranslate"><span class="pre">numCdmGroupsWithoutData</span></code><a class="headerlink" href="#Demystifying-numCdmGroupsWithoutData" title="Link to this heading"></a></h1>
+<p>This notebook shows how to set the <code class="docutils literal notranslate"><span class="pre">numCdmGroupsWithoutData</span></code> parameter to let the PDSCH know how to allocate the resource elements around DMRS resources in different DMRS ports. <code class="docutils literal notranslate"><span class="pre">numCdmGroupsWithoutData</span></code> specifies how many CDM groups in each RB are treated as reserved for DM-RS and therefore unavailable for payload data (e.g., PDSCH). By default, <strong>NeoRadium</strong> derives a default value from the number of active DM-RS ports and the configured DM-RS symbol length. This default value ensures
+there is no interference between DMRS signals in different ports/layers.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -125,16 +131,17 @@
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">Grid</span>
-<br/></pre></div>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">BandwidthPart</span><span class="p">,</span> <span class="n">PDSCH</span>
+</pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>  <span class="c1"># 5*12*30000 = 1,800,000 Hz</span>
-<span class="n">carrier</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, create a bandwidth part with 5 resource blocks and 30 kHz subcarrier spacing</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">bwp</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -144,20 +151,17 @@
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-Carrier Properties:
-  Cell Id:              1
-  Bandwidth Parts:      1
-  Active BWP:           0
-  Bandwidth Part 0:
-    Resource Blocks:    5 RBs starting at 0 (60 subcarriers)
-    Subcarrier Spacing: 30 kHz
-    CP Type:            normal
-    Bandwidth:          1.8 MHz
-    symbolsPerSlot:     14
-    slotsPerSubFrame:   2
-    nFFT:               1024
-    frameNo:            0
-    slotNo:             0
+Bandwidth Part Properties:
+  Resource Blocks:    5 RBs starting at 0 (60 subcarriers)
+  Subcarrier Spacing: 30 kHz
+  CP Type:            normal
+  Interleaving:       No
+  Bandwidth:          1.8 MHz
+  symbolsPerSlot:     14
+  slotsPerSubFrame:   2
+  nFFT:               1024
+  frameNo:            0
+  slotNo:             0
 
 </pre></div></div>
 </div>
@@ -166,161 +170,451 @@ Carrier Properties:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a 2-layer PDSCH with Mapping Type A (default) using All Symbols and PRBs in the BWP (default)</span>
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="c1"># This PDSCH is using CDM group 0 only. (2 layers -&gt; 2 ports -&gt; one CDM group)</span>
-<span class="c1"># Now inform DMRS that for example we want to use CDM group 1 for a different device</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">otherCdmGroups</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">()</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
 
-PDSCH Properties:
-  mappingType: A
-  nID: 1
-  rnti: 1
-  numLayers: 2
-  numCodewords: 1
-  modulation: 16QAM
-  portSet: [0, 1]
-  symSet:   0   1   2   3   4   5   6   7   8   9  10  11  12  13
-  prbSet:   0   1   2   3   4
-  interleavingBundleSize: 0
-  PRG Size: Wideband
-  Bandwidth Part:
-    Resource Blocks:    5 RBs starting at 0 (60 subcarriers)
-    Subcarrier Spacing: 30 kHz
-    CP Type:            normal
-    Bandwidth:          1.8 MHz
-    symbolsPerSlot:     14
-    slotsPerSubFrame:   2
-    nFFT:               1024
-    frameNo:            0
-    slotNo:             0
-  DMRS:
-    configType: 1
-    nIDs: []
-    scID: 0
-    sameSeq: 1
-    symbols: Single
-    typeA1stPos: 2
-    additionalPos: 0
-    cdmGroups: [0, 0]
-    deltaShifts: [0, 0]
-    allCdmGroups: [0, 1]
-    symSet: [2]
-    REs (before shift): [0, 2, 4, 6, 8, 10]
-    epreRatioDb: -3 (dB)
+<span class="c1"># Initialize the resource grid of the PDSCH object. This creates an internal Grid object and</span>
+<span class="c1"># populates it with the DMRS and PTRS values</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
 
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<span class="c1"># Print some statistics about the PDSCH resource grid</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">numCdmGroupsWithoutData: </span><span class="si">{</span><span class="n">pdsch</span><span class="o">.</span><span class="n">dmrs</span><span class="o">.</span><span class="n">numCdmGroupsWithoutData</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Draw grid map for both layers</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
+
+<span class="c1"># Note that in this case:</span>
+<span class="c1">#   - We only have one CDM group</span>
+<span class="c1">#   - By default, `numCdmGroupsWithoutData` is set to 1.</span>
+<span class="c1">#   - There are no resource elements marked as &quot;NO_DATA&quot;</span>
+<span class="c1">#   - There is no interference between DMRS and PDSCH resources</span>
 </pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get a resource grid from the PDSCH object. This creates a Grid object and populates it with the DMRS values</span>
-<span class="n">grid</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span>
-<span class="c1"># Print some statistics about the grid</span>
-<span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="c1"># Note that there are some resources assigned as &quot;NO_DATA&quot;</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{&#39;GridSize&#39;: 1680, &#39;NO_DATA&#39;: 60, &#39;DMRS&#39;: 60, &#39;PDSCH&#39;: 1560}
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Draw grid map for all layers, one slot and one PRB (reRange=(0,12))</span>
-<span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">reRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
-<span class="c1"># Note that the REs in the DMRS symbols that are not used by DMRS, cannot be used for data.</span>
-<span class="c1"># If we use these REs for data, it would interfere with the DMRS for the other device.</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_5_0.png" src="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_5_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s see another example. Here we are telling DMRS object that CDM groups 1 is used by</span>
-<span class="c1"># other devices. In config type 2, we can have 3 CDM groups. So, as you can see the first CDM group</span>
-<span class="c1"># (CDM Group 0) is used by this PDSCH. The second one (CDM Group 1) is used by other UEs (e.g. PDSCH of a</span>
-<span class="c1"># different UE). The third one (CDM Group 2) is not used by this PDSCH or other devices. Therefore, the</span>
-<span class="c1"># resources are available to the data.</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">otherCdmGroups</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">grid</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span>
-<span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">reRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
-<br/></pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_6_0.png" src="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_6_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let&#39;s look at another example. Here we have a PDSCH with 4 layers. This means CDM Groups 0 and 1 are used</span>
-<span class="c1"># by this PDSCH.</span>
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="c1"># We draw the map for layers 0 and 2 which are in CDM groups 0 and 1 correspondingly. As you can see</span>
-<span class="c1"># the CDM Groups 1 and 0 are marked as &quot;NO_DATA&quot; for ports 0 and 2. This is to prevent the DMRS</span>
-<span class="c1"># signals to interfere with each other. The REs of CDM Group 2 is available for all layers to be used by</span>
-<span class="c1"># data</span>
-<span class="n">grid</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span>
-<span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">reRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
-<br/></pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_7_0.png" src="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_7_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In the same configuration as above, suppose there is another PDSCH for another UE using the</span>
-<span class="c1"># CDM group 2. Now we need to make sure the REs in this CDM group are not used by this PDSCH.</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">otherCdmGroups</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">getGrid</span><span class="p">()</span><span class="o">.</span><span class="n">drawMap</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">reRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">))</span>
-<br/></pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_8_0.png" src="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_8_0.png" />
+<div class="highlight"><pre>
+
+PDSCH Properties:
+  mappingType:               A
+  nID:                       1
+  rnti:                      1
+  numLayers:                 2
+  numCodewords:              1
+  modulation:                16QAM
+  PRG Size:                  Wideband
+  portSet:                   0   1
+  symSet:                    0   1   2   3   4   5   6   7   8   9   10  11  12  13
+  prbSet:                    0   1   2   3   4
+  DMRS:
+    configType:              1
+    nIDs:                    []
+    scID:                    0
+    sameSeq:                 True
+    symbols:                 Single
+    typeA1stPos:             2
+    additionalPos:           0
+    cdmGroups (port:cdm):    0:0  1:0
+    deltaShifts (port:cdm):  0:0  1:0
+    numCdmGroupsWithoutData: 1
+    symSet:                  2
+    REs (before shift):      0 2 4 6 8 10
+    epreRatioDb:             0 (dB)
+
+Number of resource elements:
+  GridSize:       1680
+  PDSCH:          1620
+  DMRS:           60
+
+numCdmGroupsWithoutData: 1
+
+</pre></div></div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_3_1.png" src="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_3_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let&#39;s create a 4-layer PDSCH (using all default settings)</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">()</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+
+<span class="c1"># Initialize the resource grid of the PDSCH object.</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
+
+<span class="c1"># Print some statistics about the PDSCH resource grid</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+<span class="c1"># Draw grid map for both layers</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
+
+<span class="c1"># Note that in this case:</span>
+<span class="c1">#   - We have two CDM groups</span>
+<span class="c1">#   - By default, `numCdmGroupsWithoutData` is set to 2. This ensures no DMRS interference.</span>
+<span class="c1">#   - The resource elements between the DMRS REs are marked as &quot;NO_DATA&quot; and therefore</span>
+<span class="c1">#     not available for PDSCH.</span>
+<span class="c1">#   - There is no interference between DMRS and PDSCH resources</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+PDSCH Properties:
+  mappingType:               A
+  nID:                       1
+  rnti:                      1
+  numLayers:                 4
+  numCodewords:              1
+  modulation:                16QAM
+  PRG Size:                  Wideband
+  portSet:                   0   1   2   3
+  symSet:                    0   1   2   3   4   5   6   7   8   9   10  11  12  13
+  prbSet:                    0   1   2   3   4
+  DMRS:
+    configType:              1
+    nIDs:                    []
+    scID:                    0
+    sameSeq:                 True
+    symbols:                 Single
+    typeA1stPos:             2
+    additionalPos:           0
+    cdmGroups (port:cdm):    0:0  1:0  2:1  3:1
+    deltaShifts (port:cdm):  0:0  1:0  2:1  3:1
+    numCdmGroupsWithoutData: 2
+    symSet:                  2
+    REs (before shift):      0 2 4 6 8 10
+    epreRatioDb:             -3 (dB)
+
+Number of resource elements:
+  GridSize:       3360
+  NO_DATA:        120
+  PDSCH:          3120
+  DMRS:           120
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_4_1.png" src="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_4_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let&#39;s use a different DMRS configuration where we set the &#39;numCdmGroupsWithoutData&#39; to 1:</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">numCdmGroupsWithoutData</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+
+<span class="c1"># Re-initialize the resource grid since we have new DMRS configuration</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
+
+<span class="c1"># Print some statistics about the PDSCH resource grid</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+<span class="c1"># Draw grid map for both layers</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
+
+<span class="c1"># Note that in this case:</span>
+<span class="c1">#   - We have two CDM groups</span>
+<span class="c1">#   - Since numCdmGroupsWithoutData = 1, the first CDM group has REs marked as</span>
+<span class="c1">#     &quot;NO_DATA&quot; (see this in ports 2 and 3 below).</span>
+<span class="c1">#   - Since numCdmGroupsWithoutData = 1, the second CDM group is now available</span>
+<span class="c1">#     for PDSCH (see this in ports 0 and 1 below).</span>
+<span class="c1">#   - This means there will be some interference between the DMRS signals in</span>
+<span class="c1">#     layers 2 and 3 and the PDSCH data in layers 0 and 1. This interference</span>
+<span class="c1">#     can be minimized using spatial diversity between different layers of</span>
+<span class="c1">#     PDSCH in Multi-User MIMO configurations.</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+PDSCH Properties:
+  mappingType:               A
+  nID:                       1
+  rnti:                      1
+  numLayers:                 4
+  numCodewords:              1
+  modulation:                16QAM
+  PRG Size:                  Wideband
+  portSet:                   0   1   2   3
+  symSet:                    0   1   2   3   4   5   6   7   8   9   10  11  12  13
+  prbSet:                    0   1   2   3   4
+  DMRS:
+    configType:              1
+    nIDs:                    []
+    scID:                    0
+    sameSeq:                 True
+    symbols:                 Single
+    typeA1stPos:             2
+    additionalPos:           0
+    cdmGroups (port:cdm):    0:0  1:0  2:1  3:1
+    deltaShifts (port:cdm):  0:0  1:0  2:1  3:1
+    numCdmGroupsWithoutData: 1
+    symSet:                  2
+    REs (before shift):      0 2 4 6 8 10
+    epreRatioDb:             0 (dB)
+
+Number of resource elements:
+  GridSize:       3360
+  NO_DATA:        60
+  PDSCH:          3180
+  DMRS:           120
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_5_1.png" src="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_5_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now we create a 6-Layer PDSCH</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Use a DMRS with configType 2 and double symbols:</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
+
+<span class="c1"># Print some statistics about the PDSCH resource grid</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+<span class="c1"># Draw grid map for both layers</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
+
+<span class="c1"># Note that in this case:</span>
+<span class="c1">#   - We have three CDM groups</span>
+<span class="c1">#   - By default, `numCdmGroupsWithoutData` is set to 3.</span>
+<span class="c1">#   - The resource elements between the DMRS REs are marked as &quot;NO_DATA&quot; and therefore</span>
+<span class="c1">#     not available for PDSCH.</span>
+<span class="c1">#   - There is no interference between DMRS and PDSCH resources</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+PDSCH Properties:
+  mappingType:               A
+  nID:                       1
+  rnti:                      1
+  numLayers:                 6
+  numCodewords:              2
+  modulation:                16QAM
+  PRG Size:                  Wideband
+  portSet:                   0   1   2   3   4   5
+  symSet:                    0   1   2   3   4   5   6   7   8   9   10  11  12  13
+  prbSet:                    0   1   2   3   4
+  DMRS:
+    configType:              2
+    nIDs:                    []
+    scID:                    0
+    sameSeq:                 True
+    symbols:                 Double
+    typeA1stPos:             2
+    additionalPos:           0
+    cdmGroups (port:cdm):    0:0  1:0  2:1  3:1  4:2  5:2
+    deltaShifts (port:cdm):  0:0  1:0  2:2  3:2  4:4  5:4
+    numCdmGroupsWithoutData: 3
+    symSet:                  2   3
+    REs (before shift):      0 1 6 7
+    epreRatioDb:             -4.77 (dB)
+
+Number of resource elements:
+  GridSize:       5040
+  NO_DATA:        480
+  PDSCH:          4320
+  DMRS:           240
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_6_1.png" src="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_6_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now lets set &#39;numCdmGroupsWithoutData&#39; to 1</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">numCdmGroupsWithoutData</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
+
+<span class="c1"># Print some statistics about the PDSCH resource grid</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+<span class="c1"># Draw grid map for both layers</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
+
+<span class="c1"># Note that in this case:</span>
+<span class="c1">#   - We have three CDM groups</span>
+<span class="c1">#   - Since numCdmGroupsWithoutData = 1, the first CDM group has REs marked as</span>
+<span class="c1">#     &quot;NO_DATA&quot; (see this in ports 2, 3, 4, and 5 below).</span>
+<span class="c1">#   - Since numCdmGroupsWithoutData = 1, the second and third CDM groups are</span>
+<span class="c1">#     now available for PDSCH (see this in ports 0, 1, 2, and 3 below).</span>
+<span class="c1">#   - This means there will be some interference between the DMRS signals and</span>
+<span class="c1">#     PDSCH data in different layers. This interference may be minimized using</span>
+<span class="c1">#     spatial diversity between different layers of PDSCH in Multi-User MIMO</span>
+<span class="c1">#     configurations.</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+PDSCH Properties:
+  mappingType:               A
+  nID:                       1
+  rnti:                      1
+  numLayers:                 6
+  numCodewords:              2
+  modulation:                16QAM
+  PRG Size:                  Wideband
+  portSet:                   0   1   2   3   4   5
+  symSet:                    0   1   2   3   4   5   6   7   8   9   10  11  12  13
+  prbSet:                    0   1   2   3   4
+  DMRS:
+    configType:              2
+    nIDs:                    []
+    scID:                    0
+    sameSeq:                 True
+    symbols:                 Double
+    typeA1stPos:             2
+    additionalPos:           0
+    cdmGroups (port:cdm):    0:0  1:0  2:1  3:1  4:2  5:2
+    deltaShifts (port:cdm):  0:0  1:0  2:2  3:2  4:4  5:4
+    numCdmGroupsWithoutData: 1
+    symSet:                  2   3
+    REs (before shift):      0 1 6 7
+    epreRatioDb:             0 (dB)
+
+Number of resource elements:
+  GridSize:       5040
+  NO_DATA:        160
+  PDSCH:          4640
+  DMRS:           240
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_7_1.png" src="../../../../_images/source_Playground_Notebooks_DMRS_CDMsWithNoData_7_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># With the same 6-layer PDSCH, we now set &#39;numCdmGroupsWithoutData&#39; to 2:</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">numCdmGroupsWithoutData</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
+
+<span class="c1"># Print some statistics about the PDSCH resource grid</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+
+<span class="c1"># Draw grid map for both layers</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
+
+<span class="c1"># Note that in this case:</span>
+<span class="c1">#   - We have three CDM groups</span>
+<span class="c1">#   - Since numCdmGroupsWithoutData = 2, the first and second CDM groups have</span>
+<span class="c1">#     REs marked as &quot;NO_DATA&quot;.</span>
+<span class="c1">#   - Since numCdmGroupsWithoutData = 2, the third CDM group is now available</span>
+<span class="c1">#     for PDSCH (see this in ports 0, 1, 2, and 3 below).</span>
+<span class="c1">#   - This means there will be some interference between the DMRS signals in</span>
+<span class="c1">#     the third CDM group (in ports 4,5) and the PDSCH at those locations</span>
+<span class="c1">#     in ports 0,1,2, and 3.</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+PDSCH Properties:
+  mappingType:               A
+  nID:                       1
+  rnti:                      1
+  numLayers:                 6
+  numCodewords:              2
+  modulation:                16QAM
+  PRG Size:                  Wideband
+  portSet:                   0   1   2   3   4   5
+  symSet:                    0   1   2   3   4   5   6   7   8   9   10  11  12  13
+  prbSet:                    0   1   2   3   4
+  DMRS:
+    configType:              2
+    nIDs:                    []
+    scID:                    0
+    sameSeq:                 True
+    symbols:                 Double
+    typeA1stPos:             2
+    additionalPos:           0
+    cdmGroups (port:cdm):    0:0  1:0  2:1  3:1  4:2  5:2
+    deltaShifts (port:cdm):  0:0  1:0  2:2  3:2  4:4  5:4
+    numCdmGroupsWithoutData: 2
+    symSet:                  2   3
+    REs (before shift):      0 1 6 7
+    epreRatioDb:             -3 (dB)
+
+Number of resource elements:
+  GridSize:       5040
+  NO_DATA:        320
+  PDSCH:          4480
+  DMRS:           240
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
@@ -351,8 +645,8 @@ PDSCH Properties:
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="DMRS.html" class="btn btn-neutral float-left" title="Configuring DMRS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="PTRS.html" class="btn btn-neutral float-right" title="Configuring PTRS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="DMRS.html" class="btn btn-neutral float-left" title="Exploring PDSCH DM-RS Configurations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PTRS.html" class="btn btn-neutral float-right" title="Exploring PDSCH PT-RS Configurations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

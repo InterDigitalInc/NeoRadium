@@ -6,25 +6,25 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carriers and Bandwidth Parts &mdash; NeoRadium 0.4.1 Documentation</title>
+  <title>Carriers and Bandwidth Parts &mdash; NeoRadium 0.5.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=c87aa342"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Resource Grid" href="Grid.html" />
-    <link rel="prev" title="Comparing the Polar Coding results with Matlab" href="../Playground/Notebooks/CompareWithMatlab/Polar/PolarMatlab.html" /> 
+    <link rel="prev" title="Comparing the polar coding results with MATLAB" href="../Playground/Notebooks/CompareWithMatlab/Polar/PolarMatlab.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.4.1
+            NeoRadium 0.5.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -52,6 +52,7 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MigrationGuide.html">Migration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
@@ -67,16 +68,19 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#neoradium.carrier.Carrier"><code class="docutils literal notranslate"><span class="pre">Carrier</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.carrier.Carrier.print"><code class="docutils literal notranslate"><span class="pre">Carrier.print()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.carrier.Carrier.restart"><code class="docutils literal notranslate"><span class="pre">Carrier.restart()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.carrier.Carrier.goNext"><code class="docutils literal notranslate"><span class="pre">Carrier.goNext()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.carrier.Carrier.createGrid"><code class="docutils literal notranslate"><span class="pre">Carrier.createGrid()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.carrier.ReservedPrbSet"><code class="docutils literal notranslate"><span class="pre">ReservedPrbSet</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Grid.html">Resource Grid</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Waveform.html">Waveform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Modulation.html">Modulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CsiReport.html">CSI Reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
@@ -85,6 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Other Utilitiy Functions</a></li>
 </ul>
 
         </div>
@@ -93,7 +98,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.4.1</a>
+          <a href="../../index.html">NeoRadium 0.5.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -115,19 +120,32 @@
 <span id="carriers-and-bandwidth-parts"></span><h1>Carriers and Bandwidth Parts<a class="headerlink" href="#module-neoradium.carrier" title="Link to this heading"></a></h1>
 <p>The module <code class="docutils literal notranslate"><span class="pre">carrier.py</span></code> implements the classes <a class="reference internal" href="#neoradium.carrier.Carrier" title="neoradium.carrier.Carrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Carrier</span></code></a> and <a class="reference internal" href="#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>. Each
 <a class="reference internal" href="#neoradium.carrier.Carrier" title="neoradium.carrier.Carrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Carrier</span></code></a> can be associated with several <a class="reference internal" href="#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> objects. This implementation is
-based on <strong>3GPP TR 38.211</strong>.</p>
+based on <strong>3GPP TS 38.211</strong>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.carrier.BandwidthPart">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.carrier.</span></span><span class="sig-name descname"><span class="pre">BandwidthPart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">carrier</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.BandwidthPart" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.carrier.</span></span><span class="sig-name descname"><span class="pre">BandwidthPart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">carrier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.BandwidthPart" title="Link to this definition"></a></dt>
 <dd><p>This class encapsulates the functionality of a bandwidth part. A bandwidth part is a subset of contiguous common
 resource blocks for a specific numerology on a given carrier. For more detailed information, please refer to
-3GPP TR 38.211, section 4.4.5. It is important to note that BandwidthPart objects are not directly created. Instead,
-you typically create a <a class="reference internal" href="#neoradium.carrier.Carrier" title="neoradium.carrier.Carrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Carrier</span></code></a> object and retrieve its current BandwidthPart using its <code class="docutils literal notranslate"><span class="pre">curBwp</span></code>
-property.</p>
+3GPP TS 38.211, section 4.4.5. You typically create a <a class="reference internal" href="#neoradium.carrier.Carrier" title="neoradium.carrier.Carrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Carrier</span></code></a> object and retrieve its current
+BandwidthPart using its <code class="docutils literal notranslate"><span class="pre">curBwp</span></code> property. Since we usually work with bandwidth parts in simulations, you can
+also instantiate a <a class="reference internal" href="#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object directly passing both numerology and carrier information. For
+example, the following line create both a <a class="reference internal" href="#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> and a <a class="reference internal" href="#neoradium.carrier.Carrier" title="neoradium.carrier.Carrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Carrier</span></code></a> object. A reference
+to the carrier objects is available as <code class="docutils literal notranslate"><span class="pre">bwp.carrier</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a BandwidthPart. This internally creates a carrier with 24 resource blocks.</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">interleavingBundleSize</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>carrier</strong> (<em>Carrier object</em>)</p></li>
+<li><p><strong>carrier</strong> (<a class="reference internal" href="#neoradium.carrier.Carrier" title="neoradium.carrier.Carrier"><code class="xref py py-class docutils literal notranslate"><span class="pre">Carrier</span></code></a> or None) – <p>The carrier associated with this bandwidth part. If <cite>None</cite>, a new carrier is created with only one
+bandwidth part (this object) and its properties can be set using the parameters passed in kwargs. For
+example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a BandwidthPart. This internally creates a carrier with 24 resource blocks.</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">interleavingBundleSize</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</p></li>
 <li><p><strong>kwargs</strong> (<em>dict</em>) – <p>A set of optional arguments.</p>
 <blockquote>
 <div><dl class="field-list simple">
@@ -140,11 +158,16 @@ property.</p>
 <dt class="field-odd">spacing<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The subcarrier spacing in kHz. This also specifies the numerology used. To specify the
 subcarrier spacing, you can use 15, 30, 60, 120, 240, 480, or 960. To specify the numerology, you
-can use 0, 1, …, 6. Please refer to <strong>3GPP TR 38.211, section 4.2</strong> for more details.</p>
+can use 0, 1, …, 6. Please refer to <strong>3GPP TS 38.211, section 4.2</strong> for more details.</p>
 </dd>
 <dt class="field-even">cpType<span class="colon">:</span></dt>
 <dd class="field-even"><p>Cyclic Prefix type. It can be either “Normal” or “Extended”. The “Extended” type is only
 available for 60 kHz subcarrier spacing.</p>
+</dd>
+<dt class="field-odd">interleavingBundleSize<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The bundle size of the interleaving process. It can be one of 0 (default),
+2, or 4. The value 0 means interleaving is disabled (default). See <strong>3GPP TS 38.211,
+Section 7.3.1.6</strong> for more information.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -157,20 +180,20 @@ available for 60 kHz subcarrier spacing.</p>
 <blockquote>
 <div><dl class="field-list">
 <dt class="field-odd">u<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The numerology value, which falls within the range of 0 to 6 (<span class="math notranslate nohighlight">\(\mu\)</span>). See 3GPP TR 38.211,
+<dd class="field-odd"><p>The numerology value, which falls within the range of 0 to 6 (<span class="math notranslate nohighlight">\(\mu\)</span>). See 3GPP TS 38.211,
 table 4.2-1.</p>
 </dd>
 <dt class="field-even">bandwidth<span class="colon">:</span></dt>
 <dd class="field-even"><p>The bandwidth of this bandwidth part in Hz.</p>
 </dd>
 <dt class="field-odd">nFFT<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The FFT size used for OFDM modulation of the resource grids (See <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>)
+<dd class="field-odd"><p>The FFT size used for OFDM modulation of the resource grids (See <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>),
 which are created based on this bandwidth part. It is calculated as follows:</p>
 <div class="math notranslate nohighlight">
 \[N_{FFT} = \big [\frac {\frac {f_s} {1000} - \sum_{l=0}^{N_{symb}^{slot}-1} N_{CP,l}^{\mu}} {N_{symb}^{subframe,\mu}} \big ]\]</div>
 <p>where <span class="math notranslate nohighlight">\(f_s=\frac 1 {T_s}\)</span>, is the 5G sample rate (<span class="math notranslate nohighlight">\(f_s=30,720,000\)</span> Hz),
 <span class="math notranslate nohighlight">\(N_{symb}^{slot}\)</span> is the number of symbols per slot, <span class="math notranslate nohighlight">\(N_{CP,l}^{\mu}\)</span> is the number of
-samples in cyclic prefix of symbol <span class="math notranslate nohighlight">\(l\)</span> based on numerology <span class="math notranslate nohighlight">\(\mu\)</span>, and
+samples in the cyclic prefix of symbol <span class="math notranslate nohighlight">\(l\)</span> based on numerology <span class="math notranslate nohighlight">\(\mu\)</span>, and
 <span class="math notranslate nohighlight">\(N_{symb}^{subframe,\mu}\)</span> is the number of symbols in each subframe for numerology <span class="math notranslate nohighlight">\(\mu\)</span>.</p>
 </dd>
 <dt class="field-even">symbolsPerSlot<span class="colon">:</span></dt>
@@ -178,7 +201,7 @@ samples in cyclic prefix of symbol <span class="math notranslate nohighlight">\(
 12 for “Normal” and “Extended” Cyclic Prefix types, respectively.</p>
 </dd>
 <dt class="field-odd">slotsPerSubFrame<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of slots per subframe based on current numerology
+<dd class="field-odd"><p>The number of slots per subframe based on the current numerology
 (<span class="math notranslate nohighlight">\(N_{slot}^{subframe,\mu}\)</span>).</p>
 </dd>
 <dt class="field-even">symbolLens<span class="colon">:</span></dt>
@@ -194,16 +217,16 @@ symbol length for symbol <code class="docutils literal notranslate"><span class=
 (<span class="math notranslate nohighlight">\(N_{symb}^{subframe,\mu}\)</span>).</p>
 </dd>
 <dt class="field-odd">slotNoInFrame<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The slot number in current frame (<span class="math notranslate nohighlight">\(n_{s,f}^{\mu}\)</span>).</p>
+<dd class="field-odd"><p>The slot number in the current frame (<span class="math notranslate nohighlight">\(n_{s,f}^{\mu}\)</span>).</p>
 </dd>
 <dt class="field-even">slotNoInSubFrame<span class="colon">:</span></dt>
-<dd class="field-even"><p>The slot number in current subframe (<span class="math notranslate nohighlight">\(n_{s}^{\mu}\)</span>).</p>
+<dd class="field-even"><p>The slot number in the current subframe (<span class="math notranslate nohighlight">\(n_{s}^{\mu}\)</span>).</p>
 </dd>
 <dt class="field-odd">avgSlotDuration<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The average slot duration in seconds.</p>
 </dd>
 <dt class="field-even">cellId<span class="colon">:</span></dt>
-<dd class="field-even"><p>The Cell identifier of the Carrier containing this bandwidth part.</p>
+<dd class="field-even"><p>The cell identifier of the Carrier containing this bandwidth part.</p>
 </dd>
 <dt class="field-odd">slotNo<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Current slot number. A counter that can be used in simulation.</p>
@@ -231,14 +254,14 @@ transmitting the Cyclic Prefix, which does not carry useful information.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as the title for the printed information. If <cite>None</cite> (the default), the text
 “Bandwidth Part Properties:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>bool</em>) – If <cite>True</cite>, returns a string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns
-the information in a text string. Otherwise, nothing is returned.</p>
+the information in a string. Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None or str</p>
@@ -248,20 +271,13 @@ the information in a text string. Otherwise, nothing is returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.carrier.BandwidthPart.createGrid">
-<span class="sig-name descname"><span class="pre">createGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numPlanes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useReDesc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.BandwidthPart.createGrid" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">createGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numPorts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numPlanes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.BandwidthPart.createGrid" title="Link to this definition"></a></dt>
 <dd><p>Creates a resource grid and returns an empty <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>
 object based on this bandwidth part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>numPlanes</strong> (<em>int</em>) – The number of “planes” in the resource grid. See the
-<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class for more information.</p></li>
-<li><p><strong>useReDesc</strong> (<em>Boolean</em>) – If <cite>True</cite>, the resource grid created will also include additional
-fields that describe the content of each resource element (RE). This
-can be used during the debugging to make sure the resources are
-allocated correctly. See the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class
-for more information.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>numPorts</strong> (<em>int</em>) – The number of “ports” in the resource grid. See the
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class for more information.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>An empty <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object based on this
@@ -275,16 +291,16 @@ bandwidth part object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.carrier.BandwidthPart.getCpLen">
-<span class="sig-name descname"><span class="pre">getCpLen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symIdxInSubframe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.BandwidthPart.getCpLen" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getCpLen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symIdxInSubFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.BandwidthPart.getCpLen" title="Link to this definition"></a></dt>
 <dd><p>Returns the number of time samples in the Cyclic Prefix for the OFDM symbol
-specified by <code class="docutils literal notranslate"><span class="pre">symIdxInSubframe</span></code>. This is based on <strong>TS 38.211, Section 5.3.1</strong>.</p>
+specified by <code class="docutils literal notranslate"><span class="pre">symIdxInSubFrame</span></code>. This is based on <strong>TS 38.211, Section 5.3.1</strong>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>symIdxInSubframe</strong> (<em>int</em>) – The index of symbol from the beginning of subframe.</p>
+<dd class="field-odd"><p><strong>symIdxInSubFrame</strong> (<em>int</em>) – The index of the symbol from the beginning of the subframe.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The number of time samples in Cyclic Prefix for the OFDM symbol
-specified by <code class="docutils literal notranslate"><span class="pre">symIdxInSubframe</span></code>.</p>
+<dd class="field-even"><p>The number of time samples in the cyclic prefix for the OFDM symbol
+specified by <code class="docutils literal notranslate"><span class="pre">symIdxInSubFrame</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -330,7 +346,7 @@ the next slot. Therefore, the length of the returned array is <code class="docut
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.carrier.Carrier">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.carrier.</span></span><span class="sig-name descname"><span class="pre">Carrier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.Carrier" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.carrier.</span></span><span class="sig-name descname"><span class="pre">Carrier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.Carrier" title="Link to this definition"></a></dt>
 <dd><p>This class encapsulates the functionality of a Carrier. A Carrier object serves as a container for a group of
 resource blocks dedicated to either uplink or downlink communication. It is possible to associate a Carrier
 object with multiple instances of the <a class="reference internal" href="#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> class, but only one instance can be active at any
@@ -344,7 +360,7 @@ time.</p>
 <dd class="field-odd"><p>The starting resource block (RB). This is the number of RBs from CRB 0. The default is 0.</p>
 </dd>
 <dt class="field-even">numRbs<span class="colon">:</span></dt>
-<dd class="field-even"><p>The number of RBs included in the carrier. The default is 50.</p>
+<dd class="field-even"><p>The number of RBs included in the carrier. The default is 52.</p>
 </dd>
 <dt class="field-odd">bwps<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A list of <a class="reference internal" href="#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> objects associated with this Carrier. If this is not
@@ -356,26 +372,26 @@ creating the Carrier object:</p>
 <dt class="field-odd">spacing<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The subcarrier spacing in kHz. This also specifies the numerology used. To specify
 the subcarrier spacing, you can use 15, 30, 60, 120, 240, 480, or 960. To specify the
-numerology, you can use 0, 1, …, 6. Please refer to <strong>3GPP TR 38.211, section 4.2</strong>
+numerology, you can use 0, 1, …, 6. Please refer to <strong>3GPP TS 38.211, section 4.2</strong>
 for more details.</p>
 </dd>
 <dt class="field-even">cpType<span class="colon">:</span></dt>
 <dd class="field-even"><p>Cyclic Prefix type. It can be either “Normal” or “Extended”. The “Extended” type is
 only available for 60 kHz subcarrier spacing.</p>
 </dd>
+<dt class="field-odd">interleavingBundleSize<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The bundle size of the interleaving process. It can be one of 0
+(default), 2, or 4. The value 0 means interleaving is disabled (default). See <strong>3GPP
+TS 38.211 Section 7.3.1.6</strong> for more information.</p>
+</dd>
 </dl>
-<p><strong>Example:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a carrier with a single BandwidthPart:</span>
-<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cpType</span><span class="o">=</span><span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 </div></blockquote>
 </dd>
 <dt class="field-even">cellId<span class="colon">:</span></dt>
-<dd class="field-even"><p>The Cell identifier of this Carrier. The default is 1.</p>
+<dd class="field-even"><p>The cell identifier of this carrier. The default is 1.</p>
 </dd>
 <dt class="field-odd">curBwpIndex<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The index of current bandwidth part. The default is 0.</p>
+<dd class="field-odd"><p>The index of the current bandwidth part. The default is 0.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -397,10 +413,10 @@ only available for 60 kHz subcarrier spacing.</p>
 <dd class="field-odd"><p>The currently active <a class="reference internal" href="#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object.</p>
 </dd>
 <dt class="field-even">frameNoRel<span class="colon">:</span></dt>
-<dd class="field-even"><p>The remainder of current frame number divided by 1024.</p>
+<dd class="field-even"><p>The remainder of the current frame number divided by 1024.</p>
 </dd>
 <dt class="field-odd">slotNoInFrame<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The slot number in current frame (<span class="math notranslate nohighlight">\(n_{s,f}^{\mu}\)</span>).</p>
+<dd class="field-odd"><p>The slot number in the current frame (<span class="math notranslate nohighlight">\(n_{s,f}^{\mu}\)</span>).</p>
 </dd>
 <dt class="field-even">symbolsPerSlot<span class="colon">:</span></dt>
 <dd class="field-even"><p>The number of OFDM symbols in each slot (<span class="math notranslate nohighlight">\(N_{symb}^{slot}\)</span>) based on the numerology
@@ -416,11 +432,16 @@ of the currently active <a class="reference internal" href="#neoradium.carrier.B
 <a class="reference internal" href="#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> (<span class="math notranslate nohighlight">\(N_{slot}^{frame,\mu}\)</span>).</p>
 </dd>
 <dt class="field-odd">symbolsPerSubFrame<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of OFDM Symbols per subframe based on the numerology of the currently
+<dd class="field-odd"><p>The number of OFDM symbols per subframe based on the numerology of the currently
 active <a class="reference internal" href="#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> (<span class="math notranslate nohighlight">\(N_{symb}^{subframe,\mu}\)</span>).</p>
 </dd>
 </dl>
 </div></blockquote>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a carrier with a single BandwidthPart:</span>
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cpType</span><span class="o">=</span><span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.carrier.Carrier.print">
 <span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.Carrier.print" title="Link to this definition"></a></dt>
@@ -429,13 +450,13 @@ active <a class="reference internal" href="#neoradium.carrier.BandwidthPart" tit
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as the title for the printed information. If <cite>None</cite> (the default), the text
 “Carrier Properties:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>bool</em>) – If <cite>True</cite>, returns a string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -445,19 +466,79 @@ Otherwise, nothing is returned.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="neoradium.carrier.Carrier.restart">
+<span class="sig-name descname"><span class="pre">restart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.Carrier.restart" title="Link to this definition"></a></dt>
+<dd><p>Resets this carrier’s slot and frame counters to zero. Use this to rewind the carrier’s timing
+state to the beginning of a simulation run (e.g., between Monte-Carlo trials). The counterpart
+<a class="reference internal" href="#neoradium.carrier.Carrier.goNext" title="neoradium.carrier.Carrier.goNext"><code class="xref py py-meth docutils literal notranslate"><span class="pre">goNext()</span></code></a> advances the counters by one slot.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="neoradium.carrier.Carrier.goNext">
 <span class="sig-name descname"><span class="pre">goNext</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.Carrier.goNext" title="Link to this definition"></a></dt>
-<dd><p>Increments the current slot number in this carrier (<code class="docutils literal notranslate"><span class="pre">slotNo</span></code>). If the slot number passes the boundary of
-a frame, the frame number (<code class="docutils literal notranslate"><span class="pre">frameNo</span></code>) is also incremented.</p>
+<dd><p>Increments the current slot number in this carrier (<code class="docutils literal notranslate"><span class="pre">slotNo</span></code>). If the slot number crosses a frame boundary,
+the frame number (<code class="docutils literal notranslate"><span class="pre">frameNo</span></code>) is also incremented.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.carrier.Carrier.createGrid">
-<span class="sig-name descname"><span class="pre">createGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numPorts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useReDesc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.Carrier.createGrid" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">createGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numPorts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.Carrier.createGrid" title="Link to this definition"></a></dt>
 <dd><p>Creates a resource grid and returns an empty <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object based on the currently
 active <a class="reference internal" href="#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>. See <a class="reference internal" href="#neoradium.carrier.BandwidthPart.createGrid" title="neoradium.carrier.BandwidthPart.createGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BandwidthPart.createGrid()</span></code></a> for more details.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.carrier.ReservedPrbSet">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.carrier.</span></span><span class="sig-name descname"><span class="pre">ReservedPrbSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prbs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.carrier.ReservedPrbSet" title="Link to this definition"></a></dt>
+<dd><p>Represents a set of reserved resource blocks and OFDM symbols within a BWP, as defined in <strong>3GPP TS 38.214
+Section 5.1.4.1</strong>. A reserved resource set is used to mark time-frequency resources that should not be used for
+PDSCH transmission. The reservation is defined by:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>a set of reserved PRB indices,</p></li>
+<li><p>a set of reserved OFDM symbol indices within one or two slots, and</p></li>
+<li><p>a periodic activity pattern.</p></li>
+</ul>
+</div></blockquote>
+<p>The RB and symbol reservations may be provided either as bitmaps or as lists of indices. The activity pattern
+is provided as a bitmap string, where a ‘1’ indicates that the corresponding reservation unit is active.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Bitmap strings use the least significant bit (LSB) on the right, i.e. the last character in the string
+corresponds to bit 0.</p></li>
+<li><p>The symbol bitmap may describe one slot or two consecutive slots.</p></li>
+<li><p>The pattern length must be one of the values allowed by <strong>3GPP TS 38.214 Section 5.1.4.1</strong>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bwp</strong> (<a class="reference internal" href="#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><em>BandwidthPart</em></a>) – The bandwidth part to which this reservation applies.</p></li>
+<li><p><strong>prbs</strong> (<em>str</em><em> or </em><em>list</em><em> of </em><em>int</em>) – <p>Reserved physical resource blocks, corresponding to <code class="docutils literal notranslate"><span class="pre">resourceBlocks</span></code> in <strong>3GPP TS 38.214</strong>.</p>
+<ul>
+<li><p>If a string is provided, it is interpreted as a bitmap of ‘0’s and ‘1’s, with the LSB on the right. A
+‘1’ means the corresponding RB is reserved.</p></li>
+<li><p>If a list is provided, it is interpreted as the reserved symbol indices.</p></li>
+</ul>
+</p></li>
+<li><p><strong>symbols</strong> (<em>str</em><em> or </em><em>list</em><em> of </em><em>int</em>) – <p>Reserved OFDM symbols, corresponding to <code class="docutils literal notranslate"><span class="pre">symbolsInResourceBlock</span></code> in <strong>3GPP TS 38.214</strong>.</p>
+<ul>
+<li><p>If a string is provided, it is interpreted as a bitmap of ‘0’s and ‘1’s, with the LSB on the right. A
+‘1’ means the corresponding OFDM symbol is reserved.</p></li>
+<li><p>The bitmap length must be either <code class="docutils literal notranslate"><span class="pre">symbolsPerSlot</span></code> or <code class="docutils literal notranslate"><span class="pre">2*symbolsPerSlot</span></code>.</p></li>
+<li><p>If a list is provided, it is interpreted as the list of reserved symbol indices. If any index is greater
+than or equal to the slot length, the reservation is assumed to span two slots.</p></li>
+</ul>
+</p></li>
+<li><p><strong>pattern</strong> (<em>str</em><em>, </em><em>optional</em>) – Periodicity and activity pattern, corresponding to <code class="docutils literal notranslate"><span class="pre">periodicityAndPattern</span></code> in <strong>3GPP TS 38.214</strong>. This
+must be a bitmap string of ‘0’s and ‘1’s, with the LSB on the right. A ‘1’ means the corresponding
+reservation unit is active. The pattern length must be one of: <code class="docutils literal notranslate"><span class="pre">1,</span> <span class="pre">2,</span> <span class="pre">4,</span> <span class="pre">5,</span> <span class="pre">8,</span> <span class="pre">10,</span> <span class="pre">20,</span> <span class="pre">40</span></code>. A unit
+corresponds to one slot or two slots, depending on the symbol configuration. The maximum pattern duration
+is 40 ms.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -466,7 +547,7 @@ active <a class="reference internal" href="#neoradium.carrier.BandwidthPart" tit
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../Playground/Notebooks/CompareWithMatlab/Polar/PolarMatlab.html" class="btn btn-neutral float-left" title="Comparing the Polar Coding results with Matlab" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Playground/Notebooks/CompareWithMatlab/Polar/PolarMatlab.html" class="btn btn-neutral float-left" title="Comparing the polar coding results with MATLAB" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="Grid.html" class="btn btn-neutral float-right" title="Resource Grid" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

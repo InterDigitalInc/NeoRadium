@@ -1,0 +1,451 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "22bf3c88",
+   "metadata": {},
+   "source": [
+    "# Low-Density Parity Check (LDPC)\n",
+    "\n",
+    "This notebook demonstrates how to use the new ``LdpcCodec`` API for LDPC encoding and decoding."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "0fc98acd",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "from neoradium import BandwidthPart, PDSCH, LdpcCodec, Grid, CdlChannel, random\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3c2d6dcf-d69d-4349-b898-6b5e8a550c7d",
+   "metadata": {},
+   "source": [
+    "## Case 1: One Codeword (Number of Layers ≤ 4)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "52694194",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "LDPC Encode/Decode Properties:\n",
+      "  Num layers:         1\n",
+      "  Num codewords:      1\n",
+      "  numIter:            5\n",
+      "  nRef:               0\n",
+      "  Modulation:         16QAM\n",
+      "  Coderate:           449/1024\n",
+      "  TBS:                10000\n",
+      "  numLayers:          1\n",
+      "  Base Graph:         1\n",
+      "  Code Block Size:    5280\n",
+      "  Num Code Blocks:    2\n",
+      "  Lifting Size:       240\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Create an LDPC codec object\n",
+    "txBlockSize = 10000\n",
+    "coderate = 449/1024\n",
+    "modulation = \"16QAM\"\n",
+    "ldpc = LdpcCodec(modulation, coderate, txBlockSize, numLayers=1)\n",
+    "ldpc.print()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "87608883-dcee-44cd-bdb6-bb49eb3712ca",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Base Graph Shape: (46, 68)\n",
+      "8x8 sub-matrix at the \"Double Diagonal\" section:\n",
+      "      1     0    -1    -1    -1    -1    -1    -1\n",
+      "      0     0     0    -1    -1    -1    -1    -1\n",
+      "     -1    -1     0     0    -1    -1    -1    -1\n",
+      "      1    -1    -1     0    -1    -1    -1    -1\n",
+      "     -1    -1    -1    -1     0    -1    -1    -1\n",
+      "    180    -1    -1    -1    -1     0    -1    -1\n",
+      "     -1    -1    -1    -1    -1    -1     0    -1\n",
+      "     -1    -1    -1    -1    -1    -1    -1     0\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"Base Graph Shape:\", ldpc.cwCodecs[0].baseGraph.shape)\n",
+    "print(\"8x8 sub-matrix at the \\\"Double Diagonal\\\" section:\")\n",
+    "for r in ldpc.cwCodecs[0].baseGraph[0:8,22:30]: print(\"    \" + \"   \".join(\"%3d\"%x for x in r))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "0d906bd2",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Rate-Matched coded blocks Shape: (22808,)\n"
+     ]
+    }
+   ],
+   "source": [
+    "txBlock = random.bits(txBlockSize)                  # Create a random Transport Block\n",
+    "rateMatchedCodeBlocks = ldpc.encode(txBlock)\n",
+    "print(\"Rate-Matched coded blocks Shape:\", rateMatchedCodeBlocks.shape)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "cae4081e-51c5-4c55-97c4-268ed1fa738a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Simple bipolar channel (no noise):\n",
+    "channelOutput = 1 - 2.0*rateMatchedCodeBlocks"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "a84b426e-b73e-4254-8f46-8cc7a70a3a32",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "crcMatch: [ True  True  True]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# LDPC decoding\n",
+    "rxBlock, crcMatch = ldpc.decode(channelOutput)\n",
+    "\n",
+    "# Check CRC and compare with the original txBlock\n",
+    "print(\"crcMatch:\", crcMatch)\n",
+    "assert np.abs(rxBlock-txBlock).sum()==0\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2c771ca0-6395-4826-8ce7-51313a0d6174",
+   "metadata": {},
+   "source": [
+    "## Case 2: Two Codewords with Different Modulation, Coderate, and TBS Settings"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "36d3e1de",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "LDPC Encode/Decode Properties:\n",
+      "  Num layers:           6\n",
+      "  Num codewords:        2\n",
+      "  numIter:              5\n",
+      "  nRef:                 0\n",
+      "  First codeword:\n",
+      "    Modulation:         16QAM\n",
+      "    Coderate:           449/1024\n",
+      "    TBS:                10000\n",
+      "    numLayers:          3\n",
+      "    Base Graph:         1\n",
+      "    Code Block Size:    5280\n",
+      "    Num Code Blocks:    2\n",
+      "    Lifting Size:       240\n",
+      "  Second codeword:\n",
+      "    Modulation:         QPSK\n",
+      "    Coderate:           193/1024\n",
+      "    TBS:                5000\n",
+      "    numLayers:          3\n",
+      "    Base Graph:         2\n",
+      "    Code Block Size:    2560\n",
+      "    Num Code Blocks:    2\n",
+      "    Lifting Size:       256\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "txBlockSizes = [10000, 5000]\n",
+    "coderates = [449/1024, 193/1024]\n",
+    "modulations = [\"16QAM\", \"QPSK\"]\n",
+    "ldpc = LdpcCodec(modulations, coderates, txBlockSizes, numLayers=6)\n",
+    "ldpc.print()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "d34d16fa-e978-4c91-94c1-30c015931cf9",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Rate-Matched coded block lengths:\n",
+      "  First codeword:  22812\n",
+      "  Second codeword: 26532\n"
+     ]
+    }
+   ],
+   "source": [
+    "txBlocks = [random.bits(txBlockSize) for txBlockSize in txBlockSizes]   # Create random Transport Blocks\n",
+    "rateMatchedCodeBlocks = ldpc.encode(txBlocks)\n",
+    "print(\"Rate-Matched coded block lengths:\")\n",
+    "print(f\"  First codeword:  {len(rateMatchedCodeBlocks[0])}\")\n",
+    "print(f\"  Second codeword: {len(rateMatchedCodeBlocks[1])}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "e76a989b-6ecd-416b-8104-94f1ef2de425",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Simple bipolar channel with no noise:\n",
+    "channelOutput = [1 - 2.0*rateMatchedCodeBlocks[i] for i in range(2)]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "207c2235-0704-45ab-81b9-2542ab8cdfd7",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "First codeword crcMatch:  [ True  True  True]\n",
+      "Second codeword crcMatch: [ True  True  True]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# LDPC decoding\n",
+    "rxBlocks, crcMatches = ldpc.decode(channelOutput)\n",
+    "\n",
+    "# Check CRCs and compare with the original txBlocks\n",
+    "print(f\"First codeword crcMatch:  {crcMatches[0]}\")\n",
+    "print(f\"Second codeword crcMatch: {crcMatches[1]}\")\n",
+    "assert np.abs(rxBlocks[0]-txBlocks[0]).sum()==0\n",
+    "assert np.abs(rxBlocks[1]-txBlocks[1]).sum()==0\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f11c6db2-d23d-4daf-9a58-2eb1651946f4",
+   "metadata": {},
+   "source": [
+    "## Case 3: PDSCH End-to-End"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "dd3b27f1-76ad-45dc-804e-537cf3446f02",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "bwp = BandwidthPart(numRbs=24, spacing=15)          # Create a bandwidth part with 24 RBs and 15 kHz subcarrier spacing\n",
+    "pdsch = PDSCH(bwp, numLayers=1, modulation=\"16QAM\") # Create a 1-layer PDSCH\n",
+    "pdsch.setDMRS()                                     # Use default DMRS configuration\n",
+    "channel = CdlChannel(bwp, profile='C', delaySpread=100, carrierFreq=4e9, dopplerShift=10)   # Create a SISO channel"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "98b7731e-f720-4c20-8814-70dc759af2d5",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "LDPC Encode/Decode Properties:\n",
+      "  Num layers:         1\n",
+      "  Num codewords:      1\n",
+      "  numIter:            5\n",
+      "  nRef:               0\n",
+      "  Modulation:         16QAM\n",
+      "  Coderate:           449/1024\n",
+      "  TBS:                6528\n",
+      "  numLayers:          1\n",
+      "  Base Graph:         1\n",
+      "  Code Block Size:    7040\n",
+      "  Num Code Blocks:    1\n",
+      "  Lifting Size:       320\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Get the LDPC codec from PDSCH:\n",
+    "coderate = 449/1024\n",
+    "ldpc = pdsch.getLdpcCodec(coderate)\n",
+    "ldpc.print()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "3237b7e9-0359-4412-a548-5722ccdb388a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pdsch.initGrid()                                # Initialize PDSCH's internal resource grid and populate it with DMRS\n",
+    "numBits = pdsch.getBitCapacity()                                    # Number of PDSCH data bits in the resource grid\n",
+    "txBlock = random.bits(ldpc.cwCodecs[0].txBlockSize)                 # Random transport block\n",
+    "rateMatchedCodeBlocks = ldpc.encode(txBlock, numBits[0])            # LDPC-encoded and rate-matched bitstream\n",
+    "pdsch.setPdschData(rateMatchedCodeBlocks)                           # Populates the PDSCH's grid with encoded bits"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "87adeef7-5c14-4a55-b8ce-52c56b43ac30",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(1, 14, 288)"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "channelMatrix = channel.getChannelMatrix()                          # Get channel matrix\n",
+    "precoder = pdsch.getPrecodingMatrix(channelMatrix)                  # Get precoding matrix\n",
+    "effChannelMatrix = channel.getEffChannel(channelMatrix, precoder)   # The effective channel matrix\n",
+    "\n",
+    "txGrid = bwp.createGrid(len(channel.txAntenna))                     # Create a Grid for transmission\n",
+    "pdsch.precodeTo(txGrid, precoder)                                   # Precode PDSCH into the txGrid\n",
+    "txGrid.shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "0cc1abb3-8cb9-460c-8bb6-92e8ca116e4a",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(1, 14, 288)"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "snrDb = 10                                                          # Signal to noise ratio in dB\n",
+    "rxGrid = txGrid.applyChannel(channelMatrix)                         # Apply the channel to the precoded resource grid\n",
+    "noisyRxGrid = rxGrid.addNoise(snrDb=snrDb)                          # Add noise to get a noisy received resource grid\n",
+    "noisyRxGrid.shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "a4b866e1-5455-4be0-baaa-a58ff65b26a4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "eqGrid, llrScales = pdsch.equalize(noisyRxGrid, effChannelMatrix)   # Equalize the received noisy resource grid\n",
+    "llrs = pdsch.getLLRs(eqGrid, llrScales)                             # Demodulate to get the log-likelihood ratios"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "b8bf9bca-e3a4-48b0-8295-20aab5b2d087",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "crcMatch: [ True]\n"
+     ]
+    }
+   ],
+   "source": [
+    "rxBlock, crcMatch = ldpc.decode(llrs)                               # Use our LdpcCodec object to decode LLRs\n",
+    "\n",
+    "# Check CRC and compare with the original txBlock\n",
+    "print(\"crcMatch:\", crcMatch[0])\n",
+    "assert np.abs(rxBlock[0]-txBlock).sum()==0"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2d8ca944-bd71-4496-984b-de7f8a9dab8c",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.10"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

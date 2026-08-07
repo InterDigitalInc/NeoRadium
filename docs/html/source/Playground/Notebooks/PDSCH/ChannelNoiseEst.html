@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Channel/Noise Estimation &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="NR PDSCH Throughput with HARQ" href="PDSCH-Throughput.html" />
+    <link rel="prev" title="BLER Evaluation for PDSCH Communication with LDPC" href="PDSCH-BLER.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="PDSCH-endToEnd.html">End-to-End PDSCH Communication Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PDSCH-BER.html">Measuring PDSCH Bit Error Rate (BER)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PDSCH-BLER.html">BLER Evaluation for PDSCH Communication with LDPC</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Channel/Noise Estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="PDSCH-Throughput.html">NR PDSCH Throughput with HARQ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AdvancedPDSCH.html">Advanced PDSCH Configuration and End-to-End Processing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-coding">Channel Coding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Channel/Noise Estimation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/PDSCH/ChannelNoiseEst.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Channel/Noise-Estimation">
+<h1>Channel/Noise Estimation<a class="headerlink" href="#Channel/Noise-Estimation" title="Link to this heading"></a></h1>
+<p>This notebook demonstrates an end-to-end pipeline for channel and noise estimation using the PDSCH class’s <code class="docutils literal notranslate"><span class="pre">estimateChannel</span></code> method.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">estimateChannel</span></code> function estimates the effective channel between the PDSCH layers and the receive antennas using the DMRS resource elements. It also returns <code class="docutils literal notranslate"><span class="pre">errVar</span></code>, which is the variance of the effective residual uncertainty associated with the estimated channel. If the optional parameter <code class="docutils literal notranslate"><span class="pre">estimateNoiseVar</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the function also returns an estimated noise variance.</p>
+<p>This notebook compares several channel- and noise-estimation methods and evaluates their corresponding bit error rates. It also compares the estimated SNR values with the ground-truth SNR values.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">toDb</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">snrDbs</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span> <span class="c1"># SNR values (in dB) for which we want to evaluate the model</span>
+<span class="n">freqDomain</span> <span class="o">=</span> <span class="kc">True</span>                           <span class="c1"># Set to False to apply channel in the time domain</span>
+
+<span class="n">modulation</span> <span class="o">=</span> <span class="s2">&quot;16QAM&quot;</span>                        <span class="c1"># Modulation scheme</span>
+<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>    <span class="c1"># Create a carrier with 24 RBs and 30 kHz subcarrier spacing</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>                        <span class="c1"># The only bandwidth part in the carrier</span>
+
+<span class="c1"># Create a PDSCH object</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="n">modulation</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>            <span class="c1"># DMRS configuration</span>
+
+<span class="n">numSlots</span> <span class="o">=</span> <span class="mi">500</span>                                          <span class="c1"># Total number of slots</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>                                            <span class="c1"># Dictionary to save the results</span>
+
+<span class="n">noiseEstimates</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">errVars</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">minMse</span><span class="p">,</span> <span class="n">maxMse</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">chanEstMethod</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;perfect channel Knowledge&quot;</span><span class="p">,</span> <span class="s2">&quot;LS (with errVar)&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;LS (with GT noiseVar)&quot;</span><span class="p">,</span> <span class="s2">&quot;LS (with estimated noiseVar)&quot;</span><span class="p">]:</span>
+    <span class="n">results</span><span class="p">[</span><span class="n">chanEstMethod</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Simulating end-to-end for </span><span class="si">%s</span><span class="s2"> using </span><span class="si">%s</span><span class="s2"> in the </span><span class="si">%s</span><span class="s2"> domain&quot;</span><span class="o">%</span>
+          <span class="p">(</span><span class="n">modulation</span><span class="p">,</span> <span class="n">chanEstMethod</span><span class="p">,</span> <span class="s2">&quot;frequency&quot;</span> <span class="k">if</span> <span class="n">freqDomain</span> <span class="k">else</span> <span class="s2">&quot;time&quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------   ----------   ----------   ------   ----------&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrDbs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">chanEstMethod</span><span class="o">==</span><span class="s2">&quot;LS (with estimated noiseVar)&quot;</span><span class="p">:</span>
+            <span class="n">noiseEstimates</span><span class="p">[</span><span class="n">snrDb</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">errVars</span><span class="p">[</span><span class="n">snrDb</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                             <span class="c1"># Make the results reproducible for each SNR</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+        <span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Create a CdlChannel object</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+                             <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>  <span class="c1"># 16 TX antennas</span>
+                             <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">))</span>  <span class="c1"># 4 RX antennas</span>
+
+        <span class="n">bitErrors</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">totalBits</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">slotNo</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSlots</span><span class="p">):</span>
+            <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                            <span class="c1"># Create and initialize PDSCH&#39;s internal grid</span>
+            <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()</span>            <span class="c1"># Number of bits available in the resource grid</span>
+            <span class="n">txBits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numBits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>            <span class="c1"># Create random binary data</span>
+
+            <span class="c1"># Now populate the resource grid with coded data. This includes QAM modulation and resource mapping.</span>
+            <span class="n">pdsch</span><span class="o">.</span><span class="n">setPdschData</span><span class="p">(</span><span class="n">txBits</span><span class="p">)</span>
+
+            <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>              <span class="c1"># Get the channel matrix</span>
+            <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>      <span class="c1"># Get the precoder matrix</span>
+
+            <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="p">))</span>         <span class="c1"># Create the transmitted resource grid</span>
+            <span class="n">pdsch</span><span class="o">.</span><span class="n">precodeTo</span><span class="p">(</span><span class="n">txGrid</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>                       <span class="c1"># Perform the precoding</span>
+
+            <span class="k">if</span> <span class="n">freqDomain</span><span class="p">:</span>
+                <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>                 <span class="c1"># Apply the channel in the frequency domain</span>
+                <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">)</span>                       <span class="c1"># Add noise</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>                          <span class="c1"># OFDM modulation</span>
+                <span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>                            <span class="c1"># Get the max. channel delay</span>
+                <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>                       <span class="c1"># Pad with zeros</span>
+                <span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">)</span>              <span class="c1"># Apply channel in time domain</span>
+                <span class="n">noisyRxWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">snrDb</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">)</span> <span class="c1"># Add noise</span>
+                <span class="n">offset</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getTimingOffset</span><span class="p">()</span>                          <span class="c1"># Get timing info for synchronization</span>
+                <span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">noisyRxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>               <span class="c1"># Synchronization</span>
+                <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>                 <span class="c1"># OFDM demodulation</span>
+
+            <span class="k">if</span> <span class="n">chanEstMethod</span> <span class="o">==</span> <span class="s2">&quot;perfect channel Knowledge&quot;</span><span class="p">:</span>
+                <span class="n">estChannelMat</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getEffChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>              <span class="c1"># Perfect channel knowledge</span>
+                <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">,</span> <span class="n">estChannelMat</span><span class="p">)</span>                   <span class="c1"># Equalization</span>
+            <span class="k">elif</span> <span class="n">chanEstMethod</span> <span class="o">==</span> <span class="s2">&quot;LS (with errVar)&quot;</span><span class="p">:</span>
+                <span class="n">estChannelMat</span><span class="p">,</span> <span class="n">errVar</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">estimateChannel</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">)</span>                       <span class="c1"># LS channel estimation</span>
+                <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">,</span> <span class="n">estChannelMat</span><span class="p">,</span> <span class="n">errVar</span><span class="p">)</span>           <span class="c1"># Use errVar</span>
+            <span class="k">elif</span> <span class="n">chanEstMethod</span> <span class="o">==</span> <span class="s2">&quot;LS (with GT noiseVar)&quot;</span><span class="p">:</span>
+                <span class="n">estChannelMat</span><span class="p">,</span> <span class="n">errVar</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">estimateChannel</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">)</span>                       <span class="c1"># LS channel estimation</span>
+                <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">,</span> <span class="n">estChannelMat</span><span class="p">,</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">noiseVar</span><span class="p">)</span>  <span class="c1"># Use noiseVar</span>
+            <span class="k">elif</span> <span class="n">chanEstMethod</span> <span class="o">==</span> <span class="s2">&quot;LS (with estimated noiseVar)&quot;</span><span class="p">:</span>
+                <span class="n">estChannelMat</span><span class="p">,</span> <span class="n">errVar</span><span class="p">,</span> <span class="n">estNoiseVar</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">estimateChannel</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">,</span> <span class="n">estimateNoiseVar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">,</span> <span class="n">estChannelMat</span><span class="p">,</span> <span class="n">estNoiseVar</span><span class="p">)</span>      <span class="c1"># Use estimated noiseVar</span>
+                <span class="n">noiseEstimates</span><span class="p">[</span><span class="n">snrDb</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">estNoiseVar</span> <span class="p">]</span>
+                <span class="n">errVars</span><span class="p">[</span><span class="n">snrDb</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">errVar</span> <span class="p">]</span>
+
+            <span class="n">rxBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getHardBits</span><span class="p">(</span><span class="n">eqGrid</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>                           <span class="c1"># Demodulation</span>
+            <span class="n">bitErrors</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBits</span><span class="o">-</span><span class="n">txBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>                        <span class="c1"># Count the number of bit errors</span>
+            <span class="n">totalBits</span> <span class="o">+=</span> <span class="n">numBits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  </span><span class="si">%3d</span><span class="s2">      </span><span class="si">%8d</span><span class="s2">     </span><span class="si">%8d</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">snrDb</span><span class="p">,</span> <span class="n">totalBits</span><span class="p">,</span> <span class="n">bitErrors</span><span class="p">,</span>
+                                                                <span class="n">bitErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBits</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+            <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>                        <span class="c1"># Prepare the channel model for the next slot</span>
+
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span>                    <span class="c1"># Total time for this SNR</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">chanEstMethod</span><span class="p">][</span><span class="n">snrDb</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;totalBits&quot;</span><span class="p">:</span><span class="n">totalBits</span><span class="p">,</span>
+                                         <span class="s2">&quot;bitErrors&quot;</span><span class="p">:</span><span class="n">bitErrors</span><span class="p">,</span>
+                                         <span class="s2">&quot;BER&quot;</span><span class="p">:</span>      <span class="n">bitErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBits</span><span class="p">,</span>
+                                         <span class="s2">&quot;Time&quot;</span><span class="p">:</span>     <span class="n">dt</span><span class="p">,</span>
+                                         <span class="s2">&quot;NoiseVar&quot;</span><span class="p">:</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">noiseVar</span><span class="p">}</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  </span><span class="si">%3d</span><span class="s2">      </span><span class="si">%8d</span><span class="s2">     </span><span class="si">%8d</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">    </span><span class="si">%6.2f</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">snrDb</span><span class="p">,</span> <span class="n">totalBits</span><span class="p">,</span> <span class="n">bitErrors</span><span class="p">,</span>
+                                                            <span class="n">bitErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBits</span><span class="p">,</span> <span class="n">dt</span><span class="p">))</span>
+
+<span class="c1"># Compare the results</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">chanEstMethod</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s2">&quot;perfect channel Knowledge&quot;</span><span class="p">,</span> <span class="s2">&quot;LS (with errVar)&quot;</span><span class="p">,</span>
+                                  <span class="s2">&quot;LS (with GT noiseVar)&quot;</span><span class="p">,</span> <span class="s2">&quot;LS (with estimated noiseVar)&quot;</span><span class="p">]):</span>
+    <span class="n">bers</span> <span class="o">=</span> <span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="n">chanEstMethod</span><span class="p">][</span><span class="n">snrDb</span><span class="p">][</span><span class="s2">&quot;BER&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrDbs</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">,</span> <span class="n">bers</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">chanEstMethod</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Bit error rate for different channel-estimation methods&quot;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;SNR&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;BER (%)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Simulating end-to-end for 16QAM using perfect channel Knowledge in the frequency domain
+SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)
+-------   ----------   ----------   ------   ----------
+  -25      14976000      6125696     40.90     35.73
+  -20      14976000      4988515     33.31     36.62
+  -15      14976000      3416458     22.81     36.86
+  -10      14976000      1790785     11.96     36.83
+   -5      14976000       623667      4.16     36.63
+    0      14976000       126831      0.85     36.10
+    5      14976000        16749      0.11     35.75
+   10      14976000          802      0.01     36.17
+
+Simulating end-to-end for 16QAM using LS (with errVar) in the frequency domain
+SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)
+-------   ----------   ----------   ------   ----------
+  -25      14976000      6878156     45.93     37.10
+  -20      14976000      5920161     39.53     37.91
+  -15      14976000      4308707     28.77     38.18
+  -10      14976000      2460068     16.43     37.58
+   -5      14976000      1008402      6.73     37.01
+    0      14976000       255569      1.71     36.32
+    5      14976000        40725      0.27     36.38
+   10      14976000         3706      0.02     36.42
+
+Simulating end-to-end for 16QAM using LS (with GT noiseVar) in the frequency domain
+SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)
+-------   ----------   ----------   ------   ----------
+  -25      14976000      6879454     45.94     36.46
+  -20      14976000      5960180     39.80     36.44
+  -15      14976000      4391364     29.32     36.73
+  -10      14976000      2535724     16.93     36.17
+   -5      14976000      1044894      6.98     36.69
+    0      14976000       266126      1.78     36.01
+    5      14976000        42568      0.28     36.12
+   10      14976000         3848      0.03     36.48
+
+Simulating end-to-end for 16QAM using LS (with estimated noiseVar) in the frequency domain
+SNR(dB)   Total Bits   Bit Errors   BER(%)   time(Sec.)
+-------   ----------   ----------   ------   ----------
+  -25      14976000      6878526     45.93     36.82
+  -20      14976000      5957570     39.78     37.31
+  -15      14976000      4387601     29.30     36.95
+  -10      14976000      2532918     16.91     36.63
+   -5      14976000      1043822      6.97     37.07
+    0      14976000       265940      1.78     36.25
+    5      14976000        42510      0.28     36.61
+   10      14976000         3838      0.03     36.86
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_PDSCH_ChannelNoiseEst_2_1.png" src="../../../../_images/source_Playground_Notebooks_PDSCH_ChannelNoiseEst_2_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert all estimated noise variances to SNR values and compare them with the ground-truth SNR values</span>
+<span class="n">nr</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">rxAntenna</span><span class="o">.</span><span class="n">numEl</span>
+<span class="n">meanEstSnrDb</span><span class="p">,</span> <span class="n">minEstSnrDb</span><span class="p">,</span> <span class="n">maxEstSnrDb</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrDbs</span><span class="p">:</span>
+    <span class="n">estSnrs</span> <span class="o">=</span> <span class="n">toDb</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">noiseEstimates</span><span class="p">[</span><span class="n">snrDb</span><span class="p">])</span><span class="o">*</span><span class="n">nr</span><span class="p">))</span>      <span class="c1"># Estimated SNR in dB</span>
+    <span class="n">meanEstSnrDb</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">estSnrs</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="p">]</span>
+    <span class="n">minEstSnrDb</span>  <span class="o">+=</span> <span class="p">[</span> <span class="n">estSnrs</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="p">]</span>
+    <span class="n">maxEstSnrDb</span>  <span class="o">+=</span> <span class="p">[</span> <span class="n">estSnrs</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">,</span> <span class="n">snrDbs</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Ground-truth SNR&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">,</span> <span class="n">meanEstSnrDb</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Average estimated SNR&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">,</span> <span class="n">minEstSnrDb</span><span class="p">,</span> <span class="n">maxEstSnrDb</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;pink&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Range of estimated SNR&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Estimated SNR (dB)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Actual SNR (dB)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Estimated SNR (dB)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x118b28050&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_PDSCH_ChannelNoiseEst_3_1.png" src="../../../../_images/source_Playground_Notebooks_PDSCH_ChannelNoiseEst_3_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the residual error variance (errVar) values vs ground-truth SNR</span>
+<span class="n">nr</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">rxAntenna</span><span class="o">.</span><span class="n">numEl</span>
+<span class="n">meanErrVarDb</span><span class="p">,</span> <span class="n">minErrVarDb</span><span class="p">,</span> <span class="n">maxErrVarDb</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrDbs</span><span class="p">:</span>
+    <span class="n">errVarDb</span> <span class="o">=</span> <span class="n">toDb</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">errVars</span><span class="p">[</span><span class="n">snrDb</span><span class="p">])</span><span class="o">*</span><span class="n">nr</span><span class="p">))</span>      <span class="c1"># Estimated SNR in dB</span>
+    <span class="n">meanErrVarDb</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">errVarDb</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="p">]</span>
+    <span class="n">minErrVarDb</span>  <span class="o">+=</span> <span class="p">[</span> <span class="n">errVarDb</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="p">]</span>
+    <span class="n">maxErrVarDb</span>  <span class="o">+=</span> <span class="p">[</span> <span class="n">errVarDb</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">,</span> <span class="n">snrDbs</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;SNR (dB)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">,</span> <span class="n">meanErrVarDb</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Average errVar (dB)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">,</span> <span class="n">minErrVarDb</span><span class="p">,</span> <span class="n">maxErrVarDb</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;pink&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Range of errVar&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;errVar vs SNR&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;SNR (dB)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;errVar (dB)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x11900e870&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_PDSCH_ChannelNoiseEst_4_1.png" src="../../../../_images/source_Playground_Notebooks_PDSCH_ChannelNoiseEst_4_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="PDSCH-BLER.html" class="btn btn-neutral float-left" title="BLER Evaluation for PDSCH Communication with LDPC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PDSCH-Throughput.html" class="btn btn-neutral float-right" title="NR PDSCH Throughput with HARQ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

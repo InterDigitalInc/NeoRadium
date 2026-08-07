@@ -6,24 +6,24 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reference Signals &mdash; NeoRadium 0.4.1 Documentation</title>
+  <title>Reference Signals &mdash; NeoRadium 0.5.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=c87aa342"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Physical Channels" href="PhyChannels.html" />
+    <link rel="next" title="CSI Reporting" href="CsiReport.html" />
     <link rel="prev" title="Modulation" href="Modulation.html" /> 
 </head>
 
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.4.1
+            NeoRadium 0.5.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -52,6 +52,7 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MigrationGuide.html">Migration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
@@ -68,19 +69,24 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.csirs.CsiRsSet"><code class="docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.csirs.CsiRsSet.print"><code class="docutils literal notranslate"><span class="pre">CsiRsSet.print()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neoradium.csirs.CsiRsSet.trigger"><code class="docutils literal notranslate"><span class="pre">CsiRsSet.trigger()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.csirs.CsiRsSet.addCsiRs"><code class="docutils literal notranslate"><span class="pre">CsiRsSet.addCsiRs()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.csirs.CsiRsConfig"><code class="docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#neoradium.csirs.CsiRsConfig.getById"><code class="docutils literal notranslate"><span class="pre">CsiRsConfig.getById()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.csirs.CsiRsConfig.print"><code class="docutils literal notranslate"><span class="pre">CsiRsConfig.print()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.csirs.CsiRsConfig.addCsiResourceSets"><code class="docutils literal notranslate"><span class="pre">CsiRsConfig.addCsiResourceSets()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.csirs.CsiRsConfig.addCsiRs"><code class="docutils literal notranslate"><span class="pre">CsiRsConfig.addCsiRs()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.csirs.CsiRsConfig.populateGrid"><code class="docutils literal notranslate"><span class="pre">CsiRsConfig.populateGrid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neoradium.csirs.CsiRsConfig.getResources"><code class="docutils literal notranslate"><span class="pre">CsiRsConfig.getResources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neoradium.csirs.CsiRsConfig.makeTypicalResources"><code class="docutils literal notranslate"><span class="pre">CsiRsConfig.makeTypicalResources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#neoradium.csirs.CsiRsConfig.beamformingConfig"><code class="docutils literal notranslate"><span class="pre">CsiRsConfig.beamformingConfig()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-neoradium.dmrs">DMRS and PTRS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-neoradium.dmrs">DM-RS and PT-RS</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.dmrs.DMRS"><code class="docutils literal notranslate"><span class="pre">DMRS</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.dmrs.DMRS.print"><code class="docutils literal notranslate"><span class="pre">DMRS.print()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#neoradium.dmrs.DMRS.setPTRS"><code class="docutils literal notranslate"><span class="pre">DMRS.setPTRS()</span></code></a></li>
@@ -96,6 +102,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="CsiReport.html">CSI Reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
@@ -104,6 +111,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Other Utilitiy Functions</a></li>
 </ul>
 
         </div>
@@ -112,7 +120,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.4.1</a>
+          <a href="../../index.html">NeoRadium 0.5.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -135,20 +143,20 @@
 <section id="module-neoradium.csirs">
 <span id="csi-rs"></span><h2>CSI-RS<a class="headerlink" href="#module-neoradium.csirs" title="Link to this heading"></a></h2>
 <p>The module <code class="docutils literal notranslate"><span class="pre">csirs.py</span></code> implements the Channel State Information Reference Signals (CSI-RS) based on <strong>3GPP TS 38.211</strong>
-and <strong>3GPP TS 38.214</strong>. CSI-RS is implemented in <strong>NeoRadium</strong> in the following 3 classes:</p>
+and <strong>3GPP TS 38.214</strong>. CSI-RS is implemented in <strong>NeoRadium</strong> in the following three classes:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><a class="reference internal" href="#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a>: Implements one CSI-RS resource which can be used for both Zero-Power (ZP) and Non-Zero-Power
 (NZP) resources.</p></li>
-<li><p><a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a>: Implements a CSI-RS Resource Set which contains one or more CSI-RS resources.</p></li>
+<li><p><a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a>: Implements a CSI-RS resource set which contains one or more CSI-RS resources.</p></li>
 <li><p><a class="reference internal" href="#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a>: Implements the overall CSI-RS configuration information. It contains one or more CSI-RS
 resource sets.</p></li>
 </ul>
 </div></blockquote>
 <p><strong>NeoRadium</strong>’s API implementation provides both flexibility and simplicity. Here are a couple of different ways to
 configure CSI-RS.</p>
-<p><strong>Flexible Configuration:</strong>
-This method provides the most flexibility in configuration. Different numbers and types of CSI-RS resources can be
+<p><strong>Flexible configuration:</strong>
+This method provides the most flexibility for configuration. Different numbers and types of CSI-RS resources can be
 configured in different numbers and types of CSI-RS resource sets. For example, the following code configures two
 CSI-RS resource sets, one ZP and one NZP, with one and two CSI-RS resources, respectively. Each CSI-RS resource is
 configured individually with different settings.</p>
@@ -161,12 +169,12 @@ configured individually with different settings.</p>
 <span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">bwps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c1"># Create a ZP CSI-RS resource and add it to the ZP CSI-RS resource set</span>
-<span class="n">zpCsiRs</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;1000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">zpCsiRs</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;000000001000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">zpCsiRsSet</span> <span class="o">=</span> <span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;ZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">csiRsList</span><span class="o">=</span><span class="p">[</span><span class="n">zpCsiRs</span><span class="p">],</span> <span class="n">resourceType</span><span class="o">=</span><span class="s1">&#39;semiPersistent&#39;</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="c1"># Create two NZP CSI-RS resources and add them to the NZP CSI-RS resource set</span>
-<span class="n">nzpCsiRs1</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;000000001000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">nzpCsiRs2</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;1000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">nzpCsiRs1</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;1000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">nzpCsiRs2</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;000000001000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">nzpCsiRsSet</span> <span class="o">=</span> <span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">csiRsList</span><span class="o">=</span><span class="p">[</span><span class="n">nzpCsiRs1</span><span class="p">,</span> <span class="n">nzpCsiRs2</span><span class="p">],</span> <span class="n">resourceType</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="c1"># Now create the CSI-RS configuration using the ZP and NZP resource sets</span>
@@ -174,12 +182,12 @@ configured individually with different settings.</p>
 </pre></div>
 </div>
 </div>
-<p><strong>Easy and simple configuration:</strong>
+<p><strong>Easy configuration:</strong>
 You can quickly create a typical CSI-RS configuration without dealing with the complexity of various CSI-RS
 configuration parameters. For example, the following code configures CSI-RS with one NZP and one ZP resource.</p>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">An example of simplicity in CSI-RS configuration</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">CsiRsConfig</span><span class="p">,</span> <span class="n">CsiRsSet</span><span class="p">,</span> <span class="n">CsiRs</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">CsiRsConfig</span>
 
 <span class="c1"># Create the carrier and bandwidth part objects</span>
 <span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
@@ -187,16 +195,18 @@ configuration parameters. For example, the following code configures CSI-RS with
 
 <span class="c1"># Create the CSI-RS configuration with a single call. The CSI-RS resource and</span>
 <span class="c1"># resource set are automatically configured using the parameters provided.</span>
-<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">(</span><span class="n">csiType</span><span class="o">=</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;000000001000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">(</span><span class="n">csiType</span><span class="o">=</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>For more examples, see <a class="reference internal" href="../Playground/Notebooks/CSI-RS/CSI-RS.html"><span class="doc">Channel State Information Reference Signals (CSI-RS) Configuration</span></a></p>
+<p>For beam management experiments, you may use the <a class="reference internal" href="#neoradium.csirs.CsiRsConfig.beamformingConfig" title="neoradium.csirs.CsiRsConfig.beamformingConfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CsiRsConfig.beamformingConfig()</span></code></a> class method to create a
+set of CSI-RS resources for beam sweeping, beam probing, and CSI-feedback (PMI/RI/CQI).</p>
+<p>For more examples, see <a class="reference internal" href="../Playground/Notebooks/CSI-RS/CSI-RS.html"><span class="doc">Exploring CSI-RS Configurations</span></a></p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.csirs.CsiRs">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRs" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRs" title="Link to this definition"></a></dt>
 <dd><p>This class implements a CSI-RS resource which can be used to represent a Zero-Power (ZP - see <strong>3GPP TS 38.214
-Section 5.1.4.2</strong>) or Non-Zero-Power (NZP - see <strong>3GPP TS 38.214 Section 5.2.2.3.1</strong>) resource.”</p>
+Section 5.1.4.2</strong>) or Non-Zero-Power (NZP - see <strong>3GPP TS 38.214 Section 5.2.2.3.1</strong>) resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – <p>A set of optional arguments.</p>
@@ -209,7 +219,7 @@ for ZP and NZP resource types, respectively.</p>
 </dd>
 <dt class="field-even">offset<span class="colon">:</span></dt>
 <dd class="field-even"><p>The slot offset for this CSI-RS resource. It is set to zero by default. This is the value
-<span class="math notranslate nohighlight">\(T_{offset}\)</span> in <strong>3GPP TS 38.211 section 7.4.1.5.3</strong>. It is only used if the <code class="docutils literal notranslate"><span class="pre">resourceType</span></code>
+<span class="math notranslate nohighlight">\(T_{offset}\)</span> in <strong>3GPP TS 38.211 section 7.4.1.5.3</strong>. It is used only if the <code class="docutils literal notranslate"><span class="pre">resourceType</span></code>
 parameter of <a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a> class containing this CSI-RS resource is set to <code class="docutils literal notranslate"><span class="pre">'periodic'</span></code> or
 <code class="docutils literal notranslate"><span class="pre">'semiPersistent'</span></code>. See <a class="reference internal" href="#timedomainconfig"><span class="std std-ref">Time-Domain Configuration</span></a> below for more
 information.</p>
@@ -219,7 +229,7 @@ information.</p>
 16, 24, or 32. This is the value <span class="math notranslate nohighlight">\(X\)</span> in <strong>3GPP TS 38.211 Table 7.4.1.5.3-1</strong>.</p>
 </dd>
 <dt class="field-even">cdmSize<span class="colon">:</span></dt>
-<dd class="field-even"><p>The CDM size of this CSI-RS resource. It can be one of 1, 2, 4, or 8 corresponding to
+<dd class="field-even"><p>The CDM size of this CSI-RS resource. It can be one of 1, 2, 4, or 8, corresponding to
 <code class="docutils literal notranslate"><span class="pre">noCDM</span></code>, <code class="docutils literal notranslate"><span class="pre">fd-CDM2</span></code>, <code class="docutils literal notranslate"><span class="pre">cdm4-FD2-TD2</span></code>, and <code class="docutils literal notranslate"><span class="pre">cdm8-FD2-TD4</span></code> in <strong>3GPP TS 38.211
 Table 7.4.1.5.3-1</strong>.</p>
 </dd>
@@ -237,12 +247,12 @@ elements in each resource block are used by this CSI-RS resource.</p>
 <dd class="field-odd"><p>The list of time symbol indices in each slot that are used by this CSI-RS resource.</p>
 </dd>
 <dt class="field-even">powerDb<span class="colon">:</span></dt>
-<dd class="field-even"><p>The power (in dB) used by this CSI-RS resource for the NZP resources. This is ignored
+<dd class="field-even"><p>The power (in dB) used by this CSI-RS resource for NZP resources. This is ignored
 for Zero-Power (ZP) resources. The default value is 0. This contains the value of
 <span class="math notranslate nohighlight">\(\beta_{CSIRS}\)</span> as specified in <strong>3GPP TS 38.211 Section 7.4.1.5.3</strong>.</p>
 </dd>
 <dt class="field-odd">scramblingID<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The scrambling identity which is used for generating pseudo-random sequences. The
+<dd class="field-odd"><p>The scrambling identity used to generate pseudo-random sequences. The
 default is 0. This is ignored for ZP resources.</p>
 </dd>
 </dl>
@@ -251,25 +261,25 @@ default is 0. This is ignored for ZP resources.</p>
 </dd>
 </dl>
 <p><strong>Other Properties:</strong></p>
-<p>All of the parameters mentioned above except <code class="docutils literal notranslate"><span class="pre">freqMap</span></code> and <code class="docutils literal notranslate"><span class="pre">symbols</span></code> are directly available. Here is a
+<p>All the parameters mentioned above except <code class="docutils literal notranslate"><span class="pre">freqMap</span></code> and <code class="docutils literal notranslate"><span class="pre">symbols</span></code> are directly available. Here is a
 list of additional properties:</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">ls<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The time-domain symbol indices used by this CSI-RS resource. This is a list of integers that is
+<dd class="field-odd"><p>The time-domain symbol indices used by this CSI-RS resource. This is a list of integers that are
 extracted from the <code class="docutils literal notranslate"><span class="pre">symbols</span></code> parameter explained above. This list contains the <span class="math notranslate nohighlight">\(l_0\)</span> and
 <span class="math notranslate nohighlight">\(l_1\)</span> values in the 5<sup>th</sup> column of <strong>3GPP TS 38.211 Table 7.4.1.5.3-1</strong> (The column
 titled <span class="math notranslate nohighlight">\((\bar k, \bar l)\)</span>).</p>
 </dd>
 <dt class="field-even">ks<span class="colon">:</span></dt>
-<dd class="field-even"><p>The frequency-domain RE indices used by this CSI-RS resource. This is a list of integers that is
+<dd class="field-even"><p>The frequency-domain RE indices used by this CSI-RS resource. This is a list of integers that are
 extracted from the <code class="docutils literal notranslate"><span class="pre">freqMap</span></code> parameter explained above. This list contains the <span class="math notranslate nohighlight">\(k_0\)</span>,
 <span class="math notranslate nohighlight">\(k_1\)</span>, <span class="math notranslate nohighlight">\(k_2\)</span>, and <span class="math notranslate nohighlight">\(k_3\)</span> values in the 5<sup>th</sup> column of <strong>3GPP TS 38.211
-Table 7.4.1.5.3-1</strong> (The column titled <span class="math notranslate nohighlight">\((\bar k, \bar l)\)</span>).</p>
+Table 7.4.1.5.3-1</strong> (the column titled <span class="math notranslate nohighlight">\((\bar k, \bar l)\)</span>).</p>
 </dd>
 <dt class="field-odd">row<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The row index of <strong>3GPP TS 38.211 Table 7.4.1.5.3-1</strong> corresponding to the configuration of this
-CSI-RS resource (The column titled “Row”). This class determines the row index using the parameters
+CSI-RS resource (the column titled “Row”). This class determines the row index using the parameters
 <code class="docutils literal notranslate"><span class="pre">numPorts</span></code>, <code class="docutils literal notranslate"><span class="pre">cdmSize</span></code>, <code class="docutils literal notranslate"><span class="pre">density</span></code>, and <code class="docutils literal notranslate"><span class="pre">freqMap</span></code>.</p>
 </dd>
 <dt class="field-even">mySet<span class="colon">:</span></dt>
@@ -277,7 +287,7 @@ CSI-RS resource (The column titled “Row”). This class determines the row ind
 </dd>
 </dl>
 </div></blockquote>
-<p>Additionally you can access the <a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a> class parameters <code class="docutils literal notranslate"><span class="pre">period</span></code>, <code class="docutils literal notranslate"><span class="pre">bwp</span></code>, <code class="docutils literal notranslate"><span class="pre">csiType</span></code>,
+<p>Additionally, you can access the <a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a> class parameters <code class="docutils literal notranslate"><span class="pre">period</span></code>, <code class="docutils literal notranslate"><span class="pre">bwp</span></code>, <code class="docutils literal notranslate"><span class="pre">csiType</span></code>,
 <code class="docutils literal notranslate"><span class="pre">resourceType</span></code>, <code class="docutils literal notranslate"><span class="pre">active</span></code>, <code class="docutils literal notranslate"><span class="pre">startRb</span></code>, and <code class="docutils literal notranslate"><span class="pre">numRbs</span></code> directly. The parameter <code class="docutils literal notranslate"><span class="pre">mySet</span></code> is internally
 used to return these values from the <a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a> class containing this CSI-RS resource.</p>
 <dl class="py method">
@@ -288,13 +298,13 @@ used to return these values from the <a class="reference internal" href="#neorad
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as the title for the printed information. If <cite>None</cite> (the default), the text
 “CSI-RS Properties:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>bool</em>) – If <cite>True</cite>, this function returns a string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -307,7 +317,7 @@ Otherwise, nothing is returned.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.csirs.CsiRsSet">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRsSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsSet" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRsSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsSet" title="Link to this definition"></a></dt>
 <dd><p>This class implements a CSI-RS resource set which contains one or more CSI-RS resources (<a class="reference internal" href="#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a>
 objects). A CSI-RS resource set can be either Zero-Power (ZP) or Non-Zero-Power (NZP). All CSI-RS resources
 in a set are of the same type (ZP or NZP). By default, a CSI-RS resource set is configured with one CSI-RS resource.
@@ -323,11 +333,11 @@ More CSI-RS resources can be added using the <a class="reference internal" href=
 <dt class="field-odd">rsId<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The resource set identifier of this CSI-RS resource set. This is set to zero by default. This
 represents the values <code class="docutils literal notranslate"><span class="pre">nzp-CSI-ResourceSetId</span></code> or <code class="docutils literal notranslate"><span class="pre">zp-CSI-RS-ResourceSetId</span></code> in <strong>3GPP TS
-38.214</strong> for NZP and ZP resource sets correspondingly.</p>
+38.214</strong> for NZP and ZP resource sets, respectively.</p>
 </dd>
 <dt class="field-even">startRb<span class="colon">:</span></dt>
 <dd class="field-even"><p>The index of starting resource block (RB) used by this CSI-RS resource set. By default this
-is set to <code class="docutils literal notranslate"><span class="pre">bwp.startRb</span></code>. The resources specified by <code class="docutils literal notranslate"><span class="pre">startRb</span></code> and <code class="docutils literal notranslate"><span class="pre">numPorts</span></code> <strong>must</strong> be
+is set to <code class="docutils literal notranslate"><span class="pre">bwp.startRb</span></code>. The resources specified by <code class="docutils literal notranslate"><span class="pre">startRb</span></code> and <code class="docutils literal notranslate"><span class="pre">numRbs</span></code> <strong>must</strong> be
 inside the specified bandwidth part <code class="docutils literal notranslate"><span class="pre">bwp</span></code>.</p>
 </dd>
 <dt class="field-odd">numRbs<span class="colon">:</span></dt>
@@ -341,16 +351,17 @@ default this is set to <code class="docutils literal notranslate"><span class="p
 Configuration</span></a> below for more information.</p>
 </dd>
 <dt class="field-odd">period<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The period (in number of slots) of this CSI-RS resource set in time domain. This is the value <span class="math notranslate nohighlight">\(T_{CSI-RS}\)</span> in <strong>3GPP TS 38.211 section 7.4.1.5.3</strong>. By default, it is set to 4 which means
-CSI-RS is transmitted every 4<sup>th</sup> slot (for example slots numbers 0, 4, 8, …). The
-<code class="docutils literal notranslate"><span class="pre">period</span></code> can be 4, 5, 8, 10, 16, 20, 32, 40, 64, 80, 160, 320, or 640 slots. This parameter is
-ignored if <code class="docutils literal notranslate"><span class="pre">resourceType</span></code> is set to <code class="docutils literal notranslate"><span class="pre">'aperiodic'</span></code>. See
+<dd class="field-odd"><p>The period (in number of slots) of this CSI-RS resource set in the time domain. This is the
+value <span class="math notranslate nohighlight">\(T_{CSI-RS}\)</span> in <strong>3GPP TS 38.211 section 7.4.1.5.3</strong>. By default, it is set to 4, which
+CSI-RS is transmitted every 4<sup>th</sup> slot (for example, slot numbers 0, 4, 8, …). The
+means <code class="docutils literal notranslate"><span class="pre">period</span></code> can be 4, 5, 8, 10, 16, 20, 32, 40, 64, 80, 160, 320, or 640 slots. This parameter
+is ignored if <code class="docutils literal notranslate"><span class="pre">resourceType</span></code> is set to <code class="docutils literal notranslate"><span class="pre">'aperiodic'</span></code>. See
 <a class="reference internal" href="#timedomainconfig"><span class="std std-ref">Time-Domain Configuration</span></a> below for more information.</p>
 </dd>
 <dt class="field-even">active<span class="colon">:</span></dt>
-<dd class="field-even"><p>This boolean flag is used to <em>trigger</em> an <code class="docutils literal notranslate"><span class="pre">'aperiodic'</span></code> or <em>activate</em> a <code class="docutils literal notranslate"><span class="pre">'semiPersistent'</span></code>
+<dd class="field-even"><p>This boolean flag is used to activate a <code class="docutils literal notranslate"><span class="pre">'semiPersistent'</span></code>
 CSI-RS resource set. It is ignored if <code class="docutils literal notranslate"><span class="pre">resourceType</span></code> is set to <code class="docutils literal notranslate"><span class="pre">'periodic'</span></code>. This is set to
-<cite>True</cite> by default. See <a class="reference internal" href="#timedomainconfig"><span class="std std-ref">Time-Domain Configuration</span></a> below for more
+0 by default. See <a class="reference internal" href="#timedomainconfig"><span class="std std-ref">Time-Domain Configuration</span></a> below for more
 information.</p>
 </dd>
 <dt class="field-odd">csiRsList<span class="colon">:</span></dt>
@@ -365,24 +376,27 @@ specified, this class creates a single CSI-RS resource and puts it in the list. 
 </dd>
 </dl>
 <p><strong>Other Properties:</strong></p>
-<p>All of the parameters mentioned above are directly available. Here is a list of additional properties:</p>
+<p>All parameters mentioned above are directly available. Here is a list of additional properties:</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">numPorts<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This read-only parameter returns the maximum number of ports of all CSI-RS resources in this
 CSI-RS resource set.</p>
 </dd>
+<dt class="field-even">isActive<span class="colon">:</span></dt>
+<dd class="field-even"><p>This read-only parameter returns <cite>True</cite> if this CSI-RS resource set is currently active.</p>
+</dd>
 </dl>
 </div></blockquote>
 <p id="timedomainconfig"><strong>Time-Domain Configuration:</strong></p>
-<p>In time-Domain, CSI-RS can be configured for <em>periodic</em>, <em>semi-persistent</em>, or <em>aperiodic</em> transmission.</p>
+<p>In the time-Domain, CSI-RS can be configured for <em>periodic</em>, <em>semi-persistent</em>, or <em>aperiodic</em> transmission.</p>
 <dl class="field-list">
 <dt class="field-odd">Periodic<span class="colon">:</span></dt>
 <dd class="field-odd"><p>In this case, the CSI-RS transmission occurs every N<sup>th</sup> slot, where N ranges from 4 to
 640. In this case, each CSI-RS resource is also configured with an <code class="docutils literal notranslate"><span class="pre">offset</span></code> value. Please note that
 while the <code class="docutils literal notranslate"><span class="pre">period</span></code> N is the same for all CSI-RS resources in a set, the <code class="docutils literal notranslate"><span class="pre">offset</span></code> can be different for
-different CSI-RS resources in the set. That is why the <code class="docutils literal notranslate"><span class="pre">period</span></code> is a property if the CSI-RS resource
-set while <code class="docutils literal notranslate"><span class="pre">offset</span></code> is a property of CSI-RS resource.</p>
+different CSI-RS resources in the set. That is why <code class="docutils literal notranslate"><span class="pre">period</span></code> is a property of the CSI-RS resource set,
+while <code class="docutils literal notranslate"><span class="pre">offset</span></code> is a property of a CSI-RS resource.</p>
 <figure class="align-center" id="id5" style="width: 600px">
 <img alt="../../_images/CSI-RS-Timing.png" src="../../_images/CSI-RS-Timing.png" />
 <figcaption>
@@ -391,20 +405,21 @@ set while <code class="docutils literal notranslate"><span class="pre">offset</s
 </figure>
 </dd>
 <dt class="field-even">Semi-persistent<span class="colon">:</span></dt>
-<dd class="field-even"><p>In this case, the periodicity and offset of the CSI-RS transmissions is configured similar
+<dd class="field-even"><p>In this case, the periodicity and offset of the CSI-RS transmissions is configured similarly
 to the <em>periodic</em> case but the actual transmission can be disabled/enabled using the <code class="docutils literal notranslate"><span class="pre">active</span></code> flag
 defined above. Once <em>activated</em>, the CSI-RS transmission behavior is just like the <em>periodic</em> case until
 it is <em>deactivated</em>. All CSI-RS resources in the set are activated/deactivated together. (The <code class="docutils literal notranslate"><span class="pre">active</span></code>
-flag is a property of CSI-RS resource set)</p>
+flag is a property of the CSI-RS resource set)</p>
 </dd>
 <dt class="field-odd">Aperiodic<span class="colon">:</span></dt>
-<dd class="field-odd"><p>In this case, there is no periodicity. The transmission of the CSI-RS can be <em>triggered</em> by
-setting the <code class="docutils literal notranslate"><span class="pre">active</span></code> flag to <cite>True</cite>. In practice this is signaled in the DCI message. All CSI-RS
-resources in the set are <em>triggered</em> together. (The <code class="docutils literal notranslate"><span class="pre">active</span></code> flag is a property of CSI-RS resource set)</p>
+<dd class="field-odd"><p>In this case, there is no periodicity. The transmission of the CSI-RS can be triggered by
+calling the <a class="reference internal" href="#neoradium.csirs.CsiRsSet.trigger" title="neoradium.csirs.CsiRsSet.trigger"><code class="xref py py-meth docutils literal notranslate"><span class="pre">trigger()</span></code></a> function. Once triggered, this resource set remains active as long as we are
+in the current slot. In practice this is signaled in the DCI message. All CSI-RS resources in the set are
+triggered together.</p>
 </dd>
 </dl>
 <p>Please refer to <strong>3GPP TS 38.211 section 7.4.1.5.3</strong> for more details. See also
-<a class="reference internal" href="../Playground/Notebooks/CSI-RS/CSI-RS-Time.html"><span class="doc">CSI-RS timing configurations</span></a>.</p>
+<a class="reference internal" href="../Playground/Notebooks/CSI-RS/CSI-RS-Time.html"><span class="doc">CSI-RS Timing Configurations</span></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.csirs.CsiRsSet.print">
 <span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsSet.print" title="Link to this definition"></a></dt>
@@ -413,19 +428,26 @@ resources in the set are <em>triggered</em> together. (The <code class="docutils
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as the title for the printed information. If <cite>None</cite> (the default), the text
 “CSI-RS Resource Set Properties:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>bool</em>) – If <cite>True</cite>, returns a string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None or str</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csirs.CsiRsSet.trigger">
+<span class="sig-name descname"><span class="pre">trigger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsSet.trigger" title="Link to this definition"></a></dt>
+<dd><p>Triggers the current CSI-RS resource set. This activates the resource set for the current slot and it
+automatically becomes inactive when we move to the next slot.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -443,16 +465,16 @@ Otherwise, nothing is returned.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.csirs.CsiRsConfig">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRsConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiRsSetList</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsConfig" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.csirs.</span></span><span class="sig-name descname"><span class="pre">CsiRsConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csiRsSetList</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsConfig" title="Link to this definition"></a></dt>
 <dd><p>This class implements the overall CSI-RS configuration. It keeps a list of CSI-RS resource sets
 (<a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a> objects) each of which contains one or more CSI-RS resources (<a class="reference internal" href="#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a> objects). By
 default, this class creates a single CSI-RS resource set. More CSI-RS resource sets can be added using the
-<a class="reference internal" href="#neoradium.csirs.CsiRsConfig.addCsiResourceSets" title="neoradium.csirs.CsiRsConfig.addCsiResourceSets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addCsiResourceSets()</span></code></a> method</p>
+<a class="reference internal" href="#neoradium.csirs.CsiRsConfig.addCsiResourceSets" title="neoradium.csirs.CsiRsConfig.addCsiResourceSets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addCsiResourceSets()</span></code></a> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>csiRsSetList</strong> (<em>list</em>) – <p>A list of <a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a> objects contained in this CSI-RS configuration. If this list is not
-specified, but a <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object is specified in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> this class
+specified, but a <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object is provided in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>, this class
 creates a single CSI-RS resource set containing a single CSI-RS resource. The parameters passed in
 <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> are used to initialize the CSI-RS resource set and its only CSI-RS resource.</p>
 <p>If this list is not specified, and a <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> object is not given,
@@ -460,12 +482,12 @@ then the list of CSI-RS resource sets remains empty and you <strong>must</strong
 to add CSI-RS resource sets.</p>
 </p></li>
 <li><p><strong>kwargs</strong> (<em>dict</em>) – A set of optional arguments. These parameters are passed to the <a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a> and <a class="reference internal" href="#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a>
-objects when they are created the first time.</p></li>
+objects when they are first created.</p></li>
 </ul>
 </dd>
 </dl>
 <p><strong>Other Properties:</strong></p>
-<p>All of the parameters mentioned above are directly available. Here is a list of additional properties:</p>
+<p>All the parameters mentioned above are directly available. Here is a list of additional properties:</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">numPorts<span class="colon">:</span></dt>
@@ -475,20 +497,45 @@ CSI-RS resource sets.</p>
 </dl>
 </div></blockquote>
 <dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csirs.CsiRsConfig.getById">
+<span class="sig-name descname"><span class="pre">getById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resourceId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsConfig.getById" title="Link to this definition"></a></dt>
+<dd><p>Returns the CSI-RS resource set or CSI-RS resource identified by the specified IDs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>setId</strong> (<em>int</em>) – The CSI-RS resource set identifier.</p></li>
+<li><p><strong>resourceId</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The CSI-RS resource identifier within the specified resource set. If omitted or <code class="docutils literal notranslate"><span class="pre">None</span></code>, the CSI-RS
+resource set corresponding to <code class="docutils literal notranslate"><span class="pre">setId</span></code> is returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>If <code class="docutils literal notranslate"><span class="pre">resourceId</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, returns the <a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a> with the specified
+<code class="docutils literal notranslate"><span class="pre">setId</span></code>. Otherwise, returns the <a class="reference internal" href="#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a> object with the specified
+<code class="docutils literal notranslate"><span class="pre">resourceId</span></code> within that resource set.</p>
+<p>If no matching resource set or resource is found, <code class="docutils literal notranslate"><span class="pre">None</span></code> is returned.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a>, <a class="reference internal" href="#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a>, or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="neoradium.csirs.CsiRsConfig.print">
 <span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsConfig.print" title="Link to this definition"></a></dt>
-<dd><p>Prints the properties of this CSI-RS Configuration.</p>
+<dd><p>Prints the properties of this CSI-RS configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as a title for the printed information. If <cite>None</cite> (default), the text
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as the title for the printed information. If <cite>None</cite> (the default), the text
 “CSI-RS Configuration:” is used for the title.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
+<li><p><strong>getStr</strong> (<em>bool</em>) – If <cite>True</cite>, returns a string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -512,11 +559,11 @@ Otherwise, nothing is returned.</p>
 <dt class="sig sig-object py" id="neoradium.csirs.CsiRsConfig.addCsiRs">
 <span class="sig-name descname"><span class="pre">addCsiRs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setIndex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csiRs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsConfig.addCsiRs" title="Link to this definition"></a></dt>
 <dd><p>Adds the CSI-RS resource given in <code class="docutils literal notranslate"><span class="pre">csiRs</span></code> to the CSI-RS resource set specified by <code class="docutils literal notranslate"><span class="pre">setIndex</span></code> in this
-CSI-RS configuration</p>
+CSI-RS configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>setIndex</strong> (<em>int</em>) – The index of CSI-RS resource set in this CSI-RS configuration that receives the new CSI-RS resource.</p></li>
+<li><p><strong>setIndex</strong> (<em>int</em>) – The index of the CSI-RS resource set in this CSI-RS configuration that receives the new CSI-RS resource.</p></li>
 <li><p><strong>csiRs</strong> (<a class="reference internal" href="#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a>) – If specified, the <a class="reference internal" href="#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a> object is added to the CSI-RS resource set specified by <code class="docutils literal notranslate"><span class="pre">setIndex</span></code>.
 Otherwise, a new CSI-RS resource object is created based on the information in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> and then it is
 added to the CSI-RS resource set specified by <code class="docutils literal notranslate"><span class="pre">setIndex</span></code>.</p></li>
@@ -524,7 +571,7 @@ added to the CSI-RS resource set specified by <code class="docutils literal notr
 <p>If this CSI-RS configuration is empty, the information in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> is first used to create a CSI-RS
 resource set.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">csiRs</span></code> is not specified, then the information in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> is first used to create a CSI-RS
-resource and add to the specified CSI-RS resource set.</p>
+resource and added to the specified CSI-RS resource set.</p>
 </p></li>
 </ul>
 </dd>
@@ -544,90 +591,231 @@ configuration.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csirs.CsiRsConfig.getResources">
+<span class="sig-name descname"><span class="pre">getResources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsConfig.getResources" title="Link to this definition"></a></dt>
+<dd><p>Returns CSI-RS resource information organized by resource set. The returned object is a two-level
+dictionary. The first level maps CSI-RS resource set IDs to the CSI-RS resources belonging to that set.
+Each entry in the second level maps a CSI-RS resource ID to a tuple <code class="docutils literal notranslate"><span class="pre">(lIdx,</span> <span class="pre">kIdx,</span> <span class="pre">reValues)</span></code> where:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">lIdx<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array of OFDM symbol indices where the CSI-RS is transmitted</p>
+</dd>
+<dt class="field-even">kIdx<span class="colon">:</span></dt>
+<dd class="field-even"><p>array of subcarrier indices where the CSI-RS is transmitted</p>
+</dd>
+<dt class="field-odd">reValues<span class="colon">:</span></dt>
+<dd class="field-odd"><p>complex CSI-RS values corresponding to those RE locations</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>These indices refer to positions in the resource grid where the CSI-RS symbols should be placed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function returns only the CSI-RS resources available for the current slot of the bandwidth part
+based on CSI-RS timing information (e.g., periodicity, offset, whether an aperiodic CSI-RS is
+triggered, or whether a semi-persistent CSI-RS is active)</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>A nested dictionary of the form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="n">rsSetId</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="n">rsId</span> <span class="p">:</span> <span class="p">(</span><span class="n">lIdx</span><span class="p">,</span> <span class="n">kIdx</span><span class="p">,</span> <span class="n">reValues</span><span class="p">),</span>
+        <span class="o">...</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>containing CSI-RS resource information for all configured resource sets.</p>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csirs.CsiRsConfig.makeTypicalResources">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">makeTypicalResources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numPorts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numSweep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numProb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsConfig.makeTypicalResources" title="Link to this definition"></a></dt>
+<dd><p><span class="red">DEPRECATED</span>: This method is deprecated and will be removed in future releases. Please use the
+<a class="reference internal" href="#neoradium.csirs.CsiRsConfig.beamformingConfig" title="neoradium.csirs.CsiRsConfig.beamformingConfig"><code class="xref py py-meth docutils literal notranslate"><span class="pre">beamformingConfig()</span></code></a> method instead.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.csirs.CsiRsConfig.beamformingConfig">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">beamformingConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numPorts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numSweep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numProb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.csirs.CsiRsConfig.beamformingConfig" title="Link to this definition"></a></dt>
+<dd><p>Creates a typical CSI-RS configuration for beam management and CSI feedback.</p>
+<p>The returned configuration contains three NZP CSI-RS resource sets:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>A periodic set of single-port resources for beam sweeping.</p></li>
+<li><p>An aperiodic set of single-port resources for beam probing.</p></li>
+<li><p>A semi-persistent set containing one multi-port resource for
+RI/PMI/CQI measurement and reporting.</p></li>
+</ol>
+</div></blockquote>
+<p>The sweeping resources are distributed across slots using their resource
+offsets. Up to <code class="docutils literal notranslate"><span class="pre">sweepsPerSlot</span></code> resources are assigned to each slot. The
+probing resources are all assigned to the same slot because aperiodic
+CSI-RS resources do not use slot offsets. Sweeping and probing resources
+reuse the same time-frequency locations because they are expected not to
+be active simultaneously.</p>
+<p>Resource-set IDs 1, 2, and 3 are assigned to beam-sweeping, beam-probing, and RI/PMI/CQI resource
+sets. CSI-RS resource IDs are assigned consecutively, starting at 1. Sweeping
+resources are assigned first, followed by probing resources and then the
+multi-port RI/PMI/CQI resource.</p>
+<p>Note that this is a simple static beam sweeping/probing. In practice, you can use adaptive beam sweeping, by
+including the previously selected probing beam in the next sweeping set and centering future sweeps
+around it. The beam sweeping in this case looks more like a wider beam probing around the current
+best beam (including a few wider beams to detect beam drift and prevent getting stuck in a
+local maximum).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bwp</strong> (<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>) – The bandwidth part in which the CSI-RS resources are configured.</p></li>
+<li><p><strong>numPorts</strong> (<em>int</em>) – The number of antenna ports used by the RI/PMI/CQI CSI-RS resource.
+It must be a valid CSI-RS port count supported by <a class="reference internal" href="#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a>,
+namely 1, 2, 4, 8, 12, 16, 24, or 32. The sweeping and probing
+resources always use one antenna port.</p></li>
+<li><p><strong>numSweep</strong> (<em>int</em>) – The number of periodic single-port CSI-RS resources created for beam
+sweeping. The default is 8.</p></li>
+<li><p><strong>numProb</strong> (<em>int</em>) – The number of aperiodic single-port CSI-RS resources created for beam
+probing. It cannot be greater than 8. The default is 4.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – <p>A set of optional configuration arguments.</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">sweepPeriod<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Beam-sweeping period in milliseconds. It is converted
+to the period used by the sweeping resource set according to the
+numerology of <code class="docutils literal notranslate"><span class="pre">bwp</span></code>. The default is 20 ms.</p>
+</dd>
+<dt class="field-even">sweepSymbol<span class="colon">:</span></dt>
+<dd class="field-even"><p>OFDM symbol index used by the beam-sweeping and
+beam-probing resources. The default is 4.</p>
+</dd>
+<dt class="field-odd">pmiPeriod<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Period in milliseconds for the semi-persistent
+RI/PMI/CQI CSI-RS resource. It is converted to the period used by
+the resource set according to the numerology of <code class="docutils literal notranslate"><span class="pre">bwp</span></code>. The
+default is 10 ms.</p>
+</dd>
+<dt class="field-even">pmiSymbol<span class="colon">:</span></dt>
+<dd class="field-even"><p>OFDM symbol index used by the RI/PMI/CQI CSI-RS
+resource. The default is 5.</p>
+</dd>
+<dt class="field-odd">sweepsPerSlot<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Maximum number of beam-sweeping resources assigned
+to each slot. It must be either 4 or 8. The default is 8.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A CSI-RS configuration containing the periodic sweeping, aperiodic
+probing, and semi-persistent RI/PMI/CQI resource sets.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The aperiodic probing set and the semi-persistent RI/PMI/CQI set are
+inactive when created. They must be enabled using the triggering mechanism
+provided by <a class="reference internal" href="#neoradium.csirs.CsiRsSet" title="neoradium.csirs.CsiRsSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsSet</span></code></a> before their resources become available.</p>
+</div>
+<p>Please refer to the notebook <a class="reference internal" href="../Playground/Notebooks/CSI-RS/CSI-RS-Beams.html"><span class="doc">CSI-RS Configuration for Beam Management</span></a> for an example of using
+this function.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
 <hr class="docutils" />
 <section id="module-neoradium.dmrs">
-<span id="dmrs-and-ptrs"></span><h2>DMRS and PTRS<a class="headerlink" href="#module-neoradium.dmrs" title="Link to this heading"></a></h2>
-<p>The module <code class="docutils literal notranslate"><span class="pre">dmrs.py</span></code> implements the <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> and <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> classes which encapsulate the Demodulation
-Reference Signals (DMRS) and the Phase-Tracking Reference Signals (PTRS) respectively.</p>
+<span id="dm-rs-and-pt-rs"></span><h2>DM-RS and PT-RS<a class="headerlink" href="#module-neoradium.dmrs" title="Link to this heading"></a></h2>
+<p>The module <code class="docutils literal notranslate"><span class="pre">dmrs.py</span></code> implements the <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> and <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> classes, which encapsulate the Demodulation
+Reference Signals (DM-RS) and the Phase-Tracking Reference Signals (PT-RS) respectively.</p>
 <p>Demodulation reference signals are intended for channel estimation on the receiver side and enable coherent
-demodulation. They are used with all types of communication channels for both data and control, and downlink and
+demodulation. They are used with all types of communication channels for both data and control, and both downlink and
 uplink. This means a <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object can be associated with <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>,
 <code class="xref py py-class docutils literal notranslate"><span class="pre">PDCCH</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PUSCH</span></code>, or <code class="xref py py-class docutils literal notranslate"><span class="pre">PUCCH</span></code> classes.</p>
 <p><a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> is used for tracking the phase of the local oscillators at the receiver and transmitter. If
-transmitted, a PTRS is always associated with one DMRS port.</p>
+transmitted, a PT-RS is always associated with one or two DM-RS ports.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.dmrs.DMRS">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.dmrs.</span></span><span class="sig-name descname"><span class="pre">DMRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pxxch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.DMRS" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.dmrs.</span></span><span class="sig-name descname"><span class="pre">DMRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pxsch</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.DMRS" title="Link to this definition"></a></dt>
 <dd><p>This class encapsulates the configuration and functionality of Demodulation Reference Signals. A <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a>
 object can be associated with a <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>, a <code class="xref py py-class docutils literal notranslate"><span class="pre">PDCCH</span></code>, a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">PUSCH</span></code>, or a <code class="xref py py-class docutils literal notranslate"><span class="pre">PUCCH</span></code>. (Currently only
 <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> is implemented in <strong>NeoRadium</strong>. Support for other channels is coming soon.)</p>
-<p>For every PDSCH, at least one DMRS OFDM symbol is mandatory. It is also possible to have one, two, or three
-additional OFDM symbols assigned to DMRS.</p>
+<p>For every PDSCH, at least one OFDM symbol carrying DM-RS is required. It is also possible to have one, two, or
+three additional OFDM symbols assigned to DM-RS.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pxxch</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code>) – The <code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code> object associated with this <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object. Technically
-this can be any of <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PDCCH</span></code>,
-<code class="xref py py-class docutils literal notranslate"><span class="pre">PUSCH</span></code>, or <code class="xref py py-class docutils literal notranslate"><span class="pre">PUCCH</span></code> classes, but currently only
-<a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> is implemented in <strong>NeoRadium</strong>.</p></li>
+<li><p><strong>pxsch</strong> (<a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>) – The <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> object associated with this <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object. Technically
+this can be any of the <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">PUSCH</span></code> classes,
+but currently only <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> has been implemented in <strong>NeoRadium</strong>.</p></li>
 <li><p><strong>kwargs</strong> (<em>dict</em>) – <p>A set of optional arguments.</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">configType<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The DMRS configuration type. It can be either 1 (default) or 2. In Configuration type 1,
+<dd class="field-odd"><p>The DM-RS configuration type. It can be either 1 (default) or 2. In Configuration type 1,
 the minimum resource element group in frequency domain is one RE. In Configuration type 2, the
 minimum resource element group in frequency domain is two consecutive REs.</p>
 </dd>
 <dt class="field-even">enhanced<span class="colon">:</span></dt>
-<dd class="field-even"><p>This boolean parameter indicates whether the enhanced DMRS, as introduced in 3GPP release 18,
-should be used. This parameter is equivalent to the <code class="docutils literal notranslate"><span class="pre">enhanced-dmrs-Type</span></code> as explained in
+<dd class="field-even"><p>This boolean parameter indicates whether the enhanced DM-RS, as introduced in 3GPP release
+18, should be used. This parameter is equivalent to the <code class="docutils literal notranslate"><span class="pre">enhanced-dmrs-Type</span></code> as explained in
 <strong>3GPP TS 38.211, section 7.4.1.1.2</strong>. The default value is <cite>False</cite>.</p>
 </dd>
 <dt class="field-odd">symbols<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of OFDM symbols used with each group of DMRS REs. It can be 1 (<em>Single</em>) or
+<dd class="field-odd"><p>The number of OFDM symbols used with each group of DM-RS REs. It can be 1 (<em>Single</em>) or
 2 (<em>Double</em>). The default is <em>Single</em>.</p>
 </dd>
 <dt class="field-even">typeA1stPos<span class="colon">:</span></dt>
-<dd class="field-even"><p>This is the OFDM symbol index for the first DMRS symbol when Mapping type A is being
+<dd class="field-even"><p>This is the OFDM symbol index for the first DM-RS symbol when Mapping type A is being
 used. It can be either 2 (default) or 3.</p>
 </dd>
 <dt class="field-odd">additionalPos<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Position(s) for additional DMRS symbols. For <code class="docutils literal notranslate"><span class="pre">symbols==1</span></code>,
+<dd class="field-odd"><p>Position(s) for additional DM-RS symbols. For <code class="docutils literal notranslate"><span class="pre">symbols==1</span></code>,
 it can be 0, 1, 2, or 3 and for <code class="docutils literal notranslate"><span class="pre">symbols==2</span></code> it can be 0 or 1. This allows up to 4 OFDM symbols
-to be used for DMRS.</p>
+to be used for DM-RS.</p>
 </dd>
-<dt class="field-even">portSet<span class="colon">:</span></dt>
-<dd class="field-even"><p>A list of port numbers used for DMRS allocation. See <strong>3GPP TS 38.211, Table 7.4.1.1.2-5</strong>
-for more information. If not specified, it is set based on the number of layers in <code class="docutils literal notranslate"><span class="pre">pxxch</span></code>. If
-specified, the number of items in the list should match the number of layers in <code class="docutils literal notranslate"><span class="pre">pxxch</span></code>.</p>
+<dt class="field-even">numCdmGroupsWithoutData<span class="colon">:</span></dt>
+<dd class="field-even"><p>Specifies how many CDM groups in each RB are treated as reserved for DM-RS
+and therefore unavailable for payload data. It determines the extent of the DM-RS-associated
+“NO_DATA” region, in addition to the REs that carry the DM-RS symbols themselves. This value is
+used to match the DM-RS overhead and EPRE assumptions defined for PDSCH in <strong>3GPP TS 38.214,
+Section 4.1</strong>, where the DM-RS-to-PDSCH power ratio depends on the number of CDM groups without
+data. If not explicitly provided, the implementation derives a default value from the number of
+active DM-RS ports and the configured DM-RS symbol length. See
+<a class="reference internal" href="../Playground/Notebooks/DMRS/CDMsWithNoData.html"><span class="doc">Demystifying numCdmGroupsWithoutData</span></a> for examples of how to use this parameter.</p>
 </dd>
-<dt class="field-odd">otherCdmGroups<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of CDM groups used by other PXXCH objects (For example, in PDSCH, some CDM
-groups may be used for other UEs). When allocating resources, this class makes sure that no data
-is allocated in the CDM groups used for other UEs. See
-<a class="reference internal" href="../Playground/Notebooks/DMRS/CDMsWithNoData.html"><span class="doc">Using otherCdmGroups parameter</span></a> for examples of how to use this parameter.</p>
-</dd>
-<dt class="field-even">scID<span class="colon">:</span></dt>
-<dd class="field-even"><p>The number specifying which one of the <code class="docutils literal notranslate"><span class="pre">nIDs</span></code> (see below) should be used for scrambling. It
+<dt class="field-odd">scID<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number specifying which one of the <code class="docutils literal notranslate"><span class="pre">nIDs</span></code> (see below) should be used for scrambling. It
 can be 0 (default) or 1.</p>
 </dd>
-<dt class="field-odd">nIDs<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of one or 2 integer values (<code class="docutils literal notranslate"><span class="pre">nIDs[scID]</span> <span class="pre">∈</span> <span class="pre">{0,1,...,65535},</span> <span class="pre">scID</span> <span class="pre">∈</span> <span class="pre">{0,1}</span></code>) The nIDs[0]
+<dt class="field-even">nIDs<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of one or 2 integer values (<code class="docutils literal notranslate"><span class="pre">nIDs[scID]</span> <span class="pre">∈</span> <span class="pre">{0,1,...,65535},</span> <span class="pre">scID</span> <span class="pre">∈</span> <span class="pre">{0,1}</span></code>) The nIDs[0]
 and nIDs[1] are explained in <strong>3GPP TS 38.211, Section 7.4.1.1.1</strong> (<em>scramblingID0</em>,
 <em>scramblingID1</em>).</p>
 </dd>
-<dt class="field-even">sameSeq<span class="colon">:</span></dt>
-<dd class="field-even"><p>A boolean value set to <cite>True</cite> by default. If <cite>True</cite>, the same binary sequence is created
-for all CDM Groups. Otherwise the sequences for different CDM Groups are initialized differently.
+<dt class="field-odd">sameSeq<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A boolean value set to <cite>True</cite> by default. If <cite>True</cite>, the same binary sequence is created
+for all CDM groups. Otherwise, the sequences for different CDM groups are initialized differently.
 This is related to the parameter setting <code class="docutils literal notranslate"><span class="pre">dmrs-Downlink</span></code> in <strong>3GPP TS 38.211,
 Section 7.4.1.1.1</strong>. <code class="docutils literal notranslate"><span class="pre">sameSeq=True</span></code> means <code class="docutils literal notranslate"><span class="pre">dmrs-Downlink</span></code> is not provided.</p>
 </dd>
-<dt class="field-odd">epreRatioDb<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The ratio of PXXCH energy per resource element (EPRE) to DMRS EPRE in dB. If not
+<dt class="field-even">epreRatioDb<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ratio of PXSCH energy per resource element (EPRE) to DM-RS EPRE in dB. If not
 specified, <strong>3GPP TS 38.214, Table 4.1-1</strong> is used to set this parameter.</p>
 </dd>
 </dl>
@@ -640,23 +828,26 @@ specified, <strong>3GPP TS 38.214, Table 4.1-1</strong> is used to set this para
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">cdmGroups<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of CDM groups used by this DMRS. This property is set based on the <code class="docutils literal notranslate"><span class="pre">portSet</span></code> and
-<code class="docutils literal notranslate"><span class="pre">configType</span></code> parameters.</p>
+<dd class="field-odd"><p>A dictionary mapping each DM-RS port to its CDM group. This property is set based on the
+<code class="docutils literal notranslate"><span class="pre">portSet</span></code> and <code class="docutils literal notranslate"><span class="pre">configType</span></code> parameters.</p>
 </dd>
-<dt class="field-even">symSet<span class="colon">:</span></dt>
-<dd class="field-even"><p>A NumPy array containing the indices of the OFDM symbols used by this DMRS.</p>
+<dt class="field-even">deltaShifts<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary mapping each DM-RS port to its frequency-domain delta shift.</p>
 </dd>
-<dt class="field-odd">ptrs<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> object associated with this DMRS object or <cite>None</cite> if PTRS is not configured.</p>
+<dt class="field-odd">symSet<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A NumPy array containing the indices of the OFDM symbols used by this DM-RS.</p>
 </dd>
-<dt class="field-even">ptrsEnabled<span class="colon">:</span></dt>
-<dd class="field-even"><p>A boolean read-only property. If <cite>True</cite> it means PTRS is enabled, and therefore the <code class="docutils literal notranslate"><span class="pre">ptrs</span></code>
-property above should not be <cite>None</cite>. Otherwise PTRS is disabled and the <code class="docutils literal notranslate"><span class="pre">ptrs</span></code> property above
+<dt class="field-even">ptrs<span class="colon">:</span></dt>
+<dd class="field-even"><p>The <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> object associated with this DMRS object or <cite>None</cite> if PT-RS is not configured.</p>
+</dd>
+<dt class="field-odd">ptrsEnabled<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A boolean read-only property. If <cite>True</cite> it means PT-RS is enabled, and therefore the <code class="docutils literal notranslate"><span class="pre">ptrs</span></code>
+property above should not be <cite>None</cite>. Otherwise, PT-RS is disabled and the <code class="docutils literal notranslate"><span class="pre">ptrs</span></code> property above
 should be set to <cite>None</cite>.</p>
 </dd>
 </dl>
 </div></blockquote>
-<p>The notebook <a class="reference internal" href="../Playground/Notebooks/DMRS/DMRS.html"><span class="doc">Configuring DMRS</span></a> shows some examples of configuring DMRS.</p>
+<p>The notebook <a class="reference internal" href="../Playground/Notebooks/DMRS/DMRS.html"><span class="doc">Exploring PDSCH DM-RS Configurations</span></a> shows some examples of configuring DM-RS.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.dmrs.DMRS.print">
 <span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DMRS</span> <span class="pre">Properties:'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.DMRS.print" title="Link to this definition"></a></dt>
@@ -665,12 +856,12 @@ should be set to <cite>None</cite>.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em>) – If specified, it is used as a title for the printed information.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – If specified, it is used as the title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>bool</em>) – If <cite>True</cite>, returns a string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -683,22 +874,19 @@ Otherwise, nothing is returned.</p>
 <dt class="sig sig-object py" id="neoradium.dmrs.DMRS.setPTRS">
 <span class="sig-name descname"><span class="pre">setPTRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.DMRS.setPTRS" title="Link to this definition"></a></dt>
 <dd><p>Creates a new <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> object based on the parameters given in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> and associates it with
-this <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object. For more information please refer to the <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> documentation.</p>
+this <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object. For more information, please refer to the <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> documentation.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.dmrs.DMRS.populateGrid">
 <span class="sig-name descname"><span class="pre">populateGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.DMRS.populateGrid" title="Link to this definition"></a></dt>
-<dd><p>Uses the information in this <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> to calculate Demodulation
-Reference Signal values and update the <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>
-object specified by <code class="docutils literal notranslate"><span class="pre">grid</span></code>.</p>
-<p>If PTRS is enabled, it calls the <a class="reference internal" href="#neoradium.dmrs.PTRS.populateGrid" title="neoradium.dmrs.PTRS.populateGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">populateGrid()</span></code></a> method
-of the <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> class to update the specified <code class="docutils literal notranslate"><span class="pre">grid</span></code> with Phase
-Tracking Reference Signals.</p>
+<dd><p>Uses the information in this <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> to calculate demodulation reference signal values and update the
+<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object specified by <code class="docutils literal notranslate"><span class="pre">grid</span></code>.</p>
+<p>If PT-RS is enabled, it calls the <a class="reference internal" href="#neoradium.dmrs.PTRS.populateGrid" title="neoradium.dmrs.PTRS.populateGrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">populateGrid()</span></code></a> method of the <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> class to update
+the specified <code class="docutils literal notranslate"><span class="pre">grid</span></code> with phase-tracking reference signals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object that gets populated with
-the Demodulation Reference Signals.</p>
+<dd class="field-odd"><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object that is populated with the demodulation reference signals.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -707,14 +895,14 @@ the Demodulation Reference Signals.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.dmrs.PTRS">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.dmrs.</span></span><span class="sig-name descname"><span class="pre">PTRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dmrs</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.PTRS" title="Link to this definition"></a></dt>
-<dd><p>This class encapsulates the functionality of Phase Tracking Reference Signals (PTRS). A <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> object
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.dmrs.</span></span><span class="sig-name descname"><span class="pre">PTRS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dmrs</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.PTRS" title="Link to this definition"></a></dt>
+<dd><p>This class encapsulates the functionality of Phase Tracking Reference Signals (PT-RS). A <a class="reference internal" href="#neoradium.dmrs.PTRS" title="neoradium.dmrs.PTRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">PTRS</span></code></a> object
 can be associated with a <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> or a <code class="xref py py-class docutils literal notranslate"><span class="pre">PUSCH</span></code>. (Currently
 only <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> is implemented in <strong>NeoRadium</strong>. Support for other channels is coming soon.)</p>
-<p>The PTRS is used to track the phase of the local oscillators at the receiver and transmitter. This enables
+<p>The PT-RS is used to track the phase of the local oscillators at the receiver and transmitter. This enables
 suppression of phase noise and common phase error, particularly important at high carrier frequencies, such as
-millimeter-wave bands. Because of the properties of phase noise, PTRS may have low density in the frequency domain
-but high density in the time domain.. If transmitted, PTRS is always associated with one DMRS port.</p>
+millimeter-wave bands. Because of the properties of phase noise, PT-RS may have low density in the frequency domain
+but high density in the time domain. If transmitted, PT-RS is always associated with one or two DM-RS ports.</p>
 <p>This implementation is mostly based on <strong>3GPP TS 38.211, Section 7.4.1.2</strong> and <strong>3GPP TS 38.214, Section 5.1.6.3</strong>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -725,42 +913,42 @@ but high density in the time domain.. If transmitted, PTRS is always associated 
 <div><dl class="field-list simple">
 <dt class="field-odd">mcsi<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A list of 3 values for <code class="docutils literal notranslate"><span class="pre">ptrs-MCS1</span></code>, <code class="docutils literal notranslate"><span class="pre">ptrs-MCS2</span></code>, and <code class="docutils literal notranslate"><span class="pre">ptrs-MCS3</span></code> in <strong>3GPP TS 38.214,
-table 5.1.6.3-1</strong> or <cite>None</cite> (default). This is used with <code class="docutils literal notranslate"><span class="pre">iMCS</span></code> and <code class="docutils literal notranslate"><span class="pre">nRBi</span></code> to determine time
-and frequency density of the PTRS signals. See <a class="reference internal" href="#timefreqdensity"><span class="std std-ref">Specifying Time and Frequency
+Table 5.1.6.3-1</strong> or <cite>None</cite> (default). This is used with <code class="docutils literal notranslate"><span class="pre">iMCS</span></code> and <code class="docutils literal notranslate"><span class="pre">nRBi</span></code> to determine time
+and frequency density of the PT-RS signals. See <a class="reference internal" href="#timefreqdensity"><span class="std std-ref">Specifying Time and Frequency
 density</span></a> below for more information.</p>
 </dd>
 <dt class="field-even">iMCS<span class="colon">:</span></dt>
 <dd class="field-even"><p>The value from <strong>3GPP TS 38.214 tables 5.1.3.1-1 to 5.1.3.1-4</strong> or <cite>None</cite> (default). This is
-used with <code class="docutils literal notranslate"><span class="pre">mcsi</span></code> and <code class="docutils literal notranslate"><span class="pre">nRBi</span></code> to determine time and frequency density of the PTRS signals. See
+used with <code class="docutils literal notranslate"><span class="pre">mcsi</span></code> and <code class="docutils literal notranslate"><span class="pre">nRBi</span></code> to determine time and frequency density of the PT-RS signals. See
 <a class="reference internal" href="#timefreqdensity"><span class="std std-ref">Specifying Time and Frequency density</span></a> below for more information.</p>
 </dd>
 <dt class="field-odd">nRBi<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of 2 values for <code class="docutils literal notranslate"><span class="pre">nRB0</span></code> and <code class="docutils literal notranslate"><span class="pre">nRB1</span></code> in <strong>3GPP TS 38.214, table 5.1.6.3-2</strong> or
+<dd class="field-odd"><p>A list of 2 values for <code class="docutils literal notranslate"><span class="pre">nRB0</span></code> and <code class="docutils literal notranslate"><span class="pre">nRB1</span></code> in <strong>3GPP TS 38.214, Table 5.1.6.3-2</strong> or
 <cite>None</cite> (default). This is used with <code class="docutils literal notranslate"><span class="pre">mcsi</span></code> and <code class="docutils literal notranslate"><span class="pre">iMCS</span></code> to determine time and frequency
-density of the PTRS signals. See <a class="reference internal" href="#timefreqdensity"><span class="std std-ref">Specifying Time and Frequency density</span></a>
+density of the PT-RS signals. See <a class="reference internal" href="#timefreqdensity"><span class="std std-ref">Specifying Time and Frequency density</span></a>
 below for more information.</p>
 </dd>
 <dt class="field-even">timeDensity<span class="colon">:</span></dt>
-<dd class="field-even"><p>The time density of the PTRS signals. It can be 1 (default), 2, or 4. This is ignored if
+<dd class="field-even"><p>The time density of the PT-RS signals. It can be 1 (default), 2, or 4. This is ignored if
 parameters <code class="docutils literal notranslate"><span class="pre">mcsi</span></code>, <code class="docutils literal notranslate"><span class="pre">iMCS</span></code>, and <code class="docutils literal notranslate"><span class="pre">nRBi</span></code> are all specified. See <a class="reference internal" href="#timefreqdensity"><span class="std std-ref">Specifying Time and
 Frequency density</span></a> below for more information.</p>
 </dd>
 <dt class="field-odd">freqDensity<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The frequency density of the PTRS signals. It can be 2 (default) or 4. This is ignored if
+<dd class="field-odd"><p>The frequency density of the PT-RS signals. It can be 2 (default) or 4. This is ignored if
 parameters <code class="docutils literal notranslate"><span class="pre">mcsi</span></code>, <code class="docutils literal notranslate"><span class="pre">iMCS</span></code>, and <code class="docutils literal notranslate"><span class="pre">nRBi</span></code> are all specified. See <a class="reference internal" href="#timefreqdensity"><span class="std std-ref">Specifying Time and
 Frequency density</span></a> below for more information.</p>
 </dd>
 <dt class="field-even">reOffset<span class="colon">:</span></dt>
 <dd class="field-even"><p>The resource element (RE) offset. It can be one of 0 (default), 1, 2, or 3. This is the
-<code class="docutils literal notranslate"><span class="pre">resourceElementOffset</span></code> value in <strong>3GPP TS 38.211, Table 6.4.1.2.2.1-1</strong>.</p>
+<code class="docutils literal notranslate"><span class="pre">resourceElementOffset</span></code> value in <strong>3GPP TS 38.211, Table 7.4.1.2.2-1</strong>.</p>
 </dd>
 <dt class="field-odd">portSet<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The set of antenna ports associated with this PTRS. If not specified, the first port of the
+<dd class="field-odd"><p>The set of antenna ports associated with this PT-RS. If not specified, the first port of the
 associated <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> is used.</p>
 </dd>
 <dt class="field-even">epreRatio<span class="colon">:</span></dt>
 <dd class="field-even"><p>The <code class="docutils literal notranslate"><span class="pre">epre-Ratio</span></code> value in <strong>3GPP TS 38.214, Table 4.1-2</strong>. It is used to determine the
-ratio of PTRS energy per resource element (EPRE) to PDSCH EPRE in dB. It can be 0 (default) or 1.
+ratio of PT-RS energy per resource element (EPRE) to PDSCH EPRE in dB. It can be 0 (default) or 1.
 See <strong>3GPP TS 38.214, Table 4.1-2</strong> for more information.</p>
 </dd>
 </dl>
@@ -771,7 +959,7 @@ See <strong>3GPP TS 38.214, Table 4.1-2</strong> for more information.</p>
 </dl>
 <p id="timefreqdensity"><strong>Specifying Time and Frequency density:</strong></p>
 <blockquote>
-<div><p>There are two ways to specify the time and frequency density of the PTRS signals.</p>
+<div><p>There are two ways to specify the time and frequency density of the PT-RS signals.</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">Using MCS Info<span class="colon">:</span></dt>
@@ -781,7 +969,7 @@ information based on <strong>3GPP TS 38.214, Tables 5.1.6.3-1 and 5.1.6.3-2</str
 </dd>
 <dt class="field-even">Direct Setting<span class="colon">:</span></dt>
 <dd class="field-even"><p>In this method, the values <code class="docutils literal notranslate"><span class="pre">timeDensity</span></code> and <code class="docutils literal notranslate"><span class="pre">freqDensity</span></code> are provided directly.
-In this case, all of the values <code class="docutils literal notranslate"><span class="pre">mcsi</span></code>, <code class="docutils literal notranslate"><span class="pre">iMCS</span></code>, and <code class="docutils literal notranslate"><span class="pre">nRBi</span></code> must be set to <cite>None</cite> (default).</p>
+In this case, <code class="docutils literal notranslate"><span class="pre">mcsi</span></code>, <code class="docutils literal notranslate"><span class="pre">iMCS</span></code>, and <code class="docutils literal notranslate"><span class="pre">nRBi</span></code> must all be set to <cite>None</cite> (default).</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -794,7 +982,7 @@ In this case, all of the values <code class="docutils literal notranslate"><span
 </dd>
 </dl>
 </div></blockquote>
-<p>The notebook <a class="reference internal" href="../Playground/Notebooks/DMRS/PTRS.html"><span class="doc">Configuring PTRS</span></a> shows some examples of configuring PTRS.</p>
+<p>The notebook <a class="reference internal" href="../Playground/Notebooks/DMRS/PTRS.html"><span class="doc">Exploring PDSCH PT-RS Configurations</span></a> shows some examples of configuring PTRS.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.dmrs.PTRS.print">
 <span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PTRS</span> <span class="pre">Properties:'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.dmrs.PTRS.print" title="Link to this definition"></a></dt>
@@ -803,12 +991,12 @@ In this case, all of the values <code class="docutils literal notranslate"><span
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em>) – If specified, it is used as a title for the printed information.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – If specified, it is used as the title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>bool</em>) – If <cite>True</cite>, returns a string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -827,7 +1015,7 @@ with a <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradiu
 method of the <a class="reference internal" href="#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> class is called.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object that gets populated with the Phase Tracking Reference Signals.</p>
+<dd class="field-odd"><p><strong>grid</strong> (<a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>) – The <a class="reference internal" href="Grid.html#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object that is populated with the phase-tracking reference signals.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -851,7 +1039,7 @@ Dahlman, Stefan Parkvall, and Johan Skold (Fig. 8.6)</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Modulation.html" class="btn btn-neutral float-left" title="Modulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="PhyChannels.html" class="btn btn-neutral float-right" title="Physical Channels" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="CsiReport.html" class="btn btn-neutral float-right" title="CSI Reporting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -6,20 +6,20 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resource Grid &mdash; NeoRadium 0.4.1 Documentation</title>
+  <title>Resource Grid &mdash; NeoRadium 0.5.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=c87aa342"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.4.1
+            NeoRadium 0.5.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -52,6 +52,7 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MigrationGuide.html">Migration Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Playground/Playground.html">Playground</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
@@ -63,6 +64,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.clone"><code class="docutils literal notranslate"><span class="pre">Grid.clone()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.getStats"><code class="docutils literal notranslate"><span class="pre">Grid.getStats()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.reTypeAt"><code class="docutils literal notranslate"><span class="pre">Grid.reTypeAt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.reTypeAndObjIdAt"><code class="docutils literal notranslate"><span class="pre">Grid.reTypeAndObjIdAt()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.getReIndexes"><code class="docutils literal notranslate"><span class="pre">Grid.getReIndexes()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.getReValues"><code class="docutils literal notranslate"><span class="pre">Grid.getReValues()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.precode"><code class="docutils literal notranslate"><span class="pre">Grid.precode()</span></code></a></li>
@@ -71,7 +73,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.equalize"><code class="docutils literal notranslate"><span class="pre">Grid.equalize()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.estimateChannelLS"><code class="docutils literal notranslate"><span class="pre">Grid.estimateChannelLS()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.applyChannel"><code class="docutils literal notranslate"><span class="pre">Grid.applyChannel()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.getNoiseStd"><code class="docutils literal notranslate"><span class="pre">Grid.getNoiseStd()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.addNoise"><code class="docutils literal notranslate"><span class="pre">Grid.addNoise()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.grid.Grid.drawMap"><code class="docutils literal notranslate"><span class="pre">Grid.drawMap()</span></code></a></li>
 </ul>
@@ -81,6 +82,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Waveform.html">Waveform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Modulation.html">Modulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CsiReport.html">CSI Reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ChanCode.html">Channel Coding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Harq.html">HARQ</a></li>
@@ -89,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Other Utilitiy Functions</a></li>
 </ul>
 
         </div>
@@ -97,7 +100,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.4.1</a>
+          <a href="../../index.html">NeoRadium 0.5.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -117,44 +120,43 @@
              
   <section id="module-neoradium.grid">
 <span id="resource-grid"></span><h1>Resource Grid<a class="headerlink" href="#module-neoradium.grid" title="Link to this heading"></a></h1>
-<p>The module <code class="docutils literal notranslate"><span class="pre">grid.py</span></code> implements the <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class, which encapsulates the functionality of a Resource Grid,
+<p>The module <code class="docutils literal notranslate"><span class="pre">grid.py</span></code> implements the <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> class, which encapsulates the functionality of a resource grid,
 including:</p>
 <ul class="simple">
 <li><p>Keeping the Resource Element (RE) values for a specified resource grid size.</p></li>
-<li><p>Providing easy access to a specific type of data in the resource grid (e.g., DMRS values, CSI-RS values, PDSCH
+<li><p>Providing easy access to a specific type of data in the resource grid (e.g., DM-RS values, CSI-RS values, PDSCH
 data, etc.)</p></li>
-<li><p>Providing statistics and visualizing the resource grid map.</p></li>
-<li><p>Applying the <em>precoding</em> process which results in a new <em>precoded</em> <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object.</p></li>
+<li><p>Providing statistics and visualization for the resource grid map.</p></li>
 <li><p>Applying <a class="reference external" href="https://en.wikipedia.org/wiki/Orthogonal_frequency-division_multiplexing">OFDM</a> modulation to the
 resource grid which results in a <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object.</p></li>
-<li><p>Applying a <a class="reference internal" href="Channels.html"><span class="doc">Channel Model</span></a> to the resource grid in frequency domain.</p></li>
-<li><p>Applying <em>Additive White Gaussian Noise (AWGN)</em> to the resource grid in frequency domain.</p></li>
-<li><p>Performing <em>Synchronization</em> based on the correlation between the configured <a class="reference internal" href="RefSig.html"><span class="doc">reference signals</span></a>
-and a received <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a>.</p></li>
+<li><p>Applying a <a class="reference internal" href="Channels.html"><span class="doc">Channel Model</span></a> to the resource grid in the frequency domain.</p></li>
+<li><p>Applying <em>Additive White Gaussian Noise (AWGN)</em> to the resource grid in the frequency domain.</p></li>
 <li><p>Performing <em>Channel Estimation</em> based on a received resource grid and the configured
 <a class="reference internal" href="RefSig.html"><span class="doc">reference signals</span></a>.</p></li>
-<li><p>Performing <em>Equalization</em> using the estimated channel.</p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.grid.Grid">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">neoradium.grid.</span></span><span class="sig-name descname"><span class="pre">Grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numPlanes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DATA'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useReDesc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numSlots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.grid.</span></span><span class="sig-name descname"><span class="pre">Grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bwp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numPlanes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'UNASSIGNED'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numSlots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numRbs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid" title="Link to this definition"></a></dt>
 <dd><p>This class implements the functionality of a resource grid. It stores the complex frequency-domain values of
 resource elements (REs) in the grid.</p>
+<p>All transformation methods (<a class="reference internal" href="#neoradium.grid.Grid.ofdmModulate" title="neoradium.grid.Grid.ofdmModulate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ofdmModulate()</span></code></a>, <a class="reference internal" href="#neoradium.grid.Grid.applyChannel" title="neoradium.grid.Grid.applyChannel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyChannel()</span></code></a>, <a class="reference internal" href="#neoradium.grid.Grid.addNoise" title="neoradium.grid.Grid.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a>,
+<a class="reference internal" href="#neoradium.grid.Grid.clone" title="neoradium.grid.Grid.clone"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clone()</span></code></a>, etc.) return a new <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> or <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object;
+the source grid is never mutated in place.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>bwp</strong> (<a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a>) – The bandwidth part object based on which this resource grid is created.</p></li>
-<li><p><strong>numPlanes</strong> (<em>int</em><em> (</em><em>default: 1</em><em>)</em>) – A resource grid can be considered as a 3-dimensional <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> complex tensor where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
+<li><p><strong>numPlanes</strong> (<em>int</em><em> (</em><em>default: 1</em><em>)</em>) – A resource grid can be considered as a three-dimensional <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> complex tensor where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
 number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers (based on <code class="docutils literal notranslate"><span class="pre">bwp</span></code>), and <code class="docutils literal notranslate"><span class="pre">P</span></code> is the number
 of <em>planes</em>. In different contexts, <code class="docutils literal notranslate"><span class="pre">P</span></code> can be equivalent to the number of layers, number of transmitter
-antennas, or number of receiver antennas. To avoid any confusion, the resource grid implementation in
-<strong>NeoRadium</strong> uses the term <em>“Plane”</em> for the first dimension of the resource grid.</p></li>
+antenna ports, or number of receiver antennas. To avoid confusion, the resource grid implementation in
+<strong>NeoRadium</strong> uses the term <em>“plane”</em> for the first dimension of the resource grid.</p></li>
 <li><p><strong>contents</strong> (<em>str</em>) – <p>The default content type of this resource grid. Each resource element (RE) in the resource grid has an
-associated content type. When some data is assigned to some REs in this resource grid without a specified
+associated content type. When data is assigned to REs in this resource grid without a specified
 content type, the default value is used. The following content types are currently defined:</p>
 <dl class="field-list simple">
-<dt class="field-odd">DATA<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A Generic content type used when the type of data in the resource grid is unknown or not specified.</p>
+<dt class="field-odd">UNASSIGNED<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A generic content type used when the type of data in the resource grid is unknown.</p>
 </dd>
 <dt class="field-even">PDSCH<span class="colon">:</span></dt>
 <dd class="field-even"><p>The content type used for the data carried in a Physical Downlink Shared Channel (PDSCH)</p>
@@ -168,16 +170,12 @@ content type, the default value is used. The following content types are current
 <dt class="field-odd">PUCCH<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The content type used for the data carried in a Physical Uplink Control Channel (PUCCH)</p>
 </dd>
-<dt class="field-even">RX_DATA<span class="colon">:</span></dt>
-<dd class="field-even"><p>The content type used for the received resource grid. (Created by the OFDM demodulation process)</p>
-</dd>
 </dl>
 </p></li>
-<li><p><strong>useReDesc</strong> (<em>Boolean</em>) – If <cite>True</cite>, the resource grid will also include additional fields that describe the content of each
-resource element (RE). This can be used during the debugging to make sure the resources are allocated
-correctly.</p></li>
 <li><p><strong>numSlots</strong> (<em>int</em>) – The number of time slots to include in the resource grid. The number of time symbols <code class="docutils literal notranslate"><span class="pre">L</span></code> (the second
 dimension of the resource grid tensor) is equal to <code class="docutils literal notranslate"><span class="pre">numSlots</span> <span class="pre">*</span> <span class="pre">bwp.symbolsPerSlot</span></code>.</p></li>
+<li><p><strong>numRbs</strong> (<em>int</em><em> or </em><em>None</em>) – If this is specified, the resource grid will contain this many resource blocks. Otherwise (default),
+the resource grid will have the same number of resource blocks as the bandwidth part.</p></li>
 </ul>
 </dd>
 </dl>
@@ -188,49 +186,42 @@ dimension of the resource grid tensor) is equal to <code class="docutils literal
 <dt class="field-odd">shape<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Returns the shape of the 3-dimensional resource grid tensor.</p>
 </dd>
-<dt class="field-even">numPlanes<span class="colon">:</span></dt>
+<dt class="field-even">numPorts<span class="colon">:</span></dt>
 <dd class="field-even"><p>The number of antenna ports. (The same as <code class="docutils literal notranslate"><span class="pre">numPlanes</span></code>)</p>
 </dd>
-<dt class="field-odd">numPorts<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of antenna ports. (The same as <code class="docutils literal notranslate"><span class="pre">numPlanes</span></code>)</p>
+<dt class="field-odd">numLayers<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of layers. (The same as <code class="docutils literal notranslate"><span class="pre">numPlanes</span></code>)</p>
 </dd>
-<dt class="field-even">numLayers<span class="colon">:</span></dt>
-<dd class="field-even"><p>The number of layers. (The same as <code class="docutils literal notranslate"><span class="pre">numPlanes</span></code>)</p>
-</dd>
-<dt class="field-odd">numSubcarriers<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of subcarriers in this resource grid.</p>
-</dd>
-<dt class="field-even">numRBs<span class="colon">:</span></dt>
-<dd class="field-even"><p>The number of resource blocks (RBs) in this resource grid. This is equal to <code class="docutils literal notranslate"><span class="pre">numSubcarriers/12</span></code>.
-The number of subcarriers in a resource grid is always a multiple of 12.</p>
+<dt class="field-even">numSubcarriers<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of subcarriers in this resource grid.</p>
 </dd>
 <dt class="field-odd">numSymbols<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of time symbols in this resource grid. This is equal to
 <code class="docutils literal notranslate"><span class="pre">numSlots*bwp.symbolsPerSlot</span></code>.</p>
 </dd>
 <dt class="field-even">size<span class="colon">:</span></dt>
-<dd class="field-even"><p>The size of resource grid tensor.</p>
+<dd class="field-even"><p>The size of the resource grid tensor.</p>
 </dd>
 <dt class="field-odd">noiseVar<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The variance of the AWGN noise present in this resource grid. This is usually initialized to
-zero. When an AWGN noise is applied to the grid using the <a class="reference internal" href="#neoradium.grid.Grid.addNoise" title="neoradium.grid.Grid.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a> function, the variance
-of the noise stored in this property. Also, if a noisy <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> is
+<dd class="field-odd"><p>The variance of AWGN noise present in this resource grid. This is usually initialized to
+zero. When AWGN noise is applied to the grid using the <a class="reference internal" href="#neoradium.grid.Grid.addNoise" title="neoradium.grid.Grid.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a> function, the variance
+of the noise is stored in this property. Also, if a noisy <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> is
 OFDM-demodulated using the <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform.ofdmDemodulate" title="neoradium.waveform.Waveform.ofdmDemodulate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ofdmDemodulate()</span></code></a> method, then the
 amount of noise is transferred to the new <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object created.</p>
 </dd>
 </dl>
 </div></blockquote>
-<p>Additionally, you can access (Read-Only) the following <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> class
-properties directly: <code class="docutils literal notranslate"><span class="pre">startRb</span></code>, <code class="docutils literal notranslate"><span class="pre">numRbs</span></code>, <code class="docutils literal notranslate"><span class="pre">nFFT</span></code>, <code class="docutils literal notranslate"><span class="pre">symbolsPerSlot</span></code>, <code class="docutils literal notranslate"><span class="pre">slotsPerSubFrame</span></code>,
-<code class="docutils literal notranslate"><span class="pre">slotsPerFrame</span></code>, <code class="docutils literal notranslate"><span class="pre">symbolsPerSubFrame</span></code>.</p>
+<p>Additionally, you can access the following read-only <a class="reference internal" href="Carrier.html#neoradium.carrier.BandwidthPart" title="neoradium.carrier.BandwidthPart"><code class="xref py py-class docutils literal notranslate"><span class="pre">BandwidthPart</span></code></a> class
+properties directly: <code class="docutils literal notranslate"><span class="pre">nFFT</span></code>, <code class="docutils literal notranslate"><span class="pre">symbolsPerSlot</span></code>, <code class="docutils literal notranslate"><span class="pre">slotsPerSubFrame</span></code>, <code class="docutils literal notranslate"><span class="pre">slotsPerFrame</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">symbolsPerSubFrame</span></code>.</p>
 <p><strong>Resource Grid Indexing:</strong></p>
 <p>a) <em>Reading</em>: You can directly access the contents of the resource grid using indices. Here are a few
 examples of accessing the RE values in the resource grid:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">myREs</span> <span class="o">=</span> <span class="n">myGrid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">,:]</span>     <span class="c1"># instead of using myGrid.grid[0,2:5,:]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">myREs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>          <span class="c1"># Assuming 612 subcarriers, this will print: &quot;(3, 612)&quot;</span>
 
-<span class="n">indexes</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>   <span class="c1"># Get the indices of all DMRS values</span>
-<span class="n">dmrsValues</span> <span class="o">=</span> <span class="n">myGrid</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span>            <span class="c1"># Get all DMRS values as a 1-D array.</span>
+<span class="n">indexes</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>   <span class="c1"># Get the indices of all DM-RS REs</span>
+<span class="n">dmrsValues</span> <span class="o">=</span> <span class="n">myGrid</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span>            <span class="c1"># Get all DM-RS values as a 1-D array.</span>
 </pre></div>
 </div>
 <ol class="loweralpha simple" start="2">
@@ -257,12 +248,12 @@ examples of accessing the RE values in the resource grid:</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>indent</strong> (<em>int</em>) – The number of indentation characters.</p></li>
-<li><p><strong>title</strong> (<em>str</em>) – If specified, it is used as a title for the printed information.</p></li>
-<li><p><strong>getStr</strong> (<em>Boolean</em>) – If <cite>True</cite>, returns a text string instead of printing it.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – If specified, it is used as the title for the printed information.</p></li>
+<li><p><strong>getStr</strong> (<em>bool</em>) – If <cite>True</cite>, returns a string instead of printing it.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a text string.
+<dd class="field-even"><p>If the <code class="docutils literal notranslate"><span class="pre">getStr</span></code> parameter is <cite>True</cite>, then this function returns the information in a string.
 Otherwise, nothing is returned.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -317,25 +308,55 @@ this resource grid.</p>
 <dd class="field-even"><p>The content type of the resource element specified by <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">l</span></code>, and <code class="docutils literal notranslate"><span class="pre">k</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>str or tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.grid.Grid.reTypeAndObjIdAt">
+<span class="sig-name descname"><span class="pre">reTypeAndObjIdAt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.reTypeAndObjIdAt" title="Link to this definition"></a></dt>
+<dd><p>Returns the content type and object ID of the resource element at the position specified by <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">l</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">k</span></code>. For example, for a resource element assigned to non-zero-power CDI-RS, the RE type would be
+<code class="docutils literal notranslate"><span class="pre">&quot;CSIRS_NZP&quot;</span></code> and the object ID would be the resource ID of the CSI-RS resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<em>int</em>) – The <em>plane</em> number. It can be the layer or antenna index depending on the context.</p></li>
+<li><p><strong>l</strong> (<em>int</em>) – The time symbol index.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The subcarrier index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The content type and object ID associated with the resource element specified by <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">l</span></code>, and <code class="docutils literal notranslate"><span class="pre">k</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.grid.Grid.getReIndexes">
-<span class="sig-name descname"><span class="pre">getReIndexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reTypeStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.getReIndexes" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getReIndexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reTypeStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.getReIndexes" title="Link to this definition"></a></dt>
 <dd><p>Returns the indices of all resource elements in the resource grid with the content type specified by the
-<code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>. For example, the code below gets the indices of all DMRS values in the resource grid and uses
-the returned indices to retrieve these values.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dmrsIdx</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>   <span class="c1"># Get the indices of all DMRS values</span>
-<span class="n">dmrsValues</span> <span class="o">=</span> <span class="n">myGrid</span><span class="p">[</span><span class="n">dmrsIdx</span><span class="p">]</span>            <span class="c1"># Get all DMRS values as a 1-D array.</span>
+<code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>. For example, the code below gets the indices of all DM-RS resource elements in the resource grid
+and uses the returned indices to retrieve these values. Here are some examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dmrsIdx</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>   <span class="c1"># Get the indices of all DM-RS resource elements</span>
+<span class="n">dmrsValues</span> <span class="o">=</span> <span class="n">myGrid</span><span class="p">[</span><span class="n">dmrsIdx</span><span class="p">]</span>            <span class="c1"># Get all DM-RS values as a 1-D array.</span>
+
+<span class="c1"># Get indices of all CSI-RS resource elements</span>
+<span class="n">allCsiRsIdx</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;CSIRS_NZP&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get indices of CSI-RS resource elements corresponding to a CsiRs with resourceId=1</span>
+<span class="n">csiRsIdx1</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;CSIRS_NZP&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Get indices of CSI-RS resource elements for the CsiRs</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reTypeStr</strong> (<em>str</em><em> or </em><em>None</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> is <cite>None</cite>, the default content type of this resource grid is used as the key. For
-example if this resource grid was created with <code class="docutils literal notranslate"><span class="pre">contents=&quot;PDSCH&quot;</span></code>, then the indices of all resource
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reTypeStr</strong> (<em>str</em><em> or </em><em>None</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> is <cite>None</cite>, the default content type of this resource grid is used as the key. For
+example, if this resource grid was created with <code class="docutils literal notranslate"><span class="pre">contents=&quot;PDSCH&quot;</span></code>, then the indices of all resource
 elements with content type “PDSCH” are returned.</p>
 <p>Otherwise, this function returns the indices of all resource elements in the resource grid with the
 content type specified by <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>. Here is a list of values that can be used:</p>
@@ -345,13 +366,12 @@ content type specified by <code class="docutils literal notranslate"><span class
 <dd class="field-odd"><p>The <em>un-assigned</em> resource elements.</p>
 </dd>
 <dt class="field-even">”RESERVED”<span class="colon">:</span></dt>
-<dd class="field-even"><p>The reserved resource elements. This includes the REs reserved by <code class="docutils literal notranslate"><span class="pre">reservedRbSets</span></code>
-or <code class="docutils literal notranslate"><span class="pre">reservedReMap</span></code> parameters of this <code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code>.</p>
+<dd class="field-even"><p>The reserved resource elements. This includes the resource blocks reserved by the
+<a class="reference internal" href="Carrier.html#neoradium.carrier.ReservedPrbSet" title="neoradium.carrier.ReservedPrbSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReservedPrbSet</span></code></a> class.</p>
 </dd>
 <dt class="field-odd">”NO_DATA”<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The resource elements that should not contain any data. For example when the corresponding
-REs in a different layer is used for transmission of data for a different UE. (See
-<code class="docutils literal notranslate"><span class="pre">otherCdmGroups</span></code> parameter of <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> class)</p>
+<dd class="field-odd"><p>The resource elements that should not contain any data. See <code class="docutils literal notranslate"><span class="pre">numCdmGroupsWithoutData</span></code>
+parameter of <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> class for more information.</p>
 </dd>
 <dt class="field-even">”DMRS”<span class="colon">:</span></dt>
 <dd class="field-even"><p>The resource elements used for <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a>.</p>
@@ -384,7 +404,12 @@ REs in a different layer is used for transmission of data for a different UE. (S
 </dd>
 </dl>
 </div></blockquote>
-</p>
+</p></li>
+<li><p><strong>objectId</strong> (<em>int</em>) – Specifies the object ID corresponding to the resource elements of type <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>. For example, if there
+are many CSI-RS resources with different resourceId values in this grid, you could use this parameter to
+specify the <a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a> <code class="docutils literal notranslate"><span class="pre">resourceId</span></code> and only return the RE indices for the
+specified resource ID. (See the above examples)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A tuple of three 1-D NumPy arrays specifying a list of locations in the resource grid. This value can be
@@ -398,7 +423,7 @@ used directly to access REs at the specified locations. (See the above example)<
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.grid.Grid.getReValues">
-<span class="sig-name descname"><span class="pre">getReValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reTypeStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.getReValues" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getReValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reTypeStr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.getReValues" title="Link to this definition"></a></dt>
 <dd><p>Returns the values of all resource elements in the resource grid with the content type specified by the
 <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>. This is a shortcut method that allows accessing all the values in one step. For example, the
 following two methods are equivalent.</p>
@@ -409,13 +434,19 @@ following two methods are equivalent.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reTypeStr</strong> (<em>str</em><em> or </em><em>None</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> is <cite>None</cite>, the default content type of this resource grid is used as the key. For
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reTypeStr</strong> (<em>str</em><em> or </em><em>None</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code> is <cite>None</cite>, the default content type of this resource grid is used as the key. For
 example, if this resource grid was created with <code class="docutils literal notranslate"><span class="pre">contents=&quot;PDSCH&quot;</span></code>, then the values of all resource
 elements with content type “PDSCH” are returned.</p>
 <p>Otherwise, this function returns the values of all resource elements in the resource grid with the content
 type specified by <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>. See <a class="reference internal" href="#neoradium.grid.Grid.getReIndexes" title="neoradium.grid.Grid.getReIndexes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getReIndexes()</span></code></a> for a list of values that could be used
 for <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>.</p>
-</p>
+</p></li>
+<li><p><strong>objectId</strong> (<em>int</em>) – Specifies the object ID corresponding to the resource elements of type <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>. For example, if there
+are many CSI-RS resources with different resourceId values in this grid, you could use this parameter to
+specify the <a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRs" title="neoradium.csirs.CsiRs"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRs</span></code></a> <code class="docutils literal notranslate"><span class="pre">resourceId</span></code> and only return the RE values for the
+specified resource ID.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A 1-D complex NumPy array containing the values for all REs with the content type specified by
@@ -429,16 +460,19 @@ for <code class="docutils literal notranslate"><span class="pre">reTypeStr</span
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.grid.Grid.precode">
-<span class="sig-name descname"><span class="pre">precode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.precode" title="Link to this definition"></a></dt>
-<dd><p>Applies the specified precoding matrix to this grid object and returns a new <em>precoded</em> grid. This function
-supports <em>Precoding RB groups (PRGs)</em> which means different precoding matrices could be applied to different
-groups of subcarriers in the resource grid. See <strong>3GPP TS 38.214, Section 5.1.2.3</strong> for more details.</p>
+<span class="sig-name descname"><span class="pre">precode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reIndices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.precode" title="Link to this definition"></a></dt>
+<dd><p><span class="red">DEPRECATED</span>: This method is deprecated and will be removed in future releases. Please use the
+<a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH.precodeTo" title="neoradium.pdsch.PDSCH.precodeTo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">precodeTo()</span></code></a> method instead.</p>
+<p>Applies the specified precoding matrix to this grid object and returns a new <em>precoded</em> grid. This function
+supports <em>precoding resource block groups (PRGs)</em> which means different precoding matrices could be applied to
+different groups of subcarriers in the resource grid. See <strong>3GPP TS 38.214, Section 5.1.2.3</strong> for more details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>f</strong> (<em>NumPy array</em><em> or </em><em>list</em><em> of </em><em>tuples</em>) – <p>This function supports two types of precoding:</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> (<em>NumPy array</em><em> or </em><em>list</em><em> of </em><em>tuples</em>) – <p>This function supports two types of precoding:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Wideband<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">f</span></code> is an <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code> matrix where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antennas and <code class="docutils literal notranslate"><span class="pre">Nl</span></code>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">f</span></code> is an <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">Nl</span></code> matrix where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antenna ports and <code class="docutils literal notranslate"><span class="pre">Nl</span></code>
 is the number of layers which <strong>must</strong> match the number of layers in the resource grid. In this case
 the same precoding is applied to all subcarriers of the resource grid.</p>
 </dd>
@@ -448,11 +482,14 @@ For each entry in the list, the <code class="docutils literal notranslate"><span
 of the resource blocks listed in <code class="docutils literal notranslate"><span class="pre">groupRBs</span></code>.</p>
 </dd>
 </dl>
-</p>
+</p></li>
+<li><p><strong>reIndices</strong> (<em>3-tuple</em><em> or </em><em>None</em>) – A tuple of three 1-D NumPy arrays specifying a list of locations in this resource grid where the precoding
+is applied. If this is <cite>None</cite> (default), the precoding is applied to the whole grid.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A new Grid object of shape <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antennas, <code class="docutils literal notranslate"><span class="pre">L</span></code> is
-the number of OFDM symbols, and <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers.</p>
+<dd class="field-even"><p>A new <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object of shape <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of
+transmitter antenna ports, <code class="docutils literal notranslate"><span class="pre">L</span></code> is the number of OFDM symbols, and <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a></p>
@@ -463,16 +500,16 @@ the number of OFDM symbols, and <code class="docutils literal notranslate"><span
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.grid.Grid.ofdmModulate">
 <span class="sig-name descname"><span class="pre">ofdmModulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windowing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'STD'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.ofdmModulate" title="Link to this definition"></a></dt>
-<dd><p>Applies OFDM Modulation to the resource grid which results in a <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a>
+<dd><p>Applies OFDM modulation to the resource grid which results in a <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a>
 object. This function is based on <strong>3GPP TS 38.211, Section 5.3.1</strong>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>f0</strong> (<em>float</em>) – The carrier frequency of the generated waveform. If it is 0 (default), then a baseband waveform is
 generated and the <em>up-conversion</em> process explained in <strong>3GPP TS 38.211, Section 5.4</strong> is not applied.</p></li>
-<li><p><strong>windowing</strong> (<em>str</em>) – A text string indicating what type of windowing should be applied to the waveform after OFDM modulation.
-The default value <code class="docutils literal notranslate"><span class="pre">&quot;STD&quot;</span></code> means the windowing should be applied based on <strong>3GPP TS 38.104, Sections B.5.2
-and C.5.2</strong>. For more information see <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform.applyWindowing" title="neoradium.waveform.Waveform.applyWindowing"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyWindowing()</span></code></a> method of the
+<li><p><strong>windowing</strong> (<em>str</em>) – A string indicating which type of windowing should be applied to the waveform after OFDM modulation.
+The default value <code class="docutils literal notranslate"><span class="pre">&quot;STD&quot;</span></code> means that windowing is applied based on <strong>3GPP TS 38.104, Sections B.5.2
+and C.5.2</strong>. For more information, see <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform.applyWindowing" title="neoradium.waveform.Waveform.applyWindowing"><code class="xref py py-meth docutils literal notranslate"><span class="pre">applyWindowing()</span></code></a> method of the
 <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> class.</p></li>
 </ul>
 </dd>
@@ -490,7 +527,7 @@ and C.5.2</strong>. For more information see <a class="reference internal" href=
 <span class="sig-name descname"><span class="pre">estimateTimingOffset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxWaveform</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.estimateTimingOffset" title="Link to this definition"></a></dt>
 <dd><p>Estimates the timing offset of a received waveform. This method first applies OFDM modulation to the
 resource grid and then calculates the correlation of this waveform with the given <code class="docutils literal notranslate"><span class="pre">rxWaveform</span></code>. The timing
-offset is the index of where the correlation is at its maximum. The output of this function can be used by the
+offset is the index where the correlation reaches its maximum. The output of this function can be used by the
 <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform.sync" title="neoradium.waveform.Waveform.sync"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sync()</span></code></a> method of the <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> class
 to synchronize a received waveform.</p>
 <dl class="field-list simple">
@@ -498,20 +535,27 @@ to synchronize a received waveform.</p>
 <dd class="field-odd"><p><strong>rxWaveform</strong> (<a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a>) – The <a class="reference internal" href="Waveform.html#neoradium.waveform.Waveform" title="neoradium.waveform.Waveform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Waveform</span></code></a> object containing the received waveform.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The timing offset in number of time-domain samples. This is the number of samples that should be ignored
+<dd class="field-even"><p>The timing offset, in number of time-domain samples. This is the number of samples that should be ignored
 from the beginning of the <code class="docutils literal notranslate"><span class="pre">rxWaveform</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>The correlation is computed independently for each (RX antenna, TX port) pair using
+<code class="docutils literal notranslate"><span class="pre">scipy.signal.correlate</span></code>. The magnitudes of those per-pair correlations are summed across all
+pairs, and the timing offset is the index of the peak of this aggregated magnitude. Magnitude is used
+(rather than the raw complex correlation) so that random per-pair phase offsets do not cancel out.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.grid.Grid.equalize">
 <span class="sig-name descname"><span class="pre">equalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noiseVar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.equalize" title="Link to this definition"></a></dt>
-<dd><p>Equalizes a received resource grid using the estimated channel <code class="docutils literal notranslate"><span class="pre">hf</span></code>. The estimated channel is assumed to
-include the effect of precoding matrix, therefore, its shape is <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nl</span></code> where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
+<dd><p><span class="red">DEPRECATED</span>: This method is deprecated and will be removed in future releases. Please use the
+<a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH.equalize" title="neoradium.pdsch.PDSCH.equalize"><code class="xref py py-meth docutils literal notranslate"><span class="pre">equalize()</span></code></a> method instead.</p>
+<p>Equalizes a received resource grid using the estimated channel <code class="docutils literal notranslate"><span class="pre">hf</span></code>. The estimated channel is assumed to
+include the effect of the precoding matrix, therefore, its shape is <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nl</span></code> where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
 number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of receiver antennas, and
 <code class="docutils literal notranslate"><span class="pre">Nl</span></code> is the number of layers. The output of the equalization process is a new <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object
 of shape <code class="docutils literal notranslate"><span class="pre">Nl</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code>.</p>
@@ -524,7 +568,7 @@ process when extracting Log-Likelihood Ratios (LLRs) from the equalized resource
 <li><p><strong>hf</strong> (<em>4-D complex NumPy array</em>) – This is an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nl</span></code> NumPy array representing the estimated channel matrix, where <code class="docutils literal notranslate"><span class="pre">L</span></code> is
 the number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of receiver antennas,
 and <code class="docutils literal notranslate"><span class="pre">Nl</span></code> is the number of layers.</p></li>
-<li><p><strong>noiseVar</strong> (<em>float</em><em> or </em><em>None</em>) – The variance of the noise applied to the received resource grid. If this is not provided, this method
+<li><p><strong>noiseVar</strong> (<em>float</em><em> or </em><em>None</em>) – The variance of noise applied to the received resource grid. If this is not provided, this method
 tries to use the noise variance of the resource grid obtained by the OFDM demodulation process for
 the time-domain case or the variance of the noise applied to the received resource grid by the
 <a class="reference internal" href="#neoradium.grid.Grid.addNoise" title="neoradium.grid.Grid.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a> method for the frequency domain case (See the <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>
@@ -547,17 +591,19 @@ which is similar to <code class="docutils literal notranslate"><span class="pre"
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.grid.Grid.estimateChannelLS">
 <span class="sig-name descname"><span class="pre">estimateChannelLS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsInfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meanCdm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polarInt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.estimateChannelLS" title="Link to this definition"></a></dt>
-<dd><p>Performs channel estimation based on this received grid and the reference signal information in the
-<code class="docutils literal notranslate"><span class="pre">rsInfo</span></code>. Here is a list of steps taken by this function to calculated the estimated channel and noise
+<dd><p><span class="red">DEPRECATED</span>: This method is deprecated and will be removed in future releases. Please use the
+<a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH.estimateChannel" title="neoradium.pdsch.PDSCH.estimateChannel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">estimateChannel()</span></code></a> method instead.</p>
+<p>Performs channel estimation based on this received grid and the reference signal information in the
+<code class="docutils literal notranslate"><span class="pre">rsInfo</span></code>. Here is a list of steps taken by this function to calculate the estimated channel and noise
 variance:</p>
-<p>1) First the channel information is calculated at each pilot location using least squared method based on
+<p>1) First the channel information is calculated at each pilot location using the least-squares method based on
 the following equations:</p>
 <div class="math notranslate nohighlight">
 \[Y_p = h_p \odot P + n_p\]</div>
 <p>where <span class="math notranslate nohighlight">\(Y_p\)</span> is a vector of received values at the pilot locations which are the values in this
 <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object at the pilot locations indicated in <code class="docutils literal notranslate"><span class="pre">rsInfo</span></code>, <span class="math notranslate nohighlight">\(h_p\)</span> is the vector of channel
 values at pilot locations, <span class="math notranslate nohighlight">\(P\)</span> is the vector of pilot values extracted from <code class="docutils literal notranslate"><span class="pre">rsInfo</span></code>, and
-<span class="math notranslate nohighlight">\(n_p\)</span> is the noise at pilot locations. The least square estimate of the channel values at pilot
+<span class="math notranslate nohighlight">\(n_p\)</span> is the noise at pilot locations. The least-squares estimate of the channel values at pilot
 locations <span class="math notranslate nohighlight">\(h_p\)</span> is then calculated by:</p>
 <div class="math notranslate nohighlight">
 \[h_p = \frac {Y_p} P  \qquad \qquad \qquad \text{(element-wise division)}\]</div>
@@ -565,7 +611,7 @@ locations <span class="math notranslate nohighlight">\(h_p\)</span> is then calc
 smaller set of <span class="math notranslate nohighlight">\(h_p\)</span> values located at centers of CDM groups.</p>
 <p>3) Frequency interpolation along subcarriers is applied to <span class="math notranslate nohighlight">\(h_p\)</span> values at all OFDM symbols containing
 pilots based on <code class="docutils literal notranslate"><span class="pre">polarInt</span></code> and <code class="docutils literal notranslate"><span class="pre">kernel</span></code> values.</p>
-<p>4) A <em>raise-cosine</em> low-pass filter is applied to the Channel Impulse Response (CIR) values to get a
+<p>4) A <em>raised-cosine</em> low-pass filter is applied to the Channel Impulse Response (CIR) values to get a
 <em>de-noised</em> version of CIRs. The noise variance is estimated using the difference between the noisy and
 de-noised versions of the CIRs.</p>
 <p>5) Finally another interpolation is applied along OFDM symbols to estimate the channel information for the
@@ -573,21 +619,21 @@ whole channel matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rsInfo</strong> (<a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a> or <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a>) – <p>This object contain reference signal information for the channel estimation. If it is a
+<li><p><strong>rsInfo</strong> (<a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a> or <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a>) – <p>This object contains reference-signal information for the channel estimation. If it is a
 <a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a> object, the channel matrix is estimated based on the CSI-RS
-signals which does not include the precoding effect.</p>
+signals, which do not include precoding effects.</p>
 <p>If this is a <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object, the channel matrix is estimated based on the
-demodulation reference signals which includes the precoding effect.</p>
+demodulation reference signals, which include the precoding effect.</p>
 </p></li>
-<li><p><strong>meanCdm</strong> (<em>Boolean</em>) – If <cite>True</cite>, the <span class="math notranslate nohighlight">\(h_p\)</span> values at pilot locations for each CDM group are averaged before applying
-subcarrier interpolation. Otherwise interpolation is applied directly on the <span class="math notranslate nohighlight">\(h_p\)</span> values.</p></li>
-<li><p><strong>polarInt</strong> (<em>Boolean</em>) – <p>If <cite>True</cite>, the interpolation along the subcarriers is applied in polar coordinates. This means all
-<span class="math notranslate nohighlight">\(h_p\)</span> values are converted to the polar coordinates and then the type of interpolation specified by
+<li><p><strong>meanCdm</strong> (<em>bool</em>) – If <cite>True</cite>, the <span class="math notranslate nohighlight">\(h_p\)</span> values at pilot locations for each CDM group are averaged before applying
+subcarrier interpolation. Otherwise, interpolation is applied directly on the <span class="math notranslate nohighlight">\(h_p\)</span> values.</p></li>
+<li><p><strong>polarInt</strong> (<em>bool</em>) – <p>If <cite>True</cite>, the interpolation along the subcarriers is applied in polar coordinates. This means all
+<span class="math notranslate nohighlight">\(h_p\)</span> values are converted to polar coordinates and then the type of interpolation specified by
 <code class="docutils literal notranslate"><span class="pre">kernel</span></code> is applied to magnitudes and angles of these values. The results are then converted back to the
-cartesian coordinates. Otherwise (default), the interpolation is applied in the cartesian coordinates.</p>
+cartesian coordinates. Otherwise (default), the interpolation is applied in the Cartesian coordinates.</p>
 <p>Doing polar interpolation provides slightly better results at the cost of longer execution time.</p>
 </p></li>
-<li><p><strong>kernel</strong> (<em>str</em>) – <p>The type of interpolation used for channel estimation process. The same type of 1-D interpolations are
+<li><p><strong>kernel</strong> (<em>str</em>) – <p>The type of interpolation used for channel-estimation process. The same type of 1-D interpolations are
 applied along subcarriers and then OFDM symbols. Here is a list of supported values:</p>
 <dl class="field-list simple">
 <dt class="field-odd">linear<span class="colon">:</span></dt>
@@ -626,7 +672,7 @@ class.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul>
-<li><p><strong>hEst</strong> (<em>a 4-D complex NumPy array</em>) – If <code class="docutils literal notranslate"><span class="pre">rsInfo</span></code> is a <a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a> object, an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> complex NumPy
+<li><p><strong>hEst</strong> (<em>4-D complex NumPy array</em>) – If <code class="docutils literal notranslate"><span class="pre">rsInfo</span></code> is a <a class="reference internal" href="RefSig.html#neoradium.csirs.CsiRsConfig" title="neoradium.csirs.CsiRsConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">CsiRsConfig</span></code></a> object, an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> complex NumPy
 array is returned where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is
 the number of receiver antennas, and <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antennas.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">rsInfo</span></code> is a <a class="reference internal" href="RefSig.html#neoradium.dmrs.DMRS" title="neoradium.dmrs.DMRS"><code class="xref py py-class docutils literal notranslate"><span class="pre">DMRS</span></code></a> object, an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nl</span></code> complex NumPy array
@@ -643,15 +689,16 @@ the number of receiver antennas, and <code class="docutils literal notranslate">
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.grid.Grid.applyChannel">
 <span class="sig-name descname"><span class="pre">applyChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channelMatrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.applyChannel" title="Link to this definition"></a></dt>
-<dd><p>Applies a channel to this grid in frequency domain which results in a new <em>received</em> <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object.
-This function performs a matrix multiplication where this grid of shape <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> is multiplied by the
-channel matrix of shape <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> and results in the <em>received</em> grid of shape <code class="docutils literal notranslate"><span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code>, where
-<code class="docutils literal notranslate"><span class="pre">L</span></code> is the number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of receiver
+<dd><p>Applies a channel to this grid in the frequency domain which results in a new <em>received</em> <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a>
+object. This function performs a matrix multiplication where this grid of shape <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code> is multiplied by
+the channel matrix of shape <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> and results in the <em>received</em> grid of shape <code class="docutils literal notranslate"><span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the number of OFDM symbols, <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of subcarriers, <code class="docutils literal notranslate"><span class="pre">Nr</span></code> is the number of receiver
 antennas, and <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antennas.</p>
-<p>This method can be used as a shortcut method to get the received resource grid faster compared to time domain
-process of doing OFDM modulation, applying the channel, performing synchronization, and doing OFDM demodulation.</p>
-<p>Please note that the results are slightly different when a channel is applied in time domain vs frequency
-domain.</p>
+<p>This method can be used as a shortcut method to get the received resource grid faster compared to the
+time-domain process of performing OFDM modulation, applying the channel, performing synchronization, and
+carrying out OFDM demodulation.</p>
+<p>Please note that the results are slightly different when a channel is applied in the time domain vs. the
+frequency domain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channelMatrix</strong> (<em>4-D complex NumPy array</em>) – This is an <code class="docutils literal notranslate"><span class="pre">L</span> <span class="pre">x</span> <span class="pre">K</span> <span class="pre">x</span> <span class="pre">Nr</span> <span class="pre">x</span> <span class="pre">Nt</span></code> NumPy array representing the estimated channel matrix, where <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
@@ -669,33 +716,15 @@ number of OFDM symbols, and <code class="docutils literal notranslate"><span cla
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="neoradium.grid.Grid.getNoiseStd">
-<span class="sig-name descname"><span class="pre">getNoiseStd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">snr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.getNoiseStd" title="Link to this definition"></a></dt>
-<dd><p>This function calculates the noise standard deviation for the given signal-to-noise ratio (SNR). It first
-calculates the average received signal power per resource element (RE) and then uses it, along with the given
-SNR, to calculate the noise power. The returned standard deviation can be used directly by the
-<a class="reference internal" href="#neoradium.grid.Grid.addNoise" title="neoradium.grid.Grid.addNoise"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNoise()</span></code></a> method using the <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> argument.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>snr</strong> (<em>float</em>) – The signal-to-noise ratio in linear scale (not in dB).</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The noise standard deviation.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="neoradium.grid.Grid.addNoise">
 <span class="sig-name descname"><span class="pre">addNoise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.addNoise" title="Link to this definition"></a></dt>
-<dd><p>Adds Additive White Gaussian Noise (AWGN) to this resource grid based on the specified noise properties.
-The <em>noisy</em> grid is returned as a new <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object. The <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of the returned
-grid contains the variance of the noise applied by this function.</p>
-<p>If you already have a noise signal in a NumPy array, you can use the <code class="docutils literal notranslate"><span class="pre">noise</span></code> parameter of this function
-to apply it directly to this resource grid:</p>
+<dd><p>Adds Additive White Gaussian Noise (AWGN) to this resource grid and returns a new
+<a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object. The <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of the returned grid contains the
+variance of the applied noise.</p>
+<p>You can provide the noise directly, or specify its standard deviation, variance, or
+a target SNR.</p>
+<p>If you already have a noise signal in a NumPy array, use the <code class="docutils literal notranslate"><span class="pre">noise</span></code> parameter to
+add it directly to this grid:</p>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id4" title="Link to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">myNoise</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">awgn</span><span class="p">(</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>    <span class="c1"># Create AWGN with σ = 0.1</span>
@@ -703,8 +732,8 @@ to apply it directly to this resource grid:</p>
 </pre></div>
 </div>
 </div>
-<p>If you know the variance or standard deviation of the noise, you can use them directly by setting the
-arguments <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> and <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> respectively:</p>
+<p>If you already know the standard deviation or variance of the noise, use
+<code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> or <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> respectively:</p>
 <div class="literal-block-wrapper docutils container" id="id5">
 <div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id5" title="Link to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">noiseStd</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>       <span class="c1"># Same result as above</span>
@@ -712,80 +741,114 @@ arguments <code class="docutils literal notranslate"><span class="pre">noiseStd<
 </pre></div>
 </div>
 </div>
-<p>If you have a signal-to-noise ratio (SNR), there are two approaches for adding noise to the received
-resource grid:</p>
-<p><strong>Matlab Approach:</strong></p>
-<p>In this case, it is assumed that the received signal power is normalized to
-<span class="math notranslate nohighlight">\(\frac{1}{N_r}\)</span>, where <span class="math notranslate nohighlight">\(N_r\)</span> is the number of receiver antennas. Please note that when
-channel models such as CDL, TDL, or trajectory-based models are used in the communication
-pipeline, this assumption is not always valid. Support for this approach is included only to allow
-comparison with Matlab.</p>
+<p>If you specify <code class="docutils literal notranslate"><span class="pre">snrDb</span></code>, this function supports two different interpretations of SNR,
+controlled by the <code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> parameter.</p>
+<p><strong>1) Reference-power SNR</strong> (<code class="docutils literal notranslate"><span class="pre">useRxPower=False</span></code>)</p>
+<p>In this mode, the noise power is computed using a fixed reference signal power,
+independent of the instantaneous received grid. This approach is closer to typical
+<strong>3GPP-style link-level simulation methodology</strong>, where the AWGN level is fixed for
+a given SNR point and channel effects such as fading, path loss, and beamforming
+affect the received signal power without changing the injected noise power.</p>
+<p>In NeoRadium, this corresponds to assuming a normalized received signal power of
+<span class="math notranslate nohighlight">\(\frac{1}{N_r}\)</span>, where <span class="math notranslate nohighlight">\(N_r\)</span> is the number of receive antennas:</p>
 <div class="math notranslate nohighlight">
 \[\sigma^2_{AWGN} = \frac{1}{N_r \cdot 10^{\frac{SNR_{dB}}{10}}}\]</div>
 <div class="literal-block-wrapper docutils container" id="id6">
 <div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id6" title="Link to this code"></a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">mySnrDb</span><span class="p">,</span> <span class="n">useRxPower</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">mySnrDb</span><span class="p">,</span> <span class="n">useRxPower</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p><strong>Using RX Power:</strong></p>
-<p>In this case, the function first calculates the average received signal power per resource
-element (RE) and uses it, along with the given signal-to-noise ratio, to calculate the noise power.</p>
+<p>This mode is recommended for link-level performance evaluation and for generating
+results comparable to standard BLER vs. SNR curves. It is also the convention used
+by MATLAB 5G Toolbox link-level simulations.</p>
+<p><strong>2) Received-power-based SNR</strong> (<code class="docutils literal notranslate"><span class="pre">useRxPower=True</span></code>)</p>
+<p>In this mode, the noise power is derived from the actual received grid. The function
+first estimates the average received signal power per resource element (RE), and then
+applies noise to achieve the requested SNR relative to that measured power:</p>
 <div class="math notranslate nohighlight">
 \[\sigma^2_{AWGN} = \frac{\sigma^2_{RX}}{10^{\frac{SNR_{dB}}{10}}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma^2_{RX}\)</span> is the estimated average received power per RE.</p>
 <div class="literal-block-wrapper docutils container" id="id7">
 <div class="code-block-caption"><span class="caption-text">Example</span><a class="headerlink" href="#id7" title="Link to this code"></a></div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">mySnrDb</span><span class="p">,</span> <span class="n">useRxPower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rxGrid</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">snrDb</span><span class="o">=</span><span class="n">mySnrDb</span><span class="p">,</span> <span class="n">useRxPower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>Please refer to the notebook <a class="reference internal" href="../Playground/Notebooks/Others/SnrCalculations.html"><span class="doc">SNR Calculations in NeoRadium</span></a> for
-a complete analysis of how NeoRadium calculates and applies noise power for a given signal-to-noise ratio.</p>
+<p>This mode enforces a <strong>post-channel SNR</strong>, meaning that the resulting SNR is tied to
+the instantaneous received signal. As a result, variations caused by fading or other
+channel effects are partially normalized out, since both signal and noise scale
+together.</p>
+<p>This approach is useful for controlled algorithm evaluation, for example when
+benchmarking equalization, channel estimation, or decoding at a fixed received SNR.
+However, it is generally <strong>less suitable for 3GPP-style link-level performance
+studies</strong>, where channel variability is expected to directly impact the effective SNR.</p>
+<p>In summary:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">useRxPower=False</span></code>:
+Reference-power SNR. Recommended for link-level simulation results that are closer
+to common 3GPP-style evaluation methodology.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">useRxPower=True</span></code>:
+Received-power-based SNR. Useful when you intentionally want to control the SNR
+relative to the actual received grid power.</p></li>
+</ul>
+<p>Please refer to the notebook <a class="reference internal" href="../Playground/Notebooks/Others/SnrCalculations.html"><span class="doc">SNR Calculations in NeoRadium</span></a>
+for a more detailed discussion of SNR definitions and AWGN scaling in <strong>NeoRadium</strong>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – <p>The amount of noise must be specified by one of the parameters <code class="docutils literal notranslate"><span class="pre">noise</span></code>, <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code>, <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code>, or
-<code class="docutils literal notranslate"><span class="pre">snrDb</span></code>.</p>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>dict</em>) – <p>The amount of noise must be specified by one of <code class="docutils literal notranslate"><span class="pre">noise</span></code>, <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code>,
+<code class="docutils literal notranslate"><span class="pre">noiseVar</span></code>, or <code class="docutils literal notranslate"><span class="pre">snrDb</span></code>.</p>
 <dl class="field-list">
 <dt class="field-odd">noise<span class="colon">:</span></dt>
-<dd class="field-odd"><p>NumPy array with the same shape as this <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object containing the noise values.
-If <code class="docutils literal notranslate"><span class="pre">noise</span></code> is provided, it is added directly to the grid and all other parameters are ignored.</p>
+<dd class="field-odd"><p>NumPy array with the same shape as this <a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a> object containing
+the noise values. If <code class="docutils literal notranslate"><span class="pre">noise</span></code> is provided, it is added directly to the grid
+and all other parameters are ignored.</p>
 </dd>
 <dt class="field-even">noiseStd<span class="colon">:</span></dt>
-<dd class="field-even"><p>The standard deviation of the noise. AWGN complex noise is generated with zero mean
-and the specified standard deviation. If <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> is specified, <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> and <code class="docutils literal notranslate"><span class="pre">snrDb</span></code>
-are ignored.</p>
+<dd class="field-even"><p>Standard deviation of the AWGN. Complex zero-mean AWGN is generated
+using the specified standard deviation. If <code class="docutils literal notranslate"><span class="pre">noiseStd</span></code> is specified,
+<code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> and <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> are ignored.</p>
 </dd>
 <dt class="field-odd">noiseVar<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The variance of the noise. AWGN complex noise is generated with zero mean
-and the specified variance. If <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> is specified, the <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> value is ignored.</p>
+<dd class="field-odd"><p>Variance of the AWGN. Complex zero-mean AWGN is generated using the
+specified variance. If <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> is specified, <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> is ignored.</p>
 </dd>
 <dt class="field-even">snrDb<span class="colon">:</span></dt>
-<dd class="field-even"><p>The signal-to-noise ratio in decibels (dB). The noise standard deviation is calculated using
-the given SNR value and the <code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> parameter. Then, AWGN complex noise is generated
-with zero mean and the calculated standard deviation.</p>
+<dd class="field-even"><p>Signal-to-noise ratio in decibels (dB). When <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> is provided, the
+noise standard deviation is calculated from the given SNR and the
+<code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> setting, and AWGN is generated accordingly.</p>
 </dd>
 <dt class="field-odd">useRxPower<span class="colon">:</span></dt>
-<dd class="field-odd"><p>If <cite>True</cite>, this function first calculates the average received signal power per resource
-element (RE) and uses it, along with the given signal-to-noise ratio, to compute the noise power.
-Otherwise, it is assumed that the received signal power is normalized to <span class="math notranslate nohighlight">\(\frac{1}{N_r}\)</span> (Matlab
-approach), where <span class="math notranslate nohighlight">\(N_r\)</span> is the number of receiver antennas.</p>
+<dd class="field-odd"><p>Controls how <code class="docutils literal notranslate"><span class="pre">snrDb</span></code> is interpreted.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">False</span></code>: Use the reference-power SNR convention. A normalized received
+power of <span class="math notranslate nohighlight">\(\frac{1}{N_r}\)</span> is assumed, where <span class="math notranslate nohighlight">\(N_r\)</span> is the number
+of receive antennas. This mode is closer to common 3GPP-style link-level
+evaluation practice and is the default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">True</span></code>: Use the actual received grid power to compute the AWGN level.
+This sets the noise power relative to the measured received signal power.</p></li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Currently, the default value of <code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> is <cite>False</cite> (Matlab approach) for backward
-compatibility. However, in future releases, this may change to <cite>True</cite>. To ensure
-forward-compatible code, explicitly set this parameter instead of relying on the default.</p>
+<p>The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>. This keeps the behavior closer to common
+3GPP-style link-level simulations and to MATLAB 5G Toolbox conventions.
+For reproducibility and clarity, it is recommended to always set
+<code class="docutils literal notranslate"><span class="pre">useRxPower</span></code> explicitly in user code.</p>
 </div>
 </dd>
 <dt class="field-even">ranGen<span class="colon">:</span></dt>
-<dd class="field-even"><p>If provided, this random generator is used for AWGN generation. Otherwise, <strong>NeoRadium</strong>’s
-<a class="reference internal" href="Random.html"><span class="doc">global random generator</span></a> is used.</p>
+<dd class="field-even"><p>If provided, this random-number generator is used for AWGN generation. Typically a
+<a class="reference internal" href="Random.html#neoradium.random.RanGen" title="neoradium.random.RanGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">RanGen</span></code></a> instance, or any object exposing an
+<code class="docutils literal notranslate"><span class="pre">awgn(shape,</span> <span class="pre">noiseStd)</span></code> method that returns complex Gaussian samples. Otherwise,
+<strong>NeoRadium</strong>’s <a class="reference internal" href="Random.html"><span class="doc">global random generator</span></a> (the module-level
+random singleton) is used.</p>
 </dd>
 </dl>
 </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A new grid object containing the <em>noisy</em> version of this grid. The <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of the
-returned grid contains the variance of the noise applied by this function.</p>
+<dd class="field-even"><p>A new grid containing the noisy version of this grid. The <code class="docutils literal notranslate"><span class="pre">noiseVar</span></code> property of
+the returned grid contains the variance of the noise applied by this function.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#neoradium.grid.Grid" title="neoradium.grid.Grid"><code class="xref py py-class docutils literal notranslate"><span class="pre">Grid</span></code></a></p>
@@ -795,19 +858,25 @@ returned grid contains the variance of the noise applied by this function.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="neoradium.grid.Grid.drawMap">
-<span class="sig-name descname"><span class="pre">drawMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">12)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.drawMap" title="Link to this definition"></a></dt>
-<dd><p>Draws a color-coded map of this grid object. Each <code class="docutils literal notranslate"><span class="pre">plane</span></code> of the grid is drawn separately with subcarriers
-in horizontal direction and OFDM symbols in vertical direction.</p>
+<span class="sig-name descname"><span class="pre">drawMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rbRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reRange</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.grid.Grid.drawMap" title="Link to this definition"></a></dt>
+<dd><p>Draws a color-coded map of this grid object. Each <code class="docutils literal notranslate"><span class="pre">port</span></code> is drawn separately with subcarriers
+in the horizontal direction and OFDM symbols in vertical direction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ports</strong> (<em>list</em>) – Specifies the list of ports (or <code class="docutils literal notranslate"><span class="pre">planes</span></code>) to draw. Each port is drawn separately. By default this
+<li><p><strong>ports</strong> (<em>list</em>) – Specifies the list of ports (or <code class="docutils literal notranslate"><span class="pre">planes</span></code>) to draw. Each port is drawn separately. By default, this
 function draws only the first plane of the resource grid.</p></li>
-<li><p><strong>reRange</strong> (<em>tuple</em>) – Specifies the range of subcarriers (REs) to draw. By default this function only draws the first resource
-block of the grid (subcarriers 0 to 12). The tuple <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">b)</span></code> means the first RE drawn is the one at <code class="docutils literal notranslate"><span class="pre">a</span></code>
-and last one is at <code class="docutils literal notranslate"><span class="pre">b-1</span></code>.</p></li>
-<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as the title for the drawn grid. Otherwise, this function automatically creates
-a title based on the given parameters.</p></li>
+<li><p><strong>rbRange</strong> (<em>tuple</em><em> or </em><em>int</em>) – If this is an integer, this function draws the map for the specified resource block. If this is a
+tuple, it specifies the range of resource blocks (RBs) to draw. By default, this function only draws the
+first resource block of the grid (subcarriers 0 to 12). The tuple <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">b)</span></code> means draw resource blocks
+<code class="docutils literal notranslate"><span class="pre">a</span></code> to <code class="docutils literal notranslate"><span class="pre">b</span></code> including both <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code>.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em>) – If specified, it is used as the title for the drawn resource-grid map. Otherwise, this function
+automatically creates a title based on the given parameters.</p></li>
+<li><p><strong>figSize</strong> (<em>float</em>) – The figure size. Use this to control size of the plot. The default is 6.0.</p></li>
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes">matplotlib.axes.Axes</a> or None) – If specified, it must be a matplotlib <code class="docutils literal notranslate"><span class="pre">Axis</span></code> object on which the resource grid map is drawn. This can
+be used to create a group of matplotlib subplots and draw the resource grid map in one of the subplots.</p></li>
+<li><p><strong>reRange</strong> (<em>tuple</em>) – This parameter is <span class="red">deprecated</span>: and included only for backward compatibility. It will be removed
+in future releases. Please use <code class="docutils literal notranslate"><span class="pre">rbRange</span></code> instead.</p></li>
 </ul>
 </dd>
 </dl>

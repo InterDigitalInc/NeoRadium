@@ -1,6 +1,8 @@
 Playground
 ==========
-The following pages illustrate how various APIs are utilized and provide more detailed information about **NeoRadium**’s capabilities. The code presented in these pages is available in the ``Playgrounds`` directory. You can open them in a Jupyter notebook and interact with them.
+
+This section contains example notebooks that demonstrate how **NeoRadium** APIs are used in practice and highlight the library’s main capabilities. The source code for these examples is available in the ``Playground`` directory, and each notebook can be opened and explored interactively in Jupyter.
+
 
 Antenna
 -------
@@ -10,6 +12,7 @@ Antenna
         Notebooks/Antenna/AntennaElement.ipynb
         Notebooks/Antenna/AntennaPanel.ipynb
         Notebooks/Antenna/AntennaArray.ipynb
+        Notebooks/Antenna/BeamSweeping.ipynb
 
 Stochastic Channel Models
 -------------------------
@@ -20,6 +23,8 @@ Stochastic Channel Models
         Notebooks/Channels/cdlTiming.ipynb
         Notebooks/Channels/TdlChannel.ipynb
         Notebooks/Channels/CdlChannelDataset.ipynb
+        Notebooks/Channels/CustomCdl.ipynb
+        Notebooks/Channels/CdlBearingAngles.ipynb
 
 Trajectory-based Channel Model
 ------------------------------
@@ -34,7 +39,10 @@ Trajectory-based Channel Model
         Notebooks/RayTracing/ChannelSequences.ipynb
         Notebooks/RayTracing/AnimatedBER.ipynb
         Notebooks/RayTracing/AnimatedCN.ipynb
-
+        Notebooks/RayTracing/TrjBearingAngles.ipynb
+        Notebooks/RayTracing/BeamSweeping.ipynb
+        Notebooks/RayTracing/BeamSweepingTraj.ipynb
+        Notebooks/RayTracing/LinkAdaptation.ipynb
 
 Channel State Information Reference Signals (CSI-RS)
 ----------------------------------------------------
@@ -43,9 +51,19 @@ Channel State Information Reference Signals (CSI-RS)
 
         Notebooks/CSI-RS/CSI-RS.ipynb
         Notebooks/CSI-RS/CSI-RS-Time.ipynb
+        Notebooks/CSI-RS/CSI-RS-Beams.ipynb
 
-DMRS and PTRS
--------------
+CSI-Feedback
+----------------------------------------------------
+    .. toctree::
+        :maxdepth: 1
+
+        Notebooks/CSI-Feedback/CSI-Feedback1.ipynb
+        Notebooks/CSI-Feedback/CSI-Feedback2.ipynb
+        Notebooks/CSI-Feedback/CSI-Feedback3.ipynb
+
+DM-RS and PT-RS
+---------------
     .. toctree::
         :maxdepth: 1
 
@@ -61,7 +79,18 @@ Physical Downlink Shared Channel (PDSCH)
         Notebooks/PDSCH/PDSCH-endToEnd.ipynb
         Notebooks/PDSCH/PDSCH-BER.ipynb
         Notebooks/PDSCH/PDSCH-BLER.ipynb
+        Notebooks/PDSCH/ChannelNoiseEst.ipynb
         Notebooks/PDSCH/PDSCH-Throughput.ipynb
+        Notebooks/PDSCH/AdvancedPDSCH.ipynb
+
+Channel Coding
+--------------
+    .. toctree::
+        :maxdepth: 1
+
+        Notebooks/ChanCode/LDPC.ipynb
+        Notebooks/ChanCode/NumIter.ipynb
+        Notebooks/ChanCode/Polar.ipynb
 
 Hybrid Automatic Repeat reQuest (HARQ)
 --------------------------------------
@@ -83,10 +112,20 @@ A Deep Learning Case Study
 
 Research Papers
 ---------------
+
+`A Self-Refining Multi-Layer Receiver Pipeline <https://ieeexplore.ieee.org/abstract/document/11443343>`_
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
     .. toctree::
         :maxdepth: 1
 
-        A Self-Refining Multi-Layer Receiver Pipeline <https://github.com/InterDigitalInc/NeoRadium/tree/main/Playground/Research/SelfRefining>
+        readme.md <Notebooks/Research/SelfRefining/readme>
+        Notebooks/Research/SelfRefining/MLChEstDataGen.ipynb
+        Notebooks/Research/SelfRefining/MLChEstTrain.ipynb
+        Notebooks/Research/SelfRefining/MLChEstEvaluateNMSE.ipynb
+        Notebooks/Research/SelfRefining/MLChEstEvaluateBLER.ipynb
+        Notebooks/Research/SelfRefining/MLChEstEvaluateHARQ.ipynb
+
 
 Other Examples
 --------------
@@ -96,7 +135,7 @@ Other Examples
 
         Notebooks/Others/SnrCalculations.ipynb
 
-Comparing with Matlab
+Comparing with MATLAB
 ---------------------
 
 Antenna

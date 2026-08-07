@@ -6,25 +6,25 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Using the Trajectory-based Channel Model &mdash; NeoRadium 0.4.1 Documentation</title>
+  <title>Applying a Trajectory-Based Channel in the Frequency and Time Domains &mdash; NeoRadium 0.5.1 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
 
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=c87aa342"></script>
-      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="An end-to-end PDSCH Simulation with Trajectory-based Channel Model" href="TrajEndToEnd.html" />
+    <link rel="next" title="End-to-End PDSCH Simulation with a Trajectory-Based Channel Model" href="TrajEndToEnd.html" />
     <link rel="prev" title="Working with DeepMIMO Scenarios" href="DeepMimo.html" /> 
 </head>
 
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.4.1
+            NeoRadium 0.5.1
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -53,28 +53,38 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MigrationGuide.html">Migration Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="DeepMimo.html">Working with DeepMIMO Scenarios</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Using the Trajectory-based Channel Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="TrajEndToEnd.html">An end-to-end PDSCH Simulation with Trajectory-based Channel Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="TrajChannelAnim.html">Animating Trajectories</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ChannelGeneration.html">Creating random MIMO Channel Matrices from a DeepMimo Scenario</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ChannelSequences.html">Creating temporally and spatially consistent sequences of channel matrices</a></li>
-<li class="toctree-l3"><a class="reference internal" href="AnimatedBER.html">Studying Bit Error Rate changes while moving along a trajectory</a></li>
-<li class="toctree-l3"><a class="reference internal" href="AnimatedCN.html">Studying channel condition number while moving along a trajectory</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Applying a Trajectory-Based Channel in the Frequency and Time Domains</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="TrajEndToEnd.html">End-to-End PDSCH Simulation with a Trajectory-Based Channel Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrajChannelAnim.html">Animating a UE Trajectory in a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ChannelGeneration.html">Generating Random Channel Matrices from a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ChannelSequences.html">Creating Temporally and Spatially Consistent Channel-Matrix Sequences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AnimatedBER.html">Animating BER Along a UE Trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AnimatedCN.html">Animating Channel Condition Number Along a UE Trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="TrjBearingAngles.html">Ray-tracing BER at Various TX/RX Antenna Bearing Angles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="BeamSweeping.html">Beam Sweeping in a DeepMIMO Scenario</a></li>
+<li class="toctree-l3"><a class="reference internal" href="BeamSweepingTraj.html">Beam Sweeping and Probing Along a UE Trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="LinkAdaptation.html">Link Adaptation with CSI Feedback, HARQ, and OLLA Along a UE Trajectory</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dmrs-and-ptrs">DMRS and PTRS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-coding">Channel Coding</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with Matlab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
 </ul>
 </li>
 </ul>
@@ -85,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/CsiReport.html">CSI Reporting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
@@ -93,6 +104,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Utilities.html">Other Utilitiy Functions</a></li>
 </ul>
 
         </div>
@@ -101,7 +113,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.4.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.1</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -110,7 +122,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
-      <li class="breadcrumb-item active">Using the Trajectory-based Channel Model</li>
+      <li class="breadcrumb-item active">Applying a Trajectory-Based Channel in the Frequency and Time Domains</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../../../_sources/source/Playground/Notebooks/RayTracing/TrajChannel.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -120,18 +132,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="Using-the-Trajectory-based-Channel-Model">
-<h1>Using the Trajectory-based Channel Model<a class="headerlink" href="#Using-the-Trajectory-based-Channel-Model" title="Link to this heading"></a></h1>
+  <section id="Applying-a-Trajectory-Based-Channel-in-the-Frequency-and-Time-Domains">
+<h1>Applying a Trajectory-Based Channel in the Frequency and Time Domains<a class="headerlink" href="#Applying-a-Trajectory-Based-Channel-in-the-Frequency-and-Time-Domains" title="Link to this heading"></a></h1>
+<p>This notebook demonstrates how to apply a <strong>NeoRadium</strong> trajectory-based channel in both the frequency domain and the time domain. It first opens a <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario, creates a random UE trajectory, and then creates a <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/Channels.html#neoradium.trjchan.TrjChannel">TrjChannel</a> object from that trajectory.</p>
+<p>The notebook then creates a random transmit resource grid and applies the same channel in two different ways:</p>
+<ol class="arabic simple">
+<li><p><strong>Frequency-domain channel application:</strong> the channel matrix is obtained from the <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/Channels.html#neoradium.trjchan.TrjChannel">TrjChannel</a> object and applied directly to the transmit resource grid.</p></li>
+<li><p><strong>Time-domain channel application:</strong> the transmit resource grid is first converted to a waveform using OFDM modulation, the trajectory-based channel is applied to the waveform, and the received waveform is synchronized and demodulated back to a resource grid.</p></li>
+</ol>
+<p>Finally, the notebook compares the received resource grids from the two methods using the normalized mean squared error (NMSE).</p>
+<section id="Notes">
+<h2>Notes<a class="headerlink" href="#Notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>This simple example applies the channel only at the first point of the trajectory. It does not advance the UE along the trajectory and does not loop over trajectory points.</p></li>
+<li><p>No noise is added in this example. The goal is to compare the channel application methods, not to evaluate link performance.</p></li>
+<li><p>The NMSE between the frequency-domain and time-domain received grids is expected to be small, but not necessarily exactly zero. The time-domain path includes OFDM modulation, channel filtering, timing synchronization, and OFDM demodulation, which can introduce small numerical differences.</p></li>
+<li><p>The trajectory is generated from points on the DeepMIMO grid. The <code class="docutils literal notranslate"><span class="pre">trajLen</span></code> parameter refers to the number of DeepMIMO grid points used for the trajectory, not the final number of interpolated trajectory points.</p></li>
+<li><p>The user may need to update the <code class="docutils literal notranslate"><span class="pre">dataFolder</span></code> variable based on the location of the DeepMIMO scenario files on their system.</p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeepMimoData</span><span class="p">,</span> <span class="n">TrjChannel</span><span class="p">,</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">Grid</span><span class="p">,</span> <span class="n">Modem</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">DeepMimoData</span><span class="p">,</span> <span class="n">TrjChannel</span><span class="p">,</span> <span class="n">BandwidthPart</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">Modem</span><span class="p">,</span> <span class="n">random</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">neoradium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">getNmse</span>
 </pre></div>
 </div>
@@ -140,7 +166,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace this with the folder on your computer where you store DeepMIMO scenarios</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace this with the folder on your system where the DeepMIMO scenarios are stored</span>
 <span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">&quot;/data/RayTracing/DeepMIMO/Scenarios/V4/&quot;</span>
 <span class="n">DeepMimoData</span><span class="o">.</span><span class="n">setScenariosPath</span><span class="p">(</span><span class="n">dataFolder</span><span class="p">)</span>
 
@@ -168,7 +194,7 @@ DeepMimoData Properties:
   UE Height:                  1.50
   Carrier Frequency:          3.5 GHz
   Num. paths (Min, Avg, Max): 0, 6.21, 10
-  Num. total blockage:        46774
+  Num. total blockage:        46,774
   LOS percentage:             19.71%
 
 </pre></div></div>
@@ -178,20 +204,18 @@ DeepMimoData Properties:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                                 <span class="c1"># Make results reproducible</span>
+<span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>          <span class="c1"># Create a BandwidthPart object</span>
 
-<span class="c1"># Create the carrier:</span>
-<span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span> <span class="c1"># Carrier with 25 Resource Blocks, 15KHz subcarrier spacing</span>
-<span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>                                <span class="c1"># The only bandwidth part in the carrier</span>
-
-<span class="c1"># Create a random trajectory at waking speed.</span>
-<span class="n">trajectory</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">getRandomTrajectory</span><span class="p">(</span><span class="n">xyBounds</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">210</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="mi">100</span><span class="p">]]),</span>   <span class="c1"># Traj. bounds</span>
-                                              <span class="n">segLen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>               <span class="c1"># Num grid points on shortest segment</span>
-                                              <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span>                <span class="c1"># The bandwidth part</span>
-                                              <span class="n">trajLen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>            <span class="c1"># Number of grid points on trajectory</span>
-                                              <span class="n">speedMps</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>           <span class="c1"># Speed in mps (Walking)</span>
+<span class="c1"># Create a random trajectory</span>
+<span class="n">trajectory</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">getRandomTrajectory</span><span class="p">(</span><span class="n">xyBounds</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">210</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="mi">100</span><span class="p">]]),</span>   <span class="c1"># Trajectory bounds</span>
+                                              <span class="n">segLen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>     <span class="c1"># Number of DeepMIMO grid points on the shortest segment</span>
+                                              <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span>      <span class="c1"># The bandwidth part</span>
+                                              <span class="n">trajLen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>  <span class="c1"># Number of DeepMIMO grid points on the trajectory</span>
+                                              <span class="n">speedMps</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>  <span class="c1"># Speed in m/s</span>
 
 <span class="n">trajectory</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>                                  <span class="c1"># Print the trajectory information</span>
-<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>        <span class="c1"># Draw the Map with the trajectory</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>   <span class="c1"># Draw the map with the trajectory</span>
+<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>                   <span class="c1"># TX antenna at a 180-degree bearing angle</span>
 </pre></div>
 </div>
 </div>
@@ -202,58 +226,33 @@ DeepMimoData Properties:
 <div class="highlight"><pre>
 
 Trajectory Properties:
-  start (x,y,z):         (-164.55, 69.83, 1.50)
-  No. of points:         7968
-  curIdx:                0 (0.00%)
-  curSpeed:              [21.28 21.28  0.  ]
-  Total distance:        240.42 meters
-  Total time:            7.967 seconds
-  Average Speed:         30.177 m/s
-  Carrier Frequency:     3.5 GHz
-  Paths (Min, Avg, Max): 5, 8.79, 10
-  Totally blocked:       0
-  LOS percentage:        59.43%
+  start (x,y,z):          (-164.55, 69.83, 1.50)
+  No. of points:          7,968
+  curIdx:                 0 (0.00%)
+  curSpeed:               [21.28 21.28  0.  ]
+  Total distance:         240.42 meters
+  Total time:             7.967 seconds
+  Average Speed:          30.177 m/s
+  Carrier Frequency:      3.5 GHz
+  Paths (Min, Avg, Max):  5, 8.79, 10
+  Totally blocked:        0
+  LOS percentage:         59.43%
 
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(&lt;Figure size 742.518x471.734 with 1 Axes&gt;,
- &lt;Axes: title={&#39;center&#39;: &#39;Map of LOS/NLOS paths&#39;}, xlabel=&#39;X&#39;, ylabel=&#39;Y&#39;&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../../_images/source_Playground_Notebooks_RayTracing_TrajChannel_3_2.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_TrajChannel_3_2.png" />
+<img alt="../../../../_images/source_Playground_Notebooks_RayTracing_TrajChannel_3_1.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_TrajChannel_3_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a random grid</span>
-<span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">numPlanes</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>                   <span class="c1"># Create an empty resource grid</span>
-
-<span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>                              <span class="c1"># Get statistics about the grid</span>
-<span class="n">modem</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>                                 <span class="c1"># Using 16QAM modulation</span>
-<span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;UNASSIGNED&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>           <span class="c1"># Total number of bits available in the resource grid</span>
-
-<span class="n">bits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numRandomBits</span><span class="p">)</span>                      <span class="c1"># Create random bits</span>
-<span class="n">symbols</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>                         <span class="c1"># Modulate the bits to get symbols</span>
-
-<span class="n">indexes</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;UNASSIGNED&quot;</span><span class="p">)</span>            <span class="c1"># Indexes of the &quot;UNASSIGNED&quot; resources</span>
-<span class="n">txGrid</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbols</span>                              <span class="c1"># Put symbols in the resource grid</span>
-
-<span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>                     <span class="c1"># OFDM-Modulate the resource grid to get a waveform</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of Resource Grid:&quot;</span><span class="p">,</span><span class="n">txGrid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of Waveform:     &quot;</span><span class="p">,</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print the properties of the first trajectory point</span>
+<span class="n">trajectory</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -262,20 +261,80 @@ Trajectory Properties:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Shape of Resource Grid: (16, 14, 300)
-Shape of Waveform:      (16, 30720)
+
+TrjPoint Properties:
+  location:           -164.55   69.83    1.50 m
+  Distance to BS:     332.94 m
+  LOS/NLOS:           Has LOS path
+  numPaths:           8
+  sampleNo:           0
+  time:               0.000000 sec
+  speed vector:       (21.277,21.277,0.000) m/s.
+  Line-Of-Sight Path:
+    Path ID:          1
+    Delay (ns):       1110.94006
+    Power (dB):       -93.78190
+    Phases (Deg):     -106
+    AOA (Deg):        5
+    ZOA (Deg):        86
+    AOD (Deg):        -174
+    ZOD (Deg):        93
+  Non-Line-Of-Sight Paths (7):
+    Path IDs:         2     3     4     5     6     7     8
+    Delays (ns):      1111. 1111. 1112. 1113. 1113. 1255. 1256.
+    Powers (dB):      -97.1 -113. -114. -115. -112. -98.9 -101.
+    Phases (Deg):     -39   102   115   -58   162   36    -161
+    AOAs (Deg):       6     3     2     9     -2    -27   -27
+    ZOAs (Deg):       94    94    86    86    85    87    94
+    AODs (Deg):       -174  -173  -172  -178  -172  -151  -151
+    ZODs (Deg):       94    94    94    94    93    93    94
+    Bounces:          1     21    2     2     21    1     11
+        1: Reflection, 2: Diffraction, 3: Scattering, 4: Transmission
+
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a MIMO channel model based on our trajectory.</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a random resource grid</span>
+<span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">numPorts</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>                   <span class="c1"># Create an empty resource grid</span>
+
+<span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>                              <span class="c1"># Get statistics about the grid</span>
+<span class="n">modem</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>                                 <span class="c1"># Use 16QAM modulation</span>
+<span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;UNASSIGNED&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>           <span class="c1"># Total number of bits available in the resource grid</span>
+
+<span class="n">bits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numRandomBits</span><span class="p">)</span>                      <span class="c1"># Create random bits</span>
+<span class="n">symbols</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>                         <span class="c1"># Modulate the bits to get symbols</span>
+
+<span class="n">indices</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;UNASSIGNED&quot;</span><span class="p">)</span>            <span class="c1"># Indices of the &quot;UNASSIGNED&quot; resources</span>
+<span class="n">txGrid</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbols</span>                              <span class="c1"># Put symbols in the resource grid</span>
+
+<span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>                     <span class="c1"># OFDM-modulate the resource grid to get a waveform</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resource grid shape:&quot;</span><span class="p">,</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Waveform shape:     &quot;</span><span class="p">,</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Resource grid shape: (16, 14, 288)
+Waveform shape:      (16, 30720)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a trajectory-based MIMO channel model</span>
 <span class="n">channel</span> <span class="o">=</span> <span class="n">TrjChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span>
-                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>       <span class="c1"># 8 TX antenna</span>
-                     <span class="n">txOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>                               <span class="c1"># Facing left</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>       <span class="c1"># 2 RX antenna</span>
-                     <span class="n">interpolateSlots</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="c1"># 16 TX antennas</span>
+                     <span class="n">txOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>                         <span class="c1"># BS antenna facing the left side of the map</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="c1"># 4 RX antennas</span>
                      <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
 </pre></div>
@@ -288,80 +347,53 @@ Shape of Waveform:      (16, 30720)
 <div class="highlight"><pre>
 
 TrjChannel Properties:
-  carrierFreq:          3.5 GHz
-  normalizeGains:       True
-  normalizeOutput:      True
-  normalizeDelays:      True
-  interpolateSlots:     True
-  xPolPower:            10.00 (dB)
-  filterLen:            16 samples
-  delayQuantSize:       64
-  stopBandAtten:        80 dB
-  dopplerShift:         353.7814505317208 Hz
-  coherenceTime:        0.0011960553246215984 sec
+  carrierFreq:              3.5 GHz
+  normalizeGains:           True
+  normalizeOutput:          True
+  normalizeDelays:          True
+  xPolPower:                10.00 (dB)
+  filterLen:                16 samples
+  delayQuantSize:           64
+  stopBandAtten:            80 dB
+  dopplerShift:             353.8 Hz
+  coherenceTime:            1.196 milliseconds
   TX Antenna:
-    Total Elements:     16
-    spacing:            0.5𝜆, 0.5𝜆
-    shape:              2 rows x 4 columns
-    polarization:       x
-    Orientation (𝛼,𝛃,𝛄): 180° 0° 0°
+    Total Elements:         16
+    spacing:                0.5𝜆, 0.5𝜆
+    shape:                  2 rows x 4 columns
+    polarization:           x
+    Orientation (𝛼,𝛃,𝛄):     180° 0° 0°
   RX Antenna:
-    Total Elements:     4
-    spacing:            0.5𝜆, 0.5𝜆
-    shape:              1 rows x 2 columns
-    polarization:       x
+    Total Elements:         4
+    spacing:                0.5𝜆, 0.5𝜆
+    shape:                  1 rows x 2 columns
+    polarization:           x
   Trajectory:
-    start (x,y,z):         (-164.55, 69.83, 1.50)
-    No. of points:         7968
-    curIdx:                0 (0.00%)
-    curSpeed:              [21.28 21.28  0.  ]
-    Total distance:        240.42 meters
-    Total time:            7.967 seconds
-    Average Speed:         30.177 m/s
-    Carrier Frequency:     3.5 GHz
-    Paths (Min, Avg, Max): 5, 8.79, 10
-    Totally blocked:       0
-    LOS percentage:        59.43%
+    start (x,y,z):          (-164.55, 69.83, 1.50)
+    No. of points:          7,968
+    curIdx:                 0 (0.00%)
+    curSpeed:               [21.28 21.28  0.  ]
+    Total distance:         240.42 meters
+    Total time:             7.967 seconds
+    Average Speed:          30.177 m/s
+    Carrier Frequency:      3.5 GHz
+    Paths (Min, Avg, Max):  5, 8.79, 10
+    Totally blocked:        0
+    LOS percentage:         59.43%
 
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply the channel in Frequency Domain:</span>
-<span class="n">t0</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>
-<span class="n">rxGridF</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>
-<span class="n">t1</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time to apply channel in Freq. Domain:&quot;</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Time to apply channel in Freq. Domain: 0.012088775634765625
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Applying the channel in time domain and demodulate to get a received resource grid (rxGrid)</span>
-<span class="n">t0</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>                         <span class="c1"># Calculate the channel&#39;s max delay</span>
-<span class="n">paddedTxWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>              <span class="c1"># Pad the waveform with zeros</span>
-<span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">paddedTxWaveform</span><span class="p">)</span>     <span class="c1"># Apply the channel to the waveform</span>
-<span class="n">offset</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getTimingOffset</span><span class="p">()</span>                       <span class="c1"># Get the timing offset for synchronization</span>
-<span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>                 <span class="c1"># Synchronization</span>
-<span class="n">rxGridT</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">syncedWaveform</span><span class="p">)</span>       <span class="c1"># OFDM-demodulation</span>
-<span class="n">t1</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time to apply channel in Time Domain:&quot;</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NMSE between the rxGrid in Time and Freq. domains: &quot;</span><span class="p">,</span><span class="n">getNmse</span><span class="p">(</span><span class="n">rxGridT</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="n">rxGridF</span><span class="o">.</span><span class="n">grid</span><span class="p">))</span>
-<br/></pre></div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply the channel in the frequency domain</span>
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+<span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>
+<span class="n">rxGridF</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time to apply the channel in the frequency domain (s): </span><span class="si">{</span><span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="si">:</span><span class="s2">.04f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -369,81 +401,35 @@ Time to apply channel in Freq. Domain: 0.012088775634765625
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Time to apply channel in Time Domain: 0.16606688499450684
-NMSE between the rxGrid in Time and Freq. domains:  1.9054214875297066e-18
+Time to apply the channel in the frequency domain (s): 0.0118
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The following example shows the difference between interpolating the multipath information</span>
-<span class="c1"># for different symbols in a slot vs using the same multipath information for all symbols in</span>
-<span class="c1"># a slot.</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-
-<span class="n">chanMats</span> <span class="o">=</span> <span class="p">[]</span>                       <span class="c1"># list of consecutive channel matrixes</span>
-<span class="n">channel</span><span class="o">.</span><span class="n">interpolateSlots</span> <span class="o">=</span> <span class="kc">True</span>     <span class="c1"># First: Using interpolation</span>
-<span class="n">channel</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply the channel in the time domain and demodulate the received waveform to get a resource grid</span>
 <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>                 <span class="c1"># 10 channel matrices</span>
-    <span class="n">chanMats</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span> <span class="p">]</span>
-    <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
-<span class="n">chanMats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">chanMats</span><span class="p">)</span>       <span class="c1"># Shape: 10 x 14 x 300 x 4 x 16</span>
-
-<span class="c1"># Sequence of channel values for first subcarrier, between first transmitter and</span>
-<span class="c1"># first receiver antenna (A sequence 140 complex values)</span>
-<span class="n">chanValuesInt</span> <span class="o">=</span> <span class="n">chanMats</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-
-<span class="n">chanMats</span> <span class="o">=</span> <span class="p">[]</span>                       <span class="c1"># Reset the list</span>
-<span class="n">channel</span><span class="o">.</span><span class="n">interpolateSlots</span> <span class="o">=</span> <span class="kc">False</span>    <span class="c1"># Now not using interpolation</span>
-<span class="n">channel</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
-<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>                 <span class="c1"># 10 channel matrices</span>
-    <span class="n">chanMats</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span> <span class="p">]</span>
-    <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
-<span class="n">chanMats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">chanMats</span><span class="p">)</span>       <span class="c1"># Shape: 10 x 14 x 300 x 4 x 16</span>
-<span class="n">chanValuesNoInt</span> <span class="o">=</span> <span class="n">chanMats</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">chanValuesInt</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;interpolateSlots=True&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">chanValuesNoInt</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;interpolateSlots=False&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;The channel values continuum for 140 symbols (10 slots) with and without interpolation&quot;</span><span class="p">)</span>
+<span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>                         <span class="c1"># Calculate the maximum channel delay</span>
+<span class="n">paddedTxWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>              <span class="c1"># Pad the waveform with zeros</span>
+<span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">paddedTxWaveform</span><span class="p">)</span>     <span class="c1"># Apply the channel to the waveform</span>
+<span class="n">offset</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getTimingOffset</span><span class="p">()</span>                       <span class="c1"># Get the timing offset for synchronization</span>
+<span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>                 <span class="c1"># Synchronize the received waveform</span>
+<span class="n">rxGridT</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>             <span class="c1"># OFDM-demodulate the synchronized waveform</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time to apply the channel in the time domain (s): </span><span class="si">{</span><span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="si">:</span><span class="s2">.04f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NMSE between the rxGrid in time and frequency domains: </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">rxGridT</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="n">rxGridF</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">:</span><span class="s2">.04g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <br/></pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Text(0.5, 1.0, &#39;The channel values continuum for 140 symbols (10 slots) with and without interpolation&#39;)
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../../_images/source_Playground_Notebooks_RayTracing_TrajChannel_8_1.png" src="../../../../_images/source_Playground_Notebooks_RayTracing_TrajChannel_8_1.png" />
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
+<div class="highlight"><pre>
+Time to apply the channel in the time domain (s): 0.1837
+NMSE between the rxGrid in time and frequency domains: 9.404e-18
+</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
@@ -454,13 +440,14 @@ Text(0.5, 1.0, &#39;The channel values continuum for 140 symbols (10 slots) with
 </div>
 </div>
 </section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="DeepMimo.html" class="btn btn-neutral float-left" title="Working with DeepMIMO Scenarios" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="TrajEndToEnd.html" class="btn btn-neutral float-right" title="An end-to-end PDSCH Simulation with Trajectory-based Channel Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="TrajEndToEnd.html" class="btn btn-neutral float-right" title="End-to-End PDSCH Simulation with a Trajectory-Based Channel Model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

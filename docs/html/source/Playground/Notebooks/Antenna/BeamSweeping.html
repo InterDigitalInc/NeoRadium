@@ -1,0 +1,595 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beam Sweeping with Antenna Panels and Arrays &mdash; NeoRadium 0.5.1 Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/neoradium.css?v=45ad03f8" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Channel Matrix" href="../Channels/ChannelMatrix.html" />
+    <link rel="prev" title="Antenna Array" href="AntennaArray.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeoRadium 0.5.1
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">What is NeoRadium?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../MigrationGuide.html">Migration Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../Playground.html">Playground</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../Playground.html#antenna">Antenna</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="AntennaElement.html">Antenna Element</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AntennaPanel.html">Antenna Panel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="AntennaArray.html">Antenna Array</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Beam Sweeping with Antenna Panels and Arrays</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#A-Linear-Antenna-Panel-with-Dual-Polarization">A Linear Antenna Panel with Dual Polarization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#A-4×4-Antenna-Panel-with-Dual-Polarization">A 4×4 Antenna Panel with Dual Polarization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#A-Linear-Antenna-Array">A Linear Antenna Array</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#stochastic-channel-models">Stochastic Channel Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#trajectory-based-channel-model">Trajectory-based Channel Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-state-information-reference-signals-csi-rs">Channel State Information Reference Signals (CSI-RS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#csi-feedback">CSI-Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#dm-rs-and-pt-rs">DM-RS and PT-RS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#physical-downlink-shared-channel-pdsch">Physical Downlink Shared Channel (PDSCH)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#channel-coding">Channel Coding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#hybrid-automatic-repeat-request-harq">Hybrid Automatic Repeat reQuest (HARQ)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#a-deep-learning-case-study">A Deep Learning Case Study</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#research-papers">Research Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#other-examples">Other Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Carrier.html">Carriers and Bandwidth Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Grid.html">Resource Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Waveform.html">Waveform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Modulation.html">Modulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/RefSig.html">Reference Signals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/CsiReport.html">CSI Reporting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/PhyChannels.html">Physical Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/ChanCode.html">Channel Coding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Harq.html">HARQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Antenna.html">Antenna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Channels.html">Channel Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Random.html">Random Number Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/DeepMIMO.html">DeepMIMO and UE Trajectories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/SnrHelper.html">SnrScheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../API/Utilities.html">Other Utilitiy Functions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../Playground.html">Playground</a></li>
+      <li class="breadcrumb-item active">Beam Sweeping with Antenna Panels and Arrays</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/source/Playground/Notebooks/Antenna/BeamSweeping.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Beam-Sweeping-with-Antenna-Panels-and-Arrays">
+<h1>Beam Sweeping with Antenna Panels and Arrays<a class="headerlink" href="#Beam-Sweeping-with-Antenna-Panels-and-Arrays" title="Link to this heading"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.animation</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">animation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">display</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">AntennaElement</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">AntennaArray</span>
+</pre></div>
+</div>
+</div>
+<section id="A-Linear-Antenna-Panel-with-Dual-Polarization">
+<h2>A Linear Antenna Panel with Dual Polarization<a class="headerlink" href="#A-Linear-Antenna-Panel-with-Dual-Polarization" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a linear antenna panel with 8 elements (4 antenna positions with dual polarization)</span>
+<span class="n">txAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="c1"># Get beam sweeping information:</span>
+<span class="n">precoders</span><span class="p">,</span> <span class="n">beams</span> <span class="o">=</span> <span class="n">txAntenna</span><span class="o">.</span><span class="n">getSweepingBeams</span><span class="p">(</span><span class="n">numTheta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">numPhi</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">polStrategy</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+<span class="c1"># &#39;precoders&#39; is a &#39;numPorts × numBeams&#39; complex matrix.</span>
+<span class="n">numPorts</span><span class="p">,</span> <span class="n">numBeams</span> <span class="o">=</span> <span class="n">precoders</span><span class="o">.</span><span class="n">shape</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of ports: </span><span class="si">{</span><span class="n">numPorts</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">beams</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2"> Beams:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Beam    Theta     Phi     Pol&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  ----    -----    -----    ---&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numBeams</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">beams</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">beams</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">beams</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of ports: 8
+8 Beams:
+  Beam    Theta     Phi     Pol
+  ----    -----    -----    ---
+   0      90.0     -60.0     x
+   1      90.0     -38.2     x
+   2      90.0     -21.8     x
+   3      90.0      -7.1     x
+   4      90.0       7.1     x
+   5      90.0      21.8     x
+   6      90.0      38.2     x
+   7      90.0      60.0     x
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Draw beams (animation):</span>
+<span class="c1"># Note: The ±60° beams are attenuated due to the element pattern (based on 38.901).</span>
+<span class="c1"># To verify, try larger beamwidths or use an omnidirectional element.</span>
+<span class="c1"># Also observe the power of different beams: they become weaker toward the extreme angles (-60° and +60°).</span>
+<span class="c1">#</span>
+<span class="c1"># A panel for a sector works best between -45° and +45°. UEs at the sector edges experience</span>
+<span class="c1"># attenuated beams, which is consistent with practical deployments.</span>
+<span class="c1">#</span>
+<span class="c1"># Options to better cover the full 360°:</span>
+<span class="c1">#   - Use multiple panels per sector</span>
+<span class="c1">#   - Use 4 panels with 90° offsets (common in small cells, dense urban deployments, and FR2)</span>
+
+<span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Horizontal Cut of Radiation Power at zero elevation</span><span class="se">\n</span><span class="s2">Beam </span><span class="si">%d</span><span class="s2">, Beam Azimuth:</span><span class="si">%.2f</span><span class="s2">°&quot;</span>
+<span class="c1"># Initial call to get a figure and axis for the animation:</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">txAntenna</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">precoders</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span>
+                             <span class="n">title</span> <span class="o">=</span> <span class="n">title</span><span class="o">%</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">beams</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+<span class="c1"># Callback function to update the radiation pattern:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">updateCb</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">frame</span> <span class="o">%</span> <span class="n">numBeams</span>
+    <span class="n">txAntenna</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">precoders</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span>
+                            <span class="n">title</span> <span class="o">=</span> <span class="n">title</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">beams</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">()</span>
+
+<span class="c1"># Create animation of beams:</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+<span class="n">anim</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">updateCb</span><span class="p">,</span> <span class="n">frames</span> <span class="o">=</span> <span class="n">numBeams</span><span class="p">,</span>  <span class="n">interval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>   <span class="c1"># Prevent duplicate static plot</span>
+
+<span class="c1"># Save the animation to a GIF file and show it below</span>
+<span class="n">anim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;BeamSweep.gif&quot;</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="n">animation</span><span class="o">.</span><span class="n">PillowWriter</span><span class="p">(</span><span class="n">fps</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;![demo](BeamSweep.gif)&quot;</span><span class="p">))</span>
+
+<span class="c1"># Another option is to use the following command, which gives you more control over</span>
+<span class="c1"># running and pausing the animation.</span>
+<span class="c1"># HTML(anim.to_jshtml())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<p><img alt="demo" src="../../../../_images/BeamSweep.gif" /></p>
+</div>
+</div>
+</section>
+<section id="A-4×4-Antenna-Panel-with-Dual-Polarization">
+<h2>A 4×4 Antenna Panel with Dual Polarization<a class="headerlink" href="#A-4×4-Antenna-Panel-with-Dual-Polarization" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an antenna panel with 32 elements (16 antenna positions with dual polarization)</span>
+<span class="n">txAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="c1"># Get beam sweeping information:</span>
+<span class="n">precoders</span><span class="p">,</span> <span class="n">beams</span> <span class="o">=</span> <span class="n">txAntenna</span><span class="o">.</span><span class="n">getSweepingBeams</span><span class="p">(</span><span class="n">numTheta</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">numPhi</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">thetaSpan</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">polStrategy</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+<span class="c1"># &#39;precoders&#39; is a &#39;numPorts × numBeams&#39; complex matrix.</span>
+<span class="n">numPorts</span><span class="p">,</span> <span class="n">numBeams</span> <span class="o">=</span> <span class="n">precoders</span><span class="o">.</span><span class="n">shape</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of ports: </span><span class="si">{</span><span class="n">numPorts</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">beams</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2"> Beams:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Beam    Theta     Phi     Pol&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  ----    -----    -----    ---&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numBeams</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">beams</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">beams</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">beams</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of ports: 32
+16 Beams:
+  Beam    Theta     Phi     Pol
+  ----    -----    -----    ---
+   0      70.0     -60.0     x
+   1      70.0     -16.8     x
+   2      70.0      16.8     x
+   3      70.0      60.0     x
+   4      83.5     -60.0     x
+   5      83.5     -16.8     x
+   6      83.5      16.8     x
+   7      83.5      60.0     x
+   8      96.5     -60.0     x
+   9      96.5     -16.8     x
+  10      96.5      16.8     x
+  11      96.5      60.0     x
+  12     110.0     -60.0     x
+  13     110.0     -16.8     x
+  14     110.0      16.8     x
+  15     110.0      60.0     x
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initial call to obtain the figure and axis for the animation:</span>
+<span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Radiation Power for Beam </span><span class="si">%d</span><span class="se">\n</span><span class="s2">$</span><span class="se">\\</span><span class="s2">theta$=</span><span class="si">%.2f</span><span class="s2">°, $</span><span class="se">\\</span><span class="s2">phi$=</span><span class="si">%.2f</span><span class="s2">°&quot;</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">txAntenna</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">viewAngles</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span>
+                             <span class="n">weights</span><span class="o">=</span><span class="n">precoders</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span>
+                             <span class="n">title</span> <span class="o">=</span> <span class="n">title</span><span class="o">%</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">beams</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">beams</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="c1"># Callback function to update the radiation pattern:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">updateCb</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">frame</span> <span class="o">%</span> <span class="n">numBeams</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  Now drawing beam </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> ...&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">txAntenna</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">viewAngles</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span>
+                            <span class="n">weights</span><span class="o">=</span><span class="n">precoders</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span>
+                            <span class="n">title</span> <span class="o">=</span> <span class="n">title</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">beams</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="n">beams</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="n">numBeams</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  Done.&quot;</span> <span class="o">+</span> <span class="mi">50</span><span class="o">*</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">()</span>
+
+<span class="c1"># Create animation of beams:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Preparing the animation:&quot;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+<span class="n">anim</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">updateCb</span><span class="p">,</span> <span class="n">frames</span> <span class="o">=</span> <span class="n">numBeams</span><span class="p">,</span>  <span class="n">interval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>      <span class="c1"># Prevent duplicate static plot</span>
+
+<span class="c1"># Save the animation to a GIF file and show it below</span>
+<span class="n">anim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;BeamSweep3D.gif&quot;</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="n">animation</span><span class="o">.</span><span class="n">PillowWriter</span><span class="p">(</span><span class="n">fps</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;![demo3d](BeamSweep3D.gif)&quot;</span><span class="p">))</span>
+
+<span class="c1"># Another option is to use the following command, which gives you more control over</span>
+<span class="c1"># running and pausing the animation.</span>
+<span class="c1"># HTML(anim.to_jshtml())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Preparing the animation:
+  Done.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<p><img alt="demo3d" src="../../../../_images/BeamSweep3D.gif" /></p>
+</div>
+</div>
+</section>
+<section id="A-Linear-Antenna-Array">
+<h2>A Linear Antenna Array<a class="headerlink" href="#A-Linear-Antenna-Array" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now we create a 1×4 antenna array with four 2×2 panels. In this case, we have 8 antenna ports,</span>
+<span class="c1"># and each port corresponds to one panel/polarization (e.g., 4 panels, 2 polarizations).</span>
+<span class="n">panelTemplate</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">txArray</span> <span class="o">=</span> <span class="n">AntennaArray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">panels</span><span class="o">=</span><span class="n">panelTemplate</span><span class="p">)</span>
+
+<span class="c1"># Creating beam sweeping precoders for this array:</span>
+<span class="n">precoders</span><span class="p">,</span> <span class="n">beams</span> <span class="o">=</span> <span class="n">txArray</span><span class="o">.</span><span class="n">getSweepingBeams</span><span class="p">(</span><span class="n">numTheta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">numPhi</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">polStrategy</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+
+<span class="c1"># &#39;precoders&#39; is a &#39;numPorts × numBeams&#39; complex matrix.</span>
+<span class="n">numPorts</span><span class="p">,</span> <span class="n">numBeams</span> <span class="o">=</span> <span class="n">precoders</span><span class="o">.</span><span class="n">shape</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of ports: </span><span class="si">{</span><span class="n">numPorts</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;precoders shape: </span><span class="si">{</span><span class="n">precoders</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">beams</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2"> Beams:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  Beam    Theta     Phi     Pol&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  ----    -----    -----    ---&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numBeams</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">beams</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">beams</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span><span class="si">:</span><span class="s2">5.1f</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">beams</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of ports: 8
+precoders shape: (8, 8)
+8 Beams:
+  Beam    Theta     Phi     Pol
+  ----    -----    -----    ---
+   0      90.0     -60.0     x
+   1      90.0     -38.2     x
+   2      90.0     -21.8     x
+   3      90.0      -7.1     x
+   4      90.0       7.1     x
+   5      90.0      21.8     x
+   6      90.0      38.2     x
+   7      90.0      60.0     x
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Important note:</span>
+<span class="c1"># This antenna array, with default internal precoders (B), behaves like a panel of 4 elements</span>
+<span class="c1"># with 1λ spacing instead of 0.5λ. Since the spacing is larger than 0.5λ, grating lobes appear</span>
+<span class="c1"># for some steering angles. This means we cannot reliably create beams at angles greater than 30°.</span>
+
+<span class="c1"># Draw the antenna array:</span>
+<span class="n">txArray</span><span class="o">.</span><span class="n">showElements</span><span class="p">()</span>
+
+<span class="c1"># Here is how two different beams look when using port-based precoding:</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;constrained&#39;</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;polar&#39;</span><span class="p">})</span>
+<span class="n">txArray</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">phi=10$&quot;</span><span class="p">,</span>
+                      <span class="n">weights</span><span class="o">=</span><span class="n">txArray</span><span class="o">.</span><span class="n">b</span> <span class="o">@</span> <span class="n">txArray</span><span class="o">.</span><span class="n">getPortSteeringVector</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">txArray</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">phi=40$&quot;</span><span class="p">,</span>
+                      <span class="n">weights</span><span class="o">=</span><span class="n">txArray</span><span class="o">.</span><span class="n">b</span> <span class="o">@</span> <span class="n">txArray</span><span class="o">.</span><span class="n">getPortSteeringVector</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">40</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;PolarAxes: title={&#39;center&#39;: &#39;$\\phi=40$&#39;}&gt;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_10_1.png" src="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_10_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_10_2.png" src="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_10_2.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># To verify this, we can create a panel with 1λ spacing:</span>
+<span class="n">txPanel</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">txPanel</span><span class="o">.</span><span class="n">showElements</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Equivalent Panel&quot;</span><span class="p">)</span>
+
+<span class="c1"># Show the same two beams with this panel. As you can see the beams look very similar.</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;constrained&#39;</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;polar&#39;</span><span class="p">})</span>
+<span class="n">txPanel</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">phi=10$&quot;</span><span class="p">,</span>
+                      <span class="n">weights</span><span class="o">=</span><span class="n">txPanel</span><span class="o">.</span><span class="n">getPortSteeringVector</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">txPanel</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">phi=40$&quot;</span><span class="p">,</span>
+                      <span class="n">weights</span><span class="o">=</span><span class="n">txPanel</span><span class="o">.</span><span class="n">getPortSteeringVector</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">40</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;PolarAxes: title={&#39;center&#39;: &#39;$\\phi=40$&#39;}&gt;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_11_1.png" src="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_11_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_11_2.png" src="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_11_2.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># One way to address this problem is to reduce the antenna spacing within each panel.</span>
+<span class="c1"># For example, we use antenna panels with an internal spacing of 0.25λ. In this</span>
+<span class="c1"># configuration, the panel centers are separated by 0.5λ, enabling the array to</span>
+<span class="c1"># perform beamforming over larger angles.</span>
+<span class="n">panelTemplate</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">spacing</span><span class="o">=</span><span class="p">[</span><span class="mf">0.25</span><span class="p">,</span><span class="mf">0.25</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">txArray</span> <span class="o">=</span> <span class="n">AntennaArray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">panels</span><span class="o">=</span><span class="n">panelTemplate</span><span class="p">)</span>
+
+<span class="c1"># Draw the antenna array:</span>
+<span class="n">txArray</span><span class="o">.</span><span class="n">showElements</span><span class="p">()</span>
+
+<span class="c1"># Here is how two different beams look when using port-based precoding:</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;constrained&#39;</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;polar&#39;</span><span class="p">})</span>
+<span class="n">txArray</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">phi=10$&quot;</span><span class="p">,</span>
+                      <span class="n">weights</span><span class="o">=</span><span class="n">txArray</span><span class="o">.</span><span class="n">b</span> <span class="o">@</span> <span class="n">txArray</span><span class="o">.</span><span class="n">getPortSteeringVector</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">txArray</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">phi=40$&quot;</span><span class="p">,</span>
+                      <span class="n">weights</span><span class="o">=</span><span class="n">txArray</span><span class="o">.</span><span class="n">b</span> <span class="o">@</span> <span class="n">txArray</span><span class="o">.</span><span class="n">getPortSteeringVector</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">40</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;PolarAxes: title={&#39;center&#39;: &#39;$\\phi=40$&#39;}&gt;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_12_1.png" src="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_12_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_12_2.png" src="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_12_2.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Another option is to use element-based precoding, which enables beam steering over larger</span>
+<span class="c1"># angles with narrower beams. This is because the element spacing remains 0.5λ, while the</span>
+<span class="c1"># weights of individual elements can be controlled independently.</span>
+
+<span class="n">panelTemplate</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">txArray</span> <span class="o">=</span> <span class="n">AntennaArray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">panels</span><span class="o">=</span><span class="n">panelTemplate</span><span class="p">)</span>
+
+<span class="c1"># Here is how the same beams look:</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;constrained&#39;</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;polar&#39;</span><span class="p">})</span>
+<span class="n">txArray</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">phi=10$&quot;</span><span class="p">,</span>
+                      <span class="n">weights</span><span class="o">=</span><span class="n">txArray</span><span class="o">.</span><span class="n">getSteeringVector</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">txArray</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">phi=40$&quot;</span><span class="p">,</span>
+                      <span class="n">weights</span><span class="o">=</span><span class="n">txArray</span><span class="o">.</span><span class="n">getSteeringVector</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">40</span><span class="p">)</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;PolarAxes: title={&#39;center&#39;: &#39;$\\phi=40$&#39;}&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_13_1.png" src="../../../../_images/source_Playground_Notebooks_Antenna_BeamSweeping_13_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="AntennaArray.html" class="btn btn-neutral float-left" title="Antenna Array" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../Channels/ChannelMatrix.html" class="btn btn-neutral float-right" title="Channel Matrix" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, InterDigital, Inc. All Rights Reserved.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
