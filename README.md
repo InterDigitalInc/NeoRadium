@@ -1,27 +1,37 @@
 <img src="NeoRadium.png" alt="NeoRadium" width="400px"/>
 
-**NeoRadium** is a Python library engineered to simplify the simulation of **physical layer communication pipelines** based on the latest **3GPP 5G NR** standard. Its object-oriented architecture effectively abstracts the complexities inherent in different stages of the communication pipeline, enabling rapid development and execution of end-to-end simulations on any standard computer.
+**NeoRadium** is a Python library for simulating end-to-end wireless communication systems based on the latest **3GPP 5G NR** standards. Its object-oriented design abstracts much of the complexity involved in physical-layer modeling, enabling researchers and engineers to rapidly build, customize, and evaluate communication pipelines using standard Python workflows.
 
-Wireless communication research often **focuses** on specific blocks or modules within the end-to-end communication pipeline, such as equalization. However, implementing an entire 3GPP-compliant pipeline solely for the purpose of testing a single block can be both time-consuming and cumbersome. This is where **NeoRadium** proves invaluable. It provides comprehensive end-to-end communication pipeline functionality based on 3GPP standards, empowering researchers to effortlessly customize, study, and evaluate the performance of their unique implementations. All these capabilities are delivered without requiring high-end hardware, complex setups, or costly GPUs. As long as your computer operates with Python 3.9+ and a basic configuration, you are ready to begin.
+<img src="Playground/RayTracing/AnimateLA.gif" alt="AnimateLA"/>
 
-**NeoRadium** includes a comprehensive [Playground](https://interdigitalinc.github.io/NeoRadium/html/source/Playground/Playground.html), offering numerous examples for experimentation. These examples are presented as [Jupyter Notebooks](https://jupyter.org) and provide detailed explanations of API functionalities and their application in practical contexts.
+In many wireless communication projects, the primary focus is a specific component of the physical layer, such as channel estimation, equalization, precoding, beam management, scheduling, or channel coding. Implementing an entire standards-compliant communication pipeline simply to evaluate a single algorithm can be time-consuming and error-prone. **NeoRadium** addresses this challenge by providing a comprehensive 3GPP-based simulation framework that allows researchers to focus on the components they care about while leveraging a complete, interoperable end-to-end system.
 
-## NeoRadium Documentation
-* [Installation](https://interdigitalinc.github.io/NeoRadium/html/source/installation.html)
-* [Documentation Home](https://interdigitalinc.github.io/NeoRadium/html/)
+**NeoRadium** is designed to run on standard desktop and laptop computers without requiring specialized hardware, complex software stacks, or GPUs. If your system supports Python 3.9 or later, you can start exploring and developing communication-system simulations immediately.
 
-## Playground
-The **Playground** folder contains a set of tutorials demonstrating how to use various modules within **NeoRadium**. To run these examples, you'll need to start a [Jupyter Notebook](https://jupyter.org) server on your computer and access them through your web browser. Please refer to the [Playground](https://interdigitalinc.github.io/NeoRadium/html/source/Playground/Playground.html) for a complete list of available examples.
+The project includes a comprehensive **Playground** containing numerous tutorials and examples presented as **Jupyter Notebooks**. These notebooks demonstrate key APIs, explain core concepts, and provide practical examples ranging from basic resource-grid operations to complete end-to-end 5G NR simulations.
+
+## Documentation
+
+* [Installation Guide](https://interdigitalinc.github.io/NeoRadium/html/source/installation.html)
+* [Documentation Home](https://interdigitalinc.github.io/NeoRadium/html/index.html)
+* [Playground](https://interdigitalinc.github.io/NeoRadium/html/source/Playground/Playground.html)
+
+## The Playground
+
+The **Playground** directory contains a collection of tutorial notebooks covering the major **NeoRadium** modules and workflows. To run these examples, start a [Jupyter Notebook](https://jupyter.org) server and open the notebooks in your web browser.
+
+The tutorials range from introductory examples to advanced end-to-end simulations and provide a practical way to learn **NeoRadium**'s APIs and capabilities.
 
 ## Citation
-If you use this software in your work, please cite it using the following metadata:
-```
-@software{Id_AILAB_NeoRadium_2024,
+If you use **NeoRadium** in your work, please cite it as:
+
+```bibtex
+@software{Id_AILAB_NeoRadium_2026,
   author  = {Hamidi-Rad, Shahab},
   title   = {NeoRadium},
-  version = {0.4.1},
-  year    = {2025},
-  month   = {December},
+  version = {0.5.1},
+  year    = {2026},
+  month   = {August},
   url     = {https://github.com/InterDigitalInc/NeoRadium}
 }
 ```
