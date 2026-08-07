@@ -1,5 +1,8 @@
-# Copyright (c) 2024 InterDigital AI Lab
+# Copyright (c) 2024-2026, InterDigital AI Lab
 """
+:red:`DEPRECATED`: The API in this module is deprecated and will be removed in future releases. Please use the 
+:py:mod:`LdpcCodec <neoradium.ldpccodec>` API.
+
 The module ``ldpc.py`` contains the API used for 
 `Low-Density Parity Check (LDPC) <https://en.wikipedia.org/wiki/Low-density_parity-check_code>`_ encoding and 
 decoding. It implements the class :py:class:`LdpcBase`, which is the base class for LDPC coding and is derived
@@ -16,7 +19,7 @@ This implementation is based on **3GPP TS 38.212**.
 # 01/05/2024    Shahab                  Completed the documentation
 # 08/01/2025    Shahab                  - Updated some functionality to support HARQ. Most of the changes are in
 #                                         functions rateMatch and recoverRate.
-#                                       - Depricated methods: isValidCodeword, getRateMatchedCodeWords
+#                                       - Deprecated methods: isValidCodeword, getRateMatchedCodeWords
 #                                       - New methods: getRateMatchedCbLens, isValidCodedBlock, getRateMatchedCodeBlocks
 #                                       - Some clarification about the naming of "codewords", "code blocks", and
 #                                         "coded blocks". See the "Naming" comment below. The code was updated based
@@ -25,14 +28,14 @@ This implementation is based on **3GPP TS 38.212**.
 #                                         functions.
 # **********************************************************************************************************************
 import numpy as np
-from .utils import deprecated
+from .utils import deprecated, warnOnce, DOCS_LOC
 from .chancodebase import ChanCodeBase
 
 # See the "LDPC Coding" page in the "Implementation Notes".
 
 # Suggested Course:
 # LDPC and Polar Codes in 5G Standard: https://www.youtube.com/playlist?list=PLyqSpQzTE6M81HJ26ZaNv0V3ROBrcv-Kc
-# This file is based on 3GPP TS 38.212 V17.0.0 (2021-12)
+# This file is based on 3GPP TS 38.212
 # The decoder implementation is based on the layered belief propagation method with min-sum approximation as
 # explained in the above course.
 
@@ -45,7 +48,7 @@ from .chancodebase import ChanCodeBase
 # **********************************************************************************************************************
 hbg =  [ None, # Index 0 -> Invalid. Use hbg[1] or hbg[2] for Base Graphs 1 and 2 correspondingly
          [ # -------------------------------------------------------
-           # HBG 1:  3GPP TS 38.212 V17.0.0 (2021-12), Table 5.3.2-2
+           # HBG 1:  3GPP TS 38.212, Table 5.3.2-2
            # i=0     j    0    1    2    3    4    5    6    7
                    [(0,  [250, 307, 73 , 223, 211, 294, 0  , 135]),
                     (1,  [69 , 19 , 15 , 16 , 198, 118, 0  , 227]),
@@ -410,7 +413,7 @@ hbg =  [ None, # Index 0 -> Invalid. Use hbg[1] or hbg[2] for Base Graphs 1 and 
                     (67, [0  , 0  , 0  , 0  , 0  , 0  , 0  , 0])]
          ],
          [ # -------------------------------------------------------
-           # HBG 2:  3GPP TS 38.212 V17.0.0 (2021-12), Table 5.3.2-3
+           # HBG 2:  3GPP TS 38.212, Table 5.3.2-3
            # i=0     j    0    1    2    3    4    5    6    7
                    [(0 , [9  , 174, 0  , 72 , 3  , 156, 143, 145]),
                     (1 , [117, 97 , 0  , 110, 26 , 143, 19 , 131]),
@@ -654,7 +657,7 @@ hbg =  [ None, # Index 0 -> Invalid. Use hbg[1] or hbg[2] for Base Graphs 1 and 
        ]
 
 # **********************************************************************************************************************
-liftingSizeSets = [  # 3GPP TS 38.212 V17.0.0 (2021-12), Table 5.3.2-1
+liftingSizeSets = [  # 3GPP TS 38.212, Table 5.3.2-1
                     [2,  4,  8,  16,  32,  64,  128, 256],  # Set Index 0
                     [3,  6,  12, 24,  48,  96,  192, 384],  # Set Index 1
                     [5,  10, 20, 40,  80,  160, 320],       # Set Index 2
@@ -677,13 +680,13 @@ class LdpcBase(ChanCodeBase):
         r"""
         Parameters
         ----------
-        baseGraphNo: int
+        baseGraphNo : int
             The base graph used by the LDPC encoder/decoder. It can be either 1 or 2. The choice of base graph
             determines the maximum code block size (8448 bits for base graph 1 and 3840 bits for base graph 2). The
             base graphs are defined as :math:`H_{BG}` in **3GPP TS 38.212, Tables 5.3.2-2 and 5.3.2-3**.
             
-        modulation: str
-            The modulation scheme used by the physical channel based on table 7.3.1.2-1 in **3GPP TR 38.211**. Here
+        modulation : str
+            The modulation scheme used by the physical channel based on table 7.3.1.2-1 in **3GPP TS 38.211**. Here
             is a list of supported Modulation Schemes:
                     
             ===================  =========================
@@ -697,10 +700,10 @@ class LdpcBase(ChanCodeBase):
             1024QAM              10
             ===================  =========================
 
-        txLayers: int
+        txLayers : int
             The number of transmission layers in the physical channel using this LDPC encoder/decoder.
             
-        nRef: int
+        nRef : int
             This is used for Low-Buffer Rate Matching (LBRM). This is the value :math:`N_{ref}` as explained in 
             **3GPP TS 38.212, Section 5.4.2.1**.
 
@@ -739,13 +742,13 @@ class LdpcBase(ChanCodeBase):
         self.baseGraphNo = baseGraphNo      # Base Graph number 1 or 2
         if self.baseGraphNo not in [1,2]:       raise ValueError("'baseGraphNo' must be 1 or 2!")
 
-        # Modulation bits per symbol. See TS 38.211 V17.0.0 (2021-12), Table 7.3.1.2-1
+        # Modulation bits per symbol. See TS 38.211, Table 7.3.1.2-1
         mod2qm = {'BPSK':1, 'QPSK':2, '16QAM':4, '64QAM':6, '256QAM':8, '1024QAM':10}
         self.modulation = modulation
         if self.modulation not in mod2qm:       raise ValueError("Invalid 'modulation' value!")
         self.qm = mod2qm[self.modulation]
 
-        # Max code block Size (Kcb). See TS 38.212 V17.0.0 (2021-12), Section 5.2.2
+        # Max code block Size (Kcb). See TS 38.212, Section 5.2.2
         self.maxCodeBlockSize = 8448 if baseGraphNo==1 else 3840
         
         self.txBlockSize = 0        # Transport block size      (B)    Including the 24-bit transport block CRC
@@ -761,19 +764,19 @@ class LdpcBase(ChanCodeBase):
         self.nRef = nRef            # The "Nref" for rate matching. Non-zero only for Low-Buffer Rate Matching (LBRM).
 
     # ******************************************************************************************************************
-    def __repr__(self):     return self.print(getStr=True)  # Not documented - Not called directly by the user
-    def print(self, indent, title, getStr):                 # Not documented - Not called directly by the user
+    def __repr__(self):     return self.print(getStr=True)  # Undocumented - Not called directly by the user
+    def print(self, indent, title, getStr):                 # Undocumented - Not called directly by the user
         repStr = "\n" if indent==0 else ""
         repStr += indent*' ' + title + "\n"
-        repStr += indent*' ' + "  Base Graph:         %d\n"%(self.baseGraphNo)
-        repStr += indent*' ' + "  Modulation:         %s\n"%(self.modulation)
-        repStr += indent*' ' + "  Number of layers:   %d\n"%(self.txLayers)
+        repStr += indent*' ' + f"  Base Graph:         {self.baseGraphNo}\n"
+        repStr += indent*' ' + f"  Modulation:         {self.modulation}\n"
+        repStr += indent*' ' + f"  Number of layers:   {self.txLayers}\n"
         if getStr: return repStr
         print(repStr)
 
     # ******************************************************************************************************************
     @property
-    def baseGraph(self):                                    # Not documented - Explained in the __init__ function above
+    def baseGraph(self):                                    # Undocumented - Explained in the __init__ function above
         if self._baseGraph is not None:  return self._baseGraph
         assert (self.setIndex>=0 and self.liftingSize>0), "'Base Graph' not available. Encoder not initialized yet!"
         
@@ -790,7 +793,7 @@ class LdpcBase(ChanCodeBase):
 
     # ******************************************************************************************************************
     @classmethod
-    def mulShift(cls, x, k):                                # Not documented - Not called directly by the user
+    def mulShift(cls, x, k):                                # Undocumented - Not called directly by the user
         if x.ndim==1:
             # x is a binary vector of z values
             # k a number between -1, z-1
@@ -811,7 +814,7 @@ class LdpcBase(ChanCodeBase):
 
     # ******************************************************************************************************************
     @classmethod
-    def mulShiftSum(cls, x, k):                             # Not documented - Not called directly by the user
+    def mulShiftSum(cls, x, k):                             # Undocumented - Not called directly by the user
         # x is a matrix of shape (c, n, z) or (n, z)
         # k is a vector of n values
         # returns a matrix of shape (c, z) or a vector of z binary values
@@ -828,7 +831,7 @@ class LdpcBase(ChanCodeBase):
         
         Parameters
         ----------
-        codedBlock: NumPy array
+        codedBlock : NumPy array
             A NumPy array of bits representing the coded block. The length of ``codedBlock`` must be a multiple of 
             the property ``liftingSize`` (:math:`Z_c`).
 
@@ -840,7 +843,7 @@ class LdpcBase(ChanCodeBase):
         # codedBlock is a vector of size (nn=n*z)
         for row in self._baseGraph:
             if self.mulShiftSum(codedBlock.reshape(-1,self.liftingSize), row).sum()!=0: return False
-            return True
+        return True
 
     # ******************************************************************************************************************
     def getRateMatchedCbLens(self, g, c):
@@ -856,11 +859,14 @@ class LdpcBase(ChanCodeBase):
         return cbLens
 
     # ******************************************************************************************************************
-    def initialize(self, txBlockSize):                      # Not documented - Not called directly by the user
+    def initialize(self, txBlockSize):                      # Undocumented - Not called directly by the user
+        # NOTE: The following 'txBlockSize' value is different from the TBS values returned by the PDSCH class. The
+        # actual TBS values are denoted as A in the standard. The following 'txBlockSize' is the value B and B = A + L
+        # where L=24
         if self.txBlockSize == txBlockSize: return
         self.txBlockSize = txBlockSize
         
-        # Getting the number of code blocks (C). See 3GPP TS 38.212 V17.0.0 (2021-12), Section 5.2.2
+        # Getting the number of code blocks (C). See 3GPP TS 38.212, Section 5.2.2
         if self.txBlockSize <= self.maxCodeBlockSize:
             crcBits = 0                                                                         # L=0
             self.numCodeBlocks = 1                                                              # C=1
@@ -870,7 +876,7 @@ class LdpcBase(ChanCodeBase):
             self.numCodeBlocks = int(np.ceil(self.txBlockSize/(self.maxCodeBlockSize-crcBits))) # C=[B/(Kcb-L)]
             totalBits = self.txBlockSize + self.numCodeBlocks*crcBits                           # B'=B + C.L
 
-        # Getting the code block size (K). See 3GPP TS 38.212 V17.0.0 (2021-12), Section 5.2.2
+        # Getting the code block size (K). See 3GPP TS 38.212, Section 5.2.2
         kPrime = totalBits/self.numCodeBlocks       # Note that this may not be an integer
         if self.baseGraphNo==1:     kb = 22
         elif self.txBlockSize>640:  kb = 10
@@ -891,10 +897,41 @@ class LdpcBase(ChanCodeBase):
         # Code block Size (K)
         self.codeBlockSize = (22*self.liftingSize) if self.baseGraphNo==1 else (10*self.liftingSize)
 
+    # ******************************************************************************************************************
+    @classmethod
+    def getBaseGraphNo(cls, tbs, codeRate):
+        r"""
+        This class method selects the LDPC base graph number based on the specified transport block size (``tbs``) 
+        and coderate (``codeRate``), in accordance with 3GPP TS 38.212, Section 7.2.2.
+        
+        Parameters
+        ----------
+        tbs : int
+            Transport block size in bits. This value can be obtained using 
+            :py:meth:`~neoradium.pdsch.PDSCH.getTxBlockSize` method of the :py:class:`~neoradium.pdsch.PDSCH` class.
+            
+        codeRate : float
+            The coderate used for transmission.
+
+        Returns
+        -------
+        int
+            The selected LDPC base graph number (1 or 2).
+        """
+        # This is based on See 3GPP TS 38.212, Section 7.2.2
+        if tbs<=292:            return 2
+        if codeRate<=0.25:      return 2
+        if tbs>3824:            return 1
+        if codeRate>0.67:       return 1
+        return 2
+
 # **********************************************************************************************************************
 # The LDPC Encoder class
 class LdpcEncoder(LdpcBase):
     r"""
+    :red:`DEPRECATED`: This class is deprecated and will be removed in future releases. Please use the 
+    :py:class:`~neoradium.ldpccodec.LdpcCodec` class instead.
+
     This is the `Low-Density Parity Check (LDPC) <https://en.wikipedia.org/wiki/Low-density_parity-check_code>`_
     encoder class. It is derived from the :py:class:`LdpcBase` class and performs the following tasks:
     
@@ -907,7 +944,7 @@ class LdpcEncoder(LdpcBase):
         r"""
         Parameters
         ----------
-        baseGraphNo: int
+        baseGraphNo : int
             The base graph used by this LDPC encoder. It can be either 1 or 2. In NR, base graph 1 is designed for
             code rates from 1/3 to 22/24 (approximately 0.33-0.92) and base graph 2 from 1/5 to 5/6 (approximately
             0.2-0.83). The choice between base graph 1 or 2 is based on the transport block size and the targeted 
@@ -915,8 +952,8 @@ class LdpcEncoder(LdpcBase):
             bits for base graph 1 and 3840 bits for base graph 2). The base graphs are defined as :math:`H_{BG}` in
             **3GPP 3GPP TS 38.212, Tables 5.3.2-2 and 5.3.2-3**.
             
-        modulation: str
-            The modulation scheme used by the physical channel based on table 7.3.1.2-1 in **3GPP TR 38.211**. Here
+        modulation : str
+            The modulation scheme used by the physical channel based on table 7.3.1.2-1 in **3GPP TS 38.211**. Here
             is a list of supported Modulation Schemes:
                     
             ===================  =========================
@@ -930,20 +967,24 @@ class LdpcEncoder(LdpcBase):
             1024QAM              10
             ===================  =========================
 
-        txLayers: int
+        txLayers : int
             The number of transmission layers in the physical channel using this LDPC encoder.
             
-        nRef: int
+        nRef : int
             This is used for Low-Buffer Rate Matching (LBRM). Please refer to **3GPP TS 38.212, Section 5.4.2.1**
             for more details.
             
-        targetRate: float
+        targetRate : float
             The desired code rate which is the ratio of the data bits to the total number of
             bits transmitted (including the LDPC redundancy bits).
         
         
         Please refer to the :py:class:`LdpcBase` class for a list of properties inherited from the base class.
         """
+        warnOnce("The 'LdpcEncoder' class is deprecated. Please use the new `LdpcCodec` class. Visit " +
+                 DOCS_LOC + "source/API/ChanCode.html#" +
+                 "migration-guide-ldpcencoder-ldpcdecoder-ldpccodec for information about how to " +
+                 "migrate your code to use the new 'LdpcCodec' class.")
         super().__init__(baseGraphNo, modulation, txLayers, nRef)
 
         self.targetRate = targetRate    # The target code rate
@@ -956,27 +997,31 @@ class LdpcEncoder(LdpcBase):
 
         Parameters
         ----------
-        indent: int
+        indent : int
             The number of indentation characters.
             
-        title: str
-            If specified, it is used as a title for the printed information.
+        title : str
+            If specified, it is used as the title for the printed information.
 
-        getStr: Boolean
-            If `True`, returns a text string instead of printing it.
+        getStr : bool
+            If `True`, returns a string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = "LDPC Encoder Properties:"
         repStr = super().print(indent, title, True)
-        repStr += indent*' ' + "  Target Rate:        %s\n"%(str(self.targetRate))
+        repStr += indent*' ' + f"  Target Rate:        {str(self.targetRate)}\n"
         if getStr: return repStr
         print(repStr)
 
+    # ******************************************************************************************************************
+    @property
+    def numLayers(self): return self.txLayers
+    
     # ******************************************************************************************************************
     def doSegmentation(self, txBlock, fillerBit=0):
         r"""
@@ -993,13 +1038,13 @@ class LdpcEncoder(LdpcBase):
 
         Parameters
         ----------
-        txBlock: NumPy array
+        txBlock : NumPy array
             A NumPy array of bits containing the transport block information.
             
-        fillerBit: int
+        fillerBit : int
             This parameter is ignored. 
 
-            .. Note:: NeoRadium no longer uses the filler bits in its newer versions. This parameter will be removed 
+            .. Note:: **NeoRadium** no longer uses the filler bits in its newer versions. This parameter will be removed 
                       in future releases.
 
         Returns
@@ -1022,7 +1067,7 @@ class LdpcEncoder(LdpcBase):
         else:
             codeBlocksCrc = codeBlocks                                          # numCodeBlocks x bitsPerCodeBlock)
         
-        # Add filler bits. NeoRadium sets these bits to 0 (unlike Matlab)
+        # Add filler bits. NeoRadium sets these bits to 0 (unlike MATLAB)
         self.numFillerBits = self.codeBlockSize-codeBlocksCrc.shape[1]
         codeBlocksCrc = np.concatenate((codeBlocksCrc, np.int8(self.numCodeBlocks*[self.numFillerBits*[0]])),
                                        axis=1)                                  # numCodeBlocks x codeBlockSize
@@ -1037,10 +1082,10 @@ class LdpcEncoder(LdpcBase):
 
         Parameters
         ----------
-        codeBlocks: NumPy array
+        codeBlocks : NumPy array
             A ``C x K`` NumPy array containing ``C`` code blocks of length ``K`` being LDPC-encoded by this function.
             
-        puncture: Boolean
+        puncture : bool
             By default, the first :math:`2Z_c` bits of the code blocks are *punctured* (removed). If ``puncture=False``,
             then the first :math:`2Z_c` bits are kept in the returned encoded blocks.
 
@@ -1097,22 +1142,22 @@ class LdpcEncoder(LdpcBase):
 
         Parameters
         ----------
-        codedBlocks: NumPy array
+        codedBlocks : NumPy array
             A ``C x N`` NumPy array containing ``C`` encoded code blocks of length ``N`` being rate-matched by this
             function.
             
-        g: int or None
+        g : int or None
             This is the total number of bits available for transmission of the transport block. It is the value
             :math:`G` in the *bit selection* process explained in **3GPP TS 38.212, Section 5.4.2.1**. If not
             provided (default), it is calculated as :math:`G=\lceil \frac {B-24} R \rceil` where :math:`B` is the
             transport block size and :math:`R` is the code rate.
                         
-        concatCBs: Boolean
+        concatCBs : bool
             If `True` (Default), the rate-matched coded blocks are concatenated and a single array of bits is
             returned. Otherwise, a list of NumPy arrays is returned and each element in the list is the bit array
             corresponding to each coded block.
 
-        rv: int
+        rv : int
             The *Redundancy Version* used with 
             `Hybrid Automatic Repeat Request (HARQ) <https://en.wikipedia.org/wiki/Hybrid_automatic_repeat_request>`_. 
             It must be one of 0, 1, 2, or 3. Please refer to **3GPP TS 38.212, Table 5.4.2.1-2** for more details. The
@@ -1134,14 +1179,14 @@ class LdpcEncoder(LdpcBase):
             # Total number of coded bits available for transmission of the transport block (G)
             g = int(np.ceil((self.txBlockSize-24)/self.targetRate))
 
-        # For Low-Buffer Rate Matching (LBRM): nRef ≠ 0. See TS 38.212 V17.0.0 (2021-12), Section 5.4.2.1
+        # For Low-Buffer Rate Matching (LBRM): nRef ≠ 0. See TS 38.212, Section 5.4.2.1
         nCB = nz if self.nRef==0 else min(nz, self.nRef)
         sysLen = self.codeBlockSize - 2*z                           # Systematic length including fillers
         sysPart  = codedBlocks[:, :sysLen-self.numFillerBits]       # Systematic Part (without fillers)
         codePart = codedBlocks[:, sysLen:nCB]                       # The code part
         circBuf = np.concatenate([sysPart, codePart], axis=1)       # "Circular" Buffers (No fillers)
 
-        # See 3GPP TS 38.212 V17.0.0 (2021-12), Table 5.4.2.1-2 (This is k0)
+        # See 3GPP TS 38.212, Table 5.4.2.1-2 (This is k0)
         start = (np.int32([0,17,33,56] if self.baseGraphNo==1 else [0,13,25,43])[rv]*nCB//nz) * z
         outCbLens = self.getRateMatchedCbLens(g, c)
         
@@ -1151,7 +1196,7 @@ class LdpcEncoder(LdpcBase):
             e = outCbLens[r]
             rmCB = circBuf[r][idx[:e]]                              # Rate-matched CB of length e
             
-            # Interleave the Rate-matched code block. See 3GPP TS 38.212 V17.0.0 (2021-12), Section 5.4.2.2
+            # Interleave the Rate-matched code block. See 3GPP TS 38.212, Section 5.4.2.2
             rmCB = rmCB.reshape(self.qm, e//self.qm).T.flatten()
             rmCBs += [ rmCB ]                                       # Add to the list
 
@@ -1172,21 +1217,21 @@ class LdpcEncoder(LdpcBase):
 
         Parameters
         ----------
-        txBlock: NumPy array
+        txBlock : NumPy array
             A NumPy array of bits containing the transport block information.
 
-        g: int or None
+        g : int or None
             This is the total number of bits available for transmission of the transport block. It is the value
             :math:`G` in the *bit selection* process explained in **3GPP TS 38.212, Section 5.4.2.1**. If not
             provided (default), it is calculated as :math:`G=\lceil \frac {B-24} R \rceil` where :math:`B` is the
             transport block size and :math:`R` is the code rate.
             
-        concatCBs: Boolean
+        concatCBs : bool
             If `True` (Default), the rate-matched coded blocks are concatenated and a single array of bits is 
             returned. Otherwise, a list of NumPy arrays is returned and each element in the list is the bit array 
             corresponding to each coded block.
             
-        addCrc: Boolean
+        addCrc : bool
             If `True` a 24-bit CRC is appended to the ``txBlock`` before the encoding process. Otherwise, it is
             assumed that the ``txBlock`` already includes the 24-bit CRC and therefore a CRC is not appended.
             
@@ -1197,6 +1242,10 @@ class LdpcEncoder(LdpcBase):
             rate-matched coded blocks. Otherwise, a list of NumPy arrays is returned and each element in the list
             is the bit array corresponding to each coded block.
         """
+        if isinstance(txBlock,list):
+            # If txBlock and g are lists, then return a list of results for items in the lists
+            return [ self.getRateMatchedCodeBlocks(txBlock[c], g[c], concatCBs, addCrc) for c in range(len(g))]
+            
         txBlockWithCrc = self.appendCrc(txBlock,'24A') if addCrc else txBlock
         codeBlocksCrc = self.doSegmentation(txBlockWithCrc)
         codedBlocks = self.encode(codeBlocksCrc)
@@ -1220,6 +1269,9 @@ class LdpcEncoder(LdpcBase):
 # The LDPC Decoder class
 class LdpcDecoder(LdpcBase):
     r"""
+    :red:`DEPRECATED`: This class is deprecated and will be removed in future releases. Please use the 
+    :py:class:`~neoradium.ldpccodec.LdpcCodec` class instead.
+
     This is the `Low-Density Parity Check (LDPC) <https://en.wikipedia.org/wiki/Low-density_parity-check_code>`_
     decoder class. It is derived from the :py:class:`LdpcBase` class and performs rate recovery, LDPC decoding, and
     code block merging. These are basically the opposite of the encoding tasks rate matching, LDPC encoding, and
@@ -1255,7 +1307,7 @@ class LdpcDecoder(LdpcBase):
         r"""
         Parameters
         ----------
-        baseGraphNo: int
+        baseGraphNo : int
             The base graph used by this LDPC decoder. It can be either 1 or 2. In NR, base graph 1 is designed for
             code rates from 1/3 to 22/24 (approximately 0.33-0.92) and base graph 2 from 1/5 to 5/6 (approximately
             0.2-0.83). The choice between base graph 1 or 2 is based on the transport block size and the targeted 
@@ -1263,8 +1315,8 @@ class LdpcDecoder(LdpcBase):
             bits for base graph 1 and 3840 bits for base graph 2). The base graphs are defined as :math:`H_{BG}` in
             **3GPP 3GPP TS 38.212, Tables 5.3.2-2 and 5.3.2-3**.
             
-        modulation: str
-            The modulation scheme used by the physical channel based on table 7.3.1.2-1 in **3GPP TR 38.211**. Here
+        modulation : str
+            The modulation scheme used by the physical channel based on table 7.3.1.2-1 in **3GPP TS 38.211**. Here
             is a list of supported Modulation Schemes:
                     
             ===================  =========================
@@ -1278,10 +1330,10 @@ class LdpcDecoder(LdpcBase):
             1024QAM              10
             ===================  =========================
 
-        txLayers: int
+        txLayers : int
             The number of transmission layers in the physical channel using this LDPC decoder.
             
-        nRef: int
+        nRef : int
             This is used for Low-Buffer Rate Matching (LBRM). Please refer to **3GPP TS 38.212, Section 5.4.2.1**
             for more details.
 
@@ -1305,19 +1357,19 @@ class LdpcDecoder(LdpcBase):
 
         Parameters
         ----------
-        indent: int
+        indent : int
             The number of indentation characters.
             
-        title: str
-            If specified, it is used as a title for the printed information.
+        title : str
+            If specified, it is used as the title for the printed information.
 
-        getStr: Boolean
-            If `True`, returns a text string instead of printing it.
+        getStr : bool
+            If `True`, returns a string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = "LDPC Decoder Properties:"
@@ -1340,18 +1392,18 @@ class LdpcDecoder(LdpcBase):
 
         Parameters
         ----------
-        rxBlock: NumPy array
+        rxBlock : NumPy array
             A NumPy array of Log-Likelihood Ratios (LLRs) obtained as a result of demodulation process. Each element
             is a real LLR value corresponding to each received bit. The larger the LLR value, the more likely it is
             for that bit to be a ``0``.
             
-        txBlockSize: int
+        txBlockSize : int
             The transport block size. This is the number of bits in a transport block (Not including the 24-bit CRC
             that is appended to the transport block). For example, in the case of PDSCH communication, this value
             can be obtained using the method :py:meth:`~neoradium.pdsch.PDSCH.getTxBlockSize` of the
             :py:class:`~neoradium.pdsch.PDSCH` class.
 
-        harq: :py:class:`~neoradium.harq.HarqCW`
+        harq : :py:class:`~neoradium.harq.HarqCW`
             The :py:class:`~neoradium.harq.HarqCW` object handling retransmissions for each codeword. If specified, 
             this method uses this object to obtain the 'Redundancy Version' and the circular buffer of the previous
             transmission of the same transport block.
@@ -1391,7 +1443,7 @@ class LdpcDecoder(LdpcBase):
         cbLens = self.getRateMatchedCbLens(g,c)                     # Length of each code block
         cumCbLens = np.cumsum(np.append(0,cbLens))                  # Start and end of each code block
 
-        # See 3GPP TS 38.212 V17.0.0 (2021-12), Table 5.4.2.1-2 (This is k0)
+        # See 3GPP TS 38.212, Table 5.4.2.1-2 (This is k0)
         start = (np.int32([0,17,33,56] if self.baseGraphNo==1 else [0,13,25,43])[rv]*nCB//nz) * z
         idx = ( np.arange(cbLens.max()) + start ) % cirBufSize      # Indices to the output bits (Circular)
 
@@ -1401,7 +1453,7 @@ class LdpcDecoder(LdpcBase):
             if len(rxCB) < e:                                       # Append zeros if we have less than 'e' LLR values
                 rxCB = np.concatenate([rxCB, (e-len(rxCB))*[0]])
 
-            # De-Interleave the code block. See 3GPP TS 38.212 V17.0.0 (2021-12), Section 5.4.2.2
+            # De-Interleave the code block. See 3GPP TS 38.212, Section 5.4.2.2
             rxCB = rxCB.reshape(e//self.qm, self.qm).T.flatten()
 
             for s in range(0,e,cirBufSize):
@@ -1418,80 +1470,6 @@ class LdpcDecoder(LdpcBase):
                               axis=1)                                       # c x nz
     
     # ******************************************************************************************************************
-    def decode2(self, rxCodeBlock, maxIter=6, onlyInfoBits=True, outputBelief=False, alpha=0.75, stopOnGoodParity=True):
-        # Not documented. This is the belief propagation algorithm similar to the Matlab code. This is less efficient
-        # and slower than the Layered belief propagation algorithm below. Use this only for verification of the results
-        # and debugging.
-        c, _ = rxCodeBlock.shape   # Number of code blocks
-        z = self.liftingSize
-        bg = self.baseGraph
-        
-        if self.rowStarts is None:
-            # Calculate this only once for each base graph configuration
-            colIndexesInRow = []
-            nzCounts = []
-            for row in bg:
-                colIndexes = []
-                for col, val in enumerate(row):
-                    if val>=0: colIndexes += [ (col*z + (np.arange(z) + val)%z).reshape(z,1) ]
-                colIndexes = np.concatenate(colIndexes,axis=1)
-                nzCounts += z*[colIndexes.shape[1]]
-                colIndexesInRow += [ row for row in colIndexes ]
-            self.rowNZcounts = np.int32(nzCounts)
-            self.rowStarts = np.append(0, np.cumsum(nzCounts[:-1]))
-            self.colIndexes = np.concatenate(colIndexesInRow)
-
-        totalNZ = self.colIndexes.shape[0]
-        rxs = np.concatenate([np.zeros((c,2*z)), rxCodeBlock],1)    # Add the 2z punctured message bits
-        
-        rr = np.float64(totalNZ*[0])
-        numPCrows = bg.shape[0]*z               # Number of rows in the big parity-check matrix
-        decoded = []
-        for rx in rxs:
-            rx = np.clip(rx, -1e10, 1e10)
-            rr[:] = 0                           # Reset rr for each code block
-
-            for i in range(maxIter):
-                for row in range(numPCrows):
-                    indexes = self.rowStarts[row] + np.arange(self.rowNZcounts[row])
-                    colIdx = self.colIndexes[indexes]
-                    rxRowVals = rx[colIdx] - rr[indexes]
-                    
-                    # Get 2 lowest values in the absolute values of rxRowVals
-                    rxRowValsAbs = np.abs(rxRowVals)
-                    minIdx = np.argmin(rxRowValsAbs)
-                    min1 = rxRowValsAbs[minIdx]
-                    rxRowValsAbs[minIdx] = 1e10
-                    min2 = rxRowValsAbs.min()
-                    rxRowValsAbs[minIdx] = min1
-
-                    if min1>0:      # Both non-zero
-                        rxRowValSigns = np.sign(rxRowVals)
-                        rxRowValSigns1 = np.prod(rxRowValSigns)*rxRowValSigns
-                        rxRowValSigns = rxRowValSigns1 * min1
-                        rxRowValSigns[minIdx] = rxRowValSigns1[minIdx]*min2
-                        rr[indexes] = rxRowValSigns * alpha
-                    elif min2>0:    # min2 non-zero
-                        rxRowValSigns = np.zeros_like(rxRowVals)
-                        rxRowValSigns[minIdx] = np.prod(1 - 2*(rxRowVals<0))*min2
-                        rr[indexes] = rxRowValSigns * alpha
-                    else:           # Both zero
-                        rr[indexes] = 0
-
-                    rx[colIdx] = rxRowVals + rr[indexes]
-
-                if stopOnGoodParity:
-                    if self.isValidCodedBlock(1*(rx<0)):
-                        break
-                
-            decoded += [ rx ]
-            
-        decoded = np.float64(decoded)
-        if onlyInfoBits: decoded = decoded[:,:self.codeBlockSize]
-        if outputBelief: return decoded
-        return np.int8(decoded<0)
-
-    # ******************************************************************************************************************
     def decode(self, rxCodeBlock, numIter=5, onlyInfoBits=True, outputBelief=False):
         r"""
         This function implements the *Layered Belief Propagation* algorithm for LDPC-decoding of LLRs into decoded
@@ -1501,19 +1479,20 @@ class LdpcDecoder(LdpcBase):
 
         Parameters
         ----------
-        rxCodeBlock: NumPy array
+        rxCodeBlock : NumPy array
             A ``C x N`` NumPy array of ``C`` received coded blocks of length ``N`` containing the LLR values for
             each coded block.
             
-        numIter: int
+        numIter : int
             The number of iterations in the *Layered Belief Propagation* decoding algorithm. Larger values in some
-            cases could result in more accurate decoding while making the whole decoding process slower.
+            cases could result in more accurate decoding while making the whole decoding process slower. The default
+            is 5.
 
-        onlyInfoBits: Boolean
+        onlyInfoBits : bool
             If `True` (default), only the information bits are returned. Otherwise, the parity bits are also
             included in the returned values together with the information bits.
             
-        outputBelief: Boolean
+        outputBelief : bool
             If `True`, the calculated final belief values are returned for each bit which is the LLR for the
             decoded bits. Otherwise (default), *hard decision* is applied to the final belief values and the
             decoded bits are returned.
@@ -1530,8 +1509,8 @@ class LdpcDecoder(LdpcBase):
         #   LDPC and Polar Codes in 5G Standard:https://www.youtube.com/playlist?list=PLyqSpQzTE6M81HJ26ZaNv0V3ROBrcv-Kc
 
         # NOTE:
-        # The default value of numIter=5 is almost the same as Matlab's
-        # "decodeDLSCH.MaximumLDPCIterationCount=6" (Slightly better than Matlab).
+        # The default value of numIter=5 is almost the same as MATLAB's
+        # "decodeDLSCH.MaximumLDPCIterationCount=6" (Slightly better than MATLAB).
         c, _ = rxCodeBlock.shape   # Number of code blocks
         rxCodeBlock = np.clip(rxCodeBlock, -1e10, 1e10)
         z = self.liftingSize
@@ -1591,18 +1570,18 @@ class LdpcDecoder(LdpcBase):
 
         Parameters
         ----------
-        rxCodedBlocks: NumPy array
+        rxCodedBlocks : NumPy array
             A ``C x K`` NumPy array of ``C`` code blocks of length ``K``. Each code block contains a CRC as its last
             24 bits. The ``rxCodedBlocks`` is usually the returned value of the :py:meth:`decode` method explained
             above.
 
         Returns
         -------
-        txBlock: NumPy array of bits
+        txBlock : NumPy array of bits
             The NumPy array containing the transport block together with its 24-bit CRC at the end which can be 
             verified using the :py:meth:`~neoradium.chancodebase.ChanCodeBase.checkCrc` method.
             
-        crcCheckResults: NumPy array of booleans
+        crcCheckResults : NumPy array of booleans
             The boolean NumPy array containing the CRC check results for each code block. To have a valid transport
             block, all of the values in this NumPy array must be `True`.
         """
@@ -1618,3 +1597,19 @@ class LdpcDecoder(LdpcBase):
         # Check the CRC of each decoded block word and returned the flattened data (Without CRCs)
         return rxCodedBlocksNoFillers[:,:-24].flatten(), self.checkCrc(rxCodedBlocksNoFillers, '24B')
 
+    # ******************************************************************************************************************
+    def decodeLLRs(self, llrs, txBlockSizes, numIter=5):
+        noList = not isinstance(llrs,list)
+        if noList: llrs, txBlockSizes = [llrs], [txBlockSizes]
+        numCw = len(llrs)
+        decodedTxBlocks = []
+        blockErrors = []
+        for c in range(numCw):
+            # Uses the LdpcDecoder's methods to decode the 'llrs'
+            rxCodedBlocks = self.recoverRate(llrs[c], txBlockSizes[c])                  # Recover Rate
+            decodedBlocks = self.decode(rxCodedBlocks, numIter=numIter)                 # LDPC Decoding
+            decodedTxBlockWithCRC, crcMatch = self.checkCrcAndMerge(decodedBlocks)      # Check CRCs, Merge code blocks
+            decodedTxBlocks += [ decodedTxBlockWithCRC[:-24] ]                          # Remove transport block CRC
+            blockErrors += [ len(crcMatch)-sum(crcMatch) ]                              # Number of code block errors
+        if noList:  return decodedTxBlocks[0], blockErrors[0]   # llrs/txBlockSizes not lists => don't return lists
+        return decodedTxBlocks, blockErrors

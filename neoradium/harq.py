@@ -1,13 +1,13 @@
-# Copyright (c) 2025 InterDigital AI Lab
+# Copyright (c) 2025-2026, InterDigital AI Lab
 """
-The module ``harq.py`` contains the API for Hybrid Automatic Repeat reQuest (HARQ), a fundamental mechanism in 5G NR,
-designed for error correction and reliable data transfer over radio links. The class structure follows the 3GPP 
+The module ``harq.py`` contains the API for Hybrid Automatic Repeat reQuest (HARQ), a fundamental mechanism in 5G NR
+used for error correction and reliable data transfer over radio links. The class structure follows the 3GPP 
 HARQ hierarchy:
 
-- :py:class:`~neoradium.harq.HarqEntity`: The main HARQ management object. It implements the “HARQ Entity” as specified
+- :py:class:`~neoradium.harq.HarqEntity`: The main HARQ management object. It implements the "HARQ Entity" as specified
   in **3GPP TS 38.321, Section 5.3.2.1**.
 - :py:class:`~neoradium.harq.HarqProcess`: Each HARQ entity contains one or more HARQ processes. This class implements 
-  the “HARQ Process” object as specified in **3GPP TS 38.321, Section 5.3.2.2**.
+  the "HARQ Process" object as specified in **3GPP TS 38.321, Section 5.3.2.2**.
 - :py:class:`~neoradium.harq.HarqCW`: Each HARQ process can handle up to two codewords. This class implements HARQ 
   processing for a single codeword. A :py:class:`~neoradium.harq.HarqProcess` can have one or two 
   :py:class:`~neoradium.harq.HarqCW` objects, depending on the number of codewords. 
@@ -18,22 +18,22 @@ This implementation adheres to the procedures specified in **3GPP TS 38.321, TS 
 
 Here’s a typical workflow example for using HARQ in your simulations:
 
-1) Create an LDPC encoder, for instance:
+1) Create an :py:class:`~neoradium.ldpccodec.LdpcCodec` object, for instance:
 
     .. code-block:: python
             
-        ldpcEncoder = LdpcEncoder(baseGraphNo=1, modulation='QPSK', txLayers=1, targetRate=490/1024)
+        ldpc = pdsch.getLdpcCodec(coderates=490/1024)
 
-2) Create a HARQ entity object, passing in the LDPC encoder:
+2) Create a HARQ entity object, passing in the :py:class:`~neoradium.ldpccodec.LdpcCodec` object:
 
     .. code-block:: python
             
-        harq = HarqEntity(ldpcEncoder, harqType="IR", numProc=16)  # Using "Incremental Redundancy" with 16 HARQ processes
+        harq = HarqEntity(ldpc, harqType="IR", numProc=16)  # Using "Incremental Redundancy" with 16 HARQ processes
 
 3) For each transmission and each codeword, check the ``needNewData`` property. If it is `True` for a codeword, create
    the transport block bits for the corresponding codeword. Otherwise, set the transport block to `None` (for 
    retransmission). Once the transport blocks are ready for each codeword, call the 
-   :py:meth:`HarqEntity.getRateMatchedCodeBlocks` function to prepare the rate-matched bitstreams for transmission. 
+   :py:meth:`HarqEntity.encode` function to prepare the rate-matched bitstreams for transmission. 
    Here is an example:
 
     .. code-block:: python
@@ -45,14 +45,14 @@ Here’s a typical workflow example for using HARQ in your simulations:
             else:                                             # Retransmission
                 txBlocks += [ None ]                          # Set transport block to None indicating retransmission
 
-        rateMatchedCodeWords = harq.getRateMatchedCodeBlocks(txBlocks)  # Prepare the bitstream for transmission    
+        rateMatchedCodeBlocks = harq.encode(txBlocks)         # Prepare the bitstream for transmission    
 
-4) At the receiving end, after demodulating the LLRs, the :py:meth:`HarqEntity.decodeLLRs` method is invoked to obtain
-   a list of decoded blocks for each codeword. For instance:
-
+4) At the receiving end, after demodulating the LLRs, the :py:meth:`HarqEntity.decode` method is invoked to obtain 
+   the decoded transport block or blocks and their CRC results. For instance:
+    
     .. code-block:: python
 
-        decodedTxBlocks, blockErrors = harq.decodeLLRs(llrs, txBlockSize)  # Decode received LLRs
+        decodedTxBlocks, crcMatches = harq.decode(llrs)    # Decode received LLRs
 
 5) Near the end of the transmission loop, the HARQ entity’s :py:meth:`~HarqEntity.goNext` method is called to 
    transition to the next HARQ process for the subsequent transmission.
@@ -69,14 +69,27 @@ Please refer to the notebook :doc:`../Playground/Notebooks/HARQ/Harq` for a comp
 # ------------  --------------------    --------------------------------------------------------------------------------
 # 07/31/2025    Shahab Hamidi-Rad       First version of the file.
 # 08/01/2025    Shahab                  Added documentation.
+# 04/12/2026    Shahab Hamidi-Rad       Changes in NeoRadium version 0.5.0:
+#                                       * Updated the code to use the new 'LdpcCodec' API. See the "Migration Guide"
+#                                         in the module documentation in 'ldpccodec.py'.
+#                                       * Deprecated the 'decodeLLRs' and 'getRateMatchedCodeBlocks'. Use the new
+#                                         functions 'decode' and 'encode' respectively.
+#                                       * Removed the 'meanTries' and added the new 'meanFailedTransmissions', and
+#                                         'meanRetransmissions' properties to the HarqEntity class.
+#                                       * Now keeping statistics (numRxBits, numRxBlocks, numTxBits, numTxBlocks, and
+#                                         numTimeouts) for each codeword.
+#                                       * Allow changing LDPC codec. See the 'setLdpc' methods.
 # **********************************************************************************************************************
 import numpy as np
-from .ldpc import LdpcEncoder
+from .ldpccodec import LdpcCodec
+from .utils import validateRange, deprecated, DOCS_LOC
+
+docFile = "Harq"            # Used by the 'deprecated' decorators
 
 # **********************************************************************************************************************
 class HarqCW:
     r"""
-    This class implements the HARQ Processing for a single codeword. The :py:class:`neoradium.harq.HarqProcess` class 
+    This class implements HARQ processing for a single codeword. The :py:class:`neoradium.harq.HarqProcess` class 
     can have either one or two :py:class:`HarqCW` objects.
     """
     # ******************************************************************************************************************
@@ -84,11 +97,11 @@ class HarqCW:
         r"""
         Parameters
         ----------
-        process: :py:class:`~neoradium.harq.HarqProcess`
+        process : :py:class:`~neoradium.harq.HarqProcess`
             The :py:class:`~neoradium.harq.HarqProcess` object that holds this :py:class:`~neoradium.harq.HarqCW` 
             instance.
             
-        cwIdx: int
+        cwIdx : int
             The codeword index, which is 0 for the first codeword, or 1 for the second codeword.
              
                     
@@ -96,15 +109,12 @@ class HarqCW:
         
             :curTry: This indicates the current number of retransmissions. It starts at zero for the first transmission
                 for this codeword. This value increments after each transmission failure.
-            :rv: This represents the redundancy version used for retransmissions. For “Chase Combining” retransmission,
-                this value is always zero. For “Incremental Redundancy” retransmission, it is updated based on the 
+            :rv: This represents the redundancy version used for retransmissions. For "Chase Combining" retransmission,
+                this value is always zero. For "Incremental Redundancy" retransmission, it is updated based on the 
                 ``rvSequence`` parameter of the :py:class:`~neoradium.harq.HarqEntity` object.
-            :txBlockNo: This indicates the number of unique transport blocks (not including retransmissions) 
-                transmitted so far since the start of communication before the one currently being processed by this 
-                :py:class:`~neoradium.harq.HarqCW` instance.
             :needNewData: This indicates whether the :py:class:`~neoradium.harq.HarqCW` object is ready to receive a 
                 new transport block for transmission. If it is `True`, it means it is ready to transmit the new block. 
-                If it is `False`, it means it is still busy retransmitting the previous block. This corresponds to the 
+                If it is `False`, it means it is still busy retransmitting the previous block. This mirrors the role of 
                 **New Data Indicator (NDI)** in **3GPP TS 38.212**
         """
         self.process = process  # HARQ process object "owning" this HarqCW
@@ -112,23 +122,30 @@ class HarqCW:
         self.reset()            # Reset the parameters and statistics of this HarqCW
 
     # ******************************************************************************************************************
-    def reset(self):
+    def reset(self):                                                            # Undocumented
         # Called after a successful transmission, a timeout, or when called by the HARQ Entity/Process
         self.curTry = 0         # Current Try number (AKA retransmission number)
-        self.txBlockNo = 0      # The transport block number for this HarqCW
-        self.rv = 0             # Current revision number of this HarqCW
+        self.rv = 0             # Current redundancy version of this HarqCW
         self.encBuffer = None   # The encoder buffer for this HarqCW which contains the encoded bits.
-        self.decBuffer = None   # The decoder buffer for this HarqCW which contains the circular queue of LDPC decoder
+        self.decBuffer = None   # The decoder buffer for this HarqCW which contains the decoding circular queue
+        self.ldpcCodec = self.process.entity.ldpcCodec.cwCodecs[self.cwIdx]     # LDPC codec for this codeword
 
     # ******************************************************************************************************************
-    def __repr__(self):     return self.print(getStr=True)
-    def print(self, indent=0, title=None, getStr=False):
+    def setLdpc(self):
+        # If we are in the middle of retransmission, we keep using current LDPC codec until
+        # this transmission is complete (e.g. timed out or successfully decoded). Then a call to reset() function
+        # updates the ldpcCodec.
+        if self.curTry == 0:    # Not in the middle of a retransmission -> Update the LDPC codec immediately
+            self.ldpcCodec = self.process.entity.ldpcCodec.cwCodecs[self.cwIdx]
+        
+    # ******************************************************************************************************************
+    def __repr__(self):     return self.print(getStr=True)                      # Undocumented
+    def print(self, indent=0, title=None, getStr=False):                        # Undocumented
         # Prints the information about this HarqCW
         if title is None:   title = f"HARQ Codeword Properties:"
         repStr = "\n" if indent==0 else ""
         repStr += indent*' ' + title + "\n"
         repStr += indent*' ' + f"  curTry:             {self.curTry}\n"
-        repStr += indent*' ' + f"  txBlockNo:          {self.txBlockNo}\n"
         repStr += indent*' ' + f"  rv:                 {self.rv}\n"
         if self.encBuffer is not None:
             repStr += indent*' ' + f"  encBuffer Shape:    {self.encBuffer.shape}\n"
@@ -142,62 +159,53 @@ class HarqCW:
     def needNewData(self):  return self.curTry==0   # True means the start of new txBlock transmission
 
     # ******************************************************************************************************************
-    def getRateMatchedCodeBlocks(self, txBlock, g=None, concatCBs=True):
-        # Uses the LdpcEncoder's methods to encode 'txBlock'
-        encoder = self.process.entity.encoder                           # Get LDPC encoder object from the HARQ entity
-        if txBlock is None:                                             # Retransmission
-            assert self.curTry>0
+    def encode(self, txBlock, g, concatCBs):                                    # Undocumented
+        # Uses the LdpcCodecCW methods to encode 'txBlock'
+        if txBlock is None:                                                     # Retransmission
+            if self.curTry==0: raise ValueError("'txBlock' cannot be 'None' for first transmission!")
             assert self.encBuffer is not None
             # In this case we already have the encoded bits in the "encBuffer". Just need to rate-match them
-            rateMatchedCodeWords = encoder.rateMatch(self.encBuffer, g, concatCBs, self.rv)
+            rateMatchedCodeBlocks = self.ldpcCodec.rateMatch(self.encBuffer, g, concatCBs, self.rv)
             
-        else:                                                           # New transmission
-            assert self.curTry==0
+        else:                                                                   # New transmission
+            if self.curTry>0: raise ValueError("'txBlock' must be 'None' for retransmissions!")
             assert self.encBuffer is None
-            txBlockWithCrc = encoder.appendCrc(txBlock,'24A')           # Append txBlock CRC
-            codeBlocksCrc = encoder.doSegmentation(txBlockWithCrc)      # Perform segmentation
-            # Encode to Code Blocks and save to "encBuffer" to be used for possible future retransmission
-            self.encBuffer = encoder.encode(codeBlocksCrc)
-            rateMatchedCodeWords = encoder.rateMatch(self.encBuffer, g, concatCBs, self.rv) # Apply rate matching
-        return rateMatchedCodeWords
+            # Note that the following call will update the 'self.encBuffer' with the encoded code blocks
+            rateMatchedCodeBlocks = self.ldpcCodec.encode(txBlock, g, concatCBs, self)
+        return rateMatchedCodeBlocks
 
     # ******************************************************************************************************************
-    def decodeLLRs(self, llrs, txBlockSize, numIter):
-        # Uses the LdpcDecoder's methods to decode the 'llrs'
-        decoder = self.process.entity.decoder                           # Get LDPC decoder object from the HARQ entity
-
-        rxCodedBlocks = decoder.recoverRate(llrs, txBlockSize, self)              # Recover Rate
-        decodedBlocks = decoder.decode(rxCodedBlocks, numIter=numIter)            # LDPC Decoding
-        decodedTxBlockWithCRC, crcMatch = decoder.checkCrcAndMerge(decodedBlocks) # Check code block CRCs and Merge them
-        decodedTxBlock = decodedTxBlockWithCRC[:-24]                              # remove transport block CRC
-        blockErrors = len(crcMatch)-sum(crcMatch)                                 # Number of Block errors
+    def decode(self, llrs):                                                     # Undocumented
+        decodedTxBlock, crcMatch = self.ldpcCodec.decode(llrs, self)
+       
+        # Note that we update the state of this HarqCW and all statistics of the HARQ Entity after decoding the
+        # received transmission.
         
-        # Note that we update the state of this HarqCW all statistics of HARQ Entity after decoding the received
-        # transmission.
-        self.update(blockErrors, txBlockSize)
-        return decodedTxBlock, blockErrors
+        # Note: crcMatch[0] is the CRC match flag for the whole transport block and crcMatch[1,2,...] are the
+        # CRC match flags for individual code blocks. Here we only care about the whole transport block, so
+        # ``not crcMatch[0]`` means a transport block error.
+        self.update(not crcMatch[0], self.ldpcCodec.txBlockSize)
+        return decodedTxBlock, crcMatch
 
     # ******************************************************************************************************************
-    def update(self, blockErrors, txBlockSize):
+    def update(self, blockError, txBlockSize):                                  # Undocumented
         # Update all stats after decoding the received transmission.
         entity = self.process.entity                                # Get the entity object
-        if self.curTry == 0:  self.txBlockNo = entity.txBlocks[0]   # If this was a new transmission, set txBlockNo
-        entity.txBits[self.curTry] += txBlockSize                   # Update number of transmitted bits for this try
-        entity.txBlocks[self.curTry] += 1                           # Update number of transmitted blocks for this try
-        if blockErrors==0:                                          # Successful transmission
-            entity.rxBits[self.curTry] += txBlockSize               # Update number of received bits for this try
-            entity.rxBlocks[self.curTry] += 1                       # Update number of received blocks for this try
+        entity.numTxBits[self.cwIdx,self.curTry] += txBlockSize     # Update number of transmitted bits for this try
+        entity.numTxBlocks[self.cwIdx,self.curTry] += 1             # Update number of transmitted blocks for this try
 
-        if blockErrors>0:                                           # Transmission failed
+        if blockError:                                          # Transmission failed
             entity.handleEvent("RXFAILED", self )                   # Create "RXFAILED" event
             self.curTry += 1                                        # Increase the current try count
-            if self.curTry == entity.maxTries:                        # Reached Max. try count -> timed out!
+            if self.curTry == entity.maxTries:                      # Reached Max. try count -> timed out!
                 entity.handleEvent("TIMEOUT", self)                 # Create "TIMEOUT" event
-                entity.numTimeouts += 1                             # Increase the number of timeouts
+                entity.numTimeouts[self.cwIdx] += 1                 # Increase the number of timeouts
                 self.reset()                                        # Prepare for a new transmission
             else:                                                   # Try again
                 self.rv = entity.getRV(self.curTry)                 # Set the Redundancy Version for the retransmission
-        else:                                                       # Successful transmission
+        else:                                                   # Successful transmission
+            entity.numRxBits[self.cwIdx,self.curTry] += txBlockSize # Update number of received bits for this try
+            entity.numRxBlocks[self.cwIdx,self.curTry] += 1         # Update number of received blocks for this try
             entity.handleEvent("RXSUCCESS", self)                   # Create "RXSUCCESS" event
             self.reset()                                            # Prepare for a new transmission
 
@@ -215,14 +223,14 @@ class HarqProcess:
         r"""
         Parameters
         ----------
-        entity: :py:class:`~neoradium.harq.HarqEntity`
+        entity : :py:class:`~neoradium.harq.HarqEntity`
             The :py:class:`~neoradium.harq.HarqEntity` object that holds this :py:class:`~neoradium.harq.HarqProcess`
             instance.
             
-        id: int
+        id : int
             The unique identifier associated with this HARQ process.
                     
-        numCW: int
+        numCW : int
             The number of codewords processed by this HARQ process. It can be 1 or 2.
 
 
@@ -233,9 +241,9 @@ class HarqProcess:
                 transmission, while a `False` value signifies that it is currently busy retransmitting the previous 
                 transport block. This aligns with the **New Data Indicator (NDI)** defined in **3GPP TS 38.212**.
         """
-        self.id = id                    # HARQ process identifier
-        self.entity = entity            # HARQ entity
-        self.cws = [ HarqCW(self,i) for i in range(numCW) ]
+        self.id = id                                            # HARQ process identifier
+        self.entity = entity                                    # HARQ entity
+        self.cws = [ HarqCW(self,i) for i in range(numCW) ]     # One or two HarqCW objects for each codeword
 
     # ******************************************************************************************************************
     def reset(self):
@@ -245,7 +253,7 @@ class HarqProcess:
         objects.
         """
         for cw in self.cws: cw.reset()
-            
+
     # ******************************************************************************************************************
     def __repr__(self):     return self.print(getStr=True)
     def print(self, indent=0, title=None, getStr=False):
@@ -255,19 +263,19 @@ class HarqProcess:
 
         Parameters
         ----------
-        indent: int
+        indent : int
             The number of indentation characters.
             
-        title: str
-            If specified, it is used as a title for the printed information.
+        title : str
+            If specified, it is used as the title for the printed information.
 
-        getStr: Boolean
-            If `True`, returns a text string instead of printing it.
+        getStr : bool
+            If `True`, returns a string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = f"HARQ Process Properties:"
@@ -281,34 +289,34 @@ class HarqProcess:
         print(repStr)
 
     # ******************************************************************************************************************
-    @property                       # Not documented (Already mentioned in the __init__ documentation)
-    def needNewData(self):  return [cw.curTry==0 for cw in self.cws]
+    @property                                                                   # Undocumented
+    def needNewData(self):  return [cw.needNewData for cw in self.cws]
 
     # ******************************************************************************************************************
-    def getRateMatchedCodeBlocks(self, txBlocks, gs=None, concatCBs=True):
+    def encode(self, txBlocks, g, concatCBs):
         r"""
         This function takes a list of one or two transport blocks (``txBlocks``) based on the number of codewords 
         and returns a list of LDPC-encoded and rate-matched bitstreams for each codeword. If a transport block in 
         the ``txBlocks`` list is set to `None`, it uses the buffered encoded bitstream and only applies rate matching 
         for retransmitting the previously encoded transport block. Otherwise, it assumes new transmission and encodes 
         the transport block, saving the encoded bits for future retransmissions. For more information about the LDPC 
-        encoding process, refer to the :py:meth:`~neoradium.ldpc.LdpcEncoder.getRateMatchedCodeBlocks` method of the 
-        :py:class:`~neoradium.ldpc.LdpcEncoder` class.
+        encoding process, refer to the :py:meth:`~neoradium.ldpccodec.LdpcCodec.encode` method of the 
+        :py:class:`~neoradium.ldpccodec.LdpcCodec` class.
 
         Parameters
         ----------
-        txBlocks: list
+        txBlocks : list
             A list of one or two NumPy arrays for each codeword. The presence of a ‘None’ value for each transport 
             block in the list indicates a retransmission of previously buffered encoded transport block. 
 
-        g: list or None
+        g : list or None
             A list of one or two integer values for each codeword. Each element in the list represents the total 
             number of bits available for transmitting the transport block. This value corresponds to the value 
             :math:`G` in the *bit selection* process explained in **3GPP TS 38.212, Section 5.4.2.1**. If not 
             provided (default), it is calculated using the formula :math:`G=\lceil \frac {B-24} R \rceil`, where 
             :math:`B` is the transport block size and :math:`R` is the code rate.
             
-        concatCBs: Boolean
+        concatCBs : bool
             If `True` (Default), the rate-matched code blocks are concatenated, and a single array of bits is 
             returned for each codeword. Otherwise, for each codeword, a list of NumPy arrays is returned, where 
             each element in the list represents the bit array corresponding to each code block.
@@ -320,48 +328,108 @@ class HarqProcess:
             all rate-matched coded blocks. Otherwise, a list of NumPy arrays is returned, where each element in the 
             list corresponds to the bit array of a coded block.
         """
-        return [cw.getRateMatchedCodeBlocks(txBlocks[i], None if gs is None else gs[i], concatCBs) for i,cw in enumerate(self.cws)]
+        if isinstance(txBlocks,(list,tuple)):
+            # If txBlock and gs are lists, then return a list of results for items in the lists
+            numCW = self.entity.numCW
+            if len(txBlocks)!=numCW:
+                raise ValueError(f"'txBlocks' must have exactly {numCW} transport block array{['','s'][numCW-1]}!")
+            if not isinstance(g, (list, tuple)):    g = [g] * numCW     # Includes the case where g is None.
+            if len(g)!=numCW:
+                raise ValueError(f"'g' must have exactly {numCW} value{['','s'][numCW-1]}!")
+            return [ self.cws[c].encode(txBlocks[c], g[c], concatCBs) for c in range(numCW) ]
+        
+        return self.cws[0].encode(txBlocks, g, concatCBs)
 
     # ******************************************************************************************************************
-    def decodeLLRs(self, llrs, txBlockSizes, numIter=5):
+    @deprecated("encode", docFile)
+    def getRateMatchedCodeBlocks(self, txBlocks, gs=None, concatCBs=True):
+        r"""
+        :red:`DEPRECATED`: This method is deprecated and will be removed in future releases. Please use the 
+        :py:meth:`encode` method instead.
+        """
+        return self.encode(txBlocks, gs, concatCBs)
+
+    # ******************************************************************************************************************
+    def decode(self, llrs):
         r"""
         This function takes a list of one or two NumPy arrays, each containing Log-Likelihood Ratios (LLRs) for the 
-        demodulated received signals for each codeword. It then returns a list of one or two decoded transport blocks, 
-        with the size of each transport block specified by the ``txBlockSizes`` list, which provides the transport 
-        block sizes for each codeword.
+        demodulated received signals for each codeword. It then returns the decoded transport block for a single 
+        codeword, or the decoded transport blocks for two codewords.
 
-        For each codeword, the function recovers the rate, decodes the code blocks using LDPC decoding, checks the 
-        code block CRCs, and merges all code blocks to reassemble the transport block. In case of retransmissions, 
-        the function combines the LLR values of the retransmission with those from previous transmissions before 
-        decoding the code blocks. 
-
+        For each codeword, the function uses the :py:class:`~neoradium.ldpccodec.LdpcCodecCW` methods to recover the
+        rate, decode the code blocks, check the code block CRCs, and merge all code blocks to reassemble the 
+        transport block. In case of retransmissions, the function combines the LLR values of the retransmission with 
+        those from previous transmissions before decoding the code blocks. 
+        
         Parameters
         ----------
-        llrs: list
+        llrs : list
             A list of one or two NumPy arrays, each containing the Log-Likelihood Ratios (LLRs) from the demodulated 
             received signals corresponding to each codeword. 
 
-        txBlockSizes: list
-            A list containing one or two integer values, each representing the transport block size for each codeword.
-            
-        numIter: int            
-            The number of iterations in the *Layered Belief Propagation* decoding algorithm. In some cases, larger 
-            values may lead to more accurate decoding but can slow down the entire decoding process. For more 
-            information, please refer to the :py:meth:`~neoradium.ldpc.LdpcDecoder.decode` method of the 
-            :py:class:`~neoradium.ldpc.LdpcDecoder` class. The default value is 5.
-                        
         Returns
         -------
-        decodedTxBlock: list
-            A list of one or two NumPy arrays, each containing the decoded transport blocks for each codeword.
-            
-        blockErrors: list
-            A list containing one or two integer values, each representing the number of code block CRC errors 
-            for the corresponding codeword.
-        """
-        retvals = [cw.decodeLLRs(llrs[i], txBlockSizes[i], numIter) for i,cw in enumerate(self.cws)]
-        return tuple(list(x) for x in zip(*retvals))   # returns a tuple of lists for decodedTxBlocks, blockErrors
+        tuple
+            A tuple containing:
 
+            - decodedTxBlocks : NumPy array or list
+                The decoded transport block(s) (without CRC bits).
+
+                - For a single codeword: a 1D NumPy array of length :math:`A`.
+                - For two codewords: a list of two NumPy arrays.
+
+            - crcMatches : NumPy array or list
+                CRC check results for each codeword.
+
+                Each element is a boolean array of length ``C + 1``:
+                
+                - The first element corresponds to the transport-block CRC (CRC24A),
+                - The remaining elements correspond to code-block CRCs (CRC24B) when segmentation is used.
+
+                For two codewords, a list of two such arrays is returned.
+        """
+        numCW = self.entity.numCW
+        if isinstance(llrs,(list,tuple)):
+            if len(llrs)!=numCW:
+                raise ValueError(f"'llrs' must have exactly {numCW} LLR array{['','s'][numCW-1]}!")
+
+            crcMatches = []
+            decodedTxBlocks = []
+            ack = numCW*[-1]        # Used by link adaptation. -1 -> no updates, 1 -> ACK, 0 -> NACK
+            for cw in range(numCW):
+                decodedTxBlock, crcMatch = self.cws[cw].decode(llrs[cw])
+                crcMatches += [ crcMatch ]
+                decodedTxBlocks += [ decodedTxBlock ]
+                if crcMatch[0]:
+                    if self.cws[cw].curTry == 0:    ack[cw] = 1     # First transmission ACK
+                elif self.cws[cw].curTry == 1:      ack[cw] = 0     # First transmission NACK
+
+            if (self.entity.la is not None) and (max(ack)>-1):      self.entity.la.update(ack)
+            return decodedTxBlocks, crcMatches
+#            txBlockCrcMatchPairs = [ self.cws[c].decode(llrs[c]) for c in range(numCW) ]
+#            
+#            # Return a list of decoded txBlocks and a list of crcMatch info
+#            return tuple(list(x) for x in zip(*txBlockCrcMatchPairs))
+
+        if numCW>1:
+            raise ValueError(f"'llrs' must be a list or tuple of {numCW} LLR array{['','s'][numCW-1]}!")
+
+        decodedTxBlock, crcMatch = self.cws[0].decode(llrs)
+        if self.entity.la is not None:
+            if crcMatch[0]:
+                if self.cws[0].curTry == 0:     self.entity.la.update(True)     # First transmission ACK
+            elif self.cws[0].curTry == 1:       self.entity.la.update(False)    # First transmission NACK
+        return decodedTxBlock, crcMatch
+
+    # ******************************************************************************************************************
+    @deprecated("decode", docFile)
+    def decodeLLRs(self, llrs, txBlockSizes, numIter=5):
+        r"""
+        :red:`DEPRECATED`: This method is deprecated and will be removed in future releases. Please use the 
+        :py:meth:`decode` method instead.
+        """
+        return self.decode(llrs)
+        
 # **********************************************************************************************************************
 class HarqEntity:
     r"""
@@ -371,18 +439,20 @@ class HarqEntity:
     associated Transport Blocks to these corresponding processes. This HARQ information includes key parameters 
     such as the New Data Indicator (NDI), Transport Block Size (TBS), Redundancy Version (RV), and the HARQ process
     ID.
+    
+    .. Note:: In the absence of scheduler/DCI modeling, this implementation advances HARQ processes in round-robin 
+        order. This is a simulation simplification that provides deterministic use of parallel HARQ processes, but 
+        it does not model scheduler-controlled HARQ process selection used in NR systems.
     """
     # ******************************************************************************************************************
-    def __init__(self, encoder, harqType="CC", numProc=8, rvSequence=[0,2,3,1], maxTries=4, eventCallback=None):
+    def __init__(self, ldpcCodec, harqType="CC", numProc=8, rvSequence=[0,2,3,1], maxTries=4, eventCallback=None):
         r"""
         Parameters
         ----------
-        encoder: :py:class:`~neoradium.ldpc.LdpcEncoder`
-            The :py:class:`neoradium.ldpc.LdpcEncoder` object, used by this HARQ entity for LDPC encoding. It is also
-            used to create the corresponding :py:class:`neoradium.ldpc.LdpcDecoder` object, which is used for LDPC
-            decoding.
+        ldpcCodec : :py:class:`~neoradium.ldpccodec.LdpcCodec`
+            The :py:class:`neoradium.ldpccodec.LdpcCodec` object, used by this HARQ entity for LDPC coding. 
                          
-        harqType: str
+        harqType : str
             The retransmission method used by this HARQ entity. It can be one of ``"CC"``(default) or ``"IR"``:
             
             :"CC": Indicates **Chase Combining** which is a straightforward HARQ method where each retransmission 
@@ -396,35 +466,37 @@ class HarqEntity:
                    progressively building a stronger and more complete coded block. This approach significantly 
                    improves the chances of successful decoding with fewer retransmissions compared to Chase Combining.
 
-            numProc: int
-                The number of HARQ processes utilized by this HARQ entity. It varies depending on the capabilities 
-                of the UE. A HARQ entity can manage up to 32 HARQ processes, with the default being 8.
+        numProc : int
+            The number of HARQ processes utilized by this HARQ entity. It varies depending on the capabilities 
+            of the UE. A HARQ entity can manage up to 32 HARQ processes, with the default being 8.
 
-            rvSequence: list of integers
-                For the Incremental Redundancy HARQ, this specifies the sequence of redundancy versions (RV) values 
-                used for each consecutive retransmission. The default sequence is ``[0, 2, 3, 1]``, which is based 
-                on **3GPP TS 38.214, Table 5.1.2.1-2**.
-                
-            maxTries: int
-                The maximum number of transmission attempts for a specified transport block. If a transport block's 
-                transmission fails after this many attempts, a timeout event occurs. In the case of PDSCH, this value 
-                is equivalent to the parameter ``pdsch-AggregationFactor``, as explained in **3GPP TS 38.321, 
-                Section 5.3.2.1**.
-                
-            eventCallback: function or None
-                If this callback function is provided, it will be invoked on the following events:
-                
-                :“RXFAILED”: This event is triggered when a transport block transmission fails, whether it’s the 
-                    original transmission or a retransmission.
+        rvSequence : list of integers
+            Defines the order in which standardized redundancy-version identifiers are used across retransmissions. 
+            In NR LDPC rate matching, the valid RV identifiers are 0, 1, 2, and 3, each corresponding to a different 
+            starting position in the circular buffer defined in **TS 38.212 Table 5.4.2.1-2**. The default sequence 
+            ``[0, 2, 3, 1]`` is a common simulation choice for incremental-redundancy HARQ because it cycles through
+            the four standardized RVs and exposes different portions of the coded block across retransmissions. It 
+            should be treated as a configurable retransmission policy rather than a universally mandated sequence 
+            for every scenario.  
+            
+        maxTries : int
+            The maximum number of transmission attempts for a specified transport block, including the initial
+            transmission and any retransmissions. If a transport block still fails after this many attempts,
+            a timeout event occurs.
+            
+        eventCallback : function or None
+            If this callback function is provided, it will be invoked on the following events:
+            
+            :"RXFAILED": This event is triggered when a transport block transmission fails, whether it’s the 
+                original transmission or a retransmission.
 
-                :“RXSUCCESS”: This event is triggered when a transport block transmission succeeds, whether it’s the 
-                    original transmission or a retransmission.
+            :"RXSUCCESS": This event is triggered when a transport block transmission succeeds, whether it’s the 
+                original transmission or a retransmission.
 
-                :“TIMEOUT”: This event is triggered when a transport block transmission fails after the ``maxTries``
-                    transmissions.
+            :"TIMEOUT": This event is triggered when a transport block transmission fails after the ``maxTries``
+                transmissions.
 
-                For more information, refer to the :ref:`Event callback function section <EventCallback>` below.
-
+            For more information, refer to the :ref:`Event callback function section <EventCallback>` below.
 
 
         **Other Read-Only Properties:**
@@ -434,23 +506,25 @@ class HarqEntity:
             :curProcIdx: The current HARQ process that is currently transmitting or retransmitting the transport blocks. 
             :numCW: The number of codewords. This is based on the LDPC encoder's ``txLayers`` parameter. 
             :needNewData: A list of one or two boolean values, corresponding to each codeword. For each element in the 
-                list, a `True` value indicates that current HARQ process (``curProcess``) is ready to receive a new 
+                list, a `True` value indicates that the current HARQ process (``curProcess``) is ready to receive a new 
                 transport block for transmission, while a `False` value signifies that it is currently busy 
-                retransmitting the previous transport block. This aligns with the **New Data Indicator (NDI)** defined 
-                in **3GPP TS 38.212**.
+                retransmitting the previous transport block. This mirrors the role of the **New Data Indicator (NDI)** 
+                defined in **3GPP TS 38.212**.
             :totalTxBlocks: The total number of transport blocks transmitted, including retransmissions.
             :totalRxBlocks: The total number of transport blocks received and successfully decoded.
             :totalTxBits: The total number of transport block bits transmitted, including retransmissions.
             :totalRxBits: The total number of transport block bits received and successfully decoded.
             :throughput: The communication throughput expressed as a percentage. It’s calculated as
                 ``totalRxBits*100/totalTxBits``.
-            :bler: The Block Error Rate expressed as a percentage. It’s calculated as 
+            :bler: The block error rate expressed as a percentage. It’s calculated as 
                 ``(totalTxBlocks-totalRxBlocks)*100/totalTxBlocks``.
-            :numTimeouts: The total number of timeout events, which occur when a transport block fails after all 
-                retransmissions attempts.
-            :meanTries: The average number of transmission attempts per transport block. This value ranges from zero
-                (indicating no retransmissions) to ``maxTries`` (indicating all transmissions timed out).
-                
+            :bler1st: The first-transmission block error rate expressed as a percentage.
+            :numTimeouts: The total number of timeout events for each codeword. A timeout occurs when a transport 
+                block fails after all retransmission attempts.
+            :meanFailedTransmissions: The average number of failed transmissions. This values ranges from zero 
+                (indicating no failed transmissions) up to ``maxTries`` (indicating all timed out transmissions).
+            :meanRetransmissions: The average number of retransmissions per transport block. This value ranges from zero
+                (indicating no retransmissions) up to ``maxTries-1``.
 
         .. _EventCallback:
             
@@ -458,7 +532,7 @@ class HarqEntity:
         
         This function is automatically invoked when a transmission event occurs. It accepts the following parameters:
         
-            :eventStr: This string can be one of ``”RXFAILED”``, ``”RXSUCCESS”``, or ``”TIMEOUT”``, as explained above.
+            :eventStr: This string can be one of ``"RXFAILED"``, ``"RXSUCCESS"``, or ``"TIMEOUT"``, as explained above.
             :harqCW: The :py:class:`~neoradium.harq.HarqCW` object that triggered the event. This object can be used 
                 to obtain more information about the event.
             
@@ -467,39 +541,97 @@ class HarqEntity:
             .. code-block:: python
             
                 def myEventHandler(eventStr, harqCW):
-                    print(f"HARQ Process {harqCW.process.id:2d} CW{harqCW.cwIdx+1}:{event:10s} curTry:{harqCW.curTry} RV:{harqCW.rv}")
+                    print(f"HARQ Process {harqCW.process.id:2d} CW{harqCW.cwIdx+1}:{eventStr:10s} curTry:{harqCW.curTry} RV:{harqCW.rv}")
                 
             Please refer to the notebook :doc:`../Playground/Notebooks/HARQ/HarqEventCallback` for a complete example 
             of using event callback functions.
         """
-        self.encoder = encoder
-        self.decoder = encoder.getDecoder()
-        self.numCW = 2 if encoder.txLayers>4 else 1
-        assert harqType in ["CC", "IR"]
+        self.ldpcCodec = ldpcCodec
+        if not isinstance(self.ldpcCodec, LdpcCodec):
+            raise ValueError("'ldpcCodec' must be an instance of the 'LdpcCodec' class. " +
+                             "If you are still using 'LdpcEncoder' class, please visit " +
+                             DOCS_LOC + "source/API/ChanCode.html#" +
+                             "migration-guide-ldpcencoder-ldpcdecoder-ldpccodec for information about how to "+
+                             "migrate your code to use the new 'LdpcCodec' class.")
+
+        self.numCW = 2 if self.ldpcCodec.numLayers>4 else 1
         self.harqType = harqType
-        assert numProc>0 and numProc<=32
+        validateRange(self.harqType, ["CC", "IR"])
         self.numProc = numProc
+        validateRange(self.numProc, (1,32))
         self.processes = [ HarqProcess(self,i,self.numCW) for i in range(numProc) ]
-        self.rvSequence = rvSequence
+        self.rvSequence = rvSequence        # The default choice is based on 3GPP TS 38.214, Table 5.1.2.1-2
+        if len(self.rvSequence)==0: raise ValueError("'rvSequence' must not be empty!")
+        for rv in self.rvSequence:
+            if rv not in [0,1,2,3]: raise ValueError("The elements in the 'rvSequence' must be one of {0,1,2,3}!")
         self.maxTries = maxTries
+        validateRange(self.maxTries, (1, 16))
         self.eventCallback = eventCallback
+        self.la = None
         self.reset()
 
     # ******************************************************************************************************************
     def reset(self):
         r"""
         Resets this HARQ entity to prepare it for a new set of transmissions. It resets the counters and releases 
-        any encoder/decoder retransmission buffers by invoking :py:meth:`HarqProcess.reset` for all HARQ
-        processes.        
+        any LDPC retransmission buffers by invoking :py:meth:`HarqProcess.reset` for all HARQ processes.        
         """
         for p in self.processes:    p.reset()
         self.curProcIdx = 0
-        self.rxBits = np.zeros(self.maxTries, dtype=np.int32)   # rxBits[i]: Total bits received at i'th try
-        self.txBits = np.zeros(self.maxTries, dtype=np.int32)   # txBits[i]: Total bits transmitted at i'th try
-        self.rxBlocks = np.zeros(self.maxTries, dtype=np.int32) # rxBlocks[i]: Total TxBlocks received at i'th try
-        self.txBlocks = np.zeros(self.maxTries, dtype=np.int32) # txBlocks[i]: Total TxBlocks transmitted at i'th try
-        self.numTimeouts = 0
 
+        # In the following the item [c,i] corresponds to codeword 'c' and try number 'i'
+        self.numRxBits = np.zeros((self.numCW, self.maxTries), dtype=np.int32)      # Total RX bits
+        self.numTxBits = np.zeros((self.numCW, self.maxTries), dtype=np.int32)      # Total TX bits
+        self.numRxBlocks = np.zeros((self.numCW, self.maxTries), dtype=np.int32)    # Total RX blocks
+        self.numTxBlocks = np.zeros((self.numCW, self.maxTries), dtype=np.int32)    # Total TX blocks
+        self.numTimeouts = self.numCW*[0]
+        if self.la is not None: self.la.reset()
+
+    # ******************************************************************************************************************
+    def setLdpc(self, ldpcCodec):
+        r"""
+        Update the LDPC codec used for new HARQ transmissions.
+
+        The new codec is applied only to HARQ processes that are idle or starting a
+        new transport block. Processes with an active retransmission keep using the
+        LDPC codec associated with their original transmission until that HARQ process
+        completes. This preserves soft-combining consistency across retransmissions,
+        even if the modulation scheme, code rate, or other LDPC-related parameters
+        change.
+
+        Parameters
+        ----------
+        ldpcCodec : :py:class:`~neoradium.ldpccodec.LdpcCodec`
+            New LDPC codec to use for subsequent HARQ transmissions.
+        """
+        self.ldpcCodec = ldpcCodec
+        if not isinstance(self.ldpcCodec, LdpcCodec):
+            raise ValueError("'ldpcCodec' must be an instance of the 'LdpcCodec' class. " +
+                             "If you are still using 'LdpcEncoder' class, please visit " +
+                             DOCS_LOC + "source/API/ChanCode.html#" +
+                             "migration-guide-ldpcencoder-ldpcdecoder-ldpccodec for information about how to " +
+                             "migrate your code to use the new 'LdpcCodec' class.")
+        for process in self.processes:
+            for cw in process.cws:
+                cw.setLdpc()
+
+    # ******************************************************************************************************************
+    def setLA(self, la):
+        r"""
+        Set the link-adaptation object associated with this HARQ entity.
+
+        The link-adaptation object is notified when ACK/NACK feedback becomes available, allowing it 
+        to update its adaptation state, such as an OLLA CQI offset. This method is typically called 
+        by the link-adaptation object during initialization.
+
+        Parameters
+        ----------
+        la : :py:class:`~neoradium.csireport.OLLA`
+            Link-adaptation object associated with this HARQ entity. The object is expected to provide
+            an ``update`` method that accepts ACK/NACK feedback.
+        """
+        self.la = la
+    
     # ******************************************************************************************************************
     def __repr__(self):     return self.print(getStr=True)
     def print(self, indent=0, title=None, getStr=False):
@@ -508,19 +640,19 @@ class HarqEntity:
 
         Parameters
         ----------
-        indent: int
+        indent : int
             The number of indentation characters.
             
-        title: str
-            If specified, it is used as a title for the printed information.
+        title : str
+            If specified, it is used as the title for the printed information.
 
-        getStr: Boolean
-            If `True`, returns a text string instead of printing it.
+        getStr : bool
+            If `True`, returns a string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = f"HARQ Entity Properties:"
@@ -531,9 +663,7 @@ class HarqEntity:
         repStr += indent*' ' + f"  Num. Codewords:       {len(self.processes[0].cws)}\n"
         repStr += indent*' ' + f"  RV sequence:          {self.rvSequence}\n"
         repStr += indent*' ' + f"  maxTries:             {self.maxTries}\n"
-
-        repStr += self.encoder.print(indent+2, f"Encoder:", True)
-        repStr += self.decoder.print(indent+2, f"Decoder:", True)
+        repStr += self.ldpcCodec.print(indent+2, f"LDPC codec:", True)
 
         if getStr: return repStr
         print(repStr)
@@ -545,78 +675,132 @@ class HarqEntity:
 
         Parameters
         ----------
-        getStr: Boolean
-            If `True`, returns a text string instead of printing it.
+        getStr : bool
+            If `True`, returns a string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a string. 
             Otherwise, nothing is returned.
         """
         repStr = "\nHARQ Entity Statistics:\n"
-        repStr += f"  txBits (per try):     {self.txBits}\n"
-        repStr += f"  rxBits (per try):     {self.rxBits}\n"
-        repStr += f"  txBlocks (per try):   {self.txBlocks}\n"
-        repStr += f"  rxBlocks (per try):   {self.rxBlocks}\n"
-        repStr += f"  numTimeouts:          {self.numTimeouts}\n"
-        repStr += f"  totalTxBlocks:        {self.totalTxBlocks}\n"
-        repStr += f"  totalRxBlocks:        {self.totalRxBlocks}\n"
-        repStr += f"  totalTxBits:          {self.totalTxBits}\n"
-        repStr += f"  totalRxBits:          {self.totalRxBits}\n"
-        repStr += f"  throughput:           {self.throughput:.2f}%\n"
-        repStr += f"  bler:                 {self.bler:.2f}%\n"
-        repStr += f"  Average Num. Retries: {self.meanTries:.2f}%\n"
+        if self.numCW == 1:
+            repStr += f"  numTxBits (per try):      {self.numTxBits[0]}\n"
+            repStr += f"  numRxBits (per try):      {self.numRxBits[0]}\n"
+            repStr += f"  numTxBlocks (per try):    {self.numTxBlocks[0]}\n"
+            repStr += f"  numRxBlocks (per try):    {self.numRxBlocks[0]}\n"
+            repStr += f"  numTimeouts:              {self.numTimeouts[0]}\n"
+        else:
+            repStr += "\n  First codeword:\n"
+            repStr += f"    numTxBits (per try):    {self.numTxBits[0]}\n"
+            repStr += f"    numRxBits (per try):    {self.numRxBits[0]}\n"
+            repStr += f"    numTxBlocks (per try):  {self.numTxBlocks[0]}\n"
+            repStr += f"    numRxBlocks (per try):  {self.numRxBlocks[0]}\n"
+            repStr += f"    numTimeouts:            {self.numTimeouts[0]}\n"
+            repStr += "\n  Second codeword:\n"
+            repStr += f"    numTxBits (per try):    {self.numTxBits[1]}\n"
+            repStr += f"    numRxBits (per try):    {self.numRxBits[1]}\n"
+            repStr += f"    numTxBlocks (per try):  {self.numTxBlocks[1]}\n"
+            repStr += f"    numRxBlocks (per try):  {self.numRxBlocks[1]}\n"
+            repStr += f"    numTimeouts:            {self.numTimeouts[1]}\n"
+
+        repStr += f"  totalTxBlocks:            {self.totalTxBlocks}\n"
+        repStr += f"  totalRxBlocks:            {self.totalRxBlocks}\n"
+        repStr += f"  totalTxBits:              {self.totalTxBits}\n"
+        repStr += f"  totalRxBits:              {self.totalRxBits}\n"
+        repStr += f"  throughput:               {self.throughput:.2f}%\n"
+        repStr += f"  bler:                     {self.bler:.2f}%\n"
+        repStr += f"  bler1st:                  {self.bler1st:.2f}%\n"
+        repStr += f"  Avg. retransmissions:     {self.meanRetransmissions:.2f}\n"
+        repStr += f"  Avg. failed transmissions:{self.meanFailedTransmissions:.2f}\n"
         if getStr: return repStr
         print(repStr)
-        
+ 
     # ******************************************************************************************************************
-    def handleEvent(self, event, process):      # Not documented
+    def handleEvent(self, event, harqCW):      # Undocumented
         # Called to handle events. Currently it only calls the callback function if one is specified.
         if self.eventCallback is not None:
-            self.eventCallback(event, process)
+            self.eventCallback(event, harqCW)
     
     # ******************************************************************************************************************
-    def getRV(self, tryNum):                    # Not documented
+    def getRV(self, tryNum):                    # Undocumented
         # Returns the rv value based on current number of retransmissions (tryNum)
         if self.harqType == "CC":   return 0                                              # CC: Always 0
         else:                       return self.rvSequence[ tryNum%len(self.rvSequence) ] # IR: Based on rvSequence
     
     # ******************************************************************************************************************
-    @property                       # Not documented (Already mentioned in the __init__ documentation)
-    def totalTxBlocks(self):        return self.txBlocks.sum().item()
+    @property                       # Undocumented (Already mentioned in the __init__ documentation)
+    def totalTxBlocks(self):        return self.numTxBlocks.sum().item()
 
     # ******************************************************************************************************************
-    @property                       # Not documented (Already mentioned in the __init__ documentation)
-    def totalRxBlocks(self):        return self.rxBlocks.sum().item()
+    @property                       # Undocumented (Already mentioned in the __init__ documentation)
+    def totalRxBlocks(self):        return self.numRxBlocks.sum().item()
 
     # ******************************************************************************************************************
-    @property                       # Not documented (Already mentioned in the __init__ documentation)
-    def totalTxBits(self):          return self.txBits.sum().item()
+    @property                       # Undocumented (Already mentioned in the __init__ documentation)
+    def totalTxBits(self):          return self.numTxBits.sum().item()
 
     # ******************************************************************************************************************
-    @property                       # Not documented (Already mentioned in the __init__ documentation)
-    def totalRxBits(self):          return self.rxBits.sum().item()
+    @property                       # Undocumented (Already mentioned in the __init__ documentation)
+    def totalRxBits(self):          return self.numRxBits.sum().item()
 
     # ******************************************************************************************************************
-    @property                       # Not documented (Already mentioned in the __init__ documentation)
-    def throughput(self):           return self.totalRxBits*100/self.totalTxBits
+    @property                       # Undocumented (Already mentioned in the __init__ documentation)
+    def throughput(self):           return 0 if self.totalTxBits==0 else self.totalRxBits*100/self.totalTxBits
 
     # ******************************************************************************************************************
-    @property                       # Not documented (Already mentioned in the __init__ documentation)
-    def bler(self):                 return (self.totalTxBlocks-self.totalRxBlocks)*100/self.totalTxBlocks
+    @property                       # Undocumented (Already mentioned in the __init__ documentation)
+    def bler(self):
+        return 0 if self.totalTxBlocks==0 else (self.totalTxBlocks-self.totalRxBlocks)*100/self.totalTxBlocks
+
+    # ******************************************************************************************************************
+    @property                       # Undocumented (Already mentioned in the __init__ documentation)
+    def bler1st(self):
+        num1stTx = self.numTxBlocks[:,0].sum()
+        return 0 if num1stTx==0 else (num1stTx-self.numRxBlocks[:,0].sum())*100/num1stTx
+
+    # ******************************************************************************************************************
+    @property                       # Undocumented (Already mentioned in the __init__ documentation)
+    def meanFailedTransmissions(self):
+        # Returns the mean number of failed transmissions per completed block.
+        # The value ranges from 0 (no retransmissions) to maxTries (all timed out).
         
-    # ******************************************************************************************************************
-    @property                       # Not documented (Already mentioned in the __init__ documentation)
-    def meanTries(self):    return (((self.rxBlocks*np.arange(self.maxTries)).sum()+self.numTimeouts*self.maxTries)/ \
-                                    max(self.totalRxBlocks+self.numTimeouts,1)).item()
+        # With maxTries=4, a returned value of 4 means all blocks timed out.
+        numCompletedBlocks = self.totalRxBlocks + sum(self.numTimeouts)
+        if numCompletedBlocks == 0: return 0
+        numFailedTransmissions = (self.numRxBlocks.sum(0) * np.arange(self.maxTries)).sum() + \
+                                 sum(self.numTimeouts) * self.maxTries
+        return numFailedTransmissions/numCompletedBlocks
 
     # ******************************************************************************************************************
-    @property                       # Not documented (Already mentioned in the __init__ documentation)
+    @property                       # Undocumented (Already mentioned in the __init__ documentation)
+    def meanRetransmissions(self):
+        # Returns the mean number of retransmissions per completed block.
+        # The value ranges from 0 (no retransmissions) to maxTries-1.
+        #
+        # With maxTries=4, a timeout means 3 retransmissions occurred (all failed).
+        # numRxBlocks[3] only counts successful 4th attempts, so we add numTimeouts
+        # to account for failed 4th attempts, which also had 3 retransmissions.
+        #
+        # Compared to 'meanFailedTransmissions': the only difference is how timeouts
+        # are counted. That method counts maxTries failed transmissions per timeout;
+        # this one counts maxTries-1 retransmissions per timeout.
+        
+        # With maxTries=4, a returned value of 3 does not necessarily mean zero communication
+        # because some of the 4th attempts may be successful.
+        numCompletedBlocks = self.totalRxBlocks + sum(self.numTimeouts)
+        if numCompletedBlocks == 0: return 0
+        numRetransmissions = (self.numRxBlocks.sum(0) * np.arange(self.maxTries)).sum() + \
+                             sum(self.numTimeouts) * (self.maxTries - 1)
+        return numRetransmissions/numCompletedBlocks
+
+    # ******************************************************************************************************************
+    @property                       # Undocumented (Already mentioned in the __init__ documentation)
     def curProcess(self):           return self.processes[self.curProcIdx]
 
     # ******************************************************************************************************************
-    @property                       # Not documented (Already mentioned in the __init__ documentation)
+    @property                       # Undocumented (Already mentioned in the __init__ documentation)
     def needNewData(self):          return self.curProcess.needNewData
 
     # ******************************************************************************************************************
@@ -631,38 +815,75 @@ class HarqEntity:
         self.curProcIdx = (self.curProcIdx+1)%self.numProc
     
     # ******************************************************************************************************************
-    def getRateMatchedCodeBlocks(self, txBlocks, gs=None, concatCBs=True):
+    def encode(self, txBlocks, gs=None, concatCBs=True):
         r"""
         This function takes a list of one or two transport blocks (``txBlocks``) based on the number of codewords 
         and returns a list of LDPC-encoded and rate-matched bitstreams for each codeword. If a transport block in 
         the ``txBlocks`` list is set to `None`, it uses the buffered encoded bitstream and only applies rate matching 
         for retransmitting the previously encoded transport block. Otherwise, it assumes new transmission and encodes 
         the transport block and saves the encoded bits into the HARQ process for future retransmissions. This function 
-        internally calls the :py:meth:`~HarqProcess.getRateMatchedCodeBlocks` method of the :py:class:`~HarqProcess` 
-        class. For more details, refer to the documentation of :py:meth:`HarqProcess.getRateMatchedCodeBlocks`.
+        internally calls the :py:meth:`~HarqProcess.encode` method of the :py:class:`~HarqProcess` 
+        class. For more details, refer to the documentation of :py:meth:`HarqProcess.encode`.
+        
+      
+        .. Note:: This function replaces the deprecated function :py:meth:`getRateMatchedCodeBlocks`. The 
+            following example shows how to migrate existing code to use this method:
+
+            .. code-block:: python
+
+                # Old:
+                rateMatchedCodeBlocks = harq.getRateMatchedCodeBlocks(txBlocks, numBits)
+
+                # New:
+                rateMatchedCodeBlocks = harq.encode(txBlocks, numBits)
         """
-        if not isinstance(txBlocks,list):
-            return self.curProcess.getRateMatchedCodeBlocks([txBlocks], [gs], concatCBs)[0]
-        return self.curProcess.getRateMatchedCodeBlocks(txBlocks, gs, concatCBs)
+        return self.curProcess.encode(txBlocks, gs, concatCBs)
+
+    # ******************************************************************************************************************
+    @deprecated("encode", docFile)
+    def getRateMatchedCodeBlocks(self, txBlocks, gs=None, concatCBs=True):
+        r"""
+        :red:`DEPRECATED`: This method is deprecated and will be removed in future releases. Please use the 
+        :py:meth:`encode` method instead.
+        """
+        return self.encode(txBlocks, gs, concatCBs)
         
     # ******************************************************************************************************************
-    def decodeLLRs(self, llrs, txBlockSize, numIter=5):
+    def decode(self, llrs):
         r"""
         This function takes a list of one or two NumPy arrays, each containing Log-Likelihood Ratios (LLRs) for the 
-        demodulated received signals for each codeword. It then returns a list of one or two decoded transport blocks, 
-        with the size of each transport block specified by the ``txBlockSizes`` list, which provides the transport 
-        block sizes for each codeword.
+        demodulated received signals for each codeword. It then returns one or two decoded transport blocks.
 
-        For each codeword, the function recovers the rate, decodes the code blocks using LDPC decoding, checks the 
+        For each codeword, the function performs rate recovery, decodes the code blocks using LDPC decoding, checks the 
         code block CRCs, and merges all code blocks to reassemble the transport block. In case of retransmissions, 
         the function combines the LLR values of the retransmissions with those from previous transmissions before 
         decoding the code blocks. 
         
-        This function internally calls the :py:meth:`~HarqProcess.decodeLLRs` method of the :py:class:`~HarqProcess` 
-        class. For more details, refer to the documentation of :py:meth:`HarqProcess.decodeLLRs`.
+        This function internally calls the :py:meth:`~HarqProcess.decode` method of the :py:class:`~HarqProcess` 
+        class. For more details, refer to the documentation of :py:meth:`HarqProcess.decode`.
+        
+        
+        .. Note:: This function replaces the deprecated function :py:meth:`decodeLLRs`. The 
+            following example shows how to migrate existing code to use this method:
+
+            .. code-block:: python
+
+                # Old:
+                decodedTxBlocks, blockErrors = harq.decodeLLRs(llrs, txBlockSizes, numIter=2)
+
+                # New:
+                # numIter is set at instantiation
+                # crcMatch is returned instead of blockErrors (consistent with LdpcCodec.decode) 
+                decodedTxBlock, crcMatch = pdsch.decode(llrs)                       
         """
-        if not isinstance(llrs,list):
-            retVals = self.curProcess.decodeLLRs([llrs], [txBlockSize], numIter)
-            return retVals[0][0], retVals[1][0]
-        return self.curProcess.decodeLLRs(llrs, txBlockSize, numIter)
+        return self.curProcess.decode(llrs)
+        
+    # ******************************************************************************************************************
+    @deprecated("decode", docFile)
+    def decodeLLRs(self, llrs, txBlockSizes, numIter=5):
+        r"""
+        :red:`DEPRECATED`: This method is deprecated and will be removed in future releases. Please use the 
+        :py:meth:`decode` method instead.
+        """
+        return self.decode(llrs)
 

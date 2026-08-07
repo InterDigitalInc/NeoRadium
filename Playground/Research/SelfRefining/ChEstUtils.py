@@ -19,11 +19,10 @@ def toReal(x):
     return np.concatenate([x.real, x.imag], axis=1)
 
 # ----------------------------------------------------------------------------------------------------------------------
-def getRandomPilotInfo(pdsch, txGrid, cbSizes, numGoodCBs=None, markPseodoPilots=False):
+def getRandomPilotInfo(pdsch, cbSizes, numGoodCBs=None, markPseodoPilots=False):
     # Returns the indices of all pilots and pseudo-pilots. This includes the indices
     # of DMRS REs plus numGoodCBs sets of indices for REs corresponding to each "good" code block
     # cbSizes is a list of code block sizes.
-    # txGrid is the transmitted grid.
     layerMappedIdx = pdsch.getLayerMapIndexes(pdsch.dataIndices)[0]
     numCBs = len(cbSizes)
     if numGoodCBs is None: # If number of Good CBs is not given pick one randomly
@@ -31,7 +30,7 @@ def getRandomPilotInfo(pdsch, txGrid, cbSizes, numGoodCBs=None, markPseodoPilots
     qm =  pdsch.modems[0].qm
     if numGoodCBs==0:
         # Using only DMRS
-        pilotIdx = txGrid.getReIndexes("DMRS")
+        pilotIdx = pdsch.grid.getReIndexes("DMRS")
     else:
         # Using DMRS and 'numGoodCBs' code blocks
         # Get a random list of good CBs. It has 'numGoodCBs' values each ranging from 0 to numCBs-1
@@ -44,25 +43,24 @@ def getRandomPilotInfo(pdsch, txGrid, cbSizes, numGoodCBs=None, markPseodoPilots
         goodIdxIdx = np.concatenate(goodIdxIdx)
         
         pilotIdx = tuple(x[goodIdxIdx] for x in layerMappedIdx)
-        dmrsIdx = txGrid.getReIndexes("DMRS")
+        dmrsIdx = pdsch.grid.getReIndexes("DMRS")
         if markPseodoPilots:
             # NOTE: Do not set 'markPseodoPilots' to True if this function is called in a loop.
-            txGrid.reTypeIds[pilotIdx] = Grid.retNameToId["PSEUDO_PILOT"]
+            pdsch.grid.reTypeIds[pilotIdx] = Grid.retNameToId["PSEUDO_PILOT"]
         pilotIdx = tuple(np.append(pilotIdx[i],dmrsIdx[i]) for i in [0,1,2])  # The indexes to all pilots
     
     return pilotIdx
 
 # ----------------------------------------------------------------------------------------------------------------------
-def getPseudoPilotIndices(pdsch, ldpcEncoder, rsGrid, decodedTxBlockWithCRC, crcMatch):
-    numBits = pdsch.getBitSizes(rsGrid)[0]  # Actual number of bits available in the resource grid
-    rateMatchedCodeWords = ldpcEncoder.getRateMatchedCodeBlocks(decodedTxBlockWithCRC, numBits, concatCBs=False, addCrc=False)
-    pdsch.populateGrid(rsGrid, np.concatenate(rateMatchedCodeWords))
+def getPseudoPilotIndices(pdsch, ldpc, decodedTxBlock, crcMatch):
+    numBits = pdsch.getBitCapacity()[0]     # number of bits available in the resource grid
+    rateMatchedCBs = ldpc.encode(decodedTxBlock, numBits, concatCBs=False)
       
     goodIdx = [] # This is the indexes of modulated symbols corresponding to the bits in the sub-blocks
                  # decoded with correct CRC.
     s = 0
-    for i in range(len(rateMatchedCodeWords)):
-        numCodeBlockSyms = len(rateMatchedCodeWords[i])//pdsch.modems[0].qm
+    for i in range(len(rateMatchedCBs)):
+        numCodeBlockSyms = len(rateMatchedCBs[i])//pdsch.modems[0].qm
         if crcMatch[i]: goodIdx += list(range(s,s+numCodeBlockSyms))
         s += numCodeBlockSyms
 

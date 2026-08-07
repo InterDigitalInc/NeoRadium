@@ -1,17 +1,17 @@
-# Copyright (c) 2024 InterDigital AI Lab
+# Copyright (c) 2024-2026, InterDigital AI Lab
 """
-The module ``random.py`` contains the random generator classes that can be used to generate random numbers and 
-control the random behavior of your code. This module also provides the global ``random`` object which is an instance
-of the :py:class:`RanGen` class.
+The module ``random.py`` provides **NeoRadium**'s random number generation utilities.
+It defines the global :py:data:`random` object, which is the recommended entry point
+for all random operations in **NeoRadium**, and a small set of helper generator classes
+used internally.
 
-The ``random`` object
----------------------
-The ``random`` object by default is initialized as a *Permuted Congruential Generator* based on NumPy's
-`PCG64 <https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html>`_ class. It can be used to generate
-random numbers using the methods defined for NumPy's
-`Generator <https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator>`__ class such as
+The global ``random`` object
+----------------------------
+The global ``random`` object is an instance of :py:class:`RanGen`. It is initialized
+with **NeoRadium**'s default random generator configuration and can be used directly to
+generate random values using the methods of NumPy's random generators, such as
 `choice <https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.choice.html#numpy-random-generator-choice>`_
-or
+and
 `shuffle <https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.shuffle.html#numpy-random-generator-shuffle>`_.
 
 .. code-block:: python
@@ -19,160 +19,100 @@ or
     >>> from neoradium import random
     >>> random.choice(5, 3)
     array([1, 1, 4])
-    
+
     >>> a = np.arange(10)
     >>> random.shuffle(a)
     >>> a
     array([5, 8, 0, 1, 6, 9, 7, 2, 3, 4])
 
-In addition to the methods defined for the
-`Generator <https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator>`__ class,
-**NeoRadium**'s ``random`` object also supports the following methods:
+In addition to standard NumPy generator methods, **NeoRadium** generators also provide:
 
-    :bits(size): This method creates a bitstream of ``size`` random bits.
-    
+    :bits(size): Generates a bitstream of random bits.
+
         .. code-block:: python
 
             >>> from neoradium import random
             >>> random.bits(8)
             array([0, 1, 1, 0, 1, 1, 0, 1], dtype=int8)
 
-
-    :awgn(shape, noiseStd): This method creates *Additive White Gaussian Noise*
-        with standard deviation specified by ``noiseStd``. The result will be a complex NumPy array of shape ``shape``.
+    :awgn(shape, noiseStd): Generates complex additive white Gaussian noise
+        with standard deviation ``noiseStd``.
 
         .. code-block:: python
 
             >>> from neoradium import random
-            >>> random.awgn((2,2),0.5)
+            >>> random.awgn((2,2), 0.5)
             array([[-0.38382838+0.35261486j,  0.10004801-0.5325556j ],
                    [-0.20456608+0.58387099j, -0.85796067-0.15164351j]])
-                   
+
+
+Creating additional generators
+------------------------------
+New random generators should be created using the global ``random`` object's
+:py:meth:`~RanGen.getGenerator` method:
+
+.. code-block:: python
+
+    >>> from neoradium import random
+    >>> myGen = random.getGenerator(123, "PCG64")
+    >>> myGen.integers(0, 10, 5)
+    array([0, 6, 5, 0, 9])
+
+The :py:class:`RanGen` class is not intended to be instantiated directly by users.
+Instead, use :py:meth:`~RanGen.getGenerator` to create new independent generators.
+This ensures consistent initialization and makes the intended generator type and seed
+explicit.
+
 
 .. _SupportedRanGens:
 
-Supported Random Generators
----------------------------
-Using the ``random`` object's :py:meth:`getGenerator` method you can create all types of random generators supported
-by NumPy. Here is a list of supported generators:
+Supported random generator types
+--------------------------------
+The :py:meth:`~RanGen.getGenerator` method supports the following generator types:
 
-    :Default Random Generator: This is based on the NumPy class
-        `default_rng <https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.default_rng>`_, which
-        internally uses the default bit generator (PCG64). The generator can be made deterministic by providing a
-        ``seed`` value.
-        
-        .. code-block:: python
+    :DEFAULT: NumPy's ``default_rng`` generator. This is **NeoRadium**'s default choice.
+        At the time of writing, NumPy's default generator is based on PCG64.
 
-            >>> from neoradium import random
-            >>> # Creating a predictable random generator based on "default_rng"
-            >>> myGen = random.getGenerator(np.random.default_rng(123))
-            >>> myGen.integers(0,10,5)
-            array([0, 6, 5, 0, 9])
-            
-            >>> # The same as above since both use "PCG64" internally
-            >>> myGen = random.getGenerator(123)
-            >>> myGen.integers(0,10,5)
-            array([0, 6, 5, 0, 9])
+    :PCG64: NumPy's PCG64 bit generator.
 
-    :PCG64: Permuted Congruential Generator (64-bit, PCG64). This is currently
-        **NeoRadium**'s (and Python's) default bit generator object. It is based on NumPy's
-        `PCG64 <https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html>`_
-        class. As you can see the results match those above because all use the same bit generator with the same seed.
+    :MT19937: NumPy's Mersenne Twister bit generator.
+
+    :PCG64DXSM: NumPy's PCG64DXSM bit generator.
+
+    :PHILOX: NumPy's Philox counter-based bit generator.
+
+    :SFC64: NumPy's SFC64 bit generator.
+
+    :RANDOMSTATE: NumPy's legacy ``RandomState`` generator.
+
+    :MATLAB: Alias for ``RANDOMSTATE``. This option is provided as a convenient way
+        to create generators whose output matches MATLAB's default random number
+        generator for the same seed.
 
         .. code-block:: python
+            :caption: Predictable random generator in **NeoRadium**
 
             >>> from neoradium import random
-            >>> # Creating a predictable random generator based on "PCG64"
-            >>> myGen = random.getGenerator(np.random.PCG64(123))
-            >>> myGen.integers(0,10,5)
-            array([0, 6, 5, 0, 9])
-            
-    :MT19937: Mersenne Twister. This is based on NumPy's
-        `MT19937 <https://numpy.org/doc/stable/reference/random/bit_generators/mt19937.html#mersenne-twister-mt19937>`_
-        class. The generator can be made deterministic by providing a ``seed`` value.
-       
-        .. code-block:: python
-
-            >>> from neoradium import random
-            >>> # Creating an unpredictable random generator based on "MT19937"
-            >>> myGen = random.getGenerator(np.random.MT19937()) # No seed specified -> Unpredictable
-            >>> myGen.integers(0,10,5)
-            array([1, 8, 6, 8, 9])
-
-    :PCG64DXSM: Permuted Congruential Generator (64-bit, PCG64 DXSM). This is based on NumPy's
-        `PCG64DXSM <https://numpy.org/doc/stable/reference/random/bit_generators/pcg64dxsm.html#permuted-congruential-generator-64-bit-pcg64-dxsm>`_
-        class. The generator can be made deterministic by providing a ``seed`` value.
-        
-        .. code-block:: python
-
-            >>> from neoradium import random
-            >>> # Creating a predictable random generator based on "PCG64DXSM"
-            >>> myGen = random.getGenerator(np.random.PCG64DXSM(123))
-            >>> myGen.integers(0,10,5)
-            array([9, 7, 0, 9, 7])
-
-
-    :Philox: Philox Counter-based RNG. This is based on NumPy's
-        `Philox <https://numpy.org/doc/stable/reference/random/bit_generators/philox.html#philox-counter-based-rng>`_
-        class. The generator can be made deterministic by providing a ``seed`` value.
-
-        .. code-block:: python
-
-            >>> from neoradium import random
-            >>> # Creating an unpredictable random generator based on "Philox"
-            >>> myGen = random.getGenerator(np.random.Philox()) # No seed specified -> Unpredictable
-            >>> myGen.integers(0,10,5)
-            array([4, 0, 1, 6, 4])
-
-
-    :SFC64: SFC64 Small Fast Chaotic PRNG. This is based on NumPy's
-        `SFC64 <https://numpy.org/doc/stable/reference/random/bit_generators/sfc64.html#sfc64-small-fast-chaotic-prng>`_
-        class. The generator can be made deterministic by providing a ``seed`` value.
-
-        .. code-block:: python
-
-            >>> from neoradium import random
-            >>> # Creating an unpredictable random generator based on "SFC64"
-            >>> myGen = random.getGenerator(np.random.SFC64()) # No seed specified -> Unpredictable
-            >>> myGen.integers(0,10,5)
-            array([0, 7, 8, 1, 8])
-
-    :RandomState: Python's legacy random generator. This is based on NumPy's
-        `RandomState <https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState>`_
-        class. The generator can be made deterministic by providing a ``seed`` value.
-
-        .. code-block:: python
-
-            >>> from neoradium import random
-            >>> # Creating an unpredictable random generator based on "RandomState"
-            >>> myGen = random.getGenerator(np.random.RandomState(123))
-            >>> myGen.randint(0,10,5)
-            array([2, 2, 6, 1, 3])
-
-
-        .. Important::
-            The ``RandomState`` can be used to create a random generator that matches Matlab's default random 
-            generator. For example, this is used by **NeoRadium** when comparing the simulation results with Matlab's
-            implementation.
-           
-        .. code-block:: python
-            :caption: predictable random generator based on ``RandomState`` in **NeoRadium**
-
-            >>> from neoradium import random
-            >>> # Creating a predictable random generator based on "RandomState"
-            >>> myGen = random.getGenerator(np.random.RandomState(123))
+            >>> myGen = random.getGenerator(123, "MATLAB")
             >>> myGen.random(size=5)
             array([0.69646919, 0.28613933, 0.22685145, 0.55131477, 0.71946897])
 
         .. code-block:: matlab
-            :caption: predictable random generator in **Matlab**
+            :caption: Predictable random generator in MATLAB
 
             >> rng(123);
             >> rand(1,5)
-            
+
             ans =
-            
+
                 0.6965    0.2861    0.2269    0.5513    0.7195
+
+Reproducibility
+---------------
+Each call to :py:meth:`~RanGen.getGenerator` creates a new generator instance.
+For a given ``seed`` and generator type, the returned generator always starts from
+the beginning of the same sequence. Using the same ``seed`` with different generator
+types may still produce different sequences.
 """
 # **********************************************************************************************************************
 # Revision History:
@@ -183,11 +123,20 @@ by NumPy. Here is a list of supported generators:
 # 08/01/2025    Shahab Hamidi-Rad       - Some minor improvements to the RanGen class.
 #                                       - Added the "integers" function to NrGen1 for consistency.
 #                                       - Added the "randint" function to NrGen2 for consistency.
+# 04/12/2026    Shahab Hamidi-Rad       Changes in NeoRadium version 0.5.0:
+#                                       * Trying to prevent the users from creating RanGen objects directly. They must
+#                                         be created using 'getGenerator' function only.
+#                                       * Fixed issues with random states of the internal objects which could cause
+#                                         reproducibility issues.
+#                                       * The 'getGenerator' now gets a 'seed' and a 'genType'.
+#                                       * The 'reset' function can be used to restart the random sequence.
 # **********************************************************************************************************************
 import numpy as np
 
+from .utils import validateRange
+
 # **********************************************************************************************************************
-class NrGen1(np.random.RandomState):                            # Not documented - Not called directly by the user
+class NrGen1(np.random.RandomState):                            # Undocumented - Not called directly by the user
     # NrGen1 is the same as NumPy's RandomState with one more method: "bits"
     def __init__(self, seed): super().__init__(seed)
     def integers(self, low, high=None, size=None, dtype=np.int64):  return self.randint(low, high, size, dtype)
@@ -195,7 +144,7 @@ class NrGen1(np.random.RandomState):                            # Not documented
     def awgn(self, shape, noiseStd): return (self.normal(0, noiseStd/np.sqrt(2), shape+(2,))*[1,1j]).sum(-1)
 
 # **********************************************************************************************************************
-class NrGen2(np.random.Generator):                              # Not documented - Not called directly by the user
+class NrGen2(np.random.Generator):                              # Undocumented - Not called directly by the user
     # NrGen2 is the same as NumPy's Generator with one more method: "bits"
     def __init__(self, bitGen): super().__init__(bitGen)
     def randint(self, low, high=None, size=None, dtype=int):        return self.integers(low, high, size, dtype)
@@ -205,114 +154,170 @@ class NrGen2(np.random.Generator):                              # Not documented
 # **********************************************************************************************************************
 class RanGen:
     r"""
-    This is **NeoRadium**'s random number generator class. This class is used internally to create **NeoRadium**'s
-    ``random`` object. It is strongly recommended to use only **NeoRadium**'s ``random`` object for all random
-    operations.
+    **NeoRadium** random generator wrapper.
+
+    This class wraps a NumPy random generator and exposes both the standard NumPy
+    random-generation methods and **NeoRadium**-specific helper methods such as
+    :py:meth:`bits` and :py:meth:`awgn`.
+
+    The :py:class:`RanGen` class is primarily used through **NeoRadium**'s global
+    :py:data:`random` object. Users are not expected to instantiate :py:class:`RanGen`
+    directly. Instead, new generators should be created by calling
+    :py:meth:`getGenerator` on the global ``random`` object:
+
+    .. code-block:: python
+
+        from neoradium import random
+        myGen = random.getGenerator(123, "PCG64")
+
+    This design ensures that all **NeoRadium** generators are created in a consistent
+    way and that their seed and generator type are tracked correctly.
     """
-    def __init__(self, generator=None):
-        self.generator = self.getGenerator() if generator is None else generator
+    def __init__(self, generator=None, seed=None, genType="DEFAULT",  *, _internal=False):
+        """
+        Parameters
+        ----------
+        generator : object or None
+            Internal NumPy-based generator object used by this wrapper. This parameter is
+            intended for internal use only.
+
+        seed : int or None
+            The seed associated with this generator. If specified, it can be used later
+            with :py:meth:`reset` to restart the same sequence from the beginning.
+
+        genType : str
+            The generator type used to create this object. Supported values are the same
+            as those accepted by :py:meth:`getGenerator`.
+        """
+        if not _internal:
+            raise RuntimeError("RanGen objects must not be created directly. Use 'random.getGenerator' instead.")
+
+        self.seed = seed
+        self.genType = genType.upper() if isinstance(genType, str) else genType
+        if generator is None:   self.generator = self.getGenerator(seed, genType).generator
+        else:                   self.generator = generator
 
     # ******************************************************************************************************************
-    def getGenerator(self, seed=None):
+    def __repr__(self):
+        return f"RanGen(seed={self.seed}, genType={self.genType!r})"
+
+    # ******************************************************************************************************************
+    def getGenerator(self, seed=None, genType="DEFAULT"):
         r"""
-        This function creates a new random generator object that can be used to create new random values. See
-        :ref:`Supported Random Generators <SupportedRanGens>` for examples of how to use this function.
+        Creates and returns a new random number generator with a specified generator type
+        and seed. The returned generator is independent of the global ``random`` object and
+        always starts a new deterministic sequence for a given ``seed`` and ``genType``.
 
         Parameters
         ----------
-        seed: int, BitGenerator, Generator, RandomState, or None
-            This parameter specifies how the new random generator should
-            be created. It can be one of the following:
-            
-                :int: If ``seed`` is an integer, it is used as the
-                    ``seed`` to generate a
-                    `PCG64 <https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html>`_
-                    random number generator. The returned random number
-                    generator is predictable.
-                   
-                :BitGenerator: If ``seed`` is one of the
-                    `Supported BitGenerators <https://numpy.org/doc/stable/reference/random/bit_generators/index.html#supported-bitgenerators>`_
-                    the returned random generator is based on the specified
-                    bit generator.
-                
-                :Generator: If ``seed`` is a
-                    `Generator <https://numpy.org/doc/stable/reference/random/generator.html>`__
-                    object, the returned random generator is based on ``default_rng``.
-                    Note that internally, ``default_rng`` uses the
-                    `PCG64 <https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html>`_
-                    bit generator.
-                    
-                :RandomState: If ``seed`` is a
-                    `RandomState <https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState>`_
-                    object, the returned random generator is based on ``RandomState``.
-                    
-                :None: If ``seed`` is `None` (default), a default
-                    `PCG64 <https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html>`_
-                    bit generator is used without specifying the seed, which results
-                    in an unpredictable random generator.
+        seed : int or None
+            Seed used to initialize the random generator.
+
+            - If an integer is provided, the generator produces a deterministic and reproducible sequence.
+            - If ``None`` (default), the generator is initialized in a non-deterministic manner.
+
+        genType : str
+            Specifies the type of random generator to create. The value is case-insensitive.
+            Supported generator types are:
+
+            =================  ============================================================
+            genType            Description
+            =================  ============================================================
+            "DEFAULT"          NumPy default generator (default_rng, currently PCG64-based)
+            "PCG64"            NumPy PCG64 generator (recommended default)
+            "MT19937"          Mersenne Twister generator
+            "PCG64DXSM"        PCG64DXSM generator
+            "PHILOX"           Philox counter-based generator
+            "SFC64"            SFC64 generator
+            "RANDOMSTATE"      NumPy legacy RandomState generator
+            "MATLAB"           Alias for RandomState, intended to match MATLAB behavior
+            =================  ============================================================
+
+            The ``"MATLAB"`` option provides a convenient way to generate sequences that
+            match MATLAB's default random number generator for the same seed, which is
+            useful for cross-validation and comparison with MATLAB simulations.
 
         Returns
         -------
         RanGen
-            The returned :py:class:`RanGen` object is based on a **NeoRadium** internal class which is derived from
-            NumPy's `Generator <https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator>`__
-            or `RandomState <https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState>`_
-            class.
+            A new :py:class:`RanGen` object wrapping the selected NumPy random generator.
+
+        Notes
+        -----
+        - Each call to this function returns a *new* generator instance. The sequence always
+          starts from the beginning for the given ``seed`` and ``genType``.
+        - Generators created with the same ``seed`` and ``genType`` will produce identical
+          sequences, ensuring reproducibility.
+        - Different generator types may produce different sequences even when using the same seed.
         """
         # See https://numpy.org/doc/stable/reference/random/index.html
-        if seed is None:                                gen = NrGen2(np.random.PCG64())       # PCG64, unpredictable
-        elif isinstance(seed, RanGen):                  return seed                           # Already a RanGen object
-        elif isinstance(seed, np.random.BitGenerator):  gen = NrGen2(seed)                    # bit generator object
-        elif isinstance(seed, np.random.Generator):     gen = NrGen2(seed.bit_generator)      # generator object
-        elif isinstance(seed, np.random.RandomState):   gen = NrGen1(seed.get_state()[1][0])  # getting seed
-        else:                                           gen = NrGen2(np.random.PCG64(seed))   # PCG64, predictable
-        return RanGen(gen)
+        if not isinstance(genType, str):            raise ValueError(f"'genType' must be a string")
+        genType = genType.upper()
+        validateRange(genType, ['DEFAULT', 'PCG64', 'MT19937', 'PCG64DXSM', 'PHILOX', 'SFC64',
+                                'RANDOMSTATE', 'MATLAB'], varName="genType")
+        if genType in ["RANDOMSTATE", "MATLAB"]:    return RanGen(NrGen1(seed), seed, genType, _internal=True)
+
+        if genType =="DEFAULT":                     ranObj = np.random.default_rng(seed).bit_generator
+        elif genType =="PCG64":                     ranObj = np.random.PCG64(seed)
+        elif genType =="MT19937":                   ranObj = np.random.MT19937(seed)
+        elif genType =="PCG64DXSM":                 ranObj = np.random.PCG64DXSM(seed)
+        elif genType =="PHILOX":                    ranObj = np.random.Philox(seed)
+        else:                                       ranObj = np.random.SFC64(seed)      # genType == "SFC64"
+
+        return RanGen(NrGen2(ranObj), seed, genType, _internal=True)
 
     # ******************************************************************************************************************
-    def __getattr__(self, attr):
-        if attr not in self.__dict__:
-            return getattr(self.generator,attr)
-        return super().__getattr__(self, attr)
+    def __getattr__(self, attrName):
+        return getattr(self.generator, attrName)
 
     # ******************************************************************************************************************
     def setSeed(self, seed):
         r"""
-        This function changes the random generator used by this :py:class:`RanGen` object.
-        
-        .. Important::
-            It is recommended to avoid using this method on **NeoRadium**'s global ``random`` object. Since the
-            ``random`` object is a single instance used globally by all of the codebase using **NeoRadium**, changing
-            it affects other parts of your code which may depend on the original ``random`` object.
-            
-            A better approach is to create a new random generator using the :py:meth:`getGenerator` method and use
-            that for the part of your code that needs a specific random generator.
-            
-            However, for smaller programs where you want to control the random behavior of your code, this function
-            provides a quick and easy way to make your results reproducible by passing a constant integer value
-            to this function.
-            
-            .. code-block:: python
+        Re-initializes this generator with a new seed while keeping the current
+        generator type unchanged.
 
-                from neoradium import random
-                
-                # Changing the "random" object to be predictable with "MT19937" bit generator
-                # This is not recommended because it changes the "random" object which is
-                # used globally in NeoRadium.
-                random.setSeed(np.random.MT19937(123))
-                myRandInts = random.integers(0,10,5)
+        After calling this method, the underlying generator is recreated from scratch
+        using the specified ``seed`` and the current ``genType``. This means the random
+        sequence restarts from the beginning for that seed and generator type.
 
-                # Creating a new predictable random generator with "MT19937" bit generator
-                # This is the preferred approach as the original "random" object remains unchanged
-                # The results are the same as the above code.
-                myGen = random.getGenerator(np.random.MT19937(123))
-                myRandInts = myGen.integers(0,10,5)
-                
+        If the new ``seed`` is the same as the current one, this method has the same
+        effect as :py:meth:`reset`.
 
         Parameters
         ----------
-        seed: int, BitGenerator, Generator, RandomState, or None Please refer to :py:meth:`getGenerator` method
-            for details about the ``seed`` parameter.
-        """
-        self.generator = self.getGenerator(seed)
+        seed : int or None
+            The new seed used to initialize the generator.
 
-random = RanGen()
+            - If an integer is provided, the generator becomes deterministic and
+              reproducible.
+            - If ``None``, the generator is reinitialized in a non-deterministic manner.
+
+        Notes
+        -----
+        This method does not preserve the current generator state. It always creates a
+        new generator instance starting at the beginning of the sequence defined by the
+        given ``seed`` and the current generator type.
+        """
+        self.seed = seed
+        self.generator = self.getGenerator(seed, self.genType).generator
+
+    # ******************************************************************************************************************
+    def reset(self):
+        r"""
+        Resets this generator to the beginning of its current random sequence.
+
+        This method recreates the underlying generator using the stored ``seed`` and
+        current ``genType``. As a result, subsequent random values will match the values
+        produced when this generator was first created, provided the seed is not `None`.
+
+        Notes
+        -----
+        - If this generator was created with a fixed integer seed, calling ``reset()``
+          makes the sequence reproducible from the beginning.
+        - If this generator was created with ``seed=None``, calling ``reset()`` creates
+          a new non-deterministic generator, so the sequence will generally not match
+          the previous one.
+        """
+        self.setSeed(self.seed)
+
+random = RanGen(_internal=True)

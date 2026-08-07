@@ -1,9 +1,9 @@
-# Copyright (c) 2024 InterDigital AI Lab
+# Copyright (c) 2024-2026, InterDigital AI Lab
 """
 The module ``waveform.py`` implements the :py:class:`Waveform` class which encapsulates a time-domain signal
 transmitted from a set of transmitter antennas or received by a set of receiver antennas. A waveform object is
-usually created by applying OFDM modulation to a resource grid object. See :py:meth:`~neoradium.grid.Grid.ofdmModulate`
-method of the :py:class:`~neoradium.grid.Grid` class for more information.
+usually created by applying OFDM modulation to a resource grid object. See the 
+:py:meth:`~neoradium.grid.Grid.ofdmModulate` method of the :py:class:`~neoradium.grid.Grid` class for more information.
 """
 # **********************************************************************************************************************
 # Revision History:
@@ -14,6 +14,9 @@ method of the :py:class:`~neoradium.grid.Grid` class for more information.
 # 10/13/2025    Shahab Hamidi-Rad       * Added the calculation of noise power based on the signal power and SNR. See
 #                                         the new 'getNoiseStd' and 'getRePower' functions and the updates to the
 #                                         'addNoise' function.
+# 04/20/2026    Shahab                  Changes in NeoRadium version 0.5.0:
+#                                       * Updated the 'addNoise' function's documentation. 'getNoiseStd' is not
+#                                         documented anymore.
 # **********************************************************************************************************************
 
 import numpy as np
@@ -30,7 +33,7 @@ class Waveform:
     Once you have a Waveform object, you can apply a channel model to it, add AWGN noise to it, or apply other signal
     processing tasks such as *windowing*. All of these processes result in new ``Waveform`` objects.
     
-    At the receiver the received signals are usually converted back to the frequency domain by applying OFDM 
+    At the receiver, the received signals are usually converted back to the frequency domain by applying OFDM 
     demodulation, which results in a :py:class:`~neoradium.grid.Grid` object representing the received resource grid.
     """
     # ******************************************************************************************************************
@@ -47,7 +50,7 @@ class Waveform:
         noiseVar : float
             The variance of the noise applied to the time-domain signals in this Waveform object. This is usually
             initialized to zero. When an AWGN noise is applied to the waveform using the :py:meth:`addNoise` function, 
-            the variance of the noise is saved in the Waveform object.
+            the variance of the noise is stored in the Waveform object.
 
 
         **Other Read-Only Properties:**
@@ -78,19 +81,19 @@ class Waveform:
 
         Parameters
         ----------
-        indent: int
+        indent : int
             The number of indentation characters.
             
-        title: str
-            If specified, it is used as a title for the printed information.
+        title : str
+            If specified, it is used as the title for the printed information.
 
-        getStr: Boolean
-            If `True`, returns a text string instead of printing it.
+        getStr : bool
+            If `True`, returns a string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = "Waveform Properties:"
@@ -104,7 +107,7 @@ class Waveform:
         print(repStr)
 
     # ******************************************************************************************************************
-    def getRePower(self, bwp):
+    def getRePower(self, bwp):                                                  # Undocumented
         # This function calculates the average received signal power per resource element.
         # Remove the CP samples from the waveform and then calculate the average RE power.
         cpOffsetRatio = 0.5
@@ -117,26 +120,8 @@ class Waveform:
         return fftWaveform.var().item()/(12*bwp.numRbs)
 
     # ******************************************************************************************************************
-    def getNoiseStd(self, snr, bwp):
-        r"""
-        This function calculates the noise standard deviation for the given signal-to-noise ratio. It first calculates
-        the average received signal power per resource element (RE) and then uses it, along with the given 
-        signal-to-noise ratio, to calculate the noise power. The returned standard deviation can be used directly 
-        by the :py:meth:`~Waveform.addNoise` method using the ``noiseStd`` argument.
-
-        Parameters
-        ----------
-        snr : float
-            The signal-to-noise ratio in the linear form (not dB).
-        
-        bwp : :py:class:`~neoradium.carrier.BandwidthPart`
-            The bandwidth part object used to create the waveform.
-            
-        Returns
-        -------
-        float
-            The noise standard deviation.
-        """
+    def getNoiseStd(self, snr, bwp):                                            # Undocumented
+        # This method is only used in the 'addNoise' function below.
         # See equation 11 (the 2nd part) in the page "SNR, signal and noise power calculations" in
         # the "Implementation Notes" slides
         return np.sqrt(self.getRePower(bwp)*bwp.nFFT/snr)
@@ -144,114 +129,151 @@ class Waveform:
     # ******************************************************************************************************************
     def addNoise(self, **kwargs):
         r"""
-        Adds Additive White Gaussian Noise (AWGN) to this waveform based on the given noise properties. The *noisy*
-        waveform is then returned in a new :py:class:`Waveform` object.
-        
-        This is similar to the :py:meth:`~neoradium.grid.Grid.addNoise` method of the :py:class:`~neoradium.grid.Grid`
-        class, which applies noise in the frequency domain.
-        
-        If you have the noise signal in a numpy array, you can use the ``noise`` parameter of this function to apply it
-        to this waveform:
-        
+        Adds Additive White Gaussian Noise (AWGN) to this waveform and returns a new
+        :py:class:`Waveform` object. The returned waveform contains the noisy signal,
+        and its ``noiseVar`` property stores the variance of the applied noise.
+
+        This method is similar to :py:meth:`~neoradium.grid.Grid.addNoise`, which applies
+        noise in the frequency domain (resource grid). The main difference is that here
+        noise is applied in the **time domain**, and therefore depends on the FFT size
+        used during OFDM modulation.
+
+        You can provide the noise directly, or specify its standard deviation, variance,
+        or a target SNR.
+
+        If you already have a noise signal in a NumPy array, use the ``noise`` parameter
+        to add it directly:
+
         .. code-block:: python
             :caption: Example
-            
+
             myNoise = random.awgn(rxWaveform.shape, 0.1)    # Create AWGN with σ = 0.1
             rxWaveform.addNoise(noise=myNoise)
-            
-        If you know the variance or standard deviation of the noise, then you can use them directly by setting the
-        arguments ``noiseStd`` and ``noiseVar`` respectively.
-        
+
+        If you already know the standard deviation or variance of the noise, use
+        ``noiseStd`` or ``noiseVar`` respectively:
+
         .. code-block:: python
             :caption: Example
 
-            rxWaveform.addNoise(noiseStd=0.1)       # Same results as above
-            rxWaveform.addNoise(noiseVar=0.01)      # Same results as above
-        
-        If you have a signal-to-noise ratio, there are two different approaches to adding noise to the received 
-        waveform.
-        
-        **Matlab Approach:** 
-        
-            In this case, it is assumed that the received signal power is normalized to 
-            :math:`\frac 1 {N_r}` where :math:`N_r` is the number of receiver antenna. Please note that when
-            channel models such as CDL, TDL, or trajectory based channel models are used in the communication
-            pipleline, this assumption is not always true. Support for this approach is included only to allow 
-            comparison with Matlab.
-            
-            .. math::
+            rxWaveform.addNoise(noiseStd=0.1)       # Same result as above
+            rxWaveform.addNoise(noiseVar=0.01)      # Same result as above
 
-                \sigma^2_{AWGN} = \frac 1 {N_r.nFFT.10^{\frac {snrDb} {10}}}
+        If you specify ``snrDb``, this function supports two different interpretations of SNR,
+        controlled by the ``useRxPower`` parameter.
 
-            where :math:`nFFT` is the FFT size derived from the given :py:class:`~neoradium.carrier.BandwidthPart`
-            object.
+        **1) Reference-power SNR** (``useRxPower=False``)
 
-            .. code-block:: python
-                :caption: Example
-    
-                rxWaveform.addNoise(snrDb=mySnrDb, bwp=bwp, useRxPower=False)
-                
-        **Using RX Power:** 
-        
-            In this case, this function first calculates the average received signal power per resource 
-            element (RE), and uses it, along with the given signal-to-noise ratio to calculate the noise power. 
+        In this mode, the noise power is computed using a fixed reference signal power,
+        independent of the instantaneous waveform. This approach is closer to typical
+        **3GPP-style link-level simulation methodology**, where:
 
-            .. math::
+        * The AWGN level is fixed for a given SNR point
+        * Channel effects (fading, path loss, beamforming, etc.) affect the received
+          signal but do not change the injected noise power
+        * The effective SNR varies naturally with the channel realization
 
-                \sigma^2_{AWGN} = \frac {\sigma^2_{RX}} {nFFT.10^{\frac {snrDb} {10}}}
-    
-            .. code-block:: python
-                :caption: Example
-                
-                rxWaveform.addNoise(snrDb=mySnrDb, bwp=bwp, useRxPower=True)
+        In NeoRadium, this corresponds to assuming a normalized received signal power of
+        :math:`\frac{1}{N_r}`, where :math:`N_r` is the number of receive antennas. Since
+        noise is added in the time domain, the FFT size (:math:`N_{FFT}`) must also be taken
+        into account:
 
-        Please refer to the notebook :doc:`../Playground/Notebooks/Others/SnrCalculations` for 
-        a complete analysis of how NeoRadium calculates and applies noise power for a given signal-to-noise ratio.
+        .. math::
+
+            \sigma^2_{AWGN} = \frac{1}{N_r \cdot N_{FFT} \cdot 10^{\frac{SNR_{dB}}{10}}}
+
+        .. code-block:: python
+            :caption: Example
+
+            rxWaveform.addNoise(snrDb=mySnrDb, bwp=bwp, useRxPower=False)
+
+        This mode is recommended for link-level performance evaluation and for generating
+        results comparable to standard BLER vs. SNR curves. It is also the convention used
+        in MATLAB 5G Toolbox link-level simulations.
+
+        **2) Received-power-based SNR** (``useRxPower=True``)
+
+        In this mode, the noise power is derived from the actual received waveform. The
+        function first estimates the average received signal power (mapped to per-RE
+        equivalent using :math:`N_{FFT}`), and then applies noise to achieve the requested SNR:
+
+        .. math::
+
+            \sigma^2_{AWGN} = \frac{\sigma^2_{RX}}{N_{FFT} \cdot 10^{\frac{SNR_{dB}}{10}}}
+
+        where :math:`\sigma^2_{RX}` is the estimated received signal power.
+
+        .. code-block:: python
+            :caption: Example
+
+            rxWaveform.addNoise(snrDb=mySnrDb, bwp=bwp, useRxPower=True)
+
+        This mode enforces a **post-channel SNR**, meaning that the resulting SNR is tied
+        to the instantaneous received waveform. As a result, variations caused by fading
+        or other channel effects are partially normalized out, since both signal and noise
+        scale together.
+
+        This approach is useful for controlled algorithm evaluation (e.g., equalization,
+        channel estimation, or decoding at a fixed received SNR), but is generally
+        **less suitable for 3GPP-style link-level performance studies**, where channel
+        variability should directly impact the effective SNR.
+
+        In summary:
+
+        * ``useRxPower=False``:
+          Reference-power SNR (recommended; closer to 3GPP-style simulations)
+
+        * ``useRxPower=True``:
+          Received-power-based SNR (useful for controlled post-channel SNR experiments)
+
+        Please refer to the notebook :doc:`../Playground/Notebooks/Others/SnrCalculations`
+        for a detailed discussion of SNR definitions and AWGN scaling in **NeoRadium**.
 
         Parameters
         ----------
-        kwargs: dict
-            One of the following methods of specifying the noise **must** be specified.
-            
-            :noise: A NumPy array with the same shape as this :py:class:`Waveform` object containing the noise
-                information. If the noise information is provided by ``noise``, it is added directly to the waveform. In
-                this case all other parameters are ignored.
-            
-            :noiseStd: The standard deviation of the noise. An AWGN complex noise signal is generated with zero mean
-                and the specified standard deviation. If ``noiseStd`` is specified, ``noiseVar`` and ``snrDb``
-                are ignored.
+        kwargs : dict
+            The amount of noise must be specified by one of ``noise``, ``noiseStd``,
+            ``noiseVar``, or ``snrDb``.
 
-            :noiseVar: The variance of the noise. An AWGN complex noise signal is generated with zero mean and the
-                specified variance. If ``noiseVar`` is specified, the value of ``snrDb`` is ignored.
+            :noise: NumPy array with the same shape as this :py:class:`Waveform` object
+                containing the noise values. If provided, it is added directly and all
+                other parameters are ignored.
 
-            :snrDb: The signal-to-noise ratio in dB. First the noise standard deviation is calculated using the given 
-                SNR value and the ``bwp`` and ``useRxPower`` parameters. Then an AWGN complex noise signal is generated 
-                with zero mean and the calculated standard deviation. Please note that if an SNR value is used to 
-                specify the amount of noise, then a :py:class:`~neoradium.carrier.BandwidthPart` object also needs to 
-                be provided.
-                
+            :noiseStd: Standard deviation of the AWGN. Complex zero-mean AWGN is generated
+                using the specified standard deviation. If provided, ``noiseVar`` and
+                ``snrDb`` are ignored.
+
+            :noiseVar: Variance of the AWGN. Complex zero-mean AWGN is generated using the
+                specified variance. If provided, ``snrDb`` is ignored.
+
+            :snrDb: Signal-to-noise ratio in decibels (dB). When provided, the noise
+                standard deviation is calculated from the given SNR and the parameters
+                ``bwp`` and ``useRxPower``.
+
             :bwp: :py:class:`~neoradium.carrier.BandwidthPart`
-                The bandwidth part object used to extract the FFT information. This is only used if ``snrDb`` is 
-                used to specify the amount of noise.
+                Bandwidth part used to obtain the FFT size (``nFFT``). Required when
+                ``snrDb`` is specified.
 
-            :useRxPower: Boolean
-                If `True`, this function first calculates the average received signal power per resource element (RE),
-                and uses it with the given signal-to-noise ratio to calculate the noise power. Otherwise, it is assumed
-                that the received signal power is normalized to :math:`\frac 1 {N_r}` where :math:`N_r` is the number
-                of receiver antenna (Matlab Approach).
-                
-                .. Note:: Currently the default value of ``useRxPower`` is `False` (Matlab approach) for backward 
-                    compatibility. However, in future releases this may be changed to `True`. To ensure 
-                    forward-compatible code, explicitly set this parameter instead of relying on the default. 
+            :useRxPower: Controls how ``snrDb`` is interpreted.
 
-            :ranGen: If provided, it is used as the random generator
-                for the AWGN generation. Otherwise, if this is not specified, **NeoRadium**'s :doc:`global random
-                generator <./Random>` is used.
+                * ``False``: Use the reference-power SNR convention. A normalized received
+                  power of :math:`\frac{1}{N_r}` is assumed. This keeps noise independent
+                  of the instantaneous channel realization and is the default.
+
+                * ``True``: Use the actual received waveform power to compute the noise level.
+
+                .. note::
+                    The default is ``False``. This keeps the behavior closer to common
+                    3GPP-style link-level simulations and MATLAB 5G Toolbox conventions.
+                    For reproducibility and clarity, explicitly set this parameter.
+
+            :ranGen: Random-number generator used for AWGN generation. If not provided,
+                **NeoRadium**'s :doc:`global random generator <./Random>` is used.
 
         Returns
         -------
         :py:class:`Waveform`
-            A new Waveform object containing the *noisy* version of this waveform.
+            A new waveform containing the noisy version of this waveform.
         """
         noise = kwargs.get('noise', None)
         if noise is not None:
@@ -285,7 +307,7 @@ class Waveform:
             if bwp is not None: nFFT = bwp.nFFT
             else:               nFFT = kwargs.get('nFFT', None)
             if nFFT is None:    raise ValueError("When using SNR, you must also specify the FFT size!")
-            # This is similar to Matlab: Assuming RxPower = 1/nr (Which is not always the case)
+            # This is similar to MATLAB: Assuming RxPower = 1/nr (Which is not always the case)
             noiseVar = 1/(snr * self.numPorts * nFFT)  # Note: It is assumed that numPorts is the number of RX antennas
             return self.addNoise(noiseStd=np.sqrt(noiseVar), ranGen=ranGen)
 
@@ -311,7 +333,8 @@ class Waveform:
         :py:class:`Waveform`
             A new Waveform object which is ``numPad`` samples longer than the original waveform.
         """
-        return Waveform( np.concatenate((self.waveform, np.zeros((self.numPorts, numPad))), axis=1), self.noiseVar )
+        return Waveform( np.concatenate((self.waveform, np.zeros((self.numPorts, numPad), dtype=self.waveform.dtype)),
+                                        axis=1), self.noiseVar )
 
     # ******************************************************************************************************************
     def sync(self, timingOffset):
@@ -323,12 +346,12 @@ class Waveform:
         Different transmission paths may be affected by different propagation delays. The channel's ``chanOffset`` 
         member can be used to obtain the ``timingOffset``. In practice, this value is calculated by finding the 
         time-domain sample index where the correlation between the received signal and a set of reference signals is 
-        at its maximum. See for example the function :py:meth:`~neoradium.grid.Grid.estimateTimingOffset` of the
+        at its maximum. See for example, the function :py:meth:`~neoradium.grid.Grid.estimateTimingOffset` of the
         :py:class:`~neoradium.grid.Grid` class.
         
         Parameters
         ----------
-        timingOffset: int
+        timingOffset : int
             The number of time-domain samples that are removed from the beginning of the time-domain signals in this
             :py:class:`Waveform` object.
 
@@ -350,7 +373,7 @@ class Waveform:
         
         Parameters
         ----------
-        channel: :py:class:`~neoradium.channelmodel.ChannelModel`
+        channel : :py:class:`~neoradium.channelmodel.ChannelModel`
             The channel model that is applied to this time-domain waveform.
 
         Returns
@@ -363,12 +386,12 @@ class Waveform:
 
     # ******************************************************************************************************************
     @classmethod
-    def getWindowingSize(cls, cpLen, bwp):          # Not documented
-        # This function is based on tables in section F.5 in both TS 38.101-1 and TS 38.101-2 V18.4.0 (2023-12)
+    def getWindowingSize(cls, cpLen, bwp):          # Undocumented
+        # This function is based on tables in section F.5 in both TS 38.101-1 and TS 38.101-2
         # In all the related tables for Normal CP the window size is half the CP length.
         if bwp.cpType == 'normal':  return (cpLen+1)//2
 
-        # For extended, we need to use Table F.5.4-1 in TS 38.101-1 and TS 38.101-2
+        # For extended CP, we need to use Table F.5.4-1 in TS 38.101-1 and TS 38.101-2
         # We only need the table when the ratio is not 85.9%. The dict below is CP-Len -> W from tables
         # above for cases where the ratio is not 85.9%
         winTable = { 64: 54, 96:80, 128:106, 192:164 }
@@ -382,8 +405,8 @@ class Waveform:
         This is a helper function that is used to apply *windowing* to the OFDM waveform obtained from OFDM modulation
         of a resource grid.
 
-        This method supports several different windowing approaches including the ones specified in **3GPP TS 38.104,
-        Sections B.5.2 and C.5.2**.
+        This method supports several different windowing approaches including the ones specified in **3GPP TS 38.101-1
+        section F.5, table F.5.4-1**.
         
         You usually do not need to call this function directly. It is called internally at the end of the OFDM
         modulation process when the function :py:meth:`~neoradium.grid.Grid.ofdmModulate` of the
@@ -391,26 +414,26 @@ class Waveform:
         
         Parameters
         ----------
-        cpLens: list
-            A list of integer values each representing the length of cyclic prefix part at the beginning of each OFDM
-            symbol in number of time-domain samples. This list can be obtained from the 
+        cpLens : list
+            A list of integer values each representing the length of the cyclic prefix part at the beginning of each 
+            OFDM symbol in number of time-domain samples. This list can be obtained from the 
             :py:class:`~neoradium.carrier.BandwidthPart` object.
             
-        windowing: str
-            A text string specifying how the window length is obtained. It can be one of the following:
+        windowing : str
+            A string specifying how the window length is obtained. It can be one of the following:
             
-            :"STD": The windowing size is determined based on **3GPP TS 38.104, Sections B.5.2 and C.5.2**.
+            :"STD": The windowing size is determined based on **3GPP TS 38.101-1 section F.5, table F.5.4-1**.
             :Ratio as percentage: A windowing ratio can be specified as a percentage value. For example, the text 
                 string "%25" represents a windowing ratio of ``0.25``. The window length is calculated as the minimum 
                 value of ``cpLens`` multiplied by the windowing ratio, and rounded to the nearest integer value.
             :Ratio: A windowing ratio (between 0 and 1) can be specified as a number.
-                For example, the text string "0.125" represents a windowing ratio of ``0.125``. The window length is
+                For example, the string "0.125" represents a windowing ratio of ``0.125``. The window length is
                 calculated as the minimum value of ``cpLens`` multiplied by the windowing ratio and rounded to the
                 nearest integer value.
             :Window Length: The actual window length can also be specified as an integer value. For example, the text 
                 string "164" represents a window length equal to ``164``.
 
-        bwp: :py:class:`~neoradium.carrier.BandwidthPart`
+        bwp : :py:class:`~neoradium.carrier.BandwidthPart`
             The bandwidth part used for the communication.
             
         Returns
@@ -446,8 +469,8 @@ class Waveform:
             symLen = cpLen + bwp.nFFT
             symWaveForm = self.waveform[:,symStart:symStart+symLen]
                         
-            # Extend symbol waveForm by inserting a copy of 'windowLen' samples from near the end (before the already
-            # copied CP) to the start. shape: pp x (symLen+windowLen)
+            # Extend symbol waveform by inserting a copy of 'windowLen' samples from near the end (before the already
+            # copied CP) to the start. shape: pp x (symLen + windowLen)
             symWaveFormEx = np.concatenate( (symWaveForm[:,bwp.nFFT-windowLen:bwp.nFFT], symWaveForm), axis=1)
             
             # Apply the 'raisedCosine' to the first 'windowLen' samples of this symbol
@@ -481,18 +504,18 @@ class Waveform:
        
         Parameters
         ----------
-        bwp: :py:class:`~neoradium.carrier.BandwidthPart`
+        bwp : :py:class:`~neoradium.carrier.BandwidthPart`
             The bandwidth part used for the communication.
             
-        f0: float
+        f0 : float
             The carrier frequency of the waveform. If it is 0 (default), then a baseband waveform is assumed. This
             should match the value originally used when applying OFDM modulation at the transmitter side. See the
             :py:meth:`~neoradium.grid.Grid.ofdmModulate` method of the :py:class:`~neoradium.grid.Grid` class.
 
-        cpOffsetRatio: float
+        cpOffsetRatio : float
             This value determines where, in the cyclic prefix (as a ratio from the beginning of the CP), the FFT 
             should be applied. The default value of ``0.5`` means that the FFT is applied at the midpoint of the 
-            cyclic prefix."
+            cyclic prefix.
             
         Returns
         -------
@@ -512,14 +535,14 @@ class Waveform:
         gridData = np.fft.fft(fftWaveform, axis=2)          # Shape: nr x ll x nFFT
         gridData = np.fft.fftshift(gridData, axes=2)        # Shape: nr x ll x nFFT
 
-        # Get the kk values in the middle of nFFT sample resulted from FFT
+        # Get the kk values in the middle of nFFT samples resulting from the FFT (the occupied subcarriers centered
+        # in the FFT grid after fftshift)
         kk = 12*bwp.numRbs
         k0 = bwp.nFFT//2 - kk//2
         idx = range(k0, k0+kk)  # The 'kk' indices from the total 'nFFT' samples that we are interested in
 
         grid = Grid(bwp, numPlanes=self.shape[0])
         grid.grid = gridData[:,:,idx]                       # Shape: nr x ll x kk
-        grid.reTypeIds = np.ones(grid.shape, dtype=np.uint8)*grid.retNameToId["RX_DATA"]
         grid.noiseVar = self.noiseVar * bwp.nFFT            # Convert the noise variance from time to frequency domain
 
         symStarts = cpStarts + cpLens

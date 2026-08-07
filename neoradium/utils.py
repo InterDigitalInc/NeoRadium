@@ -1,4 +1,4 @@
-# Copyright (c) 2024 InterDigital AI Lab
+# Copyright (c) 2024-2026, InterDigital AI Lab
 """
 The module ``utils.py`` contains utility classes and functions used by other modules in **NeoRadium**.
 """
@@ -11,65 +11,184 @@ The module ``utils.py`` contains utility classes and functions used by other mod
 # **********************************************************************************************************************
 import numpy as np
 from scipy.interpolate import RBFInterpolator, interp1d
+from scipy.stats import norm
 import warnings, functools
-warnings.simplefilter('once', DeprecationWarning)       # Print the Deprecation Warning only once
 
-from .random import random
-
-# **********************************************************************************************************************
-def toRadian(angle):    return (None if angle is None else np.float64(angle)*np.pi/180.0)
-def toDegrees(angle):   return (None if angle is None else np.float64(angle)*180.0/np.pi)
-def toLinear(x):        return 10.0**(x/10.0)
-def toDb(x):            return 10.0*np.log10(x)
+__all__ = ['toRadian', 'toDegrees', 'toLinear', 'toDb', 'herm', 'getMse', 'getNmse']
+DOCS_LOC = "https://ail-wireless.pages.interdigital.com/neoradium/"   # For internal GitLab
 
 # **********************************************************************************************************************
-def interpolate(x, y, xNew, method, numNeighbors=None, smoothing=10):   # Not documented - Not intended for direct use
+def toRadian(angle):
+    r"""
+    Converts an angle (or array of angles) from degrees to radians. Returns ``None`` unchanged so
+    that optional-angle parameters can be passed through transparently.
+
+    Parameters
+    ----------
+    angle : float, NumPy array, or None
+        The angle(s) in degrees.
+
+    Returns
+    -------
+    float, NumPy array, or None
+        The same input converted to radians, or ``None`` if ``angle`` is ``None``.
+    """
+    return (None if angle is None else np.float64(angle)*np.pi/180.0)
+
+# **********************************************************************************************************************
+def toDegrees(angle):
+    r"""
+    Converts an angle (or array of angles) from radians to degrees. Returns ``None`` unchanged so
+    that optional-angle parameters can be passed through transparently.
+
+    Parameters
+    ----------
+    angle : float, NumPy array, or None
+        The angle(s) in radians.
+
+    Returns
+    -------
+    float, NumPy array, or None
+        The same input converted to degrees, or ``None`` if ``angle`` is ``None``.
+    """
+    return (None if angle is None else np.float64(angle)*180.0/np.pi)
+
+# **********************************************************************************************************************
+def toLinear(x):
+    r"""
+    Converts a value (or array of values) from decibels (dB) to linear scale using :math:`10^{x/10}`.
+
+    Parameters
+    ----------
+    x : float or NumPy array
+        Value(s) in dB.
+
+    Returns
+    -------
+    float or NumPy array
+        The corresponding linear value(s).
+    """
+    return 10.0**(x/10.0)
+
+# **********************************************************************************************************************
+def toDb(x):
+    r"""
+    Converts a value (or array of values) from linear scale to decibels (dB) using
+    :math:`10\log_{10}(x)`.
+
+    Parameters
+    ----------
+    x : float or NumPy array
+        Linear value(s). Must be positive; ``toDb(0)`` returns ``-inf``.
+
+    Returns
+    -------
+    float or NumPy array
+        The corresponding value(s) in dB.
+    """
+    return 10.0*np.log10(x)
+
+# **********************************************************************************************************************
+def interpolate(x, y, xNew, method, numNeighbors=None, smoothing=10):   # Undocumented - Not intended for direct use
     if method=='thin_plate_spline': f = RBFInterpolator(x[:,None], y, numNeighbors, smoothing, 'thin_plate_spline', 1)
     elif method == 'multiquadric':  f = RBFInterpolator(x[:,None], y, numNeighbors, smoothing, 'multiquadric', 1)
     elif method == 'linear':        f = interp1d(x, y, kind='linear', axis=0, fill_value='extrapolate')
     elif method == 'quadratic':     f = interp1d(x, y, kind='quadratic', axis=0, fill_value='extrapolate')
     elif method == 'nearest':       f = interp1d(x, y, kind='nearest', axis=0, fill_value='extrapolate')
-
+    else:                           raise ValueError(f"Unsupported interpolation method: {method}")
     if method in ['thin_plate_spline', 'multiquadric']: yNew = f(xNew[:,None])
     else:                                               yNew = f(xNew)
     return yNew
 
 # **********************************************************************************************************************
-def polarInterpolate(x, y, xNew, method, numNeighbors=None, smoothing=10):# Not documented - Not intended for direct use
+def polarInterpolate(x, y, xNew, method, numNeighbors=None, smoothing=10):# Undocumented - Not intended for direct use
     theta, r = np.unwrap(np.angle(y),axis=0), np.abs(y)
     thetaNew = interpolate(x, theta, xNew, method, numNeighbors, smoothing)
     rNew = interpolate(x, r, xNew, method, numNeighbors, smoothing)
     return rNew * (np.cos(thetaNew) + 1j*np.sin(thetaNew))
 
 # **********************************************************************************************************************
-def intToBits(n, length=None):                                          # Not documented - Not intended for direct use
-    if length is None:
-        return np.uint8([1 if digit=='1' else 0 for digit in bin(n)[2:]])
-        
-    bits = [1 if digit=='1' else 0 for digit in bin(n)[2:]]
-    return np.uint8((length-len(bits))*[0] + bits)
+def herm(x):
+    r"""
+    Returns the Hermitian (conjugate) transpose of ``x`` along its last two axes — i.e.,
+    :math:`x^H` for batched matrix operations where leading dimensions broadcast and only the
+    trailing two axes are transposed.
 
-# **********************************************************************************************************************
-def herm(x):                                                            # Not documented - Not intended for direct use
+    Parameters
+    ----------
+    x : NumPy array
+        Input array of shape ``(..., M, N)``.
+
+    Returns
+    -------
+    NumPy array
+        Array of shape ``(..., N, M)`` containing the conjugate transpose of ``x`` along the last
+        two axes.
+    """
     return np.swapaxes(np.conj(x),-1,-2)
 
 # **********************************************************************************************************************
-def getMse(h, hEst):                                                    # Not documented - Not intended for direct use
+def getMse(h, hEst):
+    r"""
+    Returns the *Mean Squared Error* between an estimate and a reference:
+
+    .. math::
+
+        \text{MSE} = \frac{1}{N} \sum |\hat{h} - h|^2
+
+    where the sum runs over all elements of the input arrays.
+
+    Parameters
+    ----------
+    h : NumPy array
+        The reference (true) values.
+
+    hEst : NumPy array
+        The estimated values. Must have the same shape as ``h``.
+
+    Returns
+    -------
+    float
+        The mean squared error.
+    """
     error = np.abs(hEst-h)
     mse = np.square(error).mean()
     return mse
 
 # **********************************************************************************************************************
-def getNmse(u, uEst):                                                   # Not documented - Not intended for direct use
-    # Source: https://www.mathworks.com/help/ident/ref/goodnessoffit.html
+def getNmse(u, uEst):
+    r"""
+    Returns the *Normalized Mean Squared Error* between an estimate ``uEst`` and a reference ``u``,
+    following the definition used by MATLAB's
+    `goodnessoffit <https://www.mathworks.com/help/ident/ref/goodnessoffit.html>`_:
+
+    .. math::
+
+        \text{NMSE} = \frac{\sum |\hat{u} - u|^2}{\sum |\bar{u} - u|^2}
+
+    where :math:`\bar{u}` is the mean of the reference. NMSE is dimensionless and equals ``1.0`` for
+    a trivial estimator that just returns the reference mean.
+
+    Parameters
+    ----------
+    u : NumPy array
+        The reference values.
+
+    uEst : NumPy array
+        The estimated values. Must have the same shape as ``u``.
+
+    Returns
+    -------
+    float
+        The normalized mean squared error.
+    """
     uMean = u.mean()
     nmse = np.square(np.abs(uEst-u)).sum()/np.square(np.abs(uMean-u)).sum()
     return nmse
 
 # **********************************************************************************************************************
-def goldSequence(cInit, numBits):                                       # Not documented - Not intended for direct use
-    # This function creates a "numBits"-bit Gold sequence bitstream
-    # using binary arithmetic with pre-calculated x1
+def goldSequence(cInit, numBits):                                       # Undocumented - Not intended for direct use
+    # This function creates a "numBits"-bit Gold-sequence bitstream using binary arithmetic with a pre-calculated x1.
     x1 = 0x42054D21     # Pre-calculated X1 (After 51 iterations)
     x2 = cInit          # X2 depends on "cInit".
     # Now pre-calculate x2:
@@ -77,7 +196,7 @@ def goldSequence(cInit, numBits):                                       # Not do
         x2 ^= (x2>>3) ^ (x2>>2) ^ (x2>>1)
         x2 ^= ((x2<<28) ^ (x2<<29) ^ (x2<<30))&0x7FFFFFFF
 
-    # First time, compute 12 bits
+    # First, compute 12 bits.
     c = (x1^x2)                             # 12 bits
     bits = [(c>>i)&1 for i in range(19,31)] # Pick the 12 MSBs
 
@@ -94,9 +213,8 @@ def goldSequence(cInit, numBits):                                       # Not do
     return bits[:numBits]
 
 # **********************************************************************************************************************
-def getMultiLineStr(label, values, indent, formatStr, length, numPerLine):# Not documented - Not intended for direct use
-    # This is used mostly in "print" methods of different classes where the value of a property occupies multiple
-    # lines.
+def getMultiLineStr(label, values, indent, formatStr, length, numPerLine):      # Undocumented
+    # This is used mostly in "print" methods of different classes where the value of a property spans multiple lines.
     indentStr = indent*' ' + '  '
     label = label.rstrip()+':'+' '*(len(label)-len(label.rstrip()))
     labelLen = len(label)
@@ -111,40 +229,18 @@ def getMultiLineStr(label, values, indent, formatStr, length, numPerLine):# Not 
 
 # **********************************************************************************************************************
 def freqStr(f):
-    if f>1000000000000000: return f"{f:.4g} Hz"
-    if f>1000000000000: return f"{f/1000000000000:.4g} THz"
-    if f>1000000000:    return f"{f/1000000000:.4g} GHz"
-    if f>1000000:       return f"{f/1000000:.4g} MHz"
-    if f>1000:          return f"{f/1000:.4g} kHz"
-    return f"{f} Hz"
+    if f >= 1e15: return f"{f/1e15:.4g} PHz"
+    if f >= 1e12: return f"{f/1e12:.4g} THz"
+    if f >= 1e9:  return f"{f/1e9:.4g} GHz"
+    if f >= 1e6:  return f"{f/1e6:.4g} MHz"
+    if f >= 1e3:  return f"{f/1e3:.4g} kHz"
+    return f"{f:.4g} Hz"
 
 # **********************************************************************************************************************
-def makeComplexNoiseLike(x, **kwargs):                                  # Not documented - Not intended for direct use
-    # This function may be removed in the future. Use the Waveform and Grid objects' addNoise methods instead.
-    # NOTE: To add noise to a waveform, you need to specify the nFFT value used for OFDM modulation. When adding
-    #       noise to RX grid directly, you should not specify the nFFT.
-    noiseStd = kwargs.get('noiseStd', None)
-    if noiseStd is not None:
-        return  (random.normal(0, noiseStd, x.shape+(2,))*[1,1j]).sum(-1)/np.sqrt(2)
-
-    snrDb = kwargs.get('snrDb', None)
-    if snrDb is not None:
-        snr = toLinear(snrDb)
-        nr = kwargs.get('nr', 1)
-        nFFT = kwargs.get('nFFT', 1)
-        noiseStd = 1/np.sqrt(snr*nr*nFFT)
-        return makeComplexNoiseLike(x, noiseStd=noiseStd)
-
-    noiseVar = kwargs.get('noiseVar', None)
-    if noiseVar is not None:
-        return makeComplexNoiseLike(x, noiseStd=np.sqrt(noiseVar))
-
-    raise ValueError("You must specify one of 'snrDb', 'noiseVar', or 'noiseStd'!")
-
-# **********************************************************************************************************************
-def deprecated(replacement=None):
-    # A decorator to mark functions as deprecated. It will result in a warning being emitted when the
-    # function is used.
+warnings.simplefilter('module', DeprecationWarning)     # Print the Deprecation Warning only once
+warnedMessages = set()
+def deprecated(replacement=None, docFile=None):
+    # A decorator to mark functions as deprecated. It emits a warning when the function is used.
     # Usage:
     #   def new_add(a, b):
     #       """The new, preferred function."""
@@ -159,7 +255,57 @@ def deprecated(replacement=None):
         def wrapper(*args, **kwargs):
             message = f"Call to deprecated function {func.__name__}."
             if replacement:     message += f" Use {replacement} instead."
+            if message in warnedMessages: return func(*args, **kwargs)
+            warnedMessages.add(message)
+            if docFile:
+                message += (f" For more information please visit: " + DOCS_LOC +
+                            f"source/API/{docFile}.html#{func.__module__}.{func.__qualname__}")
             warnings.warn(message, category=DeprecationWarning, stacklevel=2)
             return func(*args, **kwargs)
         return wrapper
     return decorator
+    
+# **********************************************************************************************************************
+def warnOnce(message):
+    if message in warnedMessages: return
+    warnedMessages.add(message)
+    warnings.warn(message, category=DeprecationWarning, stacklevel=3)
+
+# **********************************************************************************************************************
+def getNumBlocks(errorMargin=0.01, confidence=0.95, blerEst=0.5):
+    # Returns how many transmissions are needed to measure BLER with the specified confidence
+    # and relative margin of error.
+    # 'blerEst' is an initial estimate of BLER.
+    # The default values give the number of blocks for a margin of error of 0.01 (± 1%) with
+    # 95% confidence.
+    # Based on the following formula:
+    #    n = \frac{Z^2 \cdot (1 - \hat{p})}{\hat{p} \cdot r^2}
+    # where Z is the Z-Score, \hat{p} is the initial estimate of BLER, and r
+    # is the relative margin of error.
+    cumProb = 1 - (1 - confidence) / 2   # Cumulative Probability
+    z = norm.ppf(cumProb)                # Z-score (how many standard deviations away from the mean)
+    return int(np.ceil(z*z*(1-blerEst)/(blerEst*(errorMargin**2))))
+
+# **********************************************************************************************************************
+def validateRange(var, valids, context="", varName=None):
+    if varName is None:
+        import inspect
+        frame = inspect.getouterframes(inspect.currentframe())[1]
+        string = inspect.getframeinfo(frame[0]).code_context[0].strip()
+        varName = string[string.find('(') + 1:-1].split(',')[0].strip("self.")
+
+    if isinstance(valids, list):
+        if var in valids:                      return
+        fStr = "'%s'" if type(valids[0])==str else "%s"
+        raise ValueError("Invalid '%s'! ('%s' ∈ {%s}%s)"%(varName, varName,
+                                                        ", ".join([fStr%str(x) for x in valids]), context))
+
+    if isinstance(valids, tuple) and len(valids)==2:
+        if var in range(valids[0],valids[1]+1): return
+        fStr = "'%s'" if type(valids[0])==str else "%s"
+        raise ValueError("Invalid '%s'! ('%s' ∈ {%s}%s)"%(varName, varName,
+                                                        ",...,".join([fStr%str(x) for x in valids]), context))
+
+    if var==valids:                              return
+    fStr = "'%s'" if type(valids)==str else "%s"
+    raise ValueError("Invalid '%s'! (It must be "%(varName) + fStr%str(valids) + context + ")")

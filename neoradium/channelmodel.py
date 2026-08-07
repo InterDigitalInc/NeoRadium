@@ -1,4 +1,4 @@
-# Copyright (c) 2024 InterDigital AI Lab
+# Copyright (c) 2024-2026, InterDigital AI Lab
 """
 This module serves as the foundation for channel models. Currently, **NeoRadium** supports three types of channel 
 models: CDL, TDL, and Trajectory-based channel models. Each model is derived from the :py:class:`ChannelModel` 
@@ -15,25 +15,26 @@ or :py:class:`~neoradium.trjchan.TrjChannel`.
 #                                       channel models.
 # 05/07/2025    Shahab                  Completed the documentation.
 # 12/18/2025    Shahab                  Some bug fixes and added the function getEffChannel.
+# 08/01/2026    Shahab                  Added a new optional input parameter 'w' to the 'getEffChannel' function.
 # **********************************************************************************************************************
 import numpy as np
 from scipy.signal import lfilter
 
 from .grid import Grid
 from .waveform import Waveform
-from .utils import interpolate, freqStr, toLinear, toDb
+from .utils import freqStr, toLinear, toDb, validateRange
 from .random import random
 from .carrier import SAMPLE_RATE, 𝜅
 
 # **********************************************************************************************************************
 class ChannelModel:
     r"""
-    This is the base channel model class that handles higher level processing, such as creating Channel Impulse Response
+    This is the base channel model class that handles higher-level processing, such as creating Channel Impulse Response
     (CIR) and channel matrices and applying the channel to a time-domain :py:class:`~neoradium.waveform.Waveform` 
     or a frequency-domain resource :py:class:`~neoradium.grid.Grid`.
     
     Almost all interactions with channel models are done using the methods of this class. The derived classes mostly
-    implement the lower level processes such as how the channel multipath information is obtained or how MIMO antenna
+    implement the lower-level processes such as how the channel multipath information is obtained or how MIMO antenna
     arrays are processed in connection with the channel multipath properties.
     """
     # ******************************************************************************************************************
@@ -60,27 +61,27 @@ class ChannelModel:
                 
                 :delayQuantSize: The size of delay fraction quantization for the channel filter. The default is 64.
                 
-                :stopBandAtten: The Stop-band attenuation value (in dB) used by the channel filter. The default is 80dB.
+                :stopBandAtten: The stop-band attenuation value (in dB) used by the channel filter. The default is 80 dB.
                 
                 :seed: The seed used by the random functions in the channel model. Setting this to a fixed value ensures
                     that the channel model generates repeatable results. The default value is `None`, indicating 
-                    that this channel model uses the **NeoRadium**’s :doc:`global random number generator <./Random>`.
+                    that this channel model uses the :doc:`global random number generator <./Random>`.
                     
                 :dopplerShift: The maximum Doppler shift in Hertz. The default value is 40 Hertz, which corresponds to
-                    a speed of approximately 10 kilometers per hour. A value of zero makes the channel model static. 
-                    For trajectory-based channel models, this value is automatically assigned based on the maximum 
-                    trajectory speed.
+                    a speed of approximately 12.34 kilometers per hour (for carrier frequency of 3.5 GHz). A value of 
+                    zero makes the channel model static. For trajectory-based channel models, this value is 
+                    automatically assigned based on the maximum trajectory speed.
                     
                 :carrierFreq: The carrier frequency of the channel model in hertz. The default is 3.5 GHz.
                     
 
         **Other Properties:**
         
-        All of the parameters mentioned above are directly available. Here is a list of additional properties:
+        All the parameters mentioned above are directly available. Here is a list of additional properties:
         
             :coherenceTime: The `Coherence time <https://en.wikipedia.org/wiki/Coherence_time_(communications_systems)>`_
                 of the channel model in seconds. This is calculated based on the ``dopplerShift`` parameter.
-            :sampleRate: The sample rate used by this channel model. For 3GPP standard, this is set to 30,720,000 
+            :sampleRate: The sample rate used by this channel model. For the 3GPP standard, this is set to 30,720,000 
                 samples per second.
         """
         if bwp is None: raise ValueError("The bandwidth part cannot be 'None'!")
@@ -94,8 +95,7 @@ class ChannelModel:
         self.normalizeOutput = kwargs.get('normalizeOutput', True ) # Normalize gains based on the No. of RX antennas
         
         self.txDir = kwargs.get('txDir', 'Downlink')                # Currently used only by TDL.
-        if self.txDir not in ['Downlink', 'Uplink']:
-            raise ValueError("Unsupported 'txDir' (%s). It must be one of 'Downlink' or 'Uplink'."%(self.txDir))
+        validateRange(self.txDir, ['Downlink', 'Uplink'])
 
         self.filterLen = kwargs.get('filterLen', 16 )
         self.stopBandAtten = kwargs.get('stopBandAtten', 80 )
@@ -122,30 +122,31 @@ class ChannelModel:
             The number of indentation characters.
             
         title : str or None
-            If specified, it is used as a title for the printed information. If `None` (default), the text
+            If specified, it is used as the title for the printed information. If `None` (the default), the text
             "Channel Model Properties:" is used for the title.
 
-        getStr : Boolean
-            If `True`, returns a text string instead of printing it.
+        getStr : bool
+            If `True`, returns a string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a string. 
             Otherwise, nothing is returned.
         """
         if title is None:   title = "Channel Model Properties:"
         repStr = "\n" if indent==0 else ""
         repStr += indent*' ' + title + "\n"
-        repStr += indent*' ' + f"  carrierFreq:     {freqStr(self.carrierFreq)}\n"
-        repStr += indent*' ' + f"  normalizeGains:  {str(self.normalizeGains)}\n"
-        repStr += indent*' ' + f"  normalizeOutput: {str(self.normalizeOutput)}\n"
-        repStr += indent*' ' + f"  txDir:           {self.txDir}\n"
-        repStr += indent*' ' + f"  filterLen:       {self.filterLen} samples\n"
-        repStr += indent*' ' + f"  delayQuantSize:  {self.delayQuantSize}\n"
-        repStr += indent*' ' + f"  stopBandAtten:   {self.stopBandAtten} dB\n"
-        repStr += indent*' ' + f"  dopplerShift:    {freqStr(self.dopplerShift)}\n"
-        repStr += indent*' ' + f"  coherenceTime:   {self.coherenceTime} sec\n"
+        repStr += indent*' ' + f"  carrierFreq:        {freqStr(self.carrierFreq)}\n"
+        repStr += indent*' ' + f"  normalizeGains:     {str(self.normalizeGains)}\n"
+        repStr += indent*' ' + f"  normalizeOutput:    {str(self.normalizeOutput)}\n"
+        repStr += indent*' ' + f"  txDir:              {self.txDir}\n"
+        repStr += indent*' ' + f"  filterLen:          {self.filterLen}\n"
+        repStr += indent*' ' + f"  delayQuantSize:     {self.delayQuantSize}\n"
+        repStr += indent*' ' + f"  stopBandAtten:      {self.stopBandAtten} dB\n"
+        repStr += indent*' ' + f"  dopplerShift:       {freqStr(self.dopplerShift)}\n"
+        if self.dopplerShift>0:
+            repStr += indent*' ' + f"  coherenceTime:      {self.coherenceTime} sec\n"
         if getStr: return repStr
         print(repStr)
         
@@ -156,14 +157,14 @@ class ChannelModel:
 
         Parameters
         ----------
-        restartRanGen : Boolean
+        restartRanGen : bool
             If a ``seed`` was not provided to this channel model, this parameter is ignored. Otherwise, if 
             ``restartRanGen`` is set to `True`, the random number generator of this channel model is reset. If 
             ``restartRanGen`` is `False` (the default), the random number generator is not reset. This means that 
             if ``restartRanGen`` is `False`, for stochastic channel models, calling this function starts a new 
             sequence of channel instances, which differs from the sequence when the channel was instantiated.
             
-        applyToBwp : Boolean
+        applyToBwp : bool
             If set to `True` (the default), this function restarts the :py:class:`~neoradium.carrier.BandwidthPart` 
             associated with this channel model. Otherwise, the :py:class:`~neoradium.carrier.BandwidthPart` state 
             remains unchanged.
@@ -185,7 +186,7 @@ class ChannelModel:
 
         Parameters
         ----------
-        applyToBwp : Boolean
+        applyToBwp : bool
             If set to `True` (the default), this function advances the timing state of the 
             :py:class:`~neoradium.carrier.BandwidthPart` associated with this channel model. Otherwise, the 
             :py:class:`~neoradium.carrier.BandwidthPart` state remains unchanged.
@@ -210,7 +211,7 @@ class ChannelModel:
     @property   # This read-only property is already documented above in the __init__ function.
     def coherenceTime(self):
         # https://en.wikipedia.org/wiki/Coherence_time_(communications_systems)
-        return np.sqrt(9/(16*np.pi))/self.dopplerShift
+        return np.sqrt(9/(16*np.pi))/self.dopplerShift if self.dopplerShift>0 else np.inf
 
     # ******************************************************************************************************************
     @property
@@ -253,20 +254,20 @@ class ChannelModel:
         return grid.applyChannel(channelMatrix)
 
     # ******************************************************************************************************************
-    def buildFirs(self):                    # Not documented
+    def buildFirs(self):                    # Undocumented
         # We want to create a "Windowed Sinc Low Pass Filter" and return the FIR values.
         # To understand what is happening here, see "How to Create a Simple Low-Pass Filter" at:
         #   https://tomroelandts.com/articles/how-to-create-a-simple-low-pass-filter
         # We do this by making a "windowed sinc filter". So, we first need to make a "window".
-        # See the following page for info about how to make a kaiser window:
+        # See the following page for info about how to make a Kaiser window:
         #   https://tomroelandts.com/articles/how-to-create-a-configurable-filter-using-a-kaiser-window
-        # In our case, stopBandAtten is the same as 𝐴=−20log10(𝛿). Where the 𝛿 is the "ripple".
-        # The default value of A=80 dB with window size of N=1025=64*16+1 results in 𝛿=0.0001 and b≈0.005. Where
+        # In our case, stopBandAtten is the same as 𝐴=−20log10(𝛿), where the 𝛿 is the "ripple".
+        # The default value of A=80 dB with window size of N=1025=64*16+1 results in 𝛿=0.0001 and b≈0.005 where
         # b is the transition bandwidth (AKA rolloff).
         # 𝛿 = 10**(-A/20)
         # b = (A-8)/(2.285*2*𝛑*(N-1))
         #
-        # See Also the "Filter Experiments" files in the "OtherExperiments" folder in the playgrounds (Not published)
+        # See also the "Filter Experiments" files in the "OtherExperiments" folder in the playgrounds (Not published)
         
         # Calculate beta:
         if self.stopBandAtten > 50:   beta=0.1102*(self.stopBandAtten-8.7)
@@ -296,7 +297,7 @@ class ChannelModel:
         return np.concatenate([allFirs,np.roll(allFirs[:1],-1)])            # Shape: (delayQuantSize+1) x filterLen
 
     # ******************************************************************************************************************
-    def getCoeffMatrix(self):               # Not documented
+    def getCoeffMatrix(self):               # Undocumented
         # 'self.pathDelays' is set by the derived classes. It is an array of length numPaths containing
         # delay values in nanoseconds.
         assert not self.totalBlockage, "'getCoeffMatrix' was called at a total blockage point!"
@@ -305,7 +306,7 @@ class ChannelModel:
         intDelays = np.int32(delaysInSamples)                           # Integer parts of delays
         delayFractions = delaysInSamples - intDelays                    # Fractional parts of delays
 
-        # Calculate Filter Delay. The filter delay is additional delay to ensure the filter's "Causal latency".
+        # Calculate Filter Delay. The filter delay is additional delay to ensure the filter's "causal latency".
         # The lowest delay cannot be less than (filterLen-1)//2.
         self.filterDelay = np.clip( self.filterLen//2 - 1 - intDelays.min(), 0, None)
         intDelays += self.filterDelay  # Update the integer delay. Now each delay is at least (filterLen-1)//2
@@ -316,7 +317,7 @@ class ChannelModel:
         fracCoeffs = self.allFirs[quantIndexes]                                     # Shape: numPaths x filterLen
 
         # Now calculating the Coefficient Matrix:
-        coeffLen = intDelays.max() + self.filterLen//2 + 1  # It must includes the second half of the filter
+        coeffLen = intDelays.max() + self.filterLen//2 + 1  # It must include the second half of the filter
         
         coeffMatrix = np.zeros(numPaths*coeffLen)
         indexes = intDelays[:,None] + np.arange(self.filterLen) + \
@@ -363,7 +364,7 @@ class ChannelModel:
 
         # This is the discrete-time channel impulse response: h={h[0], h[1], ..., h[cl-1]}
         nc,nr,nt,pp = chanGains.shape
-        cir = np.matmul(chanGains.reshape(nc,-1,pp), coeffMatrix[None,:,:]).reshape(nc,nr,nt,-1) # nc x nr x nt x cl
+        cir = (chanGains.reshape(-1,pp) @ coeffMatrix).reshape(nc,nr,nt,-1)     # nc x nr x nt x cl
         chanOffset = np.abs(cir.sum((0,2))).sum(0).argmax() # Sum on (nc,nt) -> ABS -> sum on nr -> argmax
         
         # Saving the channel gains and coefficient matrix for this slot:
@@ -396,12 +397,12 @@ class ChannelModel:
             OFDM symbols, ``K`` denotes the number of subcarriers, ``Nr`` is the number of receive antennas, and 
             ``Nt`` indicates the number of transmit antennas.
         """
-        # For better understanding of what is going on here, see the slide "Calculating Channel Matrix" in the
+        # For a better understanding of what is going on here, see the slide "Calculating Channel Matrix" in the
         # implementation notes.
         self.prepareForNextSlot()   # Making sure the Channel Gains, CIR, and Channel Offset are ready for this slot.
         
         if self.totalBlockage:
-            # We are at a "Total blockage" point. Return an all zeros channel matrix
+            # We are at a "total blockage" point. Return an all zeros channel matrix
             nr, nt = self.nrNt
             ll, kk = self.bwp.symbolsPerSlot, self.bwp.numRbs*12
             return np.zeros((ll,kk,nr,nt), dtype=np.complex128)
@@ -431,7 +432,7 @@ class ChannelModel:
     def applyToSignal(self, inputSignal):
         r"""
         This method applies the channel model to the time-domain waveform specified by ``inputSignal`` and returns 
-        another :py:class:`~neoradium.waveform.Waveform` object containing the received signal in time domain.
+        another :py:class:`~neoradium.waveform.Waveform` object containing the received signal in the time domain.
 
         Parameters
         ----------
@@ -494,17 +495,15 @@ class ChannelModel:
             The path gains as a NumPy array of shape ``L x Nr x Nt x Np``.
         """
         assert not self.totalBlockage, "'getChannelGains' called at a total blockage point!"
-        pathGains = self.getPathGains()                                 # nc x nr x nt x pp
-        if self.normalizeOutput:
-            pathGains /= np.sqrt(self.nrNt[0])                          # Divide by sqrt(nr)
-        if self.normalizeGains:
-            pathGains /= np.sqrt(toLinear(self.pathPowers).sum())       # Divide by sqrt(sum(clusterPowers))
-        return pathGains                                                # nc x nr x nt x pp
+        pathGains = self.getPathGains()                                                     # nc x nr x nt x numPaths
+        if self.normalizeOutput:    pathGains /= np.sqrt(self.nrNt[0])                      # sqrt(nr)
+        if self.normalizeGains:     pathGains /= np.sqrt(toLinear(self.pathPowers).sum())   # sqrt(sum(clusterPowers))
+        return pathGains                                                                    # nc x nr x nt x numPaths
  
     # ******************************************************************************************************************
-    def applyKFactorScaling(self):  # Not documented
-        # This function applies the K-Factor Scaling. This should be called only for profiles with
-        # LOS paths and only when the K-Factor scaling is enabled (kFactor is not None).
+    def applyKFactorScaling(self):  # Undocumented
+        # This function applies the K-factor Scaling. This should be called only for profiles with
+        # LOS paths and only when the K-factor scaling is enabled (kFactor is not None).
         # See TR 38.901 - Sec. 7.7.6 K-factor for LOS channel models
         assert self.hasLos
         assert self.kFactor is not None
@@ -525,7 +524,7 @@ class ChannelModel:
 
     # ******************************************************************************************************************
     @classmethod
-    def getEffChannel(cls, channelMatrix, precoder):
+    def getEffChannel(cls, channelMatrix, precoder, w=None):
         r"""
         This class method can be used to calculate the effective channel based on the given ``channelMatrix`` and the
         ``precoder``.
@@ -535,10 +534,8 @@ class ChannelModel:
         channelMatrix : NumPy array
             An ``L x K x Nr x Nt`` complex NumPy array representing the channel matrix, where ``L`` represents the 
             number of OFDM symbols, ``K`` denotes the number of subcarriers, ``Nr`` is the number of receive antennas, 
-            and ``Nt`` indicates the number of transmit antennas. It can be the actual channel matrix obtained directly
-            from a channel model using the :py:meth:`~neoradium.channelmodel.ChannelModel.getChannelMatrix` method 
-            (perfect estimation), or an estimated channel matrix obtained using the 
-            :py:meth:`~neoradium.grid.Grid.estimateChannelLS` method.
+            and ``Nt`` indicates the number of transmit antennas. It can be obtained directly
+            from a channel model using the :py:meth:`~neoradium.channelmodel.ChannelModel.getChannelMatrix`.
 
         precoder : List of tuples or NumPy array
             The precoder information can take one of the following forms:
@@ -551,10 +548,17 @@ class ChannelModel:
             :Using PRGs: ``precoder`` is a list of tuples of the form (``groupRBs``, ``groupF``).
                 For each entry in the list, the ``Nt x Nl`` precoding matrix ``groupF`` is applied to all subcarriers
                 of the resource blocks listed in ``groupRBs``. In this case, different precoders are applied to 
-                different sub-bands of the ``channelMatrix``.
+                different `sub-bands` of the ``channelMatrix``.
                 
             You can use the :py:meth:`~neoradium.pdsch.PDSCH.getPrecodingMatrix` method to obtain a precoder.
 
+        w : NumPy array, optional
+            An optional steering vector of shape ``Nt x 1``, where ``Nt`` is the number of transmitter antennas. When
+            provided, each row of the precoding matrix is multiplied by the corresponding element of ``w`` before
+            calculating the effective channel. This allows the effective channel to include both a steering vector
+            and a PMI-based precoder. If omitted, the effective channel is calculated using only the specified 
+            precoder.
+            
         Returns
         -------
         4-D complex NumPy array
@@ -563,21 +567,31 @@ class ChannelModel:
             indicates the number of transmission layers.
         """
         # 'precoder' is either:
-        #   * a wideband Nt x Nl matrix (applied to all subcarriers), or
-        #   * a list of tuples (groupRBs, groupF) for PRG-based, frequency-selective precoding.
-        ll, kk, nr, nt = channelMatrix.shape
-        if type(precoder)==list:
-            # PRG-based precoder: build a per-subcarrier precoder matrix of shape (K, Nt, Nl).
+        #   * A list of tuples (groupPRBs, groupF) for PRG-based, frequency-selective precoding, or
+        #   * A wideband Nt x Nl matrix (applied to all subcarriers)
+        # This always returns an L x K x Nr x Nl tensor. This means it includes all PRBs of the BWP, not just the PRBs
+        # in the precoder in subband case. In this case, the missing PRBs are set to zeros.
+        l, k, nr, nt = channelMatrix.shape
+        if w is not None:
+            w = np.asarray(w, dtype=np.complex128)
+            if w.ndim == 1:     w = w[:, None]
+            if w.shape != (nt, 1):  raise ValueError(f"'w' must have shape ({nt},1); received {w.shape}.")
+        
+        if isinstance(precoder, list):
             nl = precoder[0][1].shape[1]
-            precoderMatrix = np.zeros((kk, nt, nl), dtype=np.complex128)   # Shape: K, Nt, Nl
-            for groupRBs, groupF in precoder:
+            effChannel = np.zeros((l, k, nr, nl), dtype=np.complex128)  # Shape: L x K x Nr x Nl
+            # PRG-based precoder: Apply each group independently and then concatenate all group effective channels
+            for groupPRBs, groupF in precoder:
                 # Map each RB index to its 12 subcarrier indices in frequency.
-                groupREs = np.int32([rb*12+re for rb in groupRBs for re in range(12)])
-                precoderMatrix[groupREs] = groupF
+                groupREs = np.int32([rb*12+re for rb in groupPRBs for re in range(12)])
+                if w is None:   effChannel[:,groupREs,:,:] = channelMatrix[:,groupREs,:,:] @ groupF
+                else:           effChannel[:,groupREs,:,:] = channelMatrix[:,groupREs,:,:] @ (groupF * w)
         else:
-            if type(precoder) != np.ndarray:
+            # Wideband precoder:
+            if not isinstance(precoder, np.ndarray):
                 raise ValueError("'precoder' must be a 2D NumPy array or a list of tuples.")
-            precoderMatrix = precoder
-
-        return channelMatrix @ precoderMatrix
+            if w is None:   effChannel = channelMatrix @ precoder
+            else:           effChannel = channelMatrix @ (precoder * w)
+ 
+        return effChannel
 

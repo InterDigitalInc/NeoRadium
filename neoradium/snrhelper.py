@@ -1,4 +1,4 @@
-# Copyright (c) 2024 InterDigital AI Lab
+# Copyright (c) 2025-2026, InterDigital AI Lab
 """
 The module ``snrhelper.py`` implements the adaptive SNR iterator :py:class:`SnrScheduler`.
 """
@@ -21,7 +21,7 @@ class SnrScheduler:
     at the current SNR.
     """
     # ******************************************************************************************************************
-    def __init__(self, snr0=0, step=1, maxSnrs=500, loSnrVal=100, hiSnrVal=0):
+    def __init__(self, snr0=0, step=1, loSnrVal=100, hiSnrVal=0, fastStep=None, maxSnrs=100):
         r"""
         Parameters
         ----------
@@ -31,10 +31,6 @@ class SnrScheduler:
         step : float
             SNR increment in dB used when moving up/down (default: 1.0).
     
-        maxSnrs : int
-            Hard cap on the number of recorded SNR points; used as a safeguard against non-monotonic behavior or 
-            failure to converge (default: 500).
-    
         loSnrVal : float
             Target metric value associated with the *low* SNR operating point.
             Example for BLER (%): 100. (default: 100)
@@ -43,6 +39,15 @@ class SnrScheduler:
             Target metric value associated with the *high* SNR operating point.
             Example for BLER (%): 0. (default: 0)
     
+        fastStep : float or None
+            If specified, the ``fastStep`` is used during initial searching until we find a point inside the range
+            specified by loSnrVal and hiSnrVal. Once a point is found in the range, the ``step`` parameter is used.
+            If not specified, it is set to ``2 * step``. 
+            
+        maxSnrs : int
+            Hard cap on the number of recorded SNR points; used as a safeguard against non-monotonic behavior or 
+            failure to converge (default: 100).
+
         Notes
         -----
         - For BER/BLER, metrics generally *decrease* with SNR (loSnrVal > hiSnrVal).
@@ -51,24 +56,30 @@ class SnrScheduler:
 
         .. code-block:: python
             :caption: Examples
-        
-            # Start at -8 dB, use increments of 0.2 dB for BLER using default values (loSnrVal=100, hiSnrVal=0)
+
+            # Start at -8 dB, use increments of 0.2 dB for BLER using default values (loSnrVal=100, hiSnrVal=0).
+            # The defaults are oriented for decreasing-with-SNR metrics like BLER/BER: at low SNR the metric is
+            # near 100%, at high SNR it approaches 0%. Hence loSnrVal > hiSnrVal.
             snrScheduler = SnrScheduler(snr0=-8, step=.2)
-    
+
             # Start at 0 dB, use increments of 0.5 dB for BER in the range %10 to %45
             snrScheduler = SnrScheduler(snr0=0, step=.5, loSnrVal=45, hiSnrVal=10)
-    
+
             # Start at -4 dB, use increments of 0.5 dB for throughput in the range %0 to %100. Note that
             # direction of changes in this case is the opposite of BER/BLER cases. (loSnrVal < hiSnrVal)
             snrScheduler = SnrScheduler(snr0=-4, step=1, loSnrVal=0, hiSnrVal=100)
         """
         self.snr0 = snr0            # The starting SNR value
-        if not (isinstance(step, (int, float)) and step > 0):   raise ValueError("`step` must be a positive number.")
+        if not (isinstance(step, (int, float)) and step > 0):  raise ValueError("`step` must be a positive number.")
         self.step = step            # SNR step
-        if not (isinstance(maxSnrs, int) and maxSnrs > 0):      raise ValueError("`maxSnrs` must be a positive integer.")
+        if not (isinstance(maxSnrs, int) and maxSnrs > 0):     raise ValueError("`maxSnrs` must be a positive integer.")
         self.maxSnrs = maxSnrs      # Max number of SNR values
+        if loSnrVal == hiSnrVal:    raise ValueError("`loSnrVal` and `hiSnrVal` must be distinct.")
         self.loSnrVal = loSnrVal    # The value of reference param at lowest SNR
-        self.hiSnrVal = hiSnrVal    # The value of reference param at lowest SNR
+        self.hiSnrVal = hiSnrVal    # The value of reference param at highest SNR
+        if fastStep is None:                                        self.fastStep = 2*self.step
+        elif isinstance(fastStep, (int, float)) and fastStep > 0:   self.fastStep = fastStep
+        else:                       raise ValueError("`fastStep` must be a positive number.")
         self.reset()
 
     # ******************************************************************************************************************
@@ -119,7 +130,7 @@ class SnrScheduler:
         r"""
         Record the metric(s) for the current SNR and advance the internal state.
     
-        You MUST call this at the end of each loop iteration; otherwise a ValueError is raised on the next iteration.
+        You MUST call this at the end of each loop iteration; otherwise, a ValueError is raised on the next iteration.
     
         Parameters
         ----------
@@ -159,38 +170,43 @@ class SnrScheduler:
             
     # ******************************************************************************************************************
     def updateState(self, value):                           # The state machine
+        # Round midpoint to the nearest multiple of `step` (biased toward zero via int truncation),
+        # so that every SNR the algorithm visits lies on the same step-aligned grid.
+        def midPoint():     return self.step * int((self.curHi + self.curLo)/(2*self.step))
         if self.state == 'Start':                               # Starting State
             if self.whereAmI(value)=='LoSNR':                       # At low point
                 self.curLo = max(self.curSnr, self.curLo)               # Update the highest low point
                 self.state = 'SearchingUp'                              # Go up searching for an in-range point
-                self.curSnr += self.step                                # Go up
+                self.curSnr += self.fastStep                            # Go up fast
             elif self.whereAmI(value)=='HiSNR':                     # At high point
                 self.curHi = min(self.curSnr, self.curHi)               # Update the lowest high point
                 self.state = 'SearchingDown'                            # Go down searching for an in-range point
-                self.curSnr -= self.step                                # Go down
+                self.curSnr -= self.fastStep                            # Go down fast
             else:                                                   # Found a point in the range
                 self.upStart = self.curSnr + self.step                  # Set return point to start going up after reaching low
                 self.curSnr -= self.step                                # Go down
                 self.state = 'GoingDown'                                # Update State
         elif self.state == 'SearchingUp':                       # Going up searching for an in-range point
-            if self.whereAmI(value)=='LoSNR':                       # Was at low point, still at low point -> Keep Going up faster
+            if self.whereAmI(value)=='LoSNR':                       # Was at low point, still at low point
                 self.curLo = max(self.curSnr, self.curLo)               # Update the highest low point
-                self.curSnr += 2 * self.step                            # Go 2x faster
-            elif self.whereAmI(value)=='HiSNR':                     # Was at low point, now at high point -> Go to midpoint between low and high
+                if self.curHi<np.inf:   self.curSnr = midPoint()        # We do have a high point. -> Go to midpoint
+                else:                   self.curSnr += self.fastStep    # We don't have a high point -> Keep going up fast
+            elif self.whereAmI(value)=='HiSNR':                     # Was at low point, now at high point -> Go to midpoint
                 self.curHi = min(self.curSnr, self.curHi)               # Update the lowest high point
                 self.state = 'SearchingDown'                            # Going back down
-                self.curSnr = (self.curHi + self.curLo)/2               # Go to the midpoint
+                self.curSnr = midPoint()                                # Go to midpoint (A multiple of step)
             else:                                                   # Found a point in the range
                 self.upStart = self.curSnr + self.step                  # Set return point to start going up after reaching low
                 self.curSnr -= self.step                                # Go down until we hit low
                 self.state = 'GoingDown'                                # Update State
         elif self.state == 'SearchingDown':                     # Going down searching for an in-range point
-            if self.whereAmI(value)=='HiSNR':                       # Was at high point, still at high point -> Keep Going down faster
+            if self.whereAmI(value)=='HiSNR':                       # Was at high point, still at high point
                 self.curHi = min(self.curSnr, self.curHi)               # Update the lowest high point
-                self.curSnr -= 2 * self.step                            # Go 2x faster
+                if self.curLo>-np.inf:  self.curSnr = midPoint()        # We do have a low point -> Go to midpoint
+                else:                   self.curSnr -= self.fastStep    # We don't have a low point -> Keep going down fast
             elif self.whereAmI(value)=='LoSNR':                     # Was at high point, now at low point -> Go to midpoint between low and high
                 self.curLo = max(self.curSnr, self.curLo)               # Update the highest low point
-                self.curSnr = (self.curHi + self.curLo)/2               # Go to the midpoint
+                self.curSnr = midPoint()                                # Go to the midpoint (A multiple of step)
                 self.state = 'SearchingUp'                              # Going back up
             else:                                                   # Found a point in the range
                 self.upStart = self.curSnr + self.step                  # Set return point to start going up after reaching low
@@ -201,8 +217,6 @@ class SnrScheduler:
                 self.curLo = max(self.curSnr, self.curLo)               # Update the highest low point
                 self.curSnr -= self.step                                # Go down one more step
                 self.state = 'AtLow'                                    # Update State
-            elif self.whereAmI(value)=='HiSNR':                     # Was going down, and now at high point => Unexpected behavior
-                raise RuntimeError(f"Unexpected state reached in algorithm. (Going down -> HiSNR) SNR:{self.curSnr} Value:{value}")
             else:                                                   # Was going down, not reached low point yet
                 self.curSnr -= self.step                                # Keep going
         elif self.state == 'AtLow':                             # Reached low point
@@ -219,8 +233,6 @@ class SnrScheduler:
                 self.curHi = min(self.curSnr, self.curHi)               # Update the lowest high point
                 self.curSnr += self.step                                # Go up one more step
                 self.state = 'AtHigh'                                   # Update State
-            elif self.whereAmI(value)=='LoSNR':                     # Was going up, and now at low point => Unexpected behavior
-                raise RuntimeError(f"Unexpected state reached in algorithm. (Going up -> LoSNR) SNR:{self.curSnr} Value:{value}")
             else:                                                   # Was going up, not reached high point yet
                 self.curSnr += self.step                                # Keep going
         elif self.state == 'AtHigh':                            # Reached high point
@@ -236,19 +248,32 @@ class SnrScheduler:
     # ******************************************************************************************************************
     def getSnrsAndData(self):
         r"""
-        Return recorded SNRs and their associated metric arrays.
-    
+        Return recorded SNRs and their associated metric arrays. Only SNRs within the converged
+        bracket :math:`[curLo, curHi]` are returned; the bracketing-phase endpoints outside that
+        range are silently dropped.
+
         Returns
         -------
-        list[np.ndarray]
-            A list of numpy arrays:
-            
-            - index 0: sorted SNR values inside the finalized [Lo, Hi] bracket
-            - index 1: primary metric values aligned with the SNRs
-            - index 2+: additional arrays for each `otherValues` stream
+        list or None
+            ``None`` if no iterations have been run yet (i.e., :py:meth:`setData` was never called).
+            Otherwise a list ``l`` of length ``n+2``, where ``n`` is the number of parameters in
+            the ``otherValues`` argument of :py:meth:`setData`:
+
+            - ``l[0]``: 1-D ``float32`` NumPy array of SNR values, sorted ascending.
+            - ``l[1]``: 1-D ``float32`` NumPy array of the primary metric (e.g. BLER) values
+              corresponding to ``l[0]``.
+            - ``l[i+2]`` (``0 <= i < n``): a Python list of values for the i'th ``otherValues``
+              parameter, ordered to match ``l[0]``. Elements may be scalars or NumPy arrays of
+              variable shape (NumPy can't always stack them, so a list is returned).
         """
-        if not self.buffers:    return [np.array([])]                           # The case where no iterations happened
+        if not self.buffers:    return None                                     # The case where no iterations happened
         snrs = self.buffers[0]
         idx = np.argsort(snrs)                                                  # Sort based on SNR values
         idx = [i for i in idx if snrs[i]>=self.curLo and snrs[i]<=self.curHi ]  # Drop the search SNRs at both sides
-        return [ np.array(buffer)[idx] for buffer in self.buffers ]
+        retList = [ np.float32(self.buffers[0])[idx], np.float32(self.buffers[1])[idx] ]
+        # Note that the size of otherValues for different SNRs may not be the same. So, we cannot
+        # always make them a numpy array. We return a list of "objects" for each otherValue. The "objects"
+        # in these lists may be numpy arrays and the numpy arrays in these list may have different shapes.
+        # The SNRs and Values are still returned as numpy arrays.
+        retList += [ [buffer[i] for i in idx] for buffer in self.buffers[2:] ]
+        return retList

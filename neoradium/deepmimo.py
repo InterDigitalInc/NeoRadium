@@ -1,4 +1,4 @@
-# Copyright (c) 2025 InterDigital AI Lab
+# Copyright (c) 2024-2026, InterDigital AI Lab
 """
 This module introduces the :py:class:`~neoradium.deepmimo.DeepMimoData` class, which encapsulates data related to 
 various scenarios in the `DeepMIMO <https://www.deepmimo.net>`_ framework. The 
@@ -19,32 +19,32 @@ an interactive map. A complete example of using the :py:class:`~neoradium.deepmi
 #                                       scenario and returns a generator object that can generate channel matrices
 #                                       corresponding to those random points.
 # 12/18/2025    Shahab                  Minor bug fixes.
+# 03/12/2026    Shahab                  Changes in NeoRadium version 0.5.0:
+#                                       * getRandomTrajectory now receives a 'seed' parameter for reproducibility.
+#                                       * interpolateTrajectory now assigns pathIds and polarization phases to any
+#                                         path on the trajectory. For each path, these values remain unchanged for
+#                                         all points on the trajectory as long as the path lives.
+#                                       * drawMap now returns only the 'axis' object. The 'figure' object can be
+#                                         obtained using the ax.get_figure() function.
+# 08/07/2026    Shahab                  Changes in NeoRadium version 0.5.1:
+#                                       * Added the new parameter 'lastFrameDur' to the 'animateTrajectory' function.
 # **********************************************************************************************************************
 import numpy as np
 import os, time, json
 import scipy
-import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap, ListedColormap, colorConverter
-import matplotlib.patches as mpatches
-import matplotlib.animation as animation
-
 from .trjchan import TrjPoint, Trajectory, TrjChannel
 from .carrier import SAMPLE_RATE
 from .utils import freqStr
 from .random import random
 
-testedScenarios = ["O1_3P5B", "O1_3P5", "O1_3P4", "O1_28B", "O1_28", "O1_60", "O1_140",
-                   "ASU_CAMPUS1", "ASU_CAMPUS_3P5", "BOSTON5G_3P5", "BOSTON5G_28",
-                   "CITY_9_SANFRANCISCO", "CITY_11_SANTACLARA",
-                   "I1_2P5", "I1_2P4", "I3_2P4", "I3_60_V1", "OFFICEFLOOR1"]
-inDoorScenarios = [ "I1_2P5", "I1_2P4", "I3_2P4", "I3_60_V1", "OFFICEFLOOR1"]
+indoorScenarios = [ "I1_2P5", "I1_2P4", "I3_2P4", "I3_60_V1", "OFFICEFLOOR1"]
 
 # **********************************************************************************************************************
 class DeepMimoData:
     r"""
     This class encapsulates all the ray-tracing data read from `DeepMIMO <https://www.deepmimo.net>`_ scenario 
-    files. It can be used to create random trajectories of user (UE) movements by interpolating the ray-tracing 
-    information at intermediate points on the trajectory.
+    files. It can be used to create random user (UE) trajectories by interpolating the ray-tracing information at 
+    intermediate points on the trajectory.
     
     The generated trajectories can then be used by the :py:class:`~neoradium.trjchan.TrjChannel` class to generate 
     temporally and spatially consistent sequences of MIMO channels.    
@@ -56,26 +56,29 @@ class DeepMimoData:
         r"""
         Parameters
         ----------
-        scenario: str
+        scenario : str
             The name of the `DeepMIMO <https://www.deepmimo.net>`_ scenario, which is also the name of the folder 
             containing the scenario files. 
 
-        baseStationId: int or str
-            The base station identifier. In the newer versions of `DeepMIMO <https://www.deepmimo.net>`_ scenario 
-            files, the base station identifier is a text string. You can use the 
-            :py:meth:`~neoradium.deepmimo.DeepMimoData.showScenarioInfo` class 
+        baseStationId : int or str
+            The base station identifier. In the newer (V4) versions of
+            `DeepMIMO <https://www.deepmimo.net>`_ scenario files, the base station identifier is a string;
+            in older (V1/V3) versions it is an integer. You can use the
+            :py:meth:`~neoradium.deepmimo.DeepMimoData.showScenarioInfo` class
             method to print information about available base stations and corresponding ``baseStationId`` values. The
-            default value is 1. In case of string base station identifiers, this default value results in selecting 
-            the first base station (after sorting the base station identifiers).
-            
-        gridId: int or str
-            For the scenarios with multiple user grids, this parameter determines which user grid data should be 
-            loaded. The default value is 0 which results in loading the first user grid. In the newer versions of 
-            `DeepMIMO <https://www.deepmimo.net>`_ scenario files, the base station identifier is a text string. You 
-            can use the :py:meth:`~neoradium.deepmimo.DeepMimoData.showScenarioInfo` class method to print 
-            information about available user grids and their corresponding identifiers. In case of string grid 
-            identifiers, this default value of 0 results in selecting the first user grid (after sorting the 
-            user grid identifiers).
+            default value is 1. In case of string base station identifiers, this default value results in selecting
+            the first base station (after sorting the base station identifiers). Passing a string identifier against
+            a V1 or V3 scenario raises a ``ValueError``.
+
+        gridId : int or str
+            For the scenarios with multiple user grids, this parameter determines which user grid data should be
+            loaded. The default value is 0 which results in loading the first user grid. In the newer (V4) versions of
+            `DeepMIMO <https://www.deepmimo.net>`_ scenario files, the grid identifier is a string; in older (V1/V3)
+            versions it is an integer. You can use the
+            :py:meth:`~neoradium.deepmimo.DeepMimoData.showScenarioInfo` class method to print
+            information about available user grids and their corresponding identifiers. In case of string grid
+            identifiers, the default value of zero results in selecting the first user grid (after sorting the
+            user grid identifiers). Passing a string identifier against a V1 or V3 scenario raises a ``ValueError``.
             
 
         **Other Properties:**
@@ -83,18 +86,18 @@ class DeepMimoData:
         After reading the `DeepMIMO <https://www.deepmimo.net>`_ scenario files, this class sets internal properties 
         as follows:
         
-            :gridSize: A NumPy array of 2 integers indicating the number of grid points  in ``x`` and ``y`` 
+            :gridSize: A NumPy array of 2 integers indicating the number of grid points in ``x`` and ``y`` 
                 directions.
                 
             :numGridPoints: The total number of grid points with ray-tracing data in the specified scenario. Note 
                 that :math:`numGridPoints = gridSize[0] * gridSize[1]`.
                 
-            :delta: The distance between 2 neighboring grid points (in ``x`` or ``y`` direction). It is assumed that 
+            :delta: The distance between two neighboring grid points (in ``x`` or ``y`` direction). It is assumed that 
                 this value is the same along the ``X`` and ``Y`` axes.
                 
-            :bsXyz: A NumPy array containing the three dimensional coordinates of the base station.
+            :bsXyz: A NumPy array containing the three-dimensional coordinates of the base station.
          
-            :xyMin, xyMax: NumPy arrays containing the coordinates of lower left and upper right points on the grid. 
+            :xyMin, xyMax: NumPy arrays containing the coordinates of lower-left and upper-right points on the grid. 
                 In other words, for the :math:`(x,y)` coordinates of any grid point, we have:
                 
                 .. math::
@@ -111,19 +114,22 @@ class DeepMimoData:
          
             :numTotalBlockage: Total number of grid points with no paths between the UE and the base station.
 
-            :numLOS: Total number of grid points where there is a Line-of-Sight (LOS) path between the UE and the base
+            :numLOS: Total number of grid points where there is a line-of-sight (LOS) path between the UE and the base
                 station.
 
 
         **Indexing:**
-        
-        This class supports direct indexing to the :py:class:`~neoradium.trjchan.TrjPoint` objects in the DeepMIMO 
+
+        This class supports direct indexing to the :py:class:`~neoradium.trjchan.TrjPoint` objects in the DeepMIMO
         dataset. For example:
-        
+
         .. code-block:: python
-        
+
             deepMimoData = DeepMimoData("O1_3p5B", baseStationId=3) # Read and create dataset
-            tenFirstPoints = deepMimoData[:10]      # Getting the first 10 points in the dataset
+            tenFirstPoints = deepMimoData[:10]      # Get the first 10 points in the dataset
+
+        The returned :py:class:`~neoradium.trjchan.TrjPoint` objects are live references to the internal store
+        rather than copies; mutating a returned point will mutate the corresponding entry in this dataset.
             
             
         **Iterating through points:**
@@ -139,9 +145,6 @@ class DeepMimoData:
                 if point.hasLos==1:
                     numLosPoints += 1
         """
-        if scenario.upper() not in testedScenarios:
-            print(f"Warning: This implementation has not been tested with scenario \"{scenario}\"!")
-            
         scenarioFolder = self.pathToScenarios + scenario + "/"
         if os.path.exists(scenarioFolder) == False: scenarioFolder = os.path.expanduser("~") + scenarioFolder
         if os.path.exists(scenarioFolder) == False:
@@ -151,15 +154,23 @@ class DeepMimoData:
         self.baseStationId = baseStationId
         self.gridId = gridId
 
+        if os.path.exists(scenarioFolder + 'params.json'):
+            # V4 scenario files
+            self.loadV4(scenarioFolder)
+            return
+        
+        # String identifiers (e.g., 'BS_1', 'GRID_0') are only supported by the V4 scenario format.
+        # Reject them early against V1/V3 scenarios to avoid a cryptic int() conversion failure later.
+        if isinstance(baseStationId, str) or isinstance(gridId, str):
+            raise ValueError("String 'baseStationId' or 'gridId' values are only supported for "
+                             "V4-format DeepMIMO scenarios; this scenario uses an older (V1/V3) format.")
+
         if os.path.exists(scenarioFolder + 'params.mat'):
-            # New version of scenario files
+            # V3 scenario files
             self.loadV3(scenarioFolder)
             return
 
-        if os.path.exists(scenarioFolder + 'params.json'):
-            self.loadV4(scenarioFolder)
-            return
-
+        # V1 scenario files
         self.scenario = scenario
         self.version = 1
         scenarioInfo = scipy.io.loadmat(scenarioFolder + '%s.params.mat'%(scenario))
@@ -195,19 +206,21 @@ class DeepMimoData:
         txLocInfo = txLocInfo['TX_Loc_array_full']
         self.bsXyz = txLocInfo[baseStationId-1][1:4]
 
-        # losInfo is an array of length 'numGridPoints'. Each element can be:
+        # losInfo is an array of length 'numGridPoints'. Each element may be:
         #       1: Has LOS path
-        #       0: Does not have LOS path (All paths are NLOS)
+        #       0: Does not have a LOS path (all paths are NLOS)
         #       -1: No Paths at all
         losInfo = scipy.io.loadmat(scenarioFolder+f'{scenario}.{baseStationId}.LoS.mat')['LOS_tag_array_full'][0][1:]
 
         pathLossInfo = scipy.io.loadmat(scenarioFolder+'%s.%d.PL.mat'%(scenario, baseStationId))['PL_array_full']
         distances = pathLossInfo[:,0]   # Distance between each UE and the specified base station in meters
-        pathLosses = pathLossInfo[:,1]  # Path Loss between each UE and the specified base station
+        pathLosses = pathLossInfo[:,1]  # Path loss between each UE and the specified base station
 
         self.allTrjPoints = []
         userIdx, fileIdx = 0, 1
         self.maxPaths, self.minPaths, sumPaths, self.numTotalBlockage, self.numLOS = -1, 10000, 0, 0, 0
+        # The file is read sequentially with no random access, so we walk through grids 0..gridId-1
+        # only to advance 'fileIdx' past their data; user data is parsed and stored only when g == gridId.
         for g in range(gridId+1):
             for userId in range(1,usersPerGrid[g]+1):
                 assert (userId == cirInfo[fileIdx]) and (userId == dodInfo[fileIdx]) and (userId == doaInfo[fileIdx])
@@ -225,11 +238,11 @@ class DeepMimoData:
                     pathNo = pathIdx + 1
                     assert (pathNo==cirInfo[fileIdx]) and (pathNo==dodInfo[fileIdx]) and (pathNo==doaInfo[fileIdx]), \
                         "%d, %d, %d, %d"%(pathNo, int(cirInfo[fileIdx]), int(dodInfo[fileIdx]), int(doaInfo[fileIdx]))
-                    phase, delay, power = cirInfo[fileIdx+1:fileIdx+4]  # Doppler Phase, Propagation Delay (𝜏), power
+                    phase, delay, power = cirInfo[fileIdx+1:fileIdx+4]  # Doppler phase, propagation delay (𝜏), power
                     aod, zod, dodPower = dodInfo[fileIdx+1:fileIdx+4]   # Azimuth of departure, Zenith of departure
                     aoa, zoa, doaPower = doaInfo[fileIdx+1:fileIdx+4]   # Azimuth of arrival, Zenith of arrival
                     assert (doaPower==power) and (dodPower==power)
-                    # Path Values: 0:Phase, 1:delay, 2:RxPower, 3:aoa, 4:zoa, 5:aod, 6:zod
+                    # Path values: 0:phase, 1:delay, 2:RxPower, 3:aoa, 4:zoa, 5:aod, 6:zod
                     pathsInfo += [ [phase, delay*1e9, power, aoa, zoa, aod, zod] ]
                     fileIdx += 4
 
@@ -254,17 +267,20 @@ class DeepMimoData:
         self.avgPaths = sumPaths/len(self.allTrjPoints)
 
     # ******************************************************************************************************************
-    def loadV3(self, scenarioFolder):   # Not documented
-        # This function loads the DeepMIMO data based on the V2/V3 format of files
-        # unused params: 'transmit_power'
-        # TODO: Test this with scenarios with multiple user grids
+    def loadV3(self, scenarioFolder):   # Undocumented
+        # This function loads DeepMIMO data using the V2/V3 file format
+        # Unused parameter: 'transmit_power'
+        # TODO: Test this on scenarios with multiple user grids
         params = scipy.io.loadmat(scenarioFolder + 'params.mat')
         self.carrierFreq = params['carrier_freq'][0][0]
         self.version = params['version'][0][0]
         
         gridInfo = params['user_grids']
         numUserGrids = len(gridInfo)
-        assert numUserGrids==1, "This code has not been tested with numUserGrids>1!"
+        if numUserGrids != 1:
+            raise NotImplementedError(
+                f"V3 scenarios with multiple user grids (found {numUserGrids}) are not supported; "
+                "please use a V4-format scenario or a single-grid V3 scenario.")
         gridId = self.gridId
         if gridId>=numUserGrids:
             raise ValueError("Invalid \"gridId\" value (%d)! It must be smaller than %d!"%(gridId, numUserGrids))
@@ -293,11 +309,11 @@ class DeepMimoData:
                 pathsInfo = channels.T
                 numPaths = pathsInfo.shape[0]
                 los = 1 if any(pathsInfo[:,7]==1) else 0
-                pathsInfo = pathsInfo[:,:7] # We don't keep los flag per path. The los path is the one with lowest delay
+                pathsInfo = pathsInfo[:,:7] # No LOS flags. The LOS path is the one with the lowest delay.
                 pathsInfo[:,1] *= 1e9       # Delays are kept in nanoseconds
 
-            # Using only rx Location for the UE location. In most scenarios txLoc and rxLoc are the same.
-            rxLocs = ueInfo['rx_locs'][i];      # xyz, dist, pathloss
+            # Use only the Rx location as the UE location. In most scenarios txLoc and rxLoc are the same.
+            rxLocs = ueInfo['rx_locs'][i];      # xyz, distance, path loss
             txLocs = ueInfo['tx_loc'][0];       # Base station xyz
             xyz = rxLocs[:3]
             distance = rxLocs[3]
@@ -319,39 +335,39 @@ class DeepMimoData:
         self.avgPaths = sumPaths/len(self.allTrjPoints)
     
     # ******************************************************************************************************************
-    def findId(self, name, id, default, dic):   # Not documented
-        # This function aims to ensure backward compatibility as much as possible. It returns the most suitable
-        # match for a base station or user grid identifier in the scenario information for the provided identifier,
-        # which can be an integer or a text string.
-        if type(id)==str:
-            if id in dic:                   return id       # "id" is a string that exists in the JSON dictionary
+    def findId(self, name, identifier, default, info):   # Undocumented
+        # This function attempts to preserve backward compatibility as much as possible. It returns the most suitable
+        # match for a base-station or user-grid identifier in the scenario information for the provided value,
+        # which can be an integer or a string.
+        if type(identifier)==str:
+            if identifier in info:  return identifier   # A string that exists in the info dictionary
             
-        keys = list(dic.keys())
-        if len(dic) == 1:                   return keys[0]  # Only one item in dictionary: Return its key (Ignore "id")
+        keys = list(info.keys())
+        if len(info) == 1:      return keys[0]  # Only one item in the dictionary: return its key (Ignore "identifier")
         
-        # Create a dictionary of number_id -> string_id (For example: 3: "grid_3")
+        # Create a dictionary that maps numeric IDs to string IDs (For example: 3: "grid_3")
         try:                numKeysToKey = {int("".join([c for c in key if c.isdigit()])):key for key in keys}
-        except ValueError:  numKeysToKey = None # If there is no digits in string_ids (keys) in the JSON dictionary
-        if numKeysToKey is None:    keys = sorted(keys)     # Sort the string_ids alphabetically
+        except ValueError:  numKeysToKey = None # If there are no digits in the string IDs (keys) in the info dictionary
+        if numKeysToKey is None:    keys = sorted(keys)     # Sort the string IDs alphabetically
         else:
-            # Sort the string ids based on the digits in them. (For example: "grid_2" comes before "grid_10")
+            # Sort the string IDs based on the digits they contain. (For example: "grid_2" comes before "grid_10")
             keys = [numKeysToKey[k] for k in sorted(list(numKeysToKey.keys()))]
-            if type(id) != str:
-                if id in numKeysToKey:      return numKeysToKey[id]
+            if type(identifier) != str:
+                if identifier in numKeysToKey:      return numKeysToKey[identifier]
         
-        # If we are here, there was no match. Now try one last trick:
-        if id == default:                   return keys[0]  # Return the first item if id is the default value
+        # If we get here, there was no match. Now try one last fallback:
+        if identifier == default:   return keys[0]  # Return the first item if 'identifier' is the same as default value
         
-        # Couldn't match id to any identifier in the dictionary. Raise an exception with useful information:
+        # Couldn't match identifier to any identifier in the dictionary. Raise an exception with useful information:
         if len(keys)==2:    optionsStr = f"'{keys[0]}' or '{keys[1]}'"
         else:               optionsStr = "'" + "', '".join(keys[:-1]) + f"', or '{keys[-1]}'"
-        raise ValueError(f"Invalid '{name}' value '{id}'! It must be one of: {optionsStr}.")
+        raise ValueError(f"Invalid '{name}' value '{identifier}'! It must be one of: {optionsStr}.")
 
     # ******************************************************************************************************************
-    def loadV4(self, scenarioFolder):   # Not documented
-        # Loading the scenario information from the new version (V4) of the DeepMIMO files.
-        # The biggest backward compatibility problem is the change in Base Station and User Group IDs; they are
-        # now text string instead of integers.
+    def loadV4(self, scenarioFolder):   # Undocumented
+        # Load the scenario information from version 4 of the DeepMIMO files.
+        # The biggest backward-compatibility issue is the change in base-station and user-grid IDs; they are
+        # now strings instead of integers.
         with open(scenarioFolder + 'params.json', 'r') as file: metadata = json.load(file)
 
         self.carrierFreq = metadata['rt_params']['frequency']
@@ -359,8 +375,8 @@ class DeepMimoData:
         rxGridInfo = {}
         txInfo = {}
         
-        # Reading the "txrx_sets" section of the JSON file which contains information about base station ids
-        # and user grid ids and how they are paired.
+        # Read the "txrx_sets" section of the JSON file, which contains information about base-station IDs
+        # and user-grid IDs and how they are paired.
         for i in range(100):
             if f'txrx_set_{i}' in metadata['txrx_sets']:
                 txrx = metadata['txrx_sets'][f'txrx_set_{i}']
@@ -377,11 +393,11 @@ class DeepMimoData:
         paramNames = ['phase', 'delay', 'power', 'aoa_az', 'aoa_el', 'aod_az', 'aod_el', 'inter', 'rx_pos']
         paramVals = {}
 
-        # Get best matches in the "rxGridInfo" and "txInfo" for the given "gridId" and "baseStationId. See "findId"
+        # Get the best matches in "rxGridInfo" and "txInfo" for the given "gridId" and "baseStationId". See "findId"
         self.gridId = self.findId('gridId', self.gridId, 0, rxGridInfo)
         self.baseStationId = self.findId('baseStationId', self.baseStationId, 1, txInfo)
 
-        # Now open the files and read all multipath information for the given "baseStationId" and "gridId".
+        # Now open the files and read all multipath information for the obtained "baseStationId" and "gridId".
         rxId, self.numGridPoints = rxGridInfo[self.gridId]
         txId, self.bsXyz = txInfo[self.baseStationId]
         for paramName in paramNames:
@@ -390,7 +406,7 @@ class DeepMimoData:
                 raise ValueError(f"File {fileName} does not exist!")
             paramVals[paramName] = scipy.io.loadmat(fileName)[paramName]
     
-        # Create the TrjPoint objects:
+        # Create TrjPoint objects:
         self.allTrjPoints = []
         self.maxPaths, self.minPaths, sumPaths, self.numTotalBlockage, self.numLOS = -1, 10000, 0, 0, 0
         prevPoint, dx, dy, nx = None, None, None, None
@@ -420,7 +436,7 @@ class DeepMimoData:
                 else:
                     if dy is None: nx, dy = ueIdx, d[1]
                     assert np.abs(d[1]-dy)<0.01, f"{ueIdx}: {d[1]} - {dy} = {d[1]-dy}"
-                    assert (ueIdx%nx) == 0, f"{ueIdx}: Grid row size is not consistent!"
+                    assert (ueIdx%nx) == 0, f"{ueIdx}: grid row size is inconsistent!"
             prevPoint = ueXyz
 
 
@@ -432,7 +448,9 @@ class DeepMimoData:
 
         self.avgPaths = sumPaths/self.numGridPoints
 
-        assert (self.numGridPoints%nx)==0, f"'numGridPoints'({self.numGridPoints}) is not a multiple of GridRow({nx})"
+        if (self.numGridPoints % nx) != 0:
+            raise ValueError(f"Unsupported DeepMIMO format: 'numGridPoints'({self.numGridPoints}) "
+                             f"is not a multiple of grid row size ({nx})")
         self.gridSize = np.array([nx, self.numGridPoints//nx])   # Number of grid points along the X and Y axis
         self.xyMin = self.allTrjPoints[0].xyz[:2]
         self.xyMax = self.allTrjPoints[-1].xyz[:2]
@@ -447,19 +465,16 @@ class DeepMimoData:
         
         Parameters
         ----------
-        scenario: str
-            The name of DeepMIMO scenario, which is also the name of the folder containing the scenario files. 
+        scenario : str
+            The name of the DeepMIMO scenario, which is also the name of the folder containing the scenario files. 
         """
-        if scenario.upper() not in testedScenarios:
-            print(f"Warning: This implementation has not been tested with scenario \"{scenario}\"!")
-
         scenarioFolder = cls.pathToScenarios + scenario + "/"
         if os.path.exists(scenarioFolder) == False: scenarioFolder = os.path.expanduser("~") + scenarioFolder
         if os.path.exists(scenarioFolder) == False:
             raise ValueError("Could not find the folder \"%s\"!"%(cls.pathToScenarios + scenario + "/"))
 
         if os.path.exists(scenarioFolder + 'params.mat'):
-            # New version of scenario files
+            # New version of the scenario files
             cls.showV3(scenarioFolder)
             return
             
@@ -471,8 +486,8 @@ class DeepMimoData:
 
     # ******************************************************************************************************************
     @classmethod
-    def showV1(cls, scenarioFolder):    # Not documented
-        # Prints the scenario information for the scenarios stored with the first version of DeepMIMO file format.
+    def showV1(cls, scenarioFolder):    # Undocumented
+        # Print scenario information for scenarios stored in the first version of the DeepMIMO file format
         scenario = scenarioFolder.split(os.path.sep)[-2]
         scenarioInfo = scipy.io.loadmat(scenarioFolder + '%s.params.mat'%(scenario))
         print(f"Scenario:          {scenario}")
@@ -481,14 +496,14 @@ class DeepMimoData:
         print(f"Data Folder:       {scenarioFolder}")
 
         locInfo = scipy.io.loadmat(scenarioFolder+'%s.Loc.mat'%(scenario))["Loc_array_full"]
-        usXyz = locInfo[:,1:4]
+        ueXyz = locInfo[:,1:4]
         gridInfo = np.int32(scenarioInfo['user_grids'])  # Array of [gridRowStart, gridRowEnd, gridCols]
         print(f"\nUE Grids ({len(gridInfo)}):")
         for g, (gridRowStart, gridRowEnd, gridCols) in enumerate(gridInfo):
             s,e = (gridRowStart-1)*gridCols, gridRowEnd*gridCols
             print(f"  {g}: Num UEs:{e-s:,}, " +
-                  f"xRange:{usXyz[s:e].min(0)[0]:.2f}..{usXyz[s:e].max(0)[0]:.2f}, "+
-                  f"yRange:{usXyz[s:e].min(0)[1]:.2f}..{usXyz[s:e].max(0)[1]:.2f}")
+                  f"xRange:{ueXyz[s:e].min(0)[0]:.2f}..{ueXyz[s:e].max(0)[0]:.2f}, "+
+                  f"yRange:{ueXyz[s:e].min(0)[1]:.2f}..{ueXyz[s:e].max(0)[1]:.2f}")
 
         txLocInfo = scipy.io.loadmat(scenarioFolder+'%s.TX_Loc.mat'%(scenario))['TX_Loc_array_full']
         print(f"\nBase Stations: ({len(txLocInfo)})")
@@ -497,8 +512,8 @@ class DeepMimoData:
 
     # ******************************************************************************************************************
     @classmethod
-    def showV3(cls,scenarioFolder):     # Not documented
-        # Prints the scenario information for the scenarios stored with the V2/V3 of DeepMIMO file format.
+    def showV3(cls, scenarioFolder):     # Undocumented
+        # Print scenario information for scenarios stored in the V2/V3 DeepMIMO file format.
         params = scipy.io.loadmat(scenarioFolder + 'params.mat')
 
         print(f"Scenario:          {scenarioFolder.split(os.path.sep)[-2]}")
@@ -522,8 +537,8 @@ class DeepMimoData:
 
     # ******************************************************************************************************************
     @classmethod
-    def showV4(cls,scenarioFolder):     # Not documented
-        # Prints the scenario information for the scenarios stored with the V4 of DeepMIMO file format.
+    def showV4(cls, scenarioFolder):     # Undocumented
+        # Print scenario information for scenarios stored in the V4 DeepMIMO file format.
         with open(scenarioFolder + 'params.json', 'r') as file: metadata = json.load(file)
 
         rxGridInfo = {}
@@ -580,20 +595,20 @@ class DeepMimoData:
         
         Parameters
         ----------
-        indent: int
+        indent : int
             Used internally to adjust the indentation of the printed info.
             
-        title: str
+        title : str
             The title used for the information. By default the text "DeepMimoData Properties:" is used.
 
-        getStr: boolean
-            If this is `True`, the function returns a text string instead of printing the info. Otherwise when this 
-            is `False` (default) the function prints the information.
+        getStr : bool
+            If this is `True`, the function returns a string instead of printing the information. Otherwise, when this 
+            is `False` (the default), the function prints the information.
             
         Returns
         -------
         str or None
-            If "getStr" is true, this function returns a text string containing the information about the properties of 
+            If ``getStr`` is `True`, this function returns a string containing information about the properties of 
             this class. Otherwise, nothing is returned (default).
         """
         repStr = "\n" if indent==0 else ""
@@ -609,16 +624,16 @@ class DeepMimoData:
         repStr += indent*' ' + f"  UE Height:                  {self.allTrjPoints[0].xyz[2]:.2f}\n"
         repStr += indent*' ' + f"  Carrier Frequency:          {freqStr(self.carrierFreq)}\n"
         repStr += indent*' ' + f"  Num. paths (Min, Avg, Max): {self.minPaths}, {self.avgPaths:.2f}, {self.maxPaths}\n"
-        repStr += indent*' ' + f"  Num. total blockage:        {self.numTotalBlockage}\n"
+        repStr += indent*' ' + f"  Num. total blockage:        {self.numTotalBlockage:,}\n"
         repStr += indent*' ' + f"  LOS percentage:             {self.numLOS*100/self.numGridPoints:.2f}%\n"
 
         if getStr: return repStr
         print(repStr)
 
     # ******************************************************************************************************************
-    def validateScenarioInfo(self, quiet=False):    # Not documented
-        # Validates the information loaded from current scenario prints any problems and/or inconsistency in the
-        # dataset.
+    def validateScenarioInfo(self, quiet=False):    # Undocumented
+        # Validates the information loaded from the current scenario and prints any problems and/or inconsistencies
+        # in the dataset.
         mins, maxs = 7*[+np.inf], 7*[-np.inf]
         for p in self:
             allParams =  [p.phases, p.delays, p.powers, p.aoas, p.zoas, p.aods, p.zods]
@@ -659,12 +674,12 @@ class DeepMimoData:
             assert np.abs(self.gridXyToXy(self.xyToGridXy(p.xyz[:2]))-p.xyz[:2]).max()==0, \
                         f"{p.xyz[:2]}, {deepMimoData.xyToGridXy(p.xyz[:2])}"
                         
-        print("Successfully validated all the information in the dataset.")
+        print("Successfully validated all information in the dataset.")
         print("Range of values:")
         paramNames = ["phases (Degrees)", "delays (ns)", "powers (dB)", "aoas (Degrees)",
                       "zoas (Degrees)", "aods (Degrees)", "zods (Degrees)"]
-        for i,values in enumerate(allParams):
-            print(f"    {paramNames[i]:17s}: {mins[i]} .. {maxs[i]}")
+        for i, paramName in enumerate(paramNames):
+            print(f"    {paramName:17s}: {mins[i]} .. {maxs[i]}")
 
     # ******************************************************************************************************************
     @classmethod
@@ -675,64 +690,68 @@ class DeepMimoData:
         
         Parameters
         ----------
-        newPath: str
+        newPath : str
             The new path to the ray-tracing scenario files.
         """
         cls.pathToScenarios = newPath
         if cls.pathToScenarios[-1] != '/': cls.pathToScenarios += '/'
 
     # ******************************************************************************************************************
-    def __iter__(self):                                     # Not documented
-        # The generator function used to iterate through the "TrjPoint" objects in this DeepMIMO dataset.
+    def __iter__(self):                                     # Undocumented
+        # Generator function used to iterate through the "TrjPoint" objects in this DeepMIMO dataset.
         for point in self.allTrjPoints:
             yield point
             
     # ******************************************************************************************************************
-    def __getitem__(self, idx):                             # Not documented
+    def __getitem__(self, idx):                             # Undocumented
         # Provides indexing functionality
         return self.allTrjPoints[idx]
 
     # ******************************************************************************************************************
-    # Grid positions are increased in steps of one in the actual X and Y dimensions. The grid starts at xy=(0,0) which
+    # Grid positions increase in steps of one in the actual X and Y dimensions. The grid starts at xy=(0,0) which
     # corresponds with "self.xyMin" and ends at xy=gridSize which corresponds to "self.xyMax". The following functions
-    # convert these different "coordinate systems". These are not documented since they don't need to be called
-    # directly. These function can be called for a single item or an array of items and returns values corresponding to
-    # the shape of received inputs.
+    # convert between these different "coordinate systems". These are undocumented since they don't need to be called
+    # directly. These functions can be called for a single item or an array of items and returns values corresponding
+    # to the shape of received inputs.
     def gridXyToXy(self, gridXy):
         indexes = np.array([self.gridXyToIndex(gridXy)]).reshape(-1,)
         return np.array([self.allTrjPoints[i].xyz[:2] for i in indexes]).squeeze()
     def xyToGridXy(self, xy):               return np.int32((np.array(xy)-self.allTrjPoints[0].xyz[:2])/self.delta+.5)
     def gridXyToIndex(self, trajectory):    return trajectory[...,0] + trajectory[...,1]*self.gridSize[0]
+    def trjPointAtXy(self, xy):             return self[ self.gridXyToIndex( self.xyToGridXy(xy) ) ]
 
     # ******************************************************************************************************************
-    def getRandomGridTraj(self, xyBounds, segLen, trajLen, xyStart=None, prob=None, trajDir="All"):   # Not documented
-        # Generates a random trajectory on the grid. To create a real trajectory, intermediate points need to be
-        # calculated by interpolation. This function is called by the "getRandomTrajectory" function below.
+    def getRandomGridTraj(self, xyBounds, segLen, trajLen, xyStart=None, prob=None, trajDir="All", seed=None):
+        # Generate a random trajectory on the grid. To create a real trajectory, intermediate points need to be
+        # calculated via interpolation. This function is called by the "getRandomTrajectory" function below.
         
         # xyBounds is a 2x2 matrix: [[minX, minY], [maxX, maxY]]. These are actual X and Y values. We need the bounds
         # in the grid coordinates.
+        
+        rangen = random if seed is None else random.getGenerator(seed)          # The random number generator
+
         minXy = np.maximum(self.xyMin, xyBounds[0])
         maxXy = np.minimum(self.xyMax, xyBounds[1])
         bounds = np.array([self.xyToGridXy(minXy),self.xyToGridXy(maxXy)])  # Grid Bounds
         
-        if type(trajLen) is int: trajDist = np.inf                       # The given "trajLen" is number of grid points
+        if type(trajLen) is int: trajDist = np.inf                  # The given "trajLen" is the number of grid points
         else:                    trajDist, trajLen = trajLen, 100000000  # The given "trajLen" is total travel distance
         
-        # "trajDir" can be "All", "+X", "-X", "+Y", "-Y". In the last 4 cases, the UE should not move in reverse or
+        # "trajDir" can be "All", "+X", "-X", "+Y", or "-Y". In the last 4 cases, the UE should not move in reverse or
         # orthogonal to the specified direction.
         if xyStart is None:
             # If the start point of trajectory is not provided, set it based on trajectory direction
-            if trajDir == "+X":     start = np.int32([bounds[0,0],bounds.mean(0)[1]]) # start at middle left & go right
-            elif trajDir == "-X":   start = np.int32([bounds[1,0],bounds.mean(0)[1]]) # start at middle right & go left
-            elif trajDir == "+Y":   start = np.int32([bounds.mean(0)[0],bounds[0,1]]) # start at center bottom & go up
-            elif trajDir == "-Y":   start = np.int32([bounds.mean(0)[0],bounds[1,1]]) # start at center top & go down
-            else:                   start = np.int32([bounds.mean(0)[0],bounds.mean(0)[1]]) # start at the center
+            if trajDir == "+X":   start = np.int32([bounds[0,0],bounds.mean(0)[1]]) # Start at middle left & move right
+            elif trajDir == "-X": start = np.int32([bounds[1,0],bounds.mean(0)[1]]) # Start at middle right & move left
+            elif trajDir == "+Y": start = np.int32([bounds.mean(0)[0],bounds[0,1]]) # Start at center bottom & move up
+            elif trajDir == "-Y": start = np.int32([bounds.mean(0)[0],bounds[1,1]]) # Start at center top & move down
+            else:                 start = np.int32([bounds.mean(0)[0],bounds.mean(0)[1]]) # start at the center
         else:
-            # Otherwise, make sure we are in the bounds and we don't start at corners
+            # Otherwise, ensure we are within the bounds and we don't start at corners
             start = np.minimum(np.maximum(bounds[0]+[2*segLen,2*segLen], self.xyToGridXy( xyStart )),
                                bounds[1]-[2*segLen,2*segLen])
 
-        # The delta values added to current position when moving in different directions
+        # The delta values added to the current position when moving in different directions
         dirToDeltas = {0:(1,0), 45:(1,1), 90:(0,1), 135:(-1,1), 180:(-1,0), 225:(-1,-1), 270:(0,-1), 315:(1,-1)}
         trajectory = [ np.int32(start) ]        # Current X,Y
 
@@ -741,10 +760,11 @@ class DeepMimoData:
         elif trajDir == "-X":   trajLen, curDir = min(trajLen,start[0]-bounds[0,0]-segLen), 180
         elif trajDir == "+Y":   trajLen, curDir = min(trajLen,bounds[1,1]-start[1]-segLen), 90
         elif trajDir == "-Y":   trajLen, curDir = min(trajLen,start[1]-bounds[0,1]-segLen), 270
-        else:                   curDir = random.choice(np.arange(0,360,45, dtype=np.int32))
+        else:                   curDir = rangen.choice(np.arange(0,360,45, dtype=np.int32))
     
-        # The "prob" is a tuple of 3 values for probability of turning right, going straight, and turning left.
-        # [0,1,0] can be used to force it to always go straight. None means uniform distribution for each decision.
+        # "prob" is a tuple of three values representing the probabilities of turning right, going straight, and
+        # turning left. [0,1,0] can be used to force it to always go straight. None means uniform distribution for
+        # each decision.
         if prob is None:
             probNoLeft = probNoRight = None
         elif (type(prob)==tuple) and (len(prob)==3):
@@ -759,20 +779,20 @@ class DeepMimoData:
                         "-Y": {315:"NoLeft", 225:"NoRight", 270:"All"}}
                         
         def isBadMove(newXY, newDir):
-            # returns True is a movement in direction "newDir" which ends up in "newXY" grid position
+            # Returns True if a movement in direction "newDir" that ends at "newXY" grid position
             # results in crossing the specified bounds.
             corner = {0:(-1,-1), 45:(2,3), 90:(-1,-1), 135:(0,3), 180:(-1,-1), 225:(0,1), 270:(-1,-1), 315:(1,2)}
             border = {0:2, 45:-1, 90:3, 135:-1, 180:0, 225:-1, 270:1, 315:-1}
     
-            # An array of 4 values indicating how close we are to each boarder
+            # An array of 4 values indicating how close we are to each border
             borderCloseness = ((bounds - newXY)*[[-1],[1]]).flatten()
             if np.any(borderCloseness<0):      return True
             
-            # An array of corner indices that are close to the "newXY" position
+            # An array of corner indices close to the "newXY" position
             closeCorners = tuple(np.where(borderCloseness<2*segLen)[0])
             if corner[newDir] == closeCorners: return True
 
-            # An array of border indices that are close to the "newXY" position
+            # An array of border indices close to the "newXY" position
             closeBorders = tuple(np.where(borderCloseness<segLen)[0])
             if border[newDir] in closeBorders: return True
     
@@ -780,16 +800,17 @@ class DeepMimoData:
 
         curTrajDist = 0
         while len(trajectory) < trajLen:
-            if trajDir=="All":          action = random.choice([-1,0,1], p=prob)
+            if trajDir=="All":          action = rangen.choice([-1,0,1], p=prob)
             else:
                 turns = allowedTurns[trajDir][curDir]
-                if turns=="NoLeft":     action = random.choice([-1,0], p=probNoLeft) # action: -1 or 0 (No left turn)
-                elif turns=="NoRight":  action = random.choice([0,1], p=probNoRight) # action: 0 or 1 (No right turn)
-                else:                   action = random.choice([-1,0,1], p=prob)
+                if turns=="NoLeft":     action = rangen.choice([-1,0], p=probNoLeft) # action: -1 or 0 (No left turn)
+                elif turns=="NoRight":  action = rangen.choice([0,1], p=probNoRight) # action: 0 or 1 (No right turn)
+                else:                   action = rangen.choice([-1,0,1], p=prob)
 
             newDir = (curDir + action*45)%360
             newXY = trajectory[-1] + segLen*np.int32(dirToDeltas[newDir])
-            if isBadMove(newXY, newDir):    # This is a bad move -> Do use in trajectory; Try a different direction.
+            if isBadMove(newXY, newDir):
+                # This is a bad move -> Do not use it in the trajectory; try a different direction.
                 continue
         
             trajectory += [ trajectory[-1]+(s+1)*np.int32(dirToDeltas[newDir]) for s in range(segLen) ]
@@ -799,59 +820,39 @@ class DeepMimoData:
             curTrajDist += self.delta[0] * segLen * np.sqrt(np.square(dirToDeltas[newDir]).sum())
             if curTrajDist>trajDist:        break
             
-        return np.array(trajectory[:trajLen])   # trajLen x 2
+        return np.array(trajectory[:trajLen])           # Shape: (trajLen, 2)
 
     # ******************************************************************************************************************
-    def getSamplePerPoints(self, speedMps, u=0, cpType="normal", timeRes="coherence"):  # Not documented
-        # NOTE: This function is not used anymore and will be removed later
-        # This function returns the number of samples (at SAMPLE_RATE) per trajectory step
-        # based on the given timeRes, cpType, and u
-        symPerSlot = 14 if cpType.lower()=='normal' else 12
-        if timeRes.lower() in ["symbol","slot"]:
-            # points per slot: 14 (or 12) for "symbol", 2 for "slot"
-            subSegPerSec = 1000*(1<<u)*{"symbol":symPerSlot, "slot":2}[timeRes.lower()]
-        elif timeRes.lower() == "coherence":
-            # First calculate the coherence time based on speed
-            c = 299792458                                       # speed of light
-            dopplerShift = speedMps*self.carrierFreq/c     # Doppler Shift
-            
-            # Coherence Time. See: https://en.wikipedia.org/wiki/Coherence_time_(communications_systems)
-            coherenceTime = np.sqrt(9/(16*np.pi))/dopplerShift
-            subSegPerSec = 2/coherenceTime                      # we want to sample at least twice during coherenceTime
-            if subSegPerSec < 2*1000*(1<<u):
-                subSegPerSec = 2*1000*(1<<u)                    # One slot divided to at least 2 parts
-            elif subSegPerSec < 4*1000*(1<<u):
-                subSegPerSec = 4*1000*(1<<u)                    # One slot divided to 4 parts
-            elif subSegPerSec < (symPerSlot//2)*1000*(1<<u):
-                subSegPerSec = (symPerSlot//2)*1000*(1<<u)      # One slot divided to 6/7 parts
-            else:
-                subSegPerSec = symPerSlot*1000*(1<<u)           # One slot divided at most to 12/14 parts
-        
-        # Return the number of samples (at SAMPLE_RATE) per trajectory step
-        return int(np.round(SAMPLE_RATE/subSegPerSec))
-
-    # ******************************************************************************************************************
-    def interpolateTrajectory(self, idxTrajectory, speedMps, bwp):    # Not documented
+    def interpolateTrajectory(self, idxTrajectory, speedMps, bwp):    # Undocumented
         # This function generates intermediate points on a trajectory by linearly interpolating between the
         # endpoints of each segment. The “idxTrajectory” list contains the indices of the points in the dataset that
-        # are included in the trajectory. In the code in this function, a “segment” refers to the line connecting two
-        # consecutive points on the grid along the trajectory, while a “step” denotes the line connecting two
-        # consecutive trajectory points after interpolation. The desired duration of each step is precisely equal
-        # to the corresponding slot length in the 3GPP standard sampling time (30,720,000 samples per second).
+        # are included in the trajectory. In the code in this function, a “segment” refers to the line segment
+        # connecting two consecutive points on the grid along the trajectory, while a “step” denotes the line
+        # connecting two consecutive trajectory points after interpolation. The desired duration of each step is
+        # precisely equal to the corresponding slot duration based on the 3GPP standard sampling rate (30,720,000
+        # samples per second).
         slotLens = [bwp.getSlotLen(i) for i in range(bwp.slotsPerSubFrame)]
         slotStarts = np.cumsum([0]+slotLens)
         subFrameLen = int(bwp.sampleRate//1000)  # 1 ms in number of samples (at 30,720,000 samples per second)
         
-        # We create a point for each slot and use the closest speed that divides a segment into a whole number of
+        # We create a point for each slot and use the closest speed that divides each segment into a whole number of
         # steps.
         xyzs = np.array([self.allTrjPoints[i].xyz for i in idxTrajectory])  # Shape: (trajLen, 3)
-        segLens = np.sqrt(np.square(xyzs[1:]-xyzs[:-1]).sum(-1))            # The lengths of all trajLen-1 segments
+        segLens = np.sqrt(np.square(xyzs[1:]-xyzs[:-1]).sum(-1))            # The lengths of all (trajLen - 1) segments
         intPoints=[]
         segStart = 0
-        for i in range(1,len(idxTrajectory)):                           # Doing interpolation on one segment at a time
-            # First get the 2 points of this segment
+        
+        lastUsedId = 0      # Start path IDs from 1.
+        curPathIds = np.empty((0,), dtype=np.int32)                     # Array of currently surviving path IDs
+        curPolPhases = np.empty((0,2,2), dtype=np.float64)
+        polPhaseRanGen = random.getGenerator(self.gridSize.prod())      # Reproducible polarization phases per scenario
+        existingIdx = np.empty((0,), dtype=np.int32)                    # Indices of existing paths
+        newIdx = np.arange( self.allTrjPoints[idxTrajectory[0]].numPaths )  # Indices of new paths
+                        
+        for i in range(1,len(idxTrajectory)):                           # Perform interpolation one segment at a time
+            # First get the two points of this segment
             p0 = self.allTrjPoints[idxTrajectory[i-1]]                  # The TrjPoint object for the start of segment
-            p1 = self.allTrjPoints[idxTrajectory[i]]                    # The TrjPoint object for the end of segment
+            p1 = self.allTrjPoints[idxTrajectory[i]]                    # The TrjPoint object for the end of the segment
             numSubFrame = segLens[i-1]*bwp.sampleRate/(subFrameLen*speedMps) # Number of subFrames for this segment
             subFrameFrac = (numSubFrame%1)*subFrameLen                  # Number of samples in the fractional subframe
             slotIdx = np.abs(slotStarts-subFrameFrac).argmin()          # Number of additional slots
@@ -859,8 +860,7 @@ class DeepMimoData:
             numSegSamples = numSubFrame*subFrameLen+slotStarts[slotIdx] # Total number of samples in this segment
             numSteps = numSubFrame*bwp.slotsPerSubFrame + slotIdx       # Total slots/steps for this segment
 
-#            print(p0, p1, slotIdx, slotStarts, numSubFrame, subFrameLen,  numSegSamples)
-            # Calculate the sample number at the begining of each step:
+            # Calculate the sample number at the beginning of each step:
             # Note that slotIdx ∈ {0, ..., bwp.slotsPerSubFrame}
             if slotIdx == bwp.slotsPerSubFrame:
                 # This is when fraction is close to 1 => Total duration (in samples) on this segment is the
@@ -872,25 +872,25 @@ class DeepMimoData:
             assert stepStarts[-1]==numSegSamples, f"{stepStarts}\n{numSegSamples}\n"
 
             if segStart > 0:
-                # The starting point has already been included as the last point of previous segment.
+                # The starting point has already been included as the last point of the previous segment
                 stepStarts = stepStarts[1:]
 
-            segLinSpeed = segLens[i-1]*bwp.sampleRate/numSegSamples # Actual linear speed. Close to the desired speedMps
+            segLinSpeed = segLens[i-1]*bwp.sampleRate/numSegSamples # Actual linear speed, close to the desired speedMps
             assert np.abs(segLinSpeed-speedMps) < (0.1*speedMps)    # Ensure we are still close enough to original speed
             segSpeed = (p1.xyz-p0.xyz)*bwp.sampleRate/numSegSamples # The 3D speed vector on this segment
             
             if (p0.hasLos == -1) or (p1.hasLos == -1):
-                # Total blockage -> No Interpolation needed. All points on this segment will have no paths.
+                # Total blockage -> no interpolation needed. All points on this segment will have no paths.
                 c = 0
             else:
-                # If m'th path in 'p0' matches n'th path in 'p1', then curToNext[m]=n
+                # If the m-th path in 'p0' matches the n-th path in 'p1', then curToNext[m]=n
                 # We set the maxDiff to twice the maximum delay difference between neighboring points in
-                # nanoseconds. The matchPathInfo function does not match paths if the difference of the 6D
-                # path info (Delay, Power, and 4 angles) is more than this.
+                # nanoseconds. The matchPathInfo function does not match paths if the difference in the 6D path
+                # information (Delay, Power, and 4 angles) is more than this.
                 maxDiff = 2*np.linalg.norm(self.delta)*1e9/299792458
                 curToNext = p0.matchPathInfo(p1, maxDiff)                           # Match paths between p0 and p1
-                commonIdxCur = np.where(curToNext>-1)[0]                            # Indexes of common paths in p0
-                commonIdxNext = curToNext[curToNext!=-1]                            # Indexes of common paths in p1
+                commonIdxCur = np.where(curToNext>-1)[0]                            # Indices of common paths in p0
+                commonIdxNext = curToNext[curToNext!=-1]                            # Indices of common paths in p1
                 assert len(commonIdxCur)==len(commonIdxNext)
                 c = len(commonIdxCur)                                               # c: Number of common paths
 
@@ -902,28 +902,54 @@ class DeepMimoData:
                 pathsGained = p1.numPaths-c
                 
                 # Figuring out the los flag for the interpolated points:
-                if p0.hasLos == 0:  los = 0 # We didn't have a los path. => Continue with no los path in this segment.
-                elif pathsLost==0:  los = 1 # We had a los path, we didn't lose any path => We still have the los path
-                elif p1.hasLos == 1:        # We had a los path and we have a los path now.
-                    # In this case we assume that the los paths are the same. Can't consider a case that they may be
+                if p0.hasLos == 0:  los = 0 # We did not have a LOS path. => Continue with no LOS path in this segment.
+                elif pathsLost==0:  los = 1 # We had a LOS path, we did not lose any path => We still have the LOS path
+                elif p1.hasLos == 1:        # We had a LOS path and we have a LOS path now.
+                    # In this case we assume that the LOS paths are the same. Can't consider a case that they may be
                     # different paths since there is only one los path at each point.
                     los = 1
-                else:               los = 0 # We had los path but we don't have los paths anymore and we lost some paths
+                else:               los = 0 # We had LOS path but we don't have LOS paths anymore and we lost some paths
+
+                # Handling pathIds
+                # existingIdx and newIdx are related to p0. Only the ones in p0/p1 common paths will survive.
+                survivingExistingIdx0 = np.intersect1d(existingIdx, commonIdxCur)   # Existing IDs in commonIdxCur
+                survivingExistingIdx1 = curToNext[survivingExistingIdx0]            # Existing IDs in commonIdxNext
+                survivingNewIdx = curToNext[np.intersect1d(newIdx, commonIdxCur)]   # New IDs in commonIdxCur
+
+                # Create a new array for path IDs. In this array only the common paths have non-negative values.
+                pathIds = np.int32(p1.numPaths*[-1])         # Create a new array for path IDs. Initialize with -1
+                pathIds[survivingExistingIdx1] = curPathIds[survivingExistingIdx0]  # Existing common paths.
+                pathIds[survivingNewIdx] = np.arange(len(survivingNewIdx), dtype=np.int32) + lastUsedId + 1
+                lastUsedId += len(survivingNewIdx)                                  # Update lastUsedId
+
+                # Create polarization phases to be used for all points in this segment.
+                polPhases = -10*np.ones((p1.numPaths,2,2), dtype=np.float64)    # Actual values are between -𝜋 and 𝜋
+                polPhases[survivingExistingIdx1] = curPolPhases[survivingExistingIdx0]  # Existing common paths.
+                polPhases[survivingNewIdx] = 2*np.pi * polPhaseRanGen.random(size=(len(survivingNewIdx),2,2)) - np.pi
+                
+                # Update parameters for next iteration
+                curPathIds = pathIds
+                curPolPhases = polPhases
+                newIdx = np.setdiff1d(np.arange(p1.numPaths), commonIdxNext)
+                existingIdx = commonIdxNext
+
+                segPathIds = curPathIds[commonIdxNext]                              # Array of length 'c'
+                segPolPhases = polPhases[commonIdxNext]                             # Shape: c x 2 x 2
 
                 # Path information at the segment endpoints. Shape: (2, c, 8)
                 endPointsInfo = np.concatenate(([p0.pathInfo[commonIdxCur]], [p1.pathInfo[commonIdxNext]]))
                 
-                # unwrapping azimuth/phase angles.
+                # Unwrap azimuth/phase angles.
                 # Path Values: 0:Phase, 1:delay, 2:RxPower, 3:aoa, 4:zoa, 5:aod, 6:zod, 7:bounces
                 endPointsInfo[:,:,(0,3,5)] = np.unwrap(endPointsInfo[:,:,(0,3,5)],.5, axis=0, period=360)
                 
                 # Endpoint coordinates. Shape: (2, 3)
                 endPointsXyz = np.concatenate(([p0.xyz],[p1.xyz]))
                 
-                # All info at endpoints. Shape: (2, c*8+3)
+                # All information at endpoints. Shape: (2, c*8+3)
                 endPointsInfo = np.concatenate((endPointsInfo.reshape(2,-1), endPointsXyz), axis=1)
             
-            # Do the linear interpolation to get the points between the endpoints. Shape: (numSteps+1, c*8+3)
+            # Perform linear interpolation to obtain the points between the endpoints . Shape: (numSteps+1, c*8+3)
             intPointInfo = endPointsInfo[0] + \
                            (endPointsInfo[1]-endPointsInfo[0])*(stepStarts.reshape(-1,1))/numSegSamples
             intXyzs = intPointInfo[:,-3:]                           # Interpolated coordinates, Shape(numSteps+1, 3)
@@ -932,7 +958,8 @@ class DeepMimoData:
                 # Wrapping azimuth/phase angles
                 intPathInfo[:,:,(0,3,5)] += (intPathInfo[:,:,(0,3,5)]<-180)*360 - (intPathInfo[:,:,(0,3,5)]>180)*360
                 intPoints += [ TrjPoint(xyz, los, pathInfo, bsDist=np.sqrt(np.square(xyz-self.bsXyz).sum()),
-                                        speed=segSpeed, sampleNo=pointSample+segStart)
+                                        speed=segSpeed, sampleNo=pointSample+segStart,
+                                        pathIds=segPathIds, polPhases=segPolPhases)
                                     for xyz, pathInfo, pointSample in zip(intXyzs, intPathInfo, stepStarts) ]
             else:
                 intPoints += [ TrjPoint(xyz, los, np.empty((0,8)), bsDist=np.sqrt(np.square(xyz-self.bsXyz).sum()),
@@ -945,7 +972,7 @@ class DeepMimoData:
     # ******************************************************************************************************************
     def getRandomTrajectory(self, xyBounds, segLen, bwp,
                             trajLen=None, trajTime=None, trajDist=None, xyStart=None, prob=None,
-                            trajDir="All", speedMps=None):
+                            trajDir="All", speedMps=None, seed=None):
         r"""
         Creates and returns a random trajectory in the area specified by ``xyBounds`` inside the grid of points in the
         given scenario. This function first creates a random "On-Grid" trajectory of points. It then interpolates 
@@ -954,55 +981,55 @@ class DeepMimoData:
         
         Parameters
         ----------
-        xyBounds: 2-D list of integers
+        xyBounds : 2-D list of integers
             A 2x2 matrix representing the bounds of the area where the random trajectory will be generated. The matrix 
             should be in the format ``[[minX, minY], [maxX, maxY]]``. All points in the returned trajectory will be 
             confined within these bounds. If the area defined by ``xyBounds`` overlaps with parts outside the grid area
             specified by ``xyMin`` and ``xyMax``, the boundaries are internally adjusted to ensure that the trajectory 
             falls within the intersection of the areas defined by ``xyBounds`` and the pair (``xyMin``, ``xyMax``).
 
-        segLen: integer
+        segLen : integer
             The number of grid points that the shortest segment of the trajectory traverses, excluding the starting 
             point. For instance, if ``segLen`` is set to 2, it implies that each segment of the generated trajectory 
             passes through at least three grid points (including the starting point). This parameter can be utilized 
             to control the frequency of turns in a trajectory. A larger ``segLen`` value results in a reduced number of
             turns in the trajectory.
 
-        bwp: The bandwidth part used to decide the timing of the interpolated trajectory points. One interpolated 
+        bwp : The bandwidth part used to decide the timing of the interpolated trajectory points. One interpolated 
             trajectory point is created for each slot of communication.
         
-        trajTime: float or None
+        trajTime : float or None
             If provided, it represents the total travel time (in seconds) along the trajectory. Note that the actual 
             travel time on the generated trajectory may not be precisely equal to this value due to the approximations
             in the calculations.
             
-        trajDist: float or None
+        trajDist : float or None
             If provided, it represents the total travel distance (in meters) along the trajectory. This parameter is
             ignored if ``trajTime`` is specified. Note that the actual travel distance on the generated trajectory may
             not be precisely equal to this value due to the approximations in the calculations.
 
-        trajLen: integer or None
+        trajLen : integer or None
             If provided, it represents the total number of grid points on the trajectory (excluding the starting point).
             This parameter is ignored if one of ``trajTime`` or ``trajDist`` is specified.
 
             .. Important:: At least one of ``trajTime``, ``trajDist``, or ``trajLen`` must be specified.
 
-        xyStart: list, tuple, NumPy array, or None
-            The 2-D coordinates of the the trajectory’s initial position. If this parameter is set to `None` 
+        xyStart : list, tuple, NumPy array, or None
+            The 2-D coordinates of the trajectory’s initial position. If this parameter is set to `None` 
             (default), the trajectory’s starting point is automatically determined based on ``trajDir`` and 
             ``xyBounds``. Otherwise, the given value is first checked against the trajectory bounds (``xyBounds``) and
             modified if needed to ensure that the starting point falls within the specified boundaries.
             
-        prob: tuple or None
+        prob : tuple or None
             If provided, it must be a tuple containing three probability values for turning right, going straight, and 
-            turning left. These three probability values must collectively sum up to 1. If not specified, all three
+            turning left. These three probability values must sum to 1. If not specified, all three
             probabilities are assumed to be equal: :math:`P_{right}=P_{straight}=P_{left}=\frac 1 3`
             
-        trajDir: str
+        trajDir : str
             This value can be used to restrict the direction of movement along the trajectory. At each step, the moving
             direction is the angle between the velocity vector and the X-axis. There are eight possible directions,
             corresponding to angles: 0, 45, 90, 135, 180, 225, 270, and 315 degrees. This parameter provides a general
-            direction to the trajectory. It can take one of the following values:
+            direction for the trajectory. It can take one of the following values:
         
                 :All: No restriction in direction of movement in the trajectory. This is the default value.
                 
@@ -1018,12 +1045,18 @@ class DeepMimoData:
                 :-Y: This forces the trajectory to move along the Y-axis in negative direction. The only movement
                     directions allowed in the trajectory are 225, 270, and 315 degrees.
 
-        speedMps: float or None
+        speedMps : float or None
             If provided, it specifies the trajectory speed in meters per second. If not provided, the speed is
-            automatically determined based on the scenario type (indoor vs outdoor). The current implementation uses
+            automatically determined based on the scenario type (indoor vs. outdoor). The current implementation uses
             an average walking speed of 1.2 m/s for indoor scenarios and 14 m/s for outdoor scenarios (which 
             corresponds to a car moving at 31.32 miles per hour). Note that the actual linear speed on the trajectory
             may not be precisely equal to this value due to the approximations in the calculations.
+            
+        seed : int
+            The seed used by this function to create random values. Setting this to a fixed value ensures
+            the reproducibility of the generated trajectory. The default value is `None`, indicating that this channel 
+            model uses the **NeoRadium**’s :doc:`global random number generator <./Random>`.
+            
             
         Returns
         -------
@@ -1033,7 +1066,7 @@ class DeepMimoData:
         """
         # If the speed is not specified, set the speed based on the scenario (Indoor vs outdoor).
         if speedMps is None:
-            if self.scenario in inDoorScenarios:    speedMps = 1.2          # Walking speed
+            if self.scenario in indoorScenarios:    speedMps = 1.2          # Walking speed
             else:                                   speedMps = 14           # A car at 31.32 miles per hour
 
         if trajTime is not None:    trajLen = float(trajTime*speedMps)      # trajLen is distance
@@ -1043,7 +1076,7 @@ class DeepMimoData:
         else:                       trajLen = int(trajLen)                  # trajLen is number of grid points
             
         # First find a "grid" trajectory
-        gridTrajectory = self.getRandomGridTraj(xyBounds, segLen, trajLen, xyStart, prob, trajDir)  # trajLen x 2
+        gridTrajectory = self.getRandomGridTraj(xyBounds, segLen, trajLen, xyStart, prob, trajDir, seed) # trajLen x 2
         
         # Get the indices of the points on the "grid" trajectory
         idxTrajectory = self.gridXyToIndex(gridTrajectory)                  # array of indices (len=trajLen)
@@ -1051,40 +1084,46 @@ class DeepMimoData:
         # Now interpolate to create intermediate points on each segment
         return self.interpolateTrajectory(idxTrajectory, speedMps, bwp)
 
+
     # ******************************************************************************************************************
     def drawMap(self, mapType="LOS-NLOS", overlay=None, figSize=6, ax=None):
         r"""
-        This visualization function creates a map of the scenario, assigning different colors to the points 
+        This visualization function creates a map of the scenario, assigning different colors to points 
         on the grid.
 
         Parameters
         ----------
-        mapType: str
+        mapType : str
             This specifies the type of map to be drawn by this function:
             
-                :LOS-NLOS: The color used for each point depends on whether it has a Line-of-Sight path, or if there
-                    is a total blockage at that point.
+                :LOS-NLOS: The color used for each point depends on whether it has a line-of-sight path or if there 
+                    is total blockage at that point.
                 
-                :1stPathDelays: The color used for each point depends the amount of delay for the strongest path at
+                :1stPathDelays: The color used for each point depends on the amount of delay for the strongest path at
                     that point.
                  
-                :1stPathPowers: The color used for each point depends the path power of the strongest path at that
+                :1stPathPowers: The color used for each point depends on the path power of the strongest path at that
                     point.
                         
-        overlay: :py:class:`~neoradium.trjchan.Trajectory` or NumPy array or None
+        overlay : :py:class:`~neoradium.trjchan.Trajectory` or NumPy array or None
             If this is a :py:class:`~neoradium.trjchan.Trajectory` object, then the trajectory will be drawn over the
-            map. If this is a NumPy array, it must contain a list of indices of the points in the current scenario. In
+            map. If this is a NumPy array, it must contain a list of point indices in the current scenario. In
             this case all the points in the list will be drawn (scatter plot) over the map.
 
-        figSize: float
+        figSize : float
             This value determines the approximate size of the drawn map. If the maximum of the map’s width and height 
-            is less than the specified value, the map is scaled to match the specified size. The default value is set 
+            are less than the specified value, the map is scaled to match the specified size. The default value is set 
             to ``6``.
 
-        ax: `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_ or None
-            If specified, it must be a matplotlib ``Axis`` object on which the Scenario Map is drawn. This can be used 
+        ax : `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_ or None
+            If specified, it must be a matplotlib ``Axes`` object on which the scenario map is drawn. This can be used 
             if you want to have a group of matplotlib subplots and draw the map in one of them.
               
+        Returns
+        -------
+        `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
+            The matplotlib ``Axes`` object used to draw the Scenario Map.
+    
     
         **Example:**
         
@@ -1092,11 +1131,15 @@ class DeepMimoData:
         
             deepMimoData = DeepMimoData("asu_campus1", baseStationId=1, gridId=0)
             deepMimoData.drawMap("1stPathDelays")
+
             
         .. figure:: ../Images/DeepMimoMap.png
             :align: center
             :figwidth: 600px
         """
+        import matplotlib.pyplot as plt
+        from matplotlib.colors import LinearSegmentedColormap, ListedColormap, colorConverter
+        import matplotlib.patches as mpatches
         bsGridXy = self.xyToGridXy(self.bsXyz[:2])
         gridMin, gridMax = np.int32([[0,0], self.gridSize])
         gridMin += bsGridXy*(bsGridXy<0)
@@ -1105,13 +1148,13 @@ class DeepMimoData:
         gridMin, gridMax = gridMin-margin, gridMax+margin
         
         if ax is None:
-            # The one additional inch in the width is for the legend/colorbar
+            # The additional inch in the width is for the legend/colorbar
             wInches, hInches = (gridMax-gridMin) / plt.rcParams['figure.dpi']
             scale = figSize/max(wInches, hInches)
             fig, ax = plt.subplots(figsize=((wInches+1)*scale, hInches*scale))
 
         if mapType == "LOS-NLOS":
-            heatMap = np.zeros((gridMax-gridMin)[::-1]) # 0 is translated to white
+            heatMap = np.zeros((gridMax-gridMin)[::-1])                 # 0 corresponds to white
             grid = np.array([p.hasLos+2 for p in self]).reshape(self.gridSize[::-1]) # -1,0,1 -> 1,2,3
             cmap = ListedColormap(['white', 'black', 'red', 'green',])
             categories = {0: 'BLOCKED', 1: 'NLOS', 2: 'LOS'}
@@ -1119,12 +1162,12 @@ class DeepMimoData:
             patches += [ mpatches.Patch(color='orange', label="BS") ]
             title = "Map of LOS/NLOS paths"
         elif mapType == "1stPathDelays":
-            heatMap = np.ones((gridMax-gridMin)[::-1]) # 1 is white for all types of map
+            heatMap = np.ones((gridMax-gridMin)[::-1])                  # 1 corresponds to white for all types of map
             grid = np.array([p.delays[0] if p.hasLos>-1 else 1 for p in self]).reshape(self.gridSize[::-1])
             cmap = 'viridis'
             title = "Delay of first path (ns)"
         elif mapType == "1stPathPowers":
-            heatMap = np.ones((gridMax-gridMin)[::-1]) # 1 is white for all types of map
+            heatMap = np.ones((gridMax-gridMin)[::-1])                  # 1 corresponds to white for all types of map
             grid = np.array([p.powers[0] if p.hasLos>-1 else 1 for p in self]).reshape(self.gridSize[::-1])
             cmap = 'viridis'
             title = "Power of first path (dB)"
@@ -1132,7 +1175,7 @@ class DeepMimoData:
         # heatMap includes the margins around the grid
         heatMap[-gridMin[1]:self.gridSize[1]-gridMin[1], -gridMin[0]:self.gridSize[0]-gridMin[0]] = grid
 
-        # Draw the heatmap
+        # Draw the heat map
         xyMin = self.xyMin + gridMin*self.delta
         xyMax = self.xyMax + (gridMax-self.gridSize)*self.delta
         im = ax.imshow(heatMap, cmap=cmap, interpolation='nearest', origin='lower',
@@ -1164,14 +1207,13 @@ class DeepMimoData:
                 y = [self[i].xyz[1] for i in overlay]
                 ax.scatter(x=x, y=y, c='blue', s=3)                 # Draw the points
 
-        # Legend and color bar
+        # Legend and colorbar
         if mapType == "LOS-NLOS":
             ax.legend(handles=patches, bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0.)
         else:
             cbar = plt.colorbar(im)
 
-            # We need to draw an overlay masking the blocked areas to white color. This overlay is
-            # transparent in non-blocked areas.
+            # Draw an overlay masking the blocked areas in white. It is transparent in non-blocked areas.
             blockedColor = colorConverter.to_rgba('white')
             cmap2 = LinearSegmentedColormap.from_list('blockedOverlay',[blockedColor,blockedColor],2)
             cmap2._init()          # create the _lut array, with rgba values
@@ -1180,128 +1222,273 @@ class DeepMimoData:
                       extent=[xyMin[0],xyMax[0],xyMin[1],xyMax[1]]) # Draw the overlay
 
 
-        return ax.get_figure(), ax
+        return ax
 
     # ******************************************************************************************************************
-    def animateTrajectory(self, trajectory, numGraphs=0, graphCallback=None, mapType="LOS-NLOS",
-                          pointsPerFrame=10, fileName=None):
+    def drawBsPanel(self, ax, bearingAngle, length=None):
         r"""
-        This visualization function generates a scenario map and animates the movement of a UE device along the 
-        specified trajectory within the map. Furthermore, it can animate up to three graphs below the scenario map. A
-        complete example of using this function is available at
-        :doc:`../Playground/Notebooks/RayTracing/TrajChannelAnim` in the playground.
+        Draw the base station antenna panel on the scenario map, indicating its
+        orientation based on the given bearing angle. This method is typically
+        called after :py:meth:`drawMap`.
 
         Parameters
         ----------
-        trajectory: :py:class:`~neoradium.trjchan.Trajectory`
-            The trajectory to animate. It must be an instance of :py:class:`~neoradium.trjchan.Trajectory`.
+        ax : `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
+            The axes object returned by :py:meth:`drawMap`, on which the panel
+            will be drawn.
+
+        bearingAngle : float
+            Bearing (azimuth) angle of the antenna panel in degrees.
+
+        length : float or None, optional
+            Length of the line representing the antenna panel. If None, the length
+            is chosen automatically based on the map extent.
+
+
+        Refer to the notebook :doc:`../Playground/Notebooks/RayTracing/BeamSweeping` for an example of using this
+        function.
+        """
+        import matplotlib.patches as mpatches
+        if length is None: length = min(self.xyMax-self.xyMin)/8
+
+        bsX, bsY, _ = self.bsXyz
         
-        numGraphs: int
-            The number of graphs drawn below the scenario map. The default is 0, which animates only the trajectory
-            on the map.
-        
-        graphCallback: function or None
-            If ``numGraphs`` is not zero, a callback function should be provided, which will be automatically called 
-            by this method. The function is initially called to configure the graphs, and then it is invoked for 
-            every frame of the animation to update or draw the graphs. For more information, please refer to the 
-            :ref:`callback function section <CallBack>` below.
+        # First draw the line (e.g., the panel)
+        lineAngle = np.deg2rad(bearingAngle)-np.pi/2
+        dx = (length / 2) * np.cos(lineAngle)
+        dy = (length / 2) * np.sin(lineAngle)
+        ax.plot([bsX - dx, bsX + dx],
+                [bsY - dy, bsY + dy], c='orange', linewidth=length/20)
+
+        # Draw a triangle indicating the facing direction (bearingAngle)
+        base = length / 4
+        height = length / 4
+
+        # Unit vector along the panel (line direction)
+        ux = np.cos(lineAngle)
+        uy = np.sin(lineAngle)
+
+        # Unit vector perpendicular to the panel, pointing toward bearingAngle
+        px = -np.sin(lineAngle)
+        py = np.cos(lineAngle)
+
+        # Base endpoints of the triangle (centered at the base station)
+        p1 = (bsX - ux*base/2, bsY - uy*base/2)
+        p2 = (bsX + ux*base/2,  bsY + uy*base/2)
+
+        # Apex of the triangle (points in the bearing direction)
+        p3 = (bsX + px*height, bsY + py*height)
+
+        triangle = mpatches.Polygon([p1, p2, p3], closed=True, facecolor='orange')
+        ax.add_patch(triangle)
+
+    # ******************************************************************************************************************
+    def drawBeamArrow(self, ax, beamAngle, color='orange', length=None, arrow=None):
+        r"""
+        Draw an arrow on the current scenario map to indicate a beam direction
+        relative to the base station antenna panel. This method is typically
+        called after :py:meth:`drawMap` and :py:meth:`drawBsPanel`.
+
+        Parameters
+        ----------
+        ax : `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
+            The axes object returned by :py:meth:`drawMap`, on which the beam
+            arrow will be drawn.
+
+        beamAngle : float
+            Beam angle in global coordinates in degrees. The :py:meth:`~neoradium.antenna.AntennaBase.local2Global` 
+            method can be used to convert the local beam angles to global angles.
+
+        color : str, optional
+            Color of the beam arrow. The default is 'orange'.
+
+        length : float or None, optional
+            Length of the beam arrow. If None, the length is chosen automatically
+            based on the map extent.
             
-        mapType: str
-            This specifies the type of map that will be used as the background of the animation. For more information 
-            about the available values, please refer to the :py:meth:`~neoradium.deepmimo.DeepMimoData.drawMap` method.
+        arrow : `matplotlib.patches.FancyArrowPatch <https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.FancyArrowPatch.html>`_ or None, optional 
+            An existing arrow object to be updated. If provided, the function updates the position of this
+            ``FancyArrowPatch`` instead of creating a new one. This is useful for animations, where reusing
+            the same artist avoids creating multiple arrow objects and improves rendering performance.
+            If None (default), a new arrow is created and added to the axes.
             
-        pointsPerFrame: int
-            This function creates a frame of animation every ``pointsPerFrame`` trajectory points. The default is 
-            10 which means create an animation frame every other 10 trajectory points. A value of 1, creates a frame 
-            for every trajectory point which takes 10 times more memory than the default value of 10.
+        Returns
+        -------
+        `matplotlib.patches.FancyArrowPatch <https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.FancyArrowPatch.html>`_
+            The created or updated arrow object. If ``arrow`` is provided, the same
+            instance is updated and returned; otherwise, a new ``FancyArrowPatch`` is
+            created, added to the axes, and returned.
             
-            This function generates an animation frame every ``pointsPerFrame`` trajectory points. By default, it 
-            creates an animation frame every other 10 trajectory points. If you set the value to 1, it creates a 
-            frame for every trajectory point, which requires 10 times more memory compared to the default value of 10.
             
-            .. Note:: For long trajectories, the animation can consume a significant amount of memory, and the 
-                matplotlib library may truncate it. To mitigate this issue, you can increase the value of 
-                ``pointsPerFrame`` to reduce the memory required for the animation. Alternatively, you can configure 
-                the maximum memory usage for the animation by adding a line similar to the following somewhere near 
-                the beginning of your code:
-                
+        Refer to the notebook :doc:`../Playground/Notebooks/RayTracing/BeamSweeping` for an example of using this
+        function.
+        """
+        import matplotlib.patches as mpatches
+        if length is None: length = min(self.xyMax-self.xyMin)/4
+
+        angle = np.deg2rad(beamAngle)
+        x0, y0 = self.bsXyz[:2]
+        x1 = x0 + length * np.cos(angle)
+        y1 = y0 + length * np.sin(angle)
+
+        if arrow is not None:
+            arrow.set_positions((x0, y0), (x1, y1))
+            arrow.set_color(color)
+            return arrow
+            
+        arrow = mpatches.FancyArrowPatch((x0, y0), (x1, y1), arrowstyle='->',
+                                         mutation_scale=15, linewidth=2, color=color)
+        ax.add_patch(arrow)
+        return arrow
+
+    # ******************************************************************************************************************
+    def animateTrajectory(self, trajectory, numGraphs=0, graphCallback=None, mapType="LOS-NLOS",
+                          pointsPerFrame=10, fileName=None, lastFrameDur=None):
+        r"""
+        Animate a scenario map showing the movement of a UE along a given trajectory.
+        Optionally, up to three graphs can be displayed and updated below the map.
+
+        A complete example is available in: :doc:`../Playground/Notebooks/RayTracing/TrajChannelAnim`.
+
+        Parameters
+        ----------
+        trajectory : :py:class:`~neoradium.trjchan.Trajectory`
+            The trajectory to animate.
+
+        numGraphs : int, optional
+            Number of graphs to display below the scenario map (maximum: 3).
+            The default is 0, which displays only the trajectory on the map.
+
+        graphCallback : function or None, optional
+            Callback function used to configure and update the graphs. If
+            ``numGraphs`` is greater than zero, this function must be provided.
+            It is called once for initialization and then for each animation frame.
+            See the *Animation Callback Function* section below for details.
+
+        mapType : str, optional
+            Type of map used as the background of the animation. See
+            :py:meth:`~neoradium.deepmimo.DeepMimoData.drawMap` for available options.
+
+        pointsPerFrame : int, optional
+            Number of trajectory points per animation frame. The default is 10.
+            Setting this value to 1 generates one frame per trajectory point, which increases
+            memory usage significantly.
+
+            .. note::
+                For long trajectories, the animation may consume a large amount of
+                memory and may be truncated by Matplotlib. To reduce memory usage,
+                increase ``pointsPerFrame``. Alternatively, increase the animation
+                memory limit, for example:
+
                 .. code-block:: python
-                
+
                     import matplotlib
-                    matplotlib.rcParams['animation.embed_limit'] = 100000000  # Set the limit to 100 MB
+                    matplotlib.rcParams['animation.embed_limit'] = 100000000  # 100 MB
 
-        fileName: str or None
-            If specified, it must be a path to a GIF file, and the animation will be saved to that file.
+        fileName : str or None, optional
+            If specified, the animation is saved as a GIF file at the given path.
 
+        lastFrameDur : int or None, optional
+            If specified, it is the duration (in milliseconds) to hold the final frame of the GIF 
+            before it loops. Ignored if ``fileName`` is ``None``.
 
         Returns
         -------
         `matplotlib.animation.FuncAnimation <https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.FuncAnimation.html>`_
-            A ``FuncAnimation`` object containing the information about the animation. In a Jupyter Notebook, you can 
-            utilize the ``to_jshtml()`` method of the ``FuncAnimation`` class to display the animation.
-            
+            A ``FuncAnimation`` object. In a Jupyter Notebook, you can display it
+            using the ``to_jshtml()`` method.
+
 
         .. _CallBack:
-            
+
         **Animation Callback Function**
-        
-        This function is automatically invoked to configure and display additional graphs below the scenario map 
-        during the animation. It accepts the following parameters:
-        
-            :request: This string can be either ``"Config"`` or ``"Draw"``, indicating the purpose of the call.
-            
-            :ax: This is an array of 
-                `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
-                objects. Each element of this array is used to draw a graph below the animated scenario map.
-            
-            :trajectory: The :py:class:`~neoradium.trjchan.Trajectory` object used for the animation.
-            
-            :points: A tuple of two integer values, representing the indices of points in the trajectory for the 
-                previous and current frames, respectively. This parameter is utilized only when the ``request`` 
-                parameter is set to ``"Draw"``.
-        
-        The following is an example of a callback function that draws two graphs below the animated trajectory on 
-        the scenario map.:
-        
+
+        The callback function is used to configure and update additional graphs and
+        map elements during the animation. It is invoked with the following parameters:
+
+            :request:
+                Specifies the type of operation:
+                
+                    - ``"Config"``: Called once at the beginning to configure the graphs.
+                    - ``"ConfigMap"``: Called once to customize the scenario map.
+                    - ``"Draw"``: Called for each frame to update the graphs.
+                    - ``"DrawOnMap"``: Called for each frame to draw additional elements on the map.
+
+            :ax:
+                A `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
+                object or a list of such objects.
+
+                - For ``"Config"`` and ``"Draw"``, this is a list of axes used for the graphs.
+                - For ``"ConfigMap"`` and ``"DrawOnMap"``, this is the map axes.
+
+            :trajectory:
+                The :py:class:`~neoradium.trjchan.Trajectory` used in the animation.
+
+            :points:
+                A tuple ``(p0, p1)`` representing the indices of the previous and
+                current trajectory points. Used only for ``"Draw"`` and ``"DrawOnMap"`` requests.
+
+        Example
+        -------
         .. code-block:: python
-        
+
             def handleGraph(request, ax, trajectory, points=None):
-                if request=="Config":
-                    # Configure 1st graph for delay of first path
-                    ax[0].set_xlim(0,trajectory.numPoints)
-                    ax[0].set_ylim(900,1300)
-                    ax[0].set_title("Delay of first path (ns)")
+                if request == "Config":
+                    # Configure first graph: delay of the first path
+                    ax[0].set_xlim(0, trajectory.numPoints)
+                    ax[0].set_ylim(900, 1300)
+                    ax[0].set_title("Delay of First Path (ns)")
 
-                    # Configure 2nd graph for Power of first path
-                    ax[1].set_xlim(0,trajectory.numPoints)
-                    ax[1].set_ylim(-130,-80)
-                    ax[1].set_title("Power of first path (dB)")
+                    # Configure second graph: power of the first path
+                    ax[1].set_xlim(0, trajectory.numPoints)
+                    ax[1].set_ylim(-130, -80)
+                    ax[1].set_title("Power of First Path (dB)")
 
-                elif request=="Draw":
+                elif request == "Draw":
                     p0, p1 = points
-                    ax[0].plot([p0,p1], [trajectory.points[p0].delays[0], trajectory.points[p1].delays[0]], 'blue', markersize=1)
-                    ax[1].plot([p0,p1], [trajectory.points[p0].powers[0], trajectory.points[p1].powers[0]], 'red', markersize=1)
+                    ax[0].plot(
+                        [p0, p1],
+                        [trajectory.points[p0].delays[0], trajectory.points[p1].delays[0]],
+                        'blue',
+                        markersize=1
+                    )
+                    ax[1].plot(
+                        [p0, p1],
+                        [trajectory.points[p0].powers[0], trajectory.points[p1].powers[0]],
+                        'red',
+                        markersize=1
+                    )
         """
-        if numGraphs>3:                 raise ValueError("Too many graphs! (This function supports up to 3 graphs)")
-        if trajectory.numPoints==0:     raise ValueError("The trajectory is empty!")
+        import matplotlib.pyplot as plt
+        import matplotlib.animation as animation
+        if numGraphs>3:                 raise ValueError("Too many graphs (maximum supported is 3)")
+        if trajectory.numPoints==0:     raise ValueError("The trajectory is empty")
+        
+        # Figure height scales with the number of graphs
         figSize = (6, 4+4*numGraphs/3)                                  # numGraphs→Height: 0→4, 1→5.33, 2→6.66, 3→8
         if numGraphs>0:
             fig, ax = plt.subplots(1+numGraphs,1, figsize=figSize, gridspec_kw={'height_ratios': [4] + numGraphs*[1]})
         else:
-            fig, ax = plt.subplots(figsize=figSize)                     # Just animating the map (no graphs)
+            fig, ax = plt.subplots(figsize=figSize)                     # Only animate the map
         axMap = ax if numGraphs==0 else ax[0]
-        self.drawMap(mapType, ax=axMap)
-        point, = axMap.plot([], [], 'bo', markersize=5)                 # Starting Point
+        self.drawMap(mapType, ax=axMap)                                 # Draw the background map
+        point, = axMap.plot([], [], 'bo', markersize=5)                 # Initialize the moving point (UE position)
 
-        graphCallback("Config", ax[1:], trajectory)                     # Configure the graphs
+        # Configure graphs and map (if callback is provided)
+        if graphCallback is not None:
+            graphCallback("Config", ax[1:], trajectory)                 # Configure the graphs
+            graphCallback("ConfigMap", axMap, trajectory)               # One-time customization of the map
 
         def animate(p):
             p0, p1 = (p-1)*pointsPerFrame, p*pointsPerFrame
             x, y = trajectory.points[p1].xyz[:2]
-            point.set_data([x], [y])
+            point.set_data([x], [y])                                    # Update UE position
             if p>0:
-                axMap.plot([trajectory.points[p0].xyz[0],x],            # Update the map for this frame
+                axMap.plot([trajectory.points[p0].xyz[0],x],            # Draw trajectory segment
                            [trajectory.points[p0].xyz[1],y],'black', linewidth=1)
+                if graphCallback is None:   return point,
+                
+                graphCallback("DrawOnMap", axMap, trajectory, (p0, p1)) # Drawing additional items on the map
                 if numGraphs>0:
                     graphCallback("Draw", ax[1:], trajectory, (p0, p1)) # Draw the graphs for this frame
             return point,
@@ -1312,12 +1499,27 @@ class DeepMimoData:
         anim = animation.FuncAnimation(fig, animate, frames=trajectory.numPoints//pointsPerFrame,
                                        interval=int(np.round(frameDuration)), blit=True, repeat=False)
 
-        plt.close()
         if fileName is not None:
-            # Save to a gif file
-            fps = int(min(np.round(1/(frameDuration/1000)), 30))                # Frames per second
+            # Save animation as GIF
+            fps = int(min(np.round(1/(frameDuration/1000)), 30))        # Frames per second
             anim.save(fileName, writer=animation.PillowWriter(fps=fps))
+            
+            if lastFrameDur is not None:
+                # Read the GIF file, adjust the duration of the last frame and save it again
+                from PIL import Image
+                img = Image.open(fileName)
+                frames = []
+                try:
+                    while True:     # Read all frames
+                        frames.append(img.copy())
+                        img.seek(img.tell() + 1)
+                except EOFError:    pass
+                img.close()
+                # Durations in milliseconds:
+                durations = [ int(np.round(frameDuration)) ] * (len(frames) - 1) + [ lastFrameDur ]
+                frames[0].save(fileName, save_all=True, append_images=frames[1:], duration=durations, loop=0)
 
+        plt.close(fig)
         return anim
 
     # ******************************************************************************************************************
@@ -1325,7 +1527,7 @@ class DeepMimoData:
         r"""
         This function enables you to create a trajectory by selecting points on the map. It opens a separate window 
         displaying the scenario map. You can then click on the map points to create the trajectory. After each click, 
-        the map updates to show current trajectory. To end the trajectory, simply close the window. This function 
+        the map updates to show the current trajectory. To end the trajectory, simply close the window. This function 
         returns the selected points after closing the map window. The function :py:meth:`trajectoryFromPoints` can then
         be used to create a :py:class:`~neoradium.trjchan.Trajectory` object based on the captured trajectory points.
         The notebook file :doc:`../Playground/Notebooks/RayTracing/DeepMimo` contains an example of using this
@@ -1333,37 +1535,38 @@ class DeepMimoData:
         
         Parameters
         ----------
-        mapType: str
+        mapType : str
             This specifies the type of map to be drawn by this function:
             
-                :LOS-NLOS: The color used for each point depends on whether it has a Line-of-Sight path, or if there
+                :LOS-NLOS: The color used for each point depends on whether it has a line-of-sight path or if there
                     is a total blockage at that point.
                 
-                :1stPathDelays: The color used for each point depends the amount of delay for the strongest path at
+                :1stPathDelays: The color used for each point depends on the amount of delay for the strongest path at
                     that point.
                  
-                :1stPathPowers: The color used for each point depends the path power for the strongest path at that
+                :1stPathPowers: The color used for each point depends on the path power for the strongest path at that
                     point.
                         
-        backEnd: str
+        backEnd : str
             The name of the interactive backend to be used by the matplotlib library. For more information, please 
             refer to `matplotlib backends <https://matplotlib.org/stable/users/explain/figure/backends.html>`_. The 
             default backend is “MacOSX”.
 
-        figSize: float
+        figSize : float
             This value determines the approximate size of the drawn map. If the maximum of the map’s width and height 
-            is less than the specified value, the map is scaled to match the specified size. The default value is set 
+            are less than the specified value, the map is scaled to match the specified size. The default value is set 
             to ``6``.
 
         Returns
         -------
         NumPy array
-            An array of 2-D points on the current scenario map specifying the trajectory.
+            A NumPy array of shape ``(N, 2)`` containing the ``[x, y]`` coordinates (in the scenario's local
+            map coordinates) of the ``N`` points clicked on the map, in the order they were clicked.
 
 
         **Example:**
         
-        The code below can be utilized to generate a trajectory of points for the “asu_campus1” scenario. The image 
+        The code below can be used to generate a trajectory of points for the “asu_campus1” scenario. The image 
         below illustrates the current trajectory, depicted by blue lines, and the starting point, marked by a small 
         blue circle.
         
@@ -1376,7 +1579,7 @@ class DeepMimoData:
             :align: center
             :figwidth: 600px
         """
-        import subprocess
+        import subprocess, tempfile
         print("Running the interactive map for '%s'..."%(self.scenario))
 
         if mapType == "LOS-NLOS":           titleStr = "Map of LOS/NLOS paths"
@@ -1389,7 +1592,7 @@ class DeepMimoData:
         grId = f"\"{self.gridId}\""         if type(self.gridId)==str        else self.gridId
 
         pyFileStr = f"""
-# This file was auto-generated by the NeoRadium's DeepMimoData class. Please do not edit manually.
+# This file was auto-generated by NeoRadium's DeepMimoData class. Please do not edit manually.
 from neoradium import DeepMimoData
 import matplotlib.pyplot as plt
 import matplotlib
@@ -1397,7 +1600,7 @@ matplotlib.use("{backEnd}")
 
 DeepMimoData.setScenariosPath("{self.pathToScenarios}")
 deepMimoData = DeepMimoData("{self.scenario}", {bsId}, {grId})
-fig, ax = deepMimoData.drawMap("{mapType}", figSize={figSize})
+ax = deepMimoData.drawMap("{mapType}", figSize={figSize})
 
 points = []
 def onClick(event):
@@ -1414,43 +1617,50 @@ def onClick(event):
         plt.draw()
 
 plt.title("{titleStr}")
+fig = ax.get_figure()
 cid = fig.canvas.mpl_connect('button_press_event', onClick)
 plt.show()
 print("Clicked points:", points)
 """
-        fileName = "InteractiveTrjPoints.py"
-        pyFile = open(fileName, "w")
-        pyFile.write(pyFileStr)
-        pyFile.close()
+        # Write the generated script to a unique temp file so concurrent callers don't collide,
+        # and clean it up in a 'finally' so it's removed even if the subprocess raises.
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as pyFile:
+            fileName = pyFile.name
+            pyFile.write(pyFileStr)
 
-        result = subprocess.run(["python", fileName], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        if "Clicked points: [" not in result.stdout:
-            raise ValueError("Something went wrong!\nOutput:\n%s\nError:\n%s\n"%(result.stdout,result.stderr))
-        start = result.stdout.find("Clicked points: [") + len("Clicked points: ")
-        end = start + result.stdout[start:].find("]") + 1
-        x = np.float64(eval(result.stdout[start:end]))
-        print(f"Done. {len(x)} points selected.")
-        return x
+        try:
+            result = subprocess.run(["python", fileName], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            if "Clicked points: [" not in result.stdout:
+                raise ValueError("Something went wrong!\nOutput:\n%s\nError:\n%s\n"%(result.stdout,result.stderr))
+            start = result.stdout.find("Clicked points: [") + len("Clicked points: ")
+            end = start + result.stdout[start:].find("]") + 1
+            x = np.float64(eval(result.stdout[start:end]))
+            print(f"Done. {len(x)} points selected.")
+            return x
+        finally:
+            if os.path.exists(fileName):
+                os.remove(fileName)
 
     # ******************************************************************************************************************
     def trajectoryFromPoints(self, points, bwp, speedMps=None):
         r"""
         Creates and returns a :py:class:`~neoradium.trjchan.Trajectory` object based on the given trajectory points
         and parameters. Please refer to the notebook :doc:`../Playground/Notebooks/RayTracing/DeepMimo` for an example
-        of using this function.
+        that uses this function.
         
         Parameters
         ----------
-        points: NumPy array 
+        points : NumPy array
             This array of 2-D points on the current scenario map specifies the trajectory. The 
             :py:meth:`interactiveTrajPoints` function can be used to obtain these points interactively.
 
-        bwp: The bandwidth part used to determine the timing of the interpolated trajectory points. This implementation
+        bwp : :py:class:`~neoradium.carrier.BandwidthPart`
+            The bandwidth part used to determine the timing of the interpolated trajectory points. This implementation
             generates one interpolated trajectory point for each communication slot.
         
-        speedMps: float or None
+        speedMps : float or None
             If provided, it specifies the trajectory speed in meters per second. If not provided, the speed is
-            automatically determined based on the scenario type (indoor vs outdoor). The current implementation uses
+            automatically determined based on the scenario type (indoor vs. outdoor). The current implementation uses
             an average walking speed of 1.2 m/s for indoor scenarios and 14 m/s for outdoor scenarios (which 
             corresponds to a car moving at 31.32 miles per hour). Note that the actual linear speed on the trajectory
             may not be precisely equal to this value due to the approximations in the calculations.
@@ -1476,17 +1686,140 @@ print("Clicked points:", points)
             else:
                 for y in range(p1[1],p2[1],yInc):  traj += [ [np.round(lineFunc(y=y)), y] ]
         
-        trjIndexes = self.gridXyToIndex(np.int32(traj + [p2]))
+        trajIndices = self.gridXyToIndex(np.int32(traj + [p2]))
         
-        # If the speed is not specified, set the speed based on the scenario (Indoor vs outdoor).
-        inDoorScenarios = [ "I1_2p4", "I1_2p4", "I1_2p4", "I1_2p4" ]
+        # If the speed is not specified, set it based on the scenario (Indoor vs. outdoor).
         if speedMps is None:
-            if self.scenario in inDoorScenarios:    speedMps = 1.2      # Walking speed
+            if self.scenario in indoorScenarios:    speedMps = 1.2      # Walking speed
             else:                                   speedMps = 14       # A car at 31.32 miles per hour
 
         # Now interpolate to create intermediate points on each segment
-        return self.interpolateTrajectory(trjIndexes, speedMps, bwp)    # A Trajectory object
+        return self.interpolateTrajectory(trajIndices, speedMps, bwp)    # A Trajectory object
 
+    # ******************************************************************************************************************
+    def channelForPoints(self, points, bwp, **kwargs):
+        r"""
+        Create and return a channel model representing the channel between the base station and a set 
+        of specified points on the scenario map. The returned channel model can be used to compute channel 
+        matrices or to process time- or frequency-domain signals.
+
+        The ``points`` argument may be a single :py:class:`~neoradium.trjchan.TrjPoint` object, a list of
+        :py:class:`~neoradium.trjchan.TrjPoint` objects, or a list of x–y coordinates given as tuples ``(x, y)``.
+
+        Note that although the returned object is an instance of :py:class:`~neoradium.trjchan.TrjChannel`, it does 
+        not represent a UE moving along a trajectory. The points are treated as independent samples with no temporal
+        relationship between them. The method :py:meth:`~neoradium.trjchan.TrjChannel.goNext` can be used to iterate 
+        over the points sequentially.
+
+        Parameters
+        ----------
+        points : list or :py:class:`~neoradium.trjchan.TrjPoint`
+            A single :py:class:`~neoradium.trjchan.TrjPoint`, a list of such objects,
+            or a list of x–y coordinate tuples ``(x, y)``.
+
+        bwp : :py:class:`~neoradium.carrier.BandwidthPart`
+            The bandwidth part used by the returned channel model.
+
+        kwargs : dict
+            Additional optional parameters used by the channel model:
+
+                :normalizeGains:
+                    If True (default), path gains are normalized.
+
+                :normalizeOutput:
+                    If True (default), gains are normalized based on the number
+                    of receive antennas.
+
+                :normalizeDelays:
+                    If True (default), delays are normalized as specified in
+                    *Step 3* of **3GPP TR 38.901, Section 8.4**. Otherwise, the
+                    original delays obtained from ray tracing are used.
+
+                :filterLen:
+                    Length of the channel filter (default: 16 samples).
+
+                :delayQuantSize:
+                    Quantization size for fractional delays in the channel filter
+                    (default: 64).
+
+                :stopBandAtten:
+                    Stopband attenuation (in dB) used by the channel filter
+                    (default: 80 dB).
+
+                :txAntenna:
+                    Transmit antenna, an instance of
+                    :py:class:`~neoradium.antenna.AntennaPanel` or
+                    :py:class:`~neoradium.antenna.AntennaArray`. By default, a
+                    single vertically polarized antenna (1×1 panel) is used.
+
+                :rxAntenna:
+                    Receive antenna, an instance of
+                    :py:class:`~neoradium.antenna.AntennaPanel` or
+                    :py:class:`~neoradium.antenna.AntennaArray`. By default, a
+                    single vertically polarized antenna (1×1 panel) is used.
+
+                :txOrientation:
+                    Transmitter antenna orientation as three angles (degrees):
+                    *bearing* :math:`\alpha`, *downtilt* :math:`\beta`, and
+                    *slant* :math:`\gamma`. Default is ``[0, 0, 0]``.
+                    See **3GPP TR 38.901, Section 7.1.3**.
+
+                :rxOrientation:
+                    Receiver antenna orientation as three angles (degrees):
+                    *bearing* :math:`\alpha`, *downtilt* :math:`\beta`, and
+                    *slant* :math:`\gamma`. Default is ``[0, 0, 0]``.
+                    See **3GPP TR 38.901, Section 7.1.3**.
+
+                :xPolPower:
+                    Cross-polarization power (in dB). Default is 10 dB, defined as
+                    :math:`X = 10 \log_{10} \kappa^{RT}`, where :math:`\kappa^{RT}`
+                    is the cross-polarization ratio (XPR). In the current
+                    implementation, this value is applied to all paths.
+
+                :ueSpeed:
+                    UE speed at each point. If provided, it must be a list of
+                    3D velocity vectors corresponding to the points in ``points``.
+
+        Returns
+        -------
+        :py:class:`~neoradium.trjchan.TrjChannel`
+            A channel object that provides channel information between the base
+            station and each specified point.
+
+
+        Refer to the notebook :doc:`../Playground/Notebooks/RayTracing/BeamSweeping` for an example of using this 
+        function.
+        """
+        if isinstance(points, TrjPoint):    points=[points]     # Single TrjPoint
+        elif isinstance(points, list):
+            if not isinstance(points[0], TrjPoint):
+                # Must be a list of (x,y) positions or a single position [x,y]
+                if isinstance(points[0], (list,tuple)):         # List of (x,y) positions
+                    if len(points[0])==2:       points = [self.trjPointAtXy(pos) for pos in points]
+                    else:                       points = None
+                elif len(points)==2:                            # Single [x,y] position
+                    points = [self.trjPointAtXy(points)]
+                else:
+                    points = None
+        if points is None:
+            raise ValueError("'points' must be a list of (x,y) positions or a list of 'TrjPoint' objects")
+        
+        ueSpeed = kwargs.pop("ueSpeed", None)
+        if ueSpeed is not None:
+            if not isinstance(ueSpeed, (list, np.ndarray)):
+                raise ValueError("'ueSpeed' must be a list of 3D velocity vectors.")
+            for i, point in enumerate(points):
+                if not isinstance(ueSpeed[i], (list,tuple,np.ndarray)):
+                    raise ValueError("Each 'ueSpeed' element must be a 3D velocity vector.")
+                if len(ueSpeed[i]) != 3:
+                    raise ValueError("Each 'ueSpeed' element must be a 3D velocity vector.")
+                point.speed = np.float64(ueSpeed[i])
+
+        points[-1].sampleNo = 1             # Mark it as a point-set
+        pointSet = Trajectory(points, self.carrierFreq)
+        channel = TrjChannel(bwp, pointSet, **kwargs)       # Create the trajectory-based channel model.
+        return channel
+        
     # ******************************************************************************************************************
     def getChanGen(self, numChannels, bwp,
                    los=None, minDist=0, maxDist=np.inf,
@@ -1497,15 +1830,15 @@ print("Clicked points:", points)
 
         The indices of the random points can be retrieved using the ``pointIdx`` property of the returned generator 
         object. These point indices can then be passed to the :py:meth:`drawMap` method as an "overlay" to be 
-        displayed on the map
+        displayed on the map.
         
         Refer to the notebook :doc:`../Playground/Notebooks/RayTracing/ChannelGeneration` for an example of 
         using this method.
         
         Parameters
         ----------
-        numChannels: int 
-            This is the number of channel matrices generated by the returned generator which is equal to the number of 
+        numChannels : int 
+            This is the number of channel matrices generated by the returned generator, which is equal to the number of 
             points sampled from all the points on the grid of the current scenario. However, it disregards points 
             with total blockage (i.e., points with no paths to the base station). If the given filter criteria result
             in insufficient points being available in the current scenario, the number of points sampled (and 
@@ -1514,62 +1847,62 @@ print("Clicked points:", points)
         bwp : :py:class:`~neoradium.carrier.BandwidthPart` 
             The bandwidth part object used by the returned generator to construct channel matrices.
 
-        los: Boolean or None        
+        los : bool or None        
             It can be set to `None`, `True`, or `False`.
 
-                * If set to `None`, the sampled points are not filtered based on their Line-of-Sight communication 
+                * If set to `None`, the sampled points are not filtered based on their line-of-sight communication 
                   path (default).
             
-                * If set to `True`, only the points with a Line-of-Sight communication path to the base station are
+                * If set to `True`, only the points with a line-of-sight communication path to the base station are
                   considered.
             
-                * If set to `False`, only the points without a Line-of-Sight communication path to the base station 
+                * If set to `False`, only the points without a line-of-sight communication path to the base station 
                   are considered. 
         
-        minDist: float
+        minDist : float
             If specified, this parameter determines the minimum distance between the points and the base station. 
-            Points closer than this specified value will not be considered. The default is ``0`` which effectively 
+            Points closer than this value will not be considered. The default is ``0`` which effectively 
             disables this filter.
             
-        maxDist: float
+        maxDist : float
             If specified, this parameter determines the maximum distance between the points and the base station. 
             Points farther than this specified value will not be considered. By default, this parameter is set to 
             ``np.inf``, which effectively disables this filter.
 
-        minX: float
-            If specified, parameter determines a lower bound for the ``x`` coordinate of the points to consider. It 
+        minX : float
+            If specified, this parameter determines a lower bound for the ``x`` coordinate of the points to consider. It 
             can be used with other filters to limit the points to a specific region. By default, this parameter is
             set to ``-np.inf``, which effectively disables this filter.
             
-        minY: float
-            If specified, parameter determines a lower bound for the ``y`` coordinate of the points to consider. It 
+        minY : float
+            If specified, this parameter determines a lower bound for the ``y`` coordinate of the points to consider. It 
             can be used with other filters to limit the points to a specific region. By default, this parameter is
             set to ``-np.inf``, which effectively disables this filter.
 
-        maxX: float
-            If specified, parameter determines an upper bound for the ``x`` coordinate of the points to consider. It 
+        maxX : float
+            If specified, this parameter determines an upper bound for the ``x`` coordinate of the points to consider. It 
             can be used with other filters to limit the points to a specific region. By default, this parameter is
             set to ``np.inf``, which effectively disables this filter.
 
-        maxY: float
-            If specified, parameter determines an upper bound for the ``y`` coordinate of the points to consider. It 
+        maxY : float
+            If specified, this parameter determines an upper bound for the ``y`` coordinate of the points to consider. It 
             can be used with other filters to limit the points to a specific region. By default, this parameter is
             set to ``np.inf``, which effectively disables this filter.
                     
         kwargs : dict
-            Here is a list of additional optional parameters that can be used to further customize the calculation 
-            of the channel matrices:
+            Here is a list of additional optional parameters that can be used to further customize channel-matrix 
+            generation:
             
                 :normalizeGains: If the default value of `True` is used, the path gains are normalized.
                     
                 :normalizeOutput: If the default value of `True` is used, the gains are normalized based on the 
-                    number of receive antenna.
+                    number of receive antennas.
 
                 :normalizeDelays: If the default value of `True` is used, the delays are normalized as specified in 
                     “Step 3” of **3GPP TR 38.901 section 8.4**. Otherwise, the original delays obtained from 
                     ray-tracing are used.
 
-                :filterLen: The length of the channel filter. The default is 16 sample.
+                :filterLen: The length of the channel filter. The default is 16 samples.
                 
                 :delayQuantSize: The size of the delay fraction quantization for the channel filter. The default is 64.
                 
@@ -1579,17 +1912,17 @@ print("Clicked points:", points)
                     :py:class:`neoradium.antenna.AntennaPanel` or :py:class:`neoradium.antenna.AntennaArray` class. 
                     By default, it is a single antenna in a 1x1 antenna panel with vertical polarization.
                 
-                :rxAntenna: The receiver antenna which is an instance of either the 
+                :rxAntenna: The receiver antenna, which is an instance of either the 
                     :py:class:`neoradium.antenna.AntennaPanel` or :py:class:`neoradium.antenna.AntennaArray` class. 
                     By default, it is a single antenna in a 1x1 antenna panel with vertical polarization.
                     
-                :txOrientation: The orientation of transmitter antenna. This is a list of 3 angle values in degrees for
-                    the *bearing* angle :math:`\alpha`, *downtilt* angle :math:`\beta`, and *slant* angle 
+                :txOrientation: The orientation of the transmitter antenna. This is a list of 3 angle values in degrees 
+                    for the *bearing* angle :math:`\alpha`, *downtilt* angle :math:`\beta`, and *slant* angle 
                     :math:`\gamma`. The default is [0,0,0]. Please refer to **3GPP TR 38.901 Section 7.1.3** for more
                     information.
 
-                :rxOrientation: The orientation of receiver antenna. This is a list of 3 angle values in degrees for 
-                    the *bearing* angle :math:`\alpha`, *downtilt* angle :math:`\beta`, and *slant* angle 
+                :rxOrientation: The orientation of the receiver antenna. This is a list of 3 angle values in degrees 
+                    for the *bearing* angle :math:`\alpha`, *downtilt* angle :math:`\beta`, and *slant* angle 
                     :math:`\gamma`. The default is [0,0,0]. Please refer to **3GPP TR 38.901 Section 7.1.3** for more
                     information.
 
@@ -1607,7 +1940,7 @@ print("Clicked points:", points)
                           
                         * If it is a single number, then the same UE speed is used at all points.
                     
-                    The default is ``(0,20)``.
+                    The default is ``(0, 20)``.
                       
                 :ueDir: Specifies the direction of UE movement in the X-Y plane as an angle in degrees. It can be one 
                     of the following:
@@ -1637,7 +1970,7 @@ print("Clicked points:", points)
             # Create 100 channel matrices
             chanGen = deepMimoData.getChanGen(100, 
                                               carrier.curBwp,   # Bandwidth Part  
-                                              los=False,        # Include only Non-Line-of-Sight channels
+                                              los=False,        # Include only non-line-of-sight channels
                                               minDist=200,      # With distances to the base station between 200
                                               maxDist=250,      # and 250 meters
                                               maxX=100,         # With maximum x coordinate of 100 meters
@@ -1648,7 +1981,7 @@ print("Clicked points:", points)
         seed = kwargs.pop("seed", None)
         totalPoints = len(self.allTrjPoints)
         
-        # A local function called at each reset (including first instantiation)
+        # Local function called on each reset (including the first instantiation)
         def getPointsAndChannel(seed):
             rangen = random if seed is None else random.getGenerator(seed)          # The random number generator
             allPointIdxs = rangen.choice(totalPoints, totalPoints, replace=False)   # Random shuffling of all indices
@@ -1663,15 +1996,15 @@ print("Clicked points:", points)
                 if point.xyz[0]>maxX:       continue    # Ignore points where x > maxX
                 if point.xyz[1]<minY:       continue    # Ignore points where y < minY
                 if point.xyz[1]>maxY:       continue    # Ignore points where y > maxY
-                if point.bsDist<minDist:    continue    # Ignore where distance to the base station is less than minDist
-                if point.bsDist>maxDist:    continue    # Ignore where distance to the base station is more than maxDist
+                if point.bsDist<minDist:    continue    # Ignore points whose distance to the base station is less than minDist
+                if point.bsDist>maxDist:    continue    # Ignore points whose distance to the base station is greater than maxDist
                 if los is not None:
                     if point.hasLos != (1 if los else 0):
-                        continue                        # Ignore the points with los flag mismatch with the given "los"
+                        continue                        # Ignore points whose LOS flag does not match the given "los"
                 pointIdx += [ allPointIdxs[i] ]         # Passed all the filters
 
-            points = [self[i] for i in pointIdx]        # A list of "TrjPoint" objects
-            points[-1].sampleNo = 1                     # This indicates that we want a "pointSet", not a trajectory
+            points = [self[i] for i in pointIdx]    # A list of "TrjPoint" objects
+            points[-1].sampleNo = 1                 # This indicates that we want a "pointSet" rather than a trajectory
             
             # Set random speeds at each point:
             numPoints = len(points)
@@ -1694,7 +2027,8 @@ print("Clicked points:", points)
         class ChanGen:
             def __init__(self): self.reset()
             def __iter__(self): return self
-
+            def __len__(self):  return self.channel.numPoints
+            
             def __next__(self):
                 if self.cur >= numChannels: raise StopIteration
                 chanMat = self.channel.getChannelMatrix()

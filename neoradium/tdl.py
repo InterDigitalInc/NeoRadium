@@ -1,4 +1,4 @@
-# Copyright (c) 2024 InterDigital AI Lab
+# Copyright (c) 2024-2026, InterDigital AI Lab
 """
 This module implements the :py:class:`~neoradium.tdl.TdlChannel` class, which encapsulates the functionality of the 
 Tapped Delay Line (TDL) channel model
@@ -11,6 +11,10 @@ Tapped Delay Line (TDL) channel model
 # 11/30/2023    Shahab                  Completed the documentation
 # 04/01/2025    Shahab                  Restructured the file to work with the new ChannelModel class
 # 06/20/2025    Shahab                  Updated the restart method with the new parameter "applyToBwp".
+# 06/15/2026    Shahab                  Fixed the Rician K-factor in the LOS path of 'getPathGains' so the realized
+#                                       LOS-to-NLOS power ratio matches 'kFactorLos'. Also normalized the GMEDS1
+#                                       sum-of-sinusoids amplitude so the complex Rayleigh process has unit variance,
+#                                       matching the Xiao method and giving consistent statistics between the two.
 # **********************************************************************************************************************
 import numpy as np
 from scipy.linalg import sqrtm
@@ -21,9 +25,9 @@ from .utils import getMultiLineStr, toLinear, toDb, freqStr
 
 # **********************************************************************************************************************
 # This file is based on:
-#       TR 38.901 V17.0.0 (2022-03)
-#       TS 38.101-4 V17.4.0 (2022-03)
-#       TS 38.104 V17.4.0 (2021-12)
+#       TR 38.901
+#       TS 38.101-4
+#       TS 38.104
 
 # **********************************************************************************************************************
 tapInfo = {
@@ -141,7 +145,7 @@ tapInfo = {
                     [12.0034,                -29.8       ],    #   13
                     [20.6519,                -29.2       ]],   #   14
                      
-                'A30': # TS 38.101-4 V17.4.0 (2022-03) - Table B.2.1.1-2 and Table B.2.1.2-2
+                'A30': # TS 38.101-4 - Table B.2.1.1-2 and Table B.2.1.2-2
                    # Delay (ns)            Power In dB       Tap Number #
                    [[0,                      -15.5       ],    #   1
                     [10,                     0           ],    #   2
@@ -156,7 +160,7 @@ tapInfo = {
                     [150,                    -16.6       ],    #   11
                     [290,                    -26.2       ]],   #   12
                 
-                'B100':# TS 38.101-4 V17.4.0 (2022-03) - Table B.2.1.1-3
+                'B100':# TS 38.101-4 - Table B.2.1.1-3
                    # Delay (ns)            Power In dB       Tap Number #
                    [[0,                      0           ],    #   1
                     [10,                     -2.2        ],    #   2
@@ -171,7 +175,7 @@ tapInfo = {
                     [330,                    -7.5        ],    #   11
                     [480,                    -7.1        ]],   #   12
 
-                'C60': # TS 38.101-4 V17.4.0 (2022-03) - Table B.2.1.2-3
+                'C60': # TS 38.101-4 - Table B.2.1.2-3
                    # Delay (ns)            Power In dB       Tap Number #
                    [[0,                      -7.8        ],    #   1
                     [15,                     -0.3        ],    #   2
@@ -186,7 +190,7 @@ tapInfo = {
                     [360,                    -16.9       ],    #   11
                     [520,                    -19.4       ]],   #   12
                     
-                'C300':# TS 38.101-4 V17.4.0 (2022-03) - Table B.2.1.1-4
+                'C300':# TS 38.101-4 - Table B.2.1.1-4
                    # Delay (ns)            Power In dB       Tap Number #
                    [[0,                      -6.9        ],    #   1
                     [65,                     0           ],    #   2
@@ -201,7 +205,7 @@ tapInfo = {
                     [1510,                   -14.2       ],    #   11
                     [2595,                   -16.0       ]],   #   12
                     
-                'D30': # TS 38.101-4 V17.4.0 (2022-03) - Table B.2.1.2-4
+                'D30': # TS 38.101-4 - Table B.2.1.2-4
                    # Delay (ns)            Power In dB       Tap Number #
                    [[0,                      -0.2        ],    #   1 (LOS)
                     [0,                      -12.4       ],    #   1
@@ -223,7 +227,7 @@ tapInfo = {
 preCalcMatrix = {
         'Downlink': { # For Downlink Antenna Config is:  ng x nu (nt x nr)
             'CoPolar':  {
-                'High':     {   # Downlink - CoPolar - High => TS 38.101-4 V17.4.0 (2022-03), Table B.2.3.1.2-2
+                'High':     {   # Downlink - CoPolar - High => TS 38.101-4, Table B.2.3.1.2-2
                             '1x2':[[ 1,   0.9 ],
                                    [ 0.9, 1   ]],
                             '2x1':[[ 1,   0.9 ],
@@ -273,7 +277,7 @@ preCalcMatrix = {
                                    [ 0.8099, 0.8587, 0.8894, 0.8999, 0.8587, 0.9105, 0.9430, 0.9541,
                                      0.8894, 0.9430, 0.9767, 0.9882, 0.8999, 0.9541, 0.9882, 1.0000 ]]
                             },
-                'Medium':   {   # Downlink - CoPolar - Medium => TS 38.101-4 V17.4.0 (2022-03), Table B.2.3.1.2-3
+                'Medium':   {   # Downlink - CoPolar - Medium => TS 38.101-4, Table B.2.3.1.2-3
                             '2x2':[[ 1,    0.9,  0.3,  0.27 ],
                                    [ 0.9,  1,    0.27, 0.3  ],
                                    [ 0.3,  0.27, 1,    0.9  ],
@@ -281,7 +285,7 @@ preCalcMatrix = {
                             '2x4':[[ 1.0000, 0.9882, 0.9541, 0.8999, 0.3000, 0.2965, 0.2862, 0.2700 ],  # Note: This case is slightly different from the
                                    [ 0.9882, 1.0000, 0.9882, 0.9541, 0.2965, 0.3000, 0.2965, 0.2862 ],  #       calculated matrix. Looks like it was calculated with
                                    [ 0.9541, 0.9882, 1.0000, 0.9882, 0.2862, 0.2965, 0.3000, 0.2965 ],  #       a=0.00012 instead of a=0.0001 which is specified in
-                                   [ 0.8999, 0.9541, 0.9882, 1.0000, 0.2700, 0.2862, 0.2965, 0.3000 ],  #       TS 38.101-4 V17.4.0 (2022-03), Section B.2.3.2
+                                   [ 0.8999, 0.9541, 0.9882, 1.0000, 0.2700, 0.2862, 0.2965, 0.3000 ],  #       TS 38.101-4, Section B.2.3.2
                                    [ 0.3000, 0.2965, 0.2862, 0.2700, 1.0000, 0.9882, 0.9541, 0.8999 ],
                                    [ 0.2965, 0.3000, 0.2965, 0.2862, 0.9882, 1.0000, 0.9882, 0.9541 ],
                                    [ 0.2862, 0.2965, 0.3000, 0.2965, 0.9541, 0.9882, 1.0000, 0.9882 ],
@@ -327,7 +331,7 @@ preCalcMatrix = {
                                    [ 0.2700, 0.2862, 0.2965, 0.3000, 0.5270, 0.5588, 0.5787, 0.5855,
                                      0.7872, 0.8347, 0.8645, 0.8747, 0.8999, 0.9541, 0.9882, 1.0000 ]]
                             },
-                'MediumA':  {   # Downlink - CoPolar - MediumA => TS 38.101-4 V17.4.0 (2022-03), Table B.2.3.1.2-4
+                'MediumA':  {   # Downlink - CoPolar - MediumA => TS 38.101-4, Table B.2.3.1.2-4
                             '1x4':[[ 1,      0.9,    0.6561, 0.3874 ],
                                    [ 0.9,    1,      0.9,    0.6561 ],
                                    [ 0.6561, 0.9,    1,      0.9    ],
@@ -373,7 +377,7 @@ preCalcMatrix = {
                                    [ 0.1162, 0.1968, 0.2700, 0.3000, 0.2269, 0.3842, 0.5270, 0.5856,
                                      0.3389, 0.5739, 0.7873, 0.8748, 0.3874, 0.6561, 0.9000, 1.0000 ]]
                             },
-                'Low':      {   # Downlink - CoPolar - Low => TS 38.101-4 V17.4.0 (2022-03), Table B.2.3.1.2-5
+                'Low':      {   # Downlink - CoPolar - Low => TS 38.101-4, Table B.2.3.1.2-5
                                 # Note that returning a Scalar value means an identity matrix of the specified size
                             '1x2': 2,
                             '1x4': 4,
@@ -386,7 +390,7 @@ preCalcMatrix = {
                             }
                         },
             'CrossPolar':{
-                'High':     {   # Downlink - CrossPolar - High => TS 38.101-4 V17.4.0 (2022-03), Table B.2.3.2.2-2
+                'High':     {   # Downlink - CrossPolar - High => TS 38.101-4, Table B.2.3.2.2-2
                             '4x2':[[  1.0000, 0.0000,  0.9000, 0.0000, -0.3000, 0.0000, -0.2700, 0.0000 ],
                                    [  0.0000, 1.0000,  0.0000, 0.9000,  0.0000, 0.3000,  0.0000, 0.2700 ],
                                    [  0.9000, 0.0000,  1.0000, 0.0000, -0.2700, 0.0000, -0.3000, 0.0000 ],
@@ -468,7 +472,7 @@ preCalcMatrix = {
                                    [  0.0000, 0.2700,  0.0000, 0.2862,  0.0000, 0.2965,  0.0000, 0.3000,
                                       0.0000, 0.8999,  0.0000, 0.9542,  0.0000, 0.9883,  0.0000, 1.0000 ]]
                             },
-                'Medium':   {   # Downlink - CrossPolar - MediumA => TS 38.101-4 V17.4.0 (2022-03), Table B.2.3.2.2-3
+                'Medium':   {   # Downlink - CrossPolar - MediumA => TS 38.101-4, Table B.2.3.2.2-3
                             '2x2':[[ 1.0,  0.0, -0.2, 0.0 ],
                                    [ 0.0,  1.0,  0.0, 0.2 ],
                                    [ -0.2, 0.0,  1.0, 0.0 ],
@@ -510,7 +514,7 @@ preCalcMatrix = {
                     },
         'Uplink':   {   # For Uplink Antenna Config is:  nu x ng  (nt x nr)
             'CoPolar':  {
-                'High':     {   # Uplink - CoPolar - High => TS 38.104 V17.4.0 (2021-12), Table G.2.3.1.2-2
+                'High':     {   # Uplink - CoPolar - High => TS 38.104, Table G.2.3.1.2-2
                             '1x2':[[ 1,   0.9 ],
                                    [ 0.9, 1   ]],
                             '2x2':[[ 1,    0.9,  0.9,  0.81 ],
@@ -558,7 +562,7 @@ preCalcMatrix = {
                                    [ 0.8099, 0.8587, 0.8894, 0.8999, 0.8587, 0.9105, 0.9430, 0.9541,
                                      0.8894, 0.9430, 0.9767, 0.9882, 0.8999, 0.9541, 0.9882, 1.0000 ]]
                             },
-                'Medium':   {   # Uplink - CoPolar - Medium => TS 38.104 V17.4.0 (2021-12), Table G.2.3.1.2-3
+                'Medium':   {   # Uplink - CoPolar - Medium => TS 38.104, Table G.2.3.1.2-3
                             '2x2':[[ 1,    0.9,  0.3,  0.27 ],
                                    [ 0.9,  1,    0.27, 0.3  ],
                                    [ 0.3,  0.27, 1,    0.9  ],
@@ -604,7 +608,7 @@ preCalcMatrix = {
                                    [ 0.2700, 0.2862, 0.2965, 0.3000, 0.5270, 0.5588, 0.5787, 0.5855,
                                      0.7872, 0.8347, 0.8645, 0.8747, 0.8999, 0.9541, 0.9882, 1.0000 ]]
                             },
-                'Low':      {   # Uplink - CoPolar - Low => TS 38.104 V17.4.0 (2021-12), Table G.2.3.1.2-4
+                'Low':      {   # Uplink - CoPolar - Low => TS 38.104, Table G.2.3.1.2-4
                             '1x2': 2,
                             '1x4': 4,
                             '1x8': 8,
@@ -615,7 +619,7 @@ preCalcMatrix = {
                             }
                         },
             'CrossPolar':{
-                'Low':     {   # Uplink - CrossPolar - Low => TS 38.104 V17.4.0 (2021-12), Table G.2.3.2.3-2
+                'Low':     {   # Uplink - CrossPolar - Low => TS 38.104, Table G.2.3.2.3-2
                             '1x8': 8,
                             '2x8': 16
                             }
@@ -627,24 +631,24 @@ preCalcMatrix = {
 # The alpha, beta, and gamma values from the 3GPP standard for different cases
 alphBetaGamma = {
         'Downlink': {
-            'CoPolar':   {  # TS 38.101-4 V17.4.0 (2022-03), Table B.2.3.1.2-1
+            'CoPolar':   {  # TS 38.101-4, Table B.2.3.1.2-1
                 'High':     (0.9, 0.9,      0),
                 'Medium':   (0.3, 0.9,      0),
                 'MediumA':  (0.3, 0.3874,   0),
                 'Low':      (0.0, 0.0,      0)
                          },
-            'CrossPolar':{  # TS 38.101-4 V17.4.0 (2022-03), Table B.2.3.2.2-1
+            'CrossPolar':{  # TS 38.101-4, Table B.2.3.2.2-1
                 'High':     (0.9, 0.9, 0.3),
                 'Medium':   (0.3, 0.6, 0.2)
                          }
                     },
         'Uplink':   {
-            'CoPolar':   {  # TS 38.104 V17.4.0 (2021-12), Table G.2.3.1.2-1
+            'CoPolar':   {  # TS 38.104, Table G.2.3.1.2-1
                 'High':     (0.9, 0.9, 0),
                 'Medium':   (0.9, 0.3, 0),
                 'Low':      (0.0, 0.0, 0)
                          },
-            'CrossPolar':{  # TS 38.104 V17.4.0 (2021-12), Table G.2.3.2.3-1
+            'CrossPolar':{  # TS 38.104, Table G.2.3.2.3-1
                 'Low':      (0.0, 0.0, 0.0)
                          }
                     }
@@ -797,7 +801,7 @@ class TdlChannel(ChannelModel):
 
         **Other Properties:**
         
-        All of the parameters mentioned above are directly available. Here is a list of additional properties:
+        All the parameters mentioned above are directly available. Here is a list of additional properties:
         
             :coherenceTime: The `Coherence time <https://en.wikipedia.org/wiki/Coherence_time_(communications_systems)>`_
                 of the channel model in seconds. This is calculated based on the ``dopplerShift`` parameter.
@@ -830,7 +834,7 @@ class TdlChannel(ChannelModel):
         There are two different ways to customize the TDL model:
         
         a) You can choose one of the predefined TDL profiles (See the ``profile`` parameter above) and then modify the
-           parameters of the model by passing in additional information. For example you can choose 'B100-400' for
+           parameters of the model by passing in additional information. For example, you can choose 'B100-400' for
            ``profile`` and then pass your own path delays to override the path delays specified in the standard.
            
         b) You can also define your own model completely from scratch. You first pass `None` for the ``profile`` 
@@ -850,14 +854,14 @@ class TdlChannel(ChannelModel):
         """
         super().__init__(bwp, **kwargs)
 
-        # First check the combination models specified in TS 38.101-4 V17.4.0 (2022-03):
+        # First check the combination models specified in TS 38.101-4:
         fr1Profiles = ['A30-5', 'A30-10', 'B100-400', 'C300-100', 'C300-600', 'C300-1200']  # Table B.2.2-1  (FR1)
         fr2Profiles = ['A30-35', 'A30-75', 'A30-300', 'C60-300', 'D30-75']                  # Table B.2.2-2  (FR2)
         if profile in (fr1Profiles+fr2Profiles):
             profile, dopplerStr = profile.split('-')
             self.dopplerShift = int(dopplerStr)
 
-        # Now check to see one of profiles specified in TS 38.101-4 V17.4.0 (2022-03):
+        # Now check to see one of profiles specified in TS 38.101-4:
         if profile in ['A30', 'B100', 'C60', 'C300', 'D30']:
             self.delaySpread = int(profile[1:])         # In nanoseconds
         
@@ -951,7 +955,7 @@ class TdlChannel(ChannelModel):
     def __repr__(self):     return self.print(getStr=True)
     def print(self, indent=0, title=None, getStr=False):
         r"""
-        Prints the properties of this CDL channel model object.
+        Prints the properties of this TDL channel model object.
 
         Parameters
         ----------
@@ -962,13 +966,13 @@ class TdlChannel(ChannelModel):
             If specified, it serves as the title for the printed information. If `None` (the default), an 
             automatic title is generated based on the channel model parameters.
 
-        getStr : Boolean
-            If `True`, returns a text string instead of printing it.
+        getStr : bool
+            If `True`, returns a string instead of printing it.
 
         Returns
         -------
         None or str
-            If the ``getStr`` parameter is `True`, then this function returns the information in a text string. 
+            If the ``getStr`` parameter is `True`, then this function returns the information in a string. 
             Otherwise, nothing is returned.
         """
         if title is None:
@@ -1015,14 +1019,14 @@ class TdlChannel(ChannelModel):
 
         Parameters
         ----------
-        restartRanGen : Boolean
+        restartRanGen : bool
             If a ``seed`` was not provided to this channel model, this parameter is ignored. Otherwise, if 
             ``restartRanGen`` is set to `True`, this channel model's random generator is reset and if 
             ``restartRanGen`` is `False` (default), the random generator is not reset. This means if 
             ``restartRanGen`` is `False`, calling this function starts a new sequence of channel instances that 
             are different from the sequence when the channel was instantiated.
             
-        applyToBwp : Boolean
+        applyToBwp : bool
             If set to `True` (the default), this function restarts the Bandwidth Part associated with this channel 
             model. Otherwise, the Bandwidth Part’s state remains unchanged.
         """
@@ -1034,13 +1038,13 @@ class TdlChannel(ChannelModel):
     def nrNt(self):     return self.rxAntennaCount, self.txAntennaCount
 
     # ******************************************************************************************************************
-    def scaleDelays(self):                          # Not documented
+    def scaleDelays(self):                          # Undocumented
         # See TR38.901 - Sec. 7.7.3 Scaling of delays
         if self.profile in "ABCDE":     # Only if we have a normalized delay that needs to be scaled to nanoseconds
             self.pathDelays *= self.delaySpread     # Path delays in nanoseconds
 
     # ******************************************************************************************************************
-    def sosXiao(self, sosSampleTimes):              # Not documented
+    def sosXiao(self, sosSampleTimes):              # Undocumented
         # This is based on the following paper:
         #   Novel Sum-of-Sinusoids Simulation Models for Rayleigh and Rician Fading Channels
         # Note: This is a statistical model. Sequential calls to 'getChannelGains' function may not always have
@@ -1067,7 +1071,7 @@ class TdlChannel(ChannelModel):
         return np.sqrt(1/self.sosNumSins)*(np.cos(angles) + 1j*np.sin(angles)).sum(1)
 
     # ******************************************************************************************************************
-    def sosGMEDS1(self, sosSampleTimes):        # Not documented
+    def sosGMEDS1(self, sosSampleTimes):        # Undocumented
         # This is based on the following paper:
         #   Two New Sum-of-Sinusoids-Based Methods for the Efficient Generation of Multiple Uncorrelated Rayleigh Fading
         #   Waveforms
@@ -1084,11 +1088,12 @@ class TdlChannel(ChannelModel):
         f1N, f2N = 2 * np.pi * self.dopplerShift * np.cos([alphaIN+alphaI0, alphaIN-alphaI0])
 
         # See equation (2) in the above paper. Shape: sosNumSamples x nr x nt x numPaths
-        return np.sqrt(2/self.sosNumSins)*(   np.cos(2*np.pi*f1N*sosSampleTimes + self.sosTheta1N) +
+        # Note: This is the normalized version of equation (2) so that the complex Rayleigh process has unit variance
+        return np.sqrt(1/self.sosNumSins)*(   np.cos(2*np.pi*f1N*sosSampleTimes + self.sosTheta1N) +
                                            1j*np.cos(2*np.pi*f2N*sosSampleTimes + self.sosTheta2N)).sum(1)
 
     # ******************************************************************************************************************
-    def getPathGains(self):                     # Not documented (See the "getChannelGains" in the base class)
+    def getPathGains(self):                     # Undocumented (See the "getChannelGains" in the base class)
         nr, nt = self.nrNt
         numChannels = len(self.chanGainSamples)
         sosSampleTimes = self.chanGainSamples[:,None,None,None,None]/self.sampleRate
@@ -1114,7 +1119,7 @@ class TdlChannel(ChannelModel):
         # Apply the LOS path gains
         if self.hasLos:
             # Update the first path information with the LOS gains
-            k1st = np.sqrt(toLinear(self.kFactorLos))
+            k1st = toLinear(self.kFactorLos)
             chanTimes = self.chanGainSamples[:,None,None]/self.sampleRate
             tapGains[:,:,:,0] = (tapGains[:,:,:,0] +
                                  np.sqrt(k1st) * np.exp( 2j * np.pi * self.losDopplerShift * chanTimes))/np.sqrt(k1st+1)
@@ -1126,7 +1131,7 @@ class TdlChannel(ChannelModel):
         return tapGains                                                     # Shape: numChannels x nr x nt x numPaths
 
     # ******************************************************************************************************************
-    def getSpatialCorrelationMatrix(self):          # Not documented
+    def getSpatialCorrelationMatrix(self):          # Undocumented
         nr, nt = self.nrNt
         if nt*nr <= 1:  return 1                    # Non-MIMO case -> No matrix calculation is needed
         antConf = "%dx%d"%(nt, nr)
@@ -1141,8 +1146,8 @@ class TdlChannel(ChannelModel):
             assert 0,f"The combination '{self.txDir}, {self.polarization}, {self.mimoCorrelation}' is not supported!"
         
         # Calculating Correlation matrices at the gNB and UE sides
-        # See TS 38.101-4 V17.4.0 (2022-03), Tables B.2.3.1.1-1, B.2.3.1.1-2, Sec. B.2.3.2.1, and
-        # TS 38.104 V17.4.0 (2021-12), Tables G.2.3.1.1-1, G.2.3.1.1-2, Sec. G.2.3.2.2.1, Sec. G.2.3.2.2.2
+        # See TS 38.101-4, Tables B.2.3.1.1-1, B.2.3.1.1-2, Sec. B.2.3.2.1, and
+        # TS 38.104, Tables G.2.3.1.1-1, G.2.3.1.1-2, Sec. G.2.3.2.2.1, Sec. G.2.3.2.2.2
         # Note: A Scalar value means an identity matrix of the specified size
         def powerMatrix(n): # This is used for a generalization of the matrices in the tables mentioned below
             return np.square(np.float64([ [(i-j)/(n-1) for j in range(n)] for i in range(n)]))
@@ -1158,13 +1163,13 @@ class TdlChannel(ChannelModel):
             # used symmetrically in the formula
             pp = self.getPermutationMatrix()
             if self.txDir == 'Downlink':
-                # See TS 38.101-4 V17.4.0 (2022-03), Section B.2.3.2.1
+                # See TS 38.101-4, Section B.2.3.2.1
                 gg = np.float64([[ 1,      0,      -gamma,0     ],
                                  [ 0,      1,      0,     gamma ],
                                  [ -gamma, 0,      1,     0     ],
                                  [ 0,      gamma,  0,     1     ]])
             else:
-                # See TS 38.104 V17.4.0 (2021-12), Table G.2.3.2.1-1
+                # See TS 38.104, Table G.2.3.2.1-1
                 if nu==1:
                     gg = np.float64([[ 1,      -gamma],
                                      [ -gamma, 1,    ]])
@@ -1198,7 +1203,7 @@ class TdlChannel(ChannelModel):
         return rSpat
         
     # ******************************************************************************************************************
-    def ensurePSD(self, rSpat):                     # Not documented
+    def ensurePSD(self, rSpat):                     # Undocumented
         # rSpat may need to be adjusted to ensure the correlation matrix is positive semi-definite after
         # rounding to 4 digit
         nr, nt = self.nrNt
@@ -1206,7 +1211,7 @@ class TdlChannel(ChannelModel):
 
         a = 0   # Positive semi-definite factor
         if self.txDir == 'Downlink':
-            if self.polarization=='CoPolar':    # See TS 38.101-4 V17.4.0 (2022-03), Section B.2.3.1.2
+            if self.polarization=='CoPolar':    # See TS 38.101-4, Section B.2.3.1.2
                 if self.mimoCorrelation == 'High':
                     if antConf == '4x2':            a = 0.00010
                     elif antConf == '4x4':          a = 0.00012
@@ -1214,11 +1219,11 @@ class TdlChannel(ChannelModel):
                     if antConf == '2x4':            a = 0.00010
                     elif antConf == '4x4':          a = 0.00012
             
-            else:   # CrossPolar                # See TS 38.101-4 V17.4.0 (2022-03), Section B.2.3.2.2
+            else:   # CrossPolar                # See TS 38.101-4, Section B.2.3.2.2
                 if self.mimoCorrelation == 'High':
                     if antConf in ['8x2']:          a = 0.00010
         else:       # Uplink
-            if self.polarization=='CoPolar':    # See TS 38.104 V17.4.0 (2021-12), Section G.2.3.1.2
+            if self.polarization=='CoPolar':    # See TS 38.104, Section G.2.3.1.2
                 if self.mimoCorrelation == 'High':
                     if antConf == '2x4':            a = 0.00010
                     elif antConf == '4x4':          a = 0.00012
@@ -1232,9 +1237,9 @@ class TdlChannel(ChannelModel):
         return rSpat
 
     # ******************************************************************************************************************
-    def getPermutationMatrix(self):                 # Not documented
+    def getPermutationMatrix(self):                 # Undocumented
         # Getting the permutation matrix P:
-        # See TS 38.101-4 V17.4.0 (2022-03), Section B.2.3.2.1
+        # See TS 38.101-4, Section B.2.3.2.1
         
         # P is an Nt*Nr by Nt*Nr matrix
         assert self.polarization=='CrossPolar', \
@@ -1247,8 +1252,8 @@ class TdlChannel(ChannelModel):
         return pp
  
     # ******************************************************************************************************************
-    def getPolarizationAngles(self):                # Not documented
-        # See TS 38.101-4 V17.4.0 (2022-03), B.2.3.2
+    def getPolarizationAngles(self):                # Undocumented
+        # See TS 38.101-4, B.2.3.2
         assert self.polarization=='CrossPolar', \
                "The polarization Correlation Matrix is only used for the 'CrossPolar' polarization mode!"
 
