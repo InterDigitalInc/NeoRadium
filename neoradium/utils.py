@@ -15,7 +15,7 @@ from scipy.stats import norm
 import warnings, functools
 
 __all__ = ['toRadian', 'toDegrees', 'toLinear', 'toDb', 'herm', 'getMse', 'getNmse']
-DOCS_LOC = "https://interdigitalinc.github.io/NeoRadium/html/"
+DOCS_LOC = "https://interdigitalinc.github.io/NeoRadium/html/"        # For InterDigital GitHub
 
 # **********************************************************************************************************************
 def toRadian(angle):

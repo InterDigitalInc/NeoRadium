@@ -972,7 +972,7 @@ class AntennaBase:
     # ******************************************************************************************************************
     def getSweepingBeams(self, numTheta, numPhi, thetaSpan=20, phiSpan=120,
                          angleMethod="sincos", polStrategy="equal"):
-        """
+        r"""
         Generate a beam-sweeping grid of steering vectors.
 
         This method constructs a grid of steering directions in the antenna’s **local**
@@ -1014,11 +1014,11 @@ class AntennaBase:
         Returns
         -------
         steeringVectors : NumPy array
-            Complex precoder matrix of shape ``(numPorts, numBeams)``, where ``numPorts`` is the number
-            of antenna ports and ``numBeams`` is the number of sweeping beams. When `polStrategy="probe"` 
+            Complex steering vector matrix of shape ``(numPorts, numBeams)``, where ``numPorts`` is the number
+            of antenna ports and ``numBeams`` is the number of sweeping beams. When `polStrategy="probe"`
             on a dual-pol panel, ``numBeams`` is doubled.
         beams : list
-            Beam metadata as ``[thetas, phis, pols]``, where ``thetas`` and ``phis`` have length ``numBeams`` and 
+            Beam metadata as ``[thetas, phis, pols]``, where ``thetas`` and ``phis`` have length ``numBeams`` and
             ``pols`` is a string of length ``numBeams`` describing the polarization label per beam.
 
         Notes
@@ -1029,12 +1029,18 @@ class AntennaBase:
         - For :py:class:`AntennaPanel`, ``numPorts`` is equal to number of antenna elements. For
           :py:class:`AntennaArray`, ``numPorts`` is equal to number of panels for single-polarization and 2 times
           number of panels for dual polarization.
+        - The returned columns are **unnormalized steering vectors**, not power-normalized precoders. For
+          single-polarized panels/arrays and for dual-polarized cases with ``polStrategy="equal"``, each column
+          has :math:`\|w\|^2 = N_{ports}`. For ``polStrategy="probe"`` (dual-polarized only), one polarization
+          is zeroed per column, so :math:`\|w\|^2 = N_{ports}/2` — a 3 dB power drop relative to the ``"equal"``
+          mode. If you use these as transmit precoders, apply your own normalization to control total transmit
+          power, and account for the 3 dB gap when comparing beam metrics across ``polStrategy`` modes.
         - ``angleMethod="sincos"`` samples uniformly in sin(φ) and cos(θ), which gives roughly equal angular
           separation in beam space — the same intuition behind a DFT-based beam codebook and the natural
           choice when the goal is uniform beam coverage. ``"linear"`` samples uniformly in degrees and is
           provided for the (less common) case where uniformly spaced angles are preferred over uniform beam
           spacing.
-        - On a dual-polarized antenna, ``polStrategy="probe"`` returns ``2 * numTheta * numPhi`` precoder
+        - On a dual-polarized antenna, ``polStrategy="probe"`` returns ``2 * numTheta * numPhi`` steering-vector
           columns: the first half excites only the first polarization, the second half only the second.
           This doubles the number of beams compared to ``polStrategy="equal"``.
 
@@ -1109,7 +1115,7 @@ class AntennaBase:
 
     # ******************************************************************************************************************
     def getProbingBeams(self, theta0, phi0, numBeams, polStrategy=None, maxSeparation=6, deltaTheta=5):
-        """
+        r"""
         This method generates a set of beam-probing steering vectors around a reference direction ``(theta0, phi0)``.
         It returns a matrix of beamforming weights and per-beam metadata (angles and polarization).
 
@@ -1137,8 +1143,8 @@ class AntennaBase:
         Returns
         -------
         steeringVectors : NumPy array
-            Complex precoder matrix of shape ``(numPorts, numBeams)``, where ``numPorts`` is the number
-            of antenna ports and ``numBeams`` is the number of probing beams. When `polStrategy="probe"` 
+            Complex steering vector matrix of shape ``(numPorts, numBeams)``, where ``numPorts`` is the number
+            of antenna ports and ``numBeams`` is the number of probing beams. When `polStrategy="probe"`
             on a dual-pol panel, ``numBeams`` is doubled.
         beams : list
             Beam metadata as ``[thetas, phis, pols]``, where ``thetas`` and ``phis`` have length ``numBeams`` and
@@ -1148,6 +1154,12 @@ class AntennaBase:
         -----
         - All angles are in **local** panel coordinates (same convention as :py:meth:`getSweepingBeams`).
           Broadside is at theta=90°, phi=0°.
+        - The returned columns are **unnormalized steering vectors**, not power-normalized precoders. For
+          single-polarized panels/arrays and for dual-polarized cases with ``polStrategy="equal"``, each column
+          has :math:`\|w\|^2 = N_{ports}`. For ``polStrategy="probe"`` (dual-polarized only), one polarization
+          is zeroed per column, so :math:`\|w\|^2 = N_{ports}/2` — a 3 dB power drop relative to the ``"equal"``
+          mode. If you use these as transmit precoders, apply your own normalization to control total transmit
+          power, and account for the 3 dB gap when comparing beam metrics across ``polStrategy`` modes.
         - Probing is intended to refine a beam selection around a *known* reference direction
           ``(theta0, phi0)`` — for example, after a coarse sweep with :py:meth:`getSweepingBeams` has picked
           a best beam, ``getProbingBeams`` generates a small set of nearby beams to test for a finer choice.

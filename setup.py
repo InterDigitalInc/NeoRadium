@@ -12,7 +12,8 @@ for line in lines:
 installedPackages = [ 'numpy>=1.24.0',
                       'matplotlib',
                       'jupyterlab',
-                      'scipy' ]
+                      'scipy',
+                      'Pillow' ]
 
 setuptools.setup(name="neoradium",
                  version = nrVersion,

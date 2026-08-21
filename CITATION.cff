@@ -2,8 +2,8 @@ cff-version: 1.2.0
 type: software
 message: "If you use this software, please cite it as below."
 title: "NeoRadium"
-version: "0.5.1"
-date-released: 2026-08-07
+version: "0.5.2"
+date-released: 2026-08-21
 url: "https://github.com/InterDigitalInc/NeoRadium"
 
 authors:

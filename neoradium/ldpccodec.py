@@ -1611,7 +1611,7 @@ class LdpcCodecCW(ChanCodeBase):
         """
         if g is not None:
             if self.txBlockSize>g:
-                raise ValueError(f"Cannot encode transport blocks larger than {g} bits!")
+                raise ValueError(f"Transport block size ({self.txBlockSize} bits) exceeds available bits (g={g}).")
             
         txBlockWithCrc = self.appendCrc(txBlock,'24A')
         codeBlocksCrc = self.doSegmentation(txBlockWithCrc)

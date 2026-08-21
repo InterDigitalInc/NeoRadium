@@ -1103,9 +1103,10 @@ class PDSCH:
                 
         w : NumPy array, optional
             An optional steering vector of shape ``Nt x 1`` applied before the precoder, where ``Nt`` is the number of
-            transmitter antennas. When provided, each row of the precoding matrix is multiplied by the corresponding
-            element of ``w``. This allows a directional steering vector to be combined with a PMI-based precoder. If
-            omitted, only the specified precoder is applied.
+            transmitter antennas. When provided, the precoder is effectively pre-multiplied by ``diag(w)`` — that is,
+            each transmit-antenna row of the precoder is scaled by the corresponding element of ``w`` before the
+            precoder is applied to the grid. This allows a directional steering vector to be combined with a PMI-based
+            precoder. If omitted, only the specified precoder is applied.
             
                             
         .. Note:: This function replaces the deprecated function :py:meth:`~neoradium.grid.Grid.precode`. The 

@@ -554,10 +554,10 @@ class ChannelModel:
 
         w : NumPy array, optional
             An optional steering vector of shape ``Nt x 1``, where ``Nt`` is the number of transmitter antennas. When
-            provided, each row of the precoding matrix is multiplied by the corresponding element of ``w`` before
-            calculating the effective channel. This allows the effective channel to include both a steering vector
-            and a PMI-based precoder. If omitted, the effective channel is calculated using only the specified 
-            precoder.
+            provided, the precoder is effectively pre-multiplied by ``diag(w)`` — that is, each transmit-antenna row
+            of the precoder is scaled by the corresponding element of ``w`` before calculating the effective channel.
+            This allows the effective channel to include both a steering vector and a PMI-based precoder. If omitted,
+            the effective channel is calculated using only the specified precoder.
             
         Returns
         -------

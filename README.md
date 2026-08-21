@@ -29,7 +29,7 @@ If you use **NeoRadium** in your work, please cite it as:
 @software{Id_AILAB_NeoRadium_2026,
   author  = {Hamidi-Rad, Shahab},
   title   = {NeoRadium},
-  version = {0.5.1},
+  version = {0.5.2},
   year    = {2026},
   month   = {August},
   url     = {https://github.com/InterDigitalInc/NeoRadium}

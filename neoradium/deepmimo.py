@@ -28,16 +28,245 @@ an interactive map. A complete example of using the :py:class:`~neoradium.deepmi
 #                                         obtained using the ax.get_figure() function.
 # 08/07/2026    Shahab                  Changes in NeoRadium version 0.5.1:
 #                                       * Added the new parameter 'lastFrameDur' to the 'animateTrajectory' function.
+# 08/21/2026    Shahab                  Changes in NeoRadium version 0.5.2:
+#                                       * Added the new 'NrAxes' class and improved the 'animateTrajectory' API.
 # **********************************************************************************************************************
 import numpy as np
 import os, time, json
 import scipy
+
 from .trjchan import TrjPoint, Trajectory, TrjChannel
 from .carrier import SAMPLE_RATE
 from .utils import freqStr
 from .random import random
 
 indoorScenarios = [ "I1_2P5", "I1_2P4", "I3_2P4", "I3_60_V1", "OFFICEFLOOR1"]
+
+# **********************************************************************************************************************
+class NrAxes:
+    r"""
+    Thin wrapper around a `matplotlib Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html>`_
+    that adds incremental-drawing helpers used during animation. Instances of this class are passed to the drawing
+    callback of :py:meth:`DeepMimoData.animateTrajectory` in place of the raw ``matplotlib.axes.Axes`` object so
+    the callback can:
+
+    * append new samples to an existing ``plot()`` line without re-plotting (:py:meth:`addNewPoint`),
+    * append new samples to an existing ``fill_between()`` shaded region (:py:meth:`addNewRange`),
+    * swap the data of an existing ``imshow()`` image (:py:meth:`updateImage`),
+    * draw or update a beam-direction arrow anchored at the base-station position
+      (:py:meth:`drawBeamArrow`, :py:meth:`updateBeamArrow`).
+
+    Every unrecognized attribute access falls through to the underlying ``Axes`` object via ``__getattr__``, so a
+    :py:class:`NrAxes` behaves like a regular ``Axes`` for the rest of the matplotlib API (``set_title``,
+    ``set_xlim``, ``legend``, etc.).
+    """
+    # ******************************************************************************************************************
+    def __init__(self, ax, dmData):
+        r"""
+        Parameters
+        ----------
+        ax : `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html>`_
+            The matplotlib axes being wrapped.
+
+        dmData : :py:class:`DeepMimoData`
+            The :py:class:`DeepMimoData` object whose scenario metadata (base-station position, x/y bounds) is
+            used by :py:meth:`drawBsPanel`, :py:meth:`drawBeamArrow`, and :py:meth:`updateBeamArrow`.
+        """
+        self.dmData = dmData
+        self.ax = ax
+        self.arrowLength = None
+        self.arrowColor = None
+
+    # ******************************************************************************************************************
+    def addNewPoint(self, newX, newY, lineIdx=0):
+        r"""
+        Append a new ``(x, y)`` sample to an existing line on this axes. Used to grow a line incrementally during
+        an animation without re-plotting the entire history each frame.
+
+        Parameters
+        ----------
+        newX : float or array-like
+            X-coordinate(s) of the new sample(s) to append.
+
+        newY : float or array-like
+            Y-coordinate(s) of the new sample(s) to append.
+
+        lineIdx : int, default=0
+            Index of the line inside ``ax.lines`` (in the order they were created). Use this when more than one
+            ``plot()`` call has been made on the same axes.
+
+        Returns
+        -------
+        `matplotlib.lines.Line2D <https://matplotlib.org/stable/api/_as_gen/matplotlib.lines.Line2D.html>`_
+            The updated line object. Return it from the animation callback so ``blit=True`` matplotlib animations
+            re-render it correctly.
+        """
+        if not self.ax.lines:   raise ValueError("No lines found on this axis. Call plot() first.")
+        line = self.ax.lines[lineIdx]
+        allX, allY = line.get_data()
+        line.set_data(np.append(allX, newX), np.append(allY, newY))
+        return line
+
+    # ******************************************************************************************************************
+    def addNewRange(self, newX, newMinY, newMaxY, polyIdx=0):
+        r"""
+        Append a new ``(x, minY, maxY)`` sample to an existing ``fill_between()`` shaded region so the region can
+        grow incrementally during an animation.
+
+        The polygon's raw ``x``/``minY``/``maxY`` sample arrays are cached as attributes (``_xdata``, ``_miny``,
+        ``_maxy``) on the underlying ``PolyCollection``, and the polygon's closed 2-D boundary is reconstructed on
+        every call (upper edge forward, then lower edge backward).
+
+        Parameters
+        ----------
+        newX : float or array-like
+            X-coordinate(s) of the new sample(s).
+
+        newMinY : float or array-like
+            Lower-edge Y-coordinate(s) at ``newX``.
+
+        newMaxY : float or array-like
+            Upper-edge Y-coordinate(s) at ``newX``.
+
+        polyIdx : int, default=0
+            Index of the fill region in ``ax.collections`` (in the order they were created).
+
+        Returns
+        -------
+        `matplotlib.collections.PolyCollection <https://matplotlib.org/stable/api/collections_api.html#matplotlib.collections.PolyCollection>`_
+            The updated fill-between polygon collection. Return it from the animation callback so it re-renders
+            correctly under ``blit=True``.
+        """
+        if not self.ax.collections:     raise ValueError("Call fill_between() first.")
+        fillArea = self.ax.collections[polyIdx]
+
+        # Initialize raw data attributes if missing
+        if not hasattr(fillArea, "_xdata"):
+            fillArea._xdata = np.array([])
+            fillArea._miny = np.array([])
+            fillArea._maxy = np.array([])
+
+        # Append new data to raw tracking arrays
+        fillArea._xdata = np.append(fillArea._xdata, newX)
+        fillArea._miny = np.append(fillArea._miny, newMinY)
+        fillArea._maxy = np.append(fillArea._maxy, newMaxY)
+
+        # Reconstruct closed 2D boundary: Top forward -> Bottom backward
+        xBound = np.concatenate([fillArea._xdata, fillArea._xdata[::-1]])
+        yBound = np.concatenate([fillArea._maxy, fillArea._miny[::-1]])
+        newVerts = np.column_stack([xBound, yBound])
+
+        fillArea.set_verts([newVerts])
+        return fillArea
+
+    # ******************************************************************************************************************
+    def updateImage(self, newImage, imageIdx=0):
+        r"""
+        Replace the pixel data of an existing ``imshow()`` image without re-creating the image, which preserves
+        the colorbar, extent, and colormap so no flicker occurs during animation.
+
+        Parameters
+        ----------
+        newImage : NumPy array
+            New pixel data with the same shape and dtype as the original ``imshow()`` array.
+
+        imageIdx : int, default=0
+            Index of the image inside ``ax.images`` (in the order they were created).
+
+        Returns
+        -------
+        `matplotlib.image.AxesImage <https://matplotlib.org/stable/api/_as_gen/matplotlib.image.AxesImage.html>`_
+            The updated image artist. Return it from the animation callback so ``blit=True`` re-renders it.
+        """
+        if not self.ax.images:  raise ValueError("No images found on this axis. Call imshow() first.")
+        self.ax.images[imageIdx].set_data(newImage)
+        return self.ax.images[imageIdx]
+
+    # ******************************************************************************************************************
+    def drawBsPanel(self, txBearingAngle, length=None):
+        r"""
+        Draw the base-station panel indicator on this axes. This is a thin passthrough to
+        :py:meth:`DeepMimoData.drawBsPanel` on the associated :py:class:`DeepMimoData` object.
+
+        Parameters
+        ----------
+        txBearingAngle : float
+            Bearing angle of the base-station panel in degrees, in the scenario's global coordinate system.
+
+        length : float or None, default=None
+            Length of the panel marker in meters. When omitted, a sensible default based on the scenario extent
+            is used.
+
+        Returns
+        -------
+        `matplotlib.patches.Patch <https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.Patch.html>`_
+            The patch representing the base-station panel.
+        """
+        return self.dmData.drawBsPanel(self.ax, txBearingAngle, length)
+
+    # ******************************************************************************************************************
+    def drawBeamArrow(self, globalPhi, color='orange', length=None):
+        r"""
+        Draw a beam-direction arrow anchored at the base-station position, pointing at azimuth ``globalPhi``
+        (in the scenario's global coordinate system). The arrow length and color are cached on this
+        :py:class:`NrAxes` for later use by :py:meth:`updateBeamArrow`.
+
+        The returned patch is flagged as animated (``set_animated(True)``) so ``blit=True`` animations can
+        cheaply repaint it every frame.
+
+        Parameters
+        ----------
+        globalPhi : float
+            Azimuth angle of the beam in degrees. Values greater than 180 are wrapped by subtracting 360.
+
+        color : str, default='orange'
+            Any matplotlib-recognized color specification.
+
+        length : float or None, default=None
+            Length of the arrow in meters. When omitted, defaults to one quarter of the scenario extent.
+
+        Returns
+        -------
+        `matplotlib.patches.FancyArrow <https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.FancyArrow.html>`_
+            The arrow patch. Return it from the animation callback so ``blit=True`` re-renders it.
+        """
+        if globalPhi>180: globalPhi -= 360
+        if length is None: length = min(self.dmData.xyMax-self.dmData.xyMin)/4
+        self.arrowLength = length
+        self.arrowColor = color
+        arrow = self.dmData.drawBeamArrow(self.ax, globalPhi, color, length)
+        arrow.set_animated(True)
+        return arrow
+
+    # ******************************************************************************************************************
+    def updateBeamArrow(self, globalPhi, patchIdx=-1):
+        r"""
+        Update an existing beam arrow (previously created with :py:meth:`drawBeamArrow`) to point at a new
+        azimuth. Reuses the color and length set on the initial call.
+
+        Parameters
+        ----------
+        globalPhi : float
+            New azimuth angle in degrees. Values greater than 180 are wrapped by subtracting 360.
+
+        patchIdx : int, default=-1
+            Index of the arrow inside ``ax.patches``. The default ``-1`` targets the most-recently-added patch.
+
+        Returns
+        -------
+        `matplotlib.patches.FancyArrow <https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.FancyArrow.html>`_
+            The updated arrow patch.
+        """
+        if globalPhi>180: globalPhi -= 360
+        if self.arrowLength is None:
+            raise ValueError("No beam arrows found on this axis. Call drawBeamArrow() first.")
+        arrow = self.ax.patches[patchIdx]
+        return self.dmData.drawBeamArrow(self.ax, globalPhi, self.arrowColor, self.arrowLength, arrow)
+
+    # ******************************************************************************************************************
+    def __getattr__(self, name):
+        # Pass any unhandled calls (like ax.set_title) directly to the underlying Axes object
+        return getattr(self.ax, name)
 
 # **********************************************************************************************************************
 class DeepMimoData:
@@ -1211,7 +1440,7 @@ class DeepMimoData:
         if mapType == "LOS-NLOS":
             ax.legend(handles=patches, bbox_to_anchor=(1.01, 1), loc='upper left', borderaxespad=0.)
         else:
-            cbar = plt.colorbar(im)
+            cbar = ax.get_figure().colorbar(im, label="Delay (ns)" if mapType=="1stPathDelays" else "Power (dB)", ax=ax)
 
             # Draw an overlay masking the blocked areas in white. It is transparent in non-blocked areas.
             blockedColor = colorConverter.to_rgba('white')
@@ -1220,7 +1449,6 @@ class DeepMimoData:
             cmap2._lut[0,-1] = 0   # Set everywhere transparent except where the value is 1 (Blocked)
             ax.imshow(heatMap==1, cmap=cmap2, interpolation='nearest', origin='lower',
                       extent=[xyMin[0],xyMax[0],xyMin[1],xyMax[1]]) # Draw the overlay
-
 
         return ax
 
@@ -1326,6 +1554,7 @@ class DeepMimoData:
         import matplotlib.patches as mpatches
         if length is None: length = min(self.xyMax-self.xyMin)/4
 
+        # Note: This function allows changing the color and length of the arrow during the animation
         angle = np.deg2rad(beamAngle)
         x0, y0 = self.bsXyz[:2]
         x1 = x0 + length * np.cos(angle)
@@ -1342,8 +1571,93 @@ class DeepMimoData:
         return arrow
 
     # ******************************************************************************************************************
+    @staticmethod
+    def saveGif(anim, filename, frameDuration=30, lastFrameDur=None):
+        r"""
+        Save a matplotlib `FuncAnimation
+        <https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.FuncAnimation.html>`_ object to an
+        animated GIF file using a **single global 256-color palette** derived from the first frame. Reusing the
+        same palette across every frame prevents the color-flickering artifact that occurs when PIL/Pillow
+        assigns a fresh palette per frame — particularly noticeable when the animation contains a colorbar or
+        smooth color gradient.
+
+        Blitting is temporarily disabled during frame capture so the entire canvas is drawn every frame; the
+        animation's original ``_blit`` flag and the ``animated`` flags of all patches are restored before the
+        method returns so live playback of the same animation is not affected.
+
+        This function relies on a small number of matplotlib private attributes (``anim._fig``, ``anim._blit``,
+        ``anim._init_func``, ``anim._draw_frame``, and ``anim.new_saved_frame_seq()``). Matplotlib does not
+        currently expose an official frame-by-frame render API, so this is the standard workaround.
+
+        Parameters
+        ----------
+        anim : `matplotlib.animation.FuncAnimation <https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.FuncAnimation.html>`_
+            The animation object to save. Typically obtained from
+            :py:meth:`DeepMimoData.animateTrajectory`.
+
+        filename : str
+            Output GIF file path.
+
+        frameDuration : int, default=30
+            Per-frame display duration in milliseconds. Used for every frame except (optionally) the last.
+
+        lastFrameDur : int or None, default=None
+            If specified, sets the display duration (in milliseconds) of the final frame before the GIF loops.
+            When ``None``, the last frame uses the same duration as every other frame.
+        """
+        from PIL import Image
+        fig = getattr(anim, "_fig", getattr(anim, "fig", None))
+        if fig is None: raise ValueError("Could not access Figure object from animation.")
+
+        # Temporarily disable blitting for clean full-canvas frame captures. When FuncAnimation is constructed
+        # with blit=True, matplotlib marks every artist returned by the animate() function as
+        # ``set_animated(True)`` — and the Agg backend skips ``animated=True`` artists during ``fig.canvas.draw()``.
+        # If we didn't undo this, every captured buffer would be identical (just the static background).
+        # We iterate every child of every axes, cache the original 'animated' flag, and set it to False for the
+        # duration of the capture. The 'finally' block restores everything so live playback of the same
+        # animation object is unaffected.
+        originalBlit = anim._blit
+        anim._blit = False
+        originalAnimated = []
+        for ax in fig.axes:
+            for artist in ax.get_children():
+                originalAnimated.append((artist, artist.get_animated()))
+                artist.set_animated(False)
+
+        try:
+            if anim._init_func is not None: anim._init_func()   # Run initialization function if provided
+
+            frames = []
+            # Iterate through frame sequence and capture canvas buffer
+            for frame in anim.new_saved_frame_seq():
+                anim._draw_frame(frame)
+                fig.canvas.draw()
+                rgba = np.asarray(fig.canvas.buffer_rgba())
+                img = Image.fromarray(rgba).convert("RGB")
+                frames.append(img)
+
+            if not frames:  raise ValueError("No frames generated from animation.")
+
+            # Create a master 256-color palette based on the first frame
+            masterPalette = frames[0].quantize(colors=256, method=Image.Quantize.MEDIANCUT)
+            # Map every frame to the exact same master color palette
+            quantizedFrames = [ frame.quantize(palette=masterPalette) for frame in frames ]
+
+            # Save animated GIF using PIL
+            durations = len(quantizedFrames) * [frameDuration]              # Frame durations (ms)
+            if lastFrameDur is not None:    durations[-1] = lastFrameDur    # Update last frame's duration
+            quantizedFrames[0].save( filename, save_all=True, append_images=quantizedFrames[1:],
+                                     duration=durations, loop=0)
+        finally:
+            # Restore the original blit state and per-patch 'animated' flags so live playback of the same
+            # animation is unaffected by this save pass.
+            anim._blit = originalBlit
+            for artist, state in originalAnimated:
+                artist.set_animated(state)
+
+    # ******************************************************************************************************************
     def animateTrajectory(self, trajectory, numGraphs=0, graphCallback=None, mapType="LOS-NLOS",
-                          pointsPerFrame=10, fileName=None, lastFrameDur=None):
+                          pointsPerFrame=20, fileName=None, lastFrameDur=None, speedRatio=1):
         r"""
         Animate a scenario map showing the movement of a UE along a given trajectory.
         Optionally, up to three graphs can be displayed and updated below the map.
@@ -1363,14 +1677,15 @@ class DeepMimoData:
             Callback function used to configure and update the graphs. If
             ``numGraphs`` is greater than zero, this function must be provided.
             It is called once for initialization and then for each animation frame.
-            See the *Animation Callback Function* section below for details.
+            See the :ref:`Animation Callback Function <CallBack>` section 
+            below for details.
 
         mapType : str, optional
             Type of map used as the background of the animation. See
             :py:meth:`~neoradium.deepmimo.DeepMimoData.drawMap` for available options.
 
         pointsPerFrame : int, optional
-            Number of trajectory points per animation frame. The default is 10.
+            Number of trajectory points per animation frame. The default is 20.
             Setting this value to 1 generates one frame per trajectory point, which increases
             memory usage significantly.
 
@@ -1389,8 +1704,15 @@ class DeepMimoData:
             If specified, the animation is saved as a GIF file at the given path.
 
         lastFrameDur : int or None, optional
-            If specified, it is the duration (in milliseconds) to hold the final frame of the GIF 
+            If specified, it is the duration (in milliseconds) to hold the final frame of the GIF
             before it loops. Ignored if ``fileName`` is ``None``.
+
+        speedRatio : float, default=1
+            Playback-speed multiplier. Values greater than 1 speed the animation up (frames are held for a
+            shorter time); values less than 1 slow it down. The natural pace (``speedRatio=1``) picks the
+            per-frame interval so that the animation covers the full trajectory in ``trajectory.time`` seconds.
+            The trajectory geometry itself is unchanged — this parameter only affects per-frame display time
+            (both interactive playback ``interval`` and the saved-GIF frame duration).
 
         Returns
         -------
@@ -1403,30 +1725,51 @@ class DeepMimoData:
 
         **Animation Callback Function**
 
-        The callback function is used to configure and update additional graphs and
-        map elements during the animation. It is invoked with the following parameters:
+        The callback function is used to configure and update additional graphs and map elements during the
+        animation. It is invoked with the following parameters:
 
             :request:
                 Specifies the type of operation:
-                
-                    - ``"Config"``: Called once at the beginning to configure the graphs.
-                    - ``"ConfigMap"``: Called once to customize the scenario map.
-                    - ``"Draw"``: Called for each frame to update the graphs.
-                    - ``"DrawOnMap"``: Called for each frame to draw additional elements on the map.
+
+                    - ``"Config"``: Called once at the beginning to configure the graphs (set titles, axis
+                      limits, and seed any lines / images / fill regions that will grow during the animation).
+                    - ``"ConfigMap"``: Called once to customize the scenario map (e.g. add a base-station panel
+                      via :py:meth:`NrAxes.drawBsPanel` or an initial beam arrow via
+                      :py:meth:`NrAxes.drawBeamArrow`).
+                    - ``"Draw"``: Called for each frame to update the graphs. Typical implementations use
+                      :py:meth:`NrAxes.addNewPoint`, :py:meth:`NrAxes.addNewRange`, or
+                      :py:meth:`NrAxes.updateImage` to grow / update artists in place.
+                    - ``"DrawOnMap"``: Called for each frame to update or draw items on the map (for example,
+                      :py:meth:`NrAxes.updateBeamArrow` to re-aim the base-station beam).
 
             :ax:
-                A `matplotlib.axes.Axes <https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes>`_
-                object or a list of such objects.
+                A :py:class:`NrAxes` object or a list of such objects (never the raw ``matplotlib.axes.Axes``).
+                :py:class:`NrAxes` wraps ``matplotlib.axes.Axes`` and adds incremental-drawing helpers
+                (:py:meth:`~NrAxes.addNewPoint`, :py:meth:`~NrAxes.addNewRange`, :py:meth:`~NrAxes.updateImage`,
+                :py:meth:`~NrAxes.drawBsPanel`, :py:meth:`~NrAxes.drawBeamArrow`,
+                :py:meth:`~NrAxes.updateBeamArrow`) that are the recommended way to update artists per frame
+                without re-plotting the entire history. Any attribute not defined on :py:class:`NrAxes` falls
+                through to the underlying ``matplotlib.axes.Axes`` (``set_title``, ``set_xlim``, ``plot``,
+                ``imshow``, ``legend``, etc.), so :py:class:`NrAxes` is a drop-in replacement anywhere a
+                matplotlib ``Axes`` is expected.
 
-                - For ``"Config"`` and ``"Draw"``, this is a list of axes used for the graphs.
-                - For ``"ConfigMap"`` and ``"DrawOnMap"``, this is the map axes.
+                - For ``"Config"`` and ``"Draw"``, this is a list of :py:class:`NrAxes` objects (one per graph).
+                - For ``"ConfigMap"`` and ``"DrawOnMap"``, this is a single :py:class:`NrAxes` (the map axes).
 
             :trajectory:
                 The :py:class:`~neoradium.trjchan.Trajectory` used in the animation.
 
             :points:
-                A tuple ``(p0, p1)`` representing the indices of the previous and
-                current trajectory points. Used only for ``"Draw"`` and ``"DrawOnMap"`` requests.
+                A tuple ``(p0, p1)`` giving the indices of the previous and current trajectory points. Only
+                supplied for ``"Draw"`` and ``"DrawOnMap"`` requests; omitted (``None``) for ``"Config"`` and
+                ``"ConfigMap"``.
+
+        **Return value**
+
+        The ``"Draw"`` and ``"DrawOnMap"`` callbacks should return a tuple of matplotlib artists — typically the
+        objects returned by the :py:class:`NrAxes` incremental-drawing methods — so ``blit=True`` re-renders
+        them correctly. Returning ``None`` (or omitting the return) is accepted but disables blitting for those
+        artists. The ``"Config"`` and ``"ConfigMap"`` callbacks are not expected to return anything.
 
         Example
         -------
@@ -1434,91 +1777,78 @@ class DeepMimoData:
 
             def handleGraph(request, ax, trajectory, points=None):
                 if request == "Config":
-                    # Configure first graph: delay of the first path
+                    # One-time setup: axis limits, titles, and a seed sample per graph so the "Draw" callback
+                    # can grow each line with NrAxes.addNewPoint().
                     ax[0].set_xlim(0, trajectory.numPoints)
                     ax[0].set_ylim(900, 1300)
                     ax[0].set_title("Delay of First Path (ns)")
+                    ax[0].plot([0], [ trajectory.points[0].delays[0] ], 'blue', markersize=1)
 
-                    # Configure second graph: power of the first path
                     ax[1].set_xlim(0, trajectory.numPoints)
                     ax[1].set_ylim(-130, -80)
                     ax[1].set_title("Power of First Path (dB)")
+                    ax[1].plot([0], [ trajectory.points[0].powers[0] ], 'red', markersize=1)
 
                 elif request == "Draw":
+                    # Grow each seeded line by one sample per frame and return the updated Line2D artists so
+                    # blit=True re-renders them.
                     p0, p1 = points
-                    ax[0].plot(
-                        [p0, p1],
-                        [trajectory.points[p0].delays[0], trajectory.points[p1].delays[0]],
-                        'blue',
-                        markersize=1
-                    )
-                    ax[1].plot(
-                        [p0, p1],
-                        [trajectory.points[p0].powers[0], trajectory.points[p1].powers[0]],
-                        'red',
-                        markersize=1
-                    )
+                    return (ax[0].addNewPoint(p1, trajectory.points[p1].delays[0]),
+                            ax[1].addNewPoint(p1, trajectory.points[p1].powers[0]))
         """
         import matplotlib.pyplot as plt
         import matplotlib.animation as animation
+
         if numGraphs>3:                 raise ValueError("Too many graphs (maximum supported is 3)")
         if trajectory.numPoints==0:     raise ValueError("The trajectory is empty")
         
         # Figure height scales with the number of graphs
         figSize = (6, 4+4*numGraphs/3)                                  # numGraphs→Height: 0→4, 1→5.33, 2→6.66, 3→8
         if numGraphs>0:
-            fig, ax = plt.subplots(1+numGraphs,1, figsize=figSize, gridspec_kw={'height_ratios': [4] + numGraphs*[1]})
+            fig, ax = plt.subplots(1+numGraphs,1, figsize=figSize,
+                                   gridspec_kw={'height_ratios': [4] + numGraphs*[1]})
         else:
-            fig, ax = plt.subplots(figsize=figSize)                     # Only animate the map
+            fig, ax = plt.subplots(figsize=figSize)  # Only animate the map
+        # Convert all matplotlib Axes objects to NrAxes
+        ax = NrAxes(ax,self) if numGraphs==0 else [NrAxes(x,self) for x in ax]
         axMap = ax if numGraphs==0 else ax[0]
-        self.drawMap(mapType, ax=axMap)                                 # Draw the background map
+        self.drawMap(mapType, ax=axMap.ax)                              # Draw the background map
         point, = axMap.plot([], [], 'bo', markersize=5)                 # Initialize the moving point (UE position)
+        axMap.plot([], [], 'black', linewidth=1)                        # Initialize the trajectory line
 
-        # Configure graphs and map (if callback is provided)
+        # Configure graphs and map (if a callback is provided)
         if graphCallback is not None:
-            graphCallback("Config", ax[1:], trajectory)                 # Configure the graphs
+            if numGraphs>0: graphCallback("Config", ax[1:], trajectory) # One-time Configuration the graphs
             graphCallback("ConfigMap", axMap, trajectory)               # One-time customization of the map
 
         def animate(p):
             p0, p1 = (p-1)*pointsPerFrame, p*pointsPerFrame
             x, y = trajectory.points[p1].xyz[:2]
             point.set_data([x], [y])                                    # Update UE position
+            updatedItems = (point,)
             if p>0:
-                axMap.plot([trajectory.points[p0].xyz[0],x],            # Draw trajectory segment
-                           [trajectory.points[p0].xyz[1],y],'black', linewidth=1)
-                if graphCallback is None:   return point,
+                line = axMap.addNewPoint(x,y,1)
+                updatedItems += (line,)
+                if graphCallback is not None:
+                    # Draw more items on the map
+                    mapItems = graphCallback("DrawOnMap", axMap, trajectory, (p0, p1))
+                    if mapItems is not None:    updatedItems += mapItems
                 
-                graphCallback("DrawOnMap", axMap, trajectory, (p0, p1)) # Drawing additional items on the map
-                if numGraphs>0:
-                    graphCallback("Draw", ax[1:], trajectory, (p0, p1)) # Draw the graphs for this frame
-            return point,
+                    # Draw the graphs for this frame
+                    if numGraphs>0:
+                        graphItems = graphCallback("Draw", ax[1:], trajectory, (p0, p1))
+                        if graphItems is not None:  updatedItems += graphItems
+
+            return updatedItems
 
         plt.tight_layout()
         
-        frameDuration = 1000.0*pointsPerFrame*trajectory.time/trajectory.numPoints  # Frame duration in milliseconds
+        # Frame duration in milliseconds
+        frameDuration = int(np.round( 1000.0*pointsPerFrame*trajectory.time/(speedRatio*trajectory.numPoints) ))
         anim = animation.FuncAnimation(fig, animate, frames=trajectory.numPoints//pointsPerFrame,
-                                       interval=int(np.round(frameDuration)), blit=True, repeat=False)
+                                       interval=frameDuration, blit=True, repeat=False)
 
-        if fileName is not None:
-            # Save animation as GIF
-            fps = int(min(np.round(1/(frameDuration/1000)), 30))        # Frames per second
-            anim.save(fileName, writer=animation.PillowWriter(fps=fps))
-            
-            if lastFrameDur is not None:
-                # Read the GIF file, adjust the duration of the last frame and save it again
-                from PIL import Image
-                img = Image.open(fileName)
-                frames = []
-                try:
-                    while True:     # Read all frames
-                        frames.append(img.copy())
-                        img.seek(img.tell() + 1)
-                except EOFError:    pass
-                img.close()
-                # Durations in milliseconds:
-                durations = [ int(np.round(frameDuration)) ] * (len(frames) - 1) + [ lastFrameDur ]
-                frames[0].save(fileName, save_all=True, append_images=frames[1:], duration=durations, loop=0)
-
+        if fileName is not None:    self.saveGif(anim, fileName, frameDuration, lastFrameDur)
         plt.close(fig)
         return anim
 

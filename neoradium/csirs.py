@@ -1236,7 +1236,7 @@ class CsiRsConfig:  # CSI-RS configuration (contains several CSI-RS resource set
         sweepsPerSlot = kwargs.get('sweepsPerSlot', 8) # number of beam sweeping resources packed into a slot
 
         if numProb>8:                   raise ValueError("'numProb' cannot be more than 8.")
-        if sweepsPerSlot not in [4,8]:  raise ValueError("'sweepsPerSlot' cannot be 4 or 8.")
+        if sweepsPerSlot not in [4,8]:  raise ValueError("'sweepsPerSlot' must be 4 or 8.")
 
         # Sweeping CSI-RS are at OFDM symbol 'sweepSymbol' and REs 2,3,4,5,6,7,8,9. Up to 'sweepsPerSlot'
         # 1-port CSI-RS resources are packed into a slot.

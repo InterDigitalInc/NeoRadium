@@ -15,7 +15,7 @@ CSI feedback. It includes the CQI tables based on **3GPP TS 38.214**.
 #                                         a JSON file the first time a CqiData object is created.
 # **********************************************************************************************************************
 import numpy as np
-import csv, json, os
+import json, os
 
 from .utils import toLinear
 from .ldpccodec import LdpcCodec

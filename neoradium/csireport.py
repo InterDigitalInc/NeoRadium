@@ -42,8 +42,10 @@ docFile = "CsiReport"          # Used by the 'deprecated' decorators
 NpComplex = np.typing.NDArray[np.complexfloating]
 @dataclass
 class CriFeedback:
-    cri:        int                                 # The CSI-RS ID corresponding to the best beam
-    rsrp:       float                               # RSRP of the best beam (in dB)
+    cri:        int | list[int]                     # The CSI-RS ID(s) corresponding to the best beam(s)
+    rsrp:       float | list[float] | None = None   # RSRP(s) of the best beam(s) (in dB). Set when quantity="Cri".
+    score:      float | None = None                 # Spectral-efficiency score of the best beam.
+                                                    # Set when quantity="CriRiPmiCqi".
 
 @dataclass
 class RiFeedback:
@@ -139,6 +141,14 @@ class CsiReport:
                 Type of CSI quantity to report. Supported values are ``"Cri"`` (default),
                 ``"RiPmiCqi"``, ``"CriRiPmiCqi"``, and ``"RiPmi"``.
 
+            :numCri: 
+                Number of ``(resourceId, RSRP)`` pairs reported when ``quantity`` is set to 
+                ``"Cri"``. If ``1`` (default), ``CriFeedback.cri`` is the resource ID corresponding
+                to the highest RSRP, and ``CriFeedback.rsrp`` is that RSRP value (in dB). If 
+                ``K > 1``, ``CriFeedback.cri`` is a list of top-K resource IDs, and ``CriFeedback.rsrp``
+                is a list of their corresponding RSRP values (in dB, descending order). This 
+                Corresponds to ``nrofReportedRS`` in **3GPP TS 38.214 and TS 38.331**.
+                
             :txAntenna:
                 Transmit antenna configuration used for PMI/RI/CQI processing (An 
                 :py:class:`~neoradium.antenna.AntennaPanel` object). This is required when 
@@ -189,6 +199,8 @@ class CsiReport:
         
         self.quantity = kwargs.get('quantity', 'Cri')               # See 3GPP TS 38.214, Section 5.2.1.4
         validateRange(self.quantity, ['Cri', 'RiPmiCqi', 'RiPmi', 'CriRiPmiCqi'])
+
+        self.numCri = kwargs.get('numCri', 1)   # Number of (resourceId, RSRP) pairs when quantity is set to "Cri"
 
         # PMI/Ri/CQI settings ------------------------------------------------------------------------------------------
         if ('Pmi' in self.quantity) or ('Ri' in self.quantity) or ('Cqi' in self.quantity):
@@ -387,16 +399,13 @@ class CsiReport:
             rsrp = self.getRsrp(rxCsiRsValues, csiRsValues, rxGrid.noiseVar)   # No noise power compensation
             self.criRsrpValues[ resourceId ] = rsrp
 
-        # We need to wait until we have RSRP for all the resources in the set for beam sweeping/probing
-        cri = None
-        bestRsrp = 0
-        for resourceId, rsrp in self.criRsrpValues.items():
-            if rsrp is None:    return      # We don't have RSRP for all resources yet -> Cannot get CRI yet
-            if cri is None:     cri, bestRsrp = resourceId, rsrp
-            elif rsrp>bestRsrp: cri, bestRsrp = resourceId, rsrp
-                
-        if cri is None:         return      # No CRI yet. (shouldn't happen)
-        self.csiFeedback.cri = CriFeedback(cri, toDb(bestRsrp))
+        rsrps = list(self.criRsrpValues.values())
+        if None in rsrps:   return          # We don't have RSRP for all resources yet -> Cannot get CRI
+        idx = np.argsort(rsrps)[::-1][:self.numCri]     # Top-K RSRP indices (K=self.numCri)
+        ids = np.array(list(self.criRsrpValues.keys()))[idx].tolist()
+
+        if self.numCri == 1:    self.csiFeedback.cri = CriFeedback(ids[0], toDb(rsrps[ idx[0] ]))       # Best
+        else:                   self.csiFeedback.cri = CriFeedback(ids, toDb(rsrps)[idx].tolist() )     # Top-K
         
         # Now reset all RSRPs in 'criRsrpValues' to prepare for the next measurement round.
         for resourceId in self.criRsrpValues:
@@ -613,7 +622,7 @@ class CsiReport:
                 elif riPmiInfo[0]>bestRiPmi[0]:             cri, bestRiPmi = resourceId, riPmiInfo  # Better score
                 
             # Update self.csiFeedback with the best resource information
-            self.csiFeedback.cri = CriFeedback(cri, bestRiPmi[0])
+            self.csiFeedback.cri = CriFeedback(cri, score=bestRiPmi[0])
             self.csiFeedback.ri = bestRiPmi[2]
             self.csiFeedback.pmi = bestRiPmi[3]
             bestSinrs, bestRank = bestRiPmi[1], bestRiPmi[2].ri
@@ -764,13 +773,19 @@ class CsiReportMan:
                     ``reportId`` is set to ``"Cri"``). Otherwise, it is set to ``None``. CriFeedback 
                     contains:
 
-                        cri : int
-                            CSI-RS resource indicator. This identifies the CSI-RS resource selected by the
-                            receiver, corresponding to the strongest beam.
+                        cri : int or list of ints
+                            CSI-RS resource indicator(s). If ``numCri`` is ``1``, this identifies
+                            the resource ID corresponding to the highest RSRP. If ``numCri`` is ``K > 1``,
+                            this is a list of top-K resource IDs.
 
-                        rsrp : float
-                            RSRP value (in dB) associated with the selected CSI-RS resource. This is the 
-                            computed reference signal received power for the selected beam/resource.
+                        rsrp : float, list of floats, or None 
+                            If ``numCri`` is ``1``, this is the RSRP value (in dB) associated with 
+                            the CSI-RS resource identified by ``cri``. If ``numCri`` is ``K > 1``, this
+                            is a list of RSRP values corresponding to the cri list (in dB, descending order). 
+                            This is set only when quantity="Cri".
+
+                        score : float or None
+                            Spectral-efficiency score of the best beam. Set when quantity="CriRiPmiCqi".
 
                 ri : RiFeedback or None
                     RI feedback. This field is populated when rank indication feedback is requested (e.g. the 
