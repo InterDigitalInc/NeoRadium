@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exploring PDSCH PT-RS Configurations &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Exploring PDSCH PT-RS Configurations &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -101,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -237,12 +237,12 @@ PDSCH Properties:
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
 
 <span class="c1"># Print summary statistics</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of resource elements:"</span><span class="p">)</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">":"</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
 <span class="c1"># Draw the grid map for both layers</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Default PT-RS Configuration&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Default PT-RS Configuration"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -275,11 +275,11 @@ Number of resource elements:
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setPTRS</span><span class="p">(</span><span class="n">timeDensity</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="c1"># Reinitialize the PDSCH&#39;s resource grid since it has new DM-RS configuration</span>
+<span class="c1"># Reinitialize the PDSCH's resource grid since it has new DM-RS configuration</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
 
 <span class="c1"># Draw the grid map for the first layer</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Double-Symbol DM-RS with PT-RS timeDensity=2&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Double-Symbol DM-RS with PT-RS timeDensity=2"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -294,12 +294,12 @@ Number of resource elements:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use two additional DM-RS symbol positions for DM-RS (additionalPos=2) with PT-RS reOffset=3 (or &#39;11&#39;) which</span>
-<span class="c1"># places PT-RS at RE index 8 (See &quot;resourceElementOffset&quot; in 3GPP TS 38.211, Table 6.4.1.2.2.1-1).</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use two additional DM-RS symbol positions for DM-RS (additionalPos=2) with PT-RS reOffset=3 (or '11') which</span>
+<span class="c1"># places PT-RS at RE index 8 (See "resourceElementOffset" in 3GPP TS 38.211, Table 6.4.1.2.2.1-1).</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setPTRS</span><span class="p">(</span><span class="n">timeDensity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">reOffset</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;DM-RS with Two Additional Symbol Positions</span><span class="se">\n</span><span class="s2">PTRS with timeDensity=2 and reOffset=3&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"DM-RS with Two Additional Symbol Positions</span><span class="se">\n</span><span class="s2">PTRS with timeDensity=2 and reOffset=3"</span><span class="p">);</span>
 <br/></pre></div>
 </div>
 </div>
@@ -315,15 +315,15 @@ Number of resource elements:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Comparing freqDensity=2 vs freqDensity=4</span>
-<span class="c1"># Use one additional DM-RS symbol position for DMRS (additionalPos=1) with PTRS reOffset=1 (or &#39;01&#39;) which</span>
-<span class="c1"># places PT-RS at RE index 2 (See &quot;resourceElementOffset&quot; in 3GPP TS 38.211, Table 6.4.1.2.2.1-1).</span>
+<span class="c1"># Use one additional DM-RS symbol position for DMRS (additionalPos=1) with PTRS reOffset=1 (or '01') which</span>
+<span class="c1"># places PT-RS at RE index 2 (See "resourceElementOffset" in 3GPP TS 38.211, Table 6.4.1.2.2.1-1).</span>
 <span class="c1"># This is shown once with freqDensity=2 and once with freqDensity=4 and compare the map for 5 PRBs</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">additionalPos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setPTRS</span><span class="p">(</span><span class="n">timeDensity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">freqDensity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">reOffset</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># PTRS in every other RB</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;PT-RS with timeDensity=2, freqDensity=2, and reOffset=1&quot;</span><span class="p">)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"PT-RS with timeDensity=2, freqDensity=2, and reOffset=1"</span><span class="p">)</span>
 
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setPTRS</span><span class="p">(</span><span class="n">timeDensity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">freqDensity</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">reOffset</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># PTRS in every other 4 RBs</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;PT-RS with timeDensity=2, freqDensity=4, and reOffset=1&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"PT-RS with timeDensity=2, freqDensity=4, and reOffset=1"</span><span class="p">);</span>
 <br/></pre></div>
 </div>
 </div>

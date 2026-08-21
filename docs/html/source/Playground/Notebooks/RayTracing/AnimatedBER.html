@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Animating BER Along a UE Trajectory &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Animating BER Along a UE Trajectory &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -113,7 +113,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -163,11 +163,11 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace this with the folder on your computer where you store DeepMIMO scenarios</span>
-<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">&quot;/data/RayTracing/DeepMIMO/Scenarios/V4/&quot;</span>
+<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">"/data/RayTracing/DeepMIMO/Scenarios/V4/"</span>
 <span class="n">DeepMimoData</span><span class="o">.</span><span class="n">setScenariosPath</span><span class="p">(</span><span class="n">dataFolder</span><span class="p">)</span>
 
 <span class="c1"># Create a DeepMimoData object</span>
-<span class="n">dmData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">)</span>
+<span class="n">dmData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"asu_campus_3p5"</span><span class="p">)</span>
 <span class="n">dmData</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -211,7 +211,7 @@ DeepMimoData Properties:
                                         <span class="n">seed</span><span class="o">=</span><span class="mi">184</span><span class="p">)</span>       <span class="c1"># Make results reproducible</span>
 
 <span class="n">trajectory</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>                                      <span class="c1"># Print the trajectory information</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">dmData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>             <span class="c1"># Draw the map with the trajectory</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">dmData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">"LOS-NLOS"</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>             <span class="c1"># Draw the map with the trajectory</span>
 <span class="n">dmData</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">txBearingAngle</span><span class="p">)</span>                  <span class="c1"># Draw the base station antenna panel</span>
 </pre></div>
 </div>
@@ -254,7 +254,7 @@ Trajectory Properties:
 <span class="c1"># Since our goal is to show that different UE locations along a DeepMIMO trajectory experience different</span>
 <span class="c1"># BER, we should not normalize the channel gain independently at each location. Per-location</span>
 <span class="c1"># gain normalization would remove exactly the large-scale variation we want to observe. So, we set</span>
-<span class="c1"># the &#39;normalizeGains&#39; to &#39;False&#39; in our channel model below and use a fixed noise power.</span>
+<span class="c1"># the 'normalizeGains' to 'False' in our channel model below and use a fixed noise power.</span>
 
 <span class="c1"># Calculate the noise power</span>
 <span class="n">k</span> <span class="o">=</span> <span class="mf">1.380649e-23</span>        <span class="c1"># Boltzmann constant (joules per kelvin)</span>
@@ -270,7 +270,7 @@ Trajectory Properties:
                      <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]))</span>       <span class="c1"># 2 RX antennas</span>
 <span class="c1"># channel.print()                   # Uncomment to print the channel model info</span>
 
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;256QAM&quot;</span><span class="p">)</span>        <span class="c1"># PDSCH with one layer</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">"256QAM"</span><span class="p">)</span>        <span class="c1"># PDSCH with one layer</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>                <span class="c1"># DMRS configuration</span>
 
 <span class="n">numSlots</span> <span class="o">=</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span>     <span class="c1"># Total number of slots = number of points on the trajectory</span>
@@ -279,7 +279,7 @@ Trajectory Properties:
     <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>                  <span class="c1"># Get the channel matrix</span>
     <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>          <span class="c1"># Get the precoder matrix</span>
 
-    <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                            <span class="c1"># Create and initialize PDSCH&#39;s internal grid</span>
+    <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                            <span class="c1"># Create and initialize PDSCH's internal grid</span>
     <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>                         <span class="c1"># Number of bits available in the resource grid</span>
     <span class="n">txBits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numBits</span><span class="p">)</span>                               <span class="c1"># Create random binary data</span>
 
@@ -299,8 +299,8 @@ Trajectory Properties:
     <span class="n">berInfo</span><span class="p">[</span><span class="n">slotNo</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">numBits</span>                                <span class="c1"># Store number of bits</span>
 
     <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Slot: </span><span class="si">{</span><span class="n">slotNo</span><span class="o">+</span><span class="mi">1</span><span class="si">:</span><span class="s2">&lt;6d</span><span class="si">}</span><span class="s2">  &quot;</span>
-          <span class="sa">f</span><span class="s2">&quot;BER (%): </span><span class="si">{</span><span class="n">berInfo</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">berInfo</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">&lt;6.2f</span><span class="si">}</span><span class="s2">  &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Slot: </span><span class="si">{</span><span class="n">slotNo</span><span class="o">+</span><span class="mi">1</span><span class="si">:</span><span class="s2">&lt;6d</span><span class="si">}</span><span class="s2">  "</span>
+          <span class="sa">f</span><span class="s2">"BER (%): </span><span class="si">{</span><span class="n">berInfo</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">berInfo</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">&lt;6.2f</span><span class="si">}</span><span class="s2">  "</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">"</span><span class="se">\r</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -316,40 +316,36 @@ Slot: 7957    BER (%): 16.50
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prevBer</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="c1"># Callback used to initialize and update the scenario map and the graphs below it</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Callback used to initialize and update the scenario map and the graphs below it</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">handleGraph</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">global</span> <span class="n">prevBer</span>
-    <span class="k">if</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;Config&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">==</span><span class="s2">"Config"</span><span class="p">:</span>
         <span class="c1"># BER plot</span>
         <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span><span class="p">)</span>
         <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
-        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;BER (%)&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Trajectory points&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"BER (%)"</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Trajectory points"</span><span class="p">)</span>
         <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">berInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">berInfo</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]],</span> <span class="s1">'Red'</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;ConfigMap&quot;</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;BER along a UE Trajectory&quot;</span><span class="p">)</span>
-        <span class="n">dmData</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">txBearingAngle</span><span class="p">)</span>   <span class="c1"># Draw TX antenna panel</span>
+    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">"ConfigMap"</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"BER along a UE Trajectory"</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">txBearingAngle</span><span class="p">)</span>   <span class="c1"># Draw TX antenna panel</span>
 
-    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;Draw&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">"Draw"</span><span class="p">:</span>
         <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">points</span>
         <span class="n">sums</span> <span class="o">=</span> <span class="n">berInfo</span><span class="p">[</span><span class="n">p0</span><span class="p">:</span><span class="n">p1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">ber</span> <span class="o">=</span> <span class="n">sums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">sums</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">prevBer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>    <span class="n">prevBer</span> <span class="o">=</span> <span class="n">ber</span>
-        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">],</span> <span class="p">[</span><span class="n">prevBer</span><span class="p">,</span>  <span class="n">ber</span><span class="p">],</span> <span class="s1">&#39;Red&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">prevBer</span> <span class="o">=</span> <span class="n">ber</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">addNewPoint</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">ber</span><span class="p">),)</span>
 
 <span class="c1"># Create the animation and display it below</span>
 <span class="n">anim</span> <span class="o">=</span> <span class="n">dmData</span><span class="o">.</span><span class="n">animateTrajectory</span><span class="p">(</span><span class="n">trajectory</span><span class="p">,</span> <span class="n">numGraphs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pointsPerFrame</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-                                <span class="n">graphCallback</span><span class="o">=</span><span class="n">handleGraph</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="s1">&#39;AnimateBER.gif&#39;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;![demo](AnimateBER.gif)&quot;</span><span class="p">))</span>
+                                <span class="n">graphCallback</span><span class="o">=</span><span class="n">handleGraph</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="s1">'AnimateBER.gif'</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"![demo](AnimateBER.gif)"</span><span class="p">))</span>
 
 <span class="c1"># Another option is to use the following command which gives you additional</span>
 <span class="c1"># control buttons for running the animation.</span>
 <span class="c1">#    # Increase the animation memory limit for HTML-based animation display</span>
-<span class="c1">#    matplotlib.rcParams[&#39;animation.embed_limit&#39;] = 100000000</span>
+<span class="c1">#    matplotlib.rcParams['animation.embed_limit'] = 100000000</span>
 <span class="c1">#    HTML(anim.to_jshtml())</span>
 </pre></div>
 </div>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Polar Coding &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Polar Coding &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -101,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -150,10 +150,10 @@
 <span class="n">snrdB</span> <span class="o">=</span> <span class="n">esNo</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">coderate</span><span class="p">)</span> <span class="c1"># SNR in dB</span>
 <span class="n">noiseVar</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">snrdB</span><span class="o">/</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">noiseStd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">noiseVar</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Coderate:           </span><span class="si">{</span><span class="n">coderate</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SNR:                </span><span class="si">{</span><span class="n">snrdB</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> dB&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise Variance:     </span><span class="si">{</span><span class="n">noiseVar</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD:          </span><span class="si">{</span><span class="n">noiseStd</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Coderate:           </span><span class="si">{</span><span class="n">coderate</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"SNR:                </span><span class="si">{</span><span class="n">snrdB</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> dB"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise Variance:     </span><span class="si">{</span><span class="n">noiseVar</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD:          </span><span class="si">{</span><span class="n">noiseStd</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -173,7 +173,7 @@ Noise STD:          0.96
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Polar encoder</span>
-<span class="n">polarEncoder</span> <span class="o">=</span> <span class="n">PolarEncoder</span><span class="p">(</span><span class="n">payloadLen</span><span class="p">,</span> <span class="n">rateMatchedLen</span><span class="p">,</span> <span class="s1">&#39;dci&#39;</span><span class="p">)</span>
+<span class="n">polarEncoder</span> <span class="o">=</span> <span class="n">PolarEncoder</span><span class="p">(</span><span class="n">payloadLen</span><span class="p">,</span> <span class="n">rateMatchedLen</span><span class="p">,</span> <span class="s1">'dci'</span><span class="p">)</span>
 <span class="n">polarEncoder</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 <br/></pre></div>
 </div>
@@ -205,13 +205,13 @@ Polar Encoder Properties:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>             <span class="c1"># Make results reproducible</span>
 <span class="n">txpBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>      <span class="c1"># Create random bit stream</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transport Block Shape: &quot;</span><span class="p">,</span> <span class="n">txpBlock</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transport Block:       &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">txpBlock</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Transport Block Shape: "</span><span class="p">,</span> <span class="n">txpBlock</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Transport Block:       "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">txpBlock</span><span class="p">))</span>
 
 <span class="c1"># Perform segmentation</span>
 <span class="n">codeBlocks</span> <span class="o">=</span> <span class="n">polarEncoder</span><span class="o">.</span><span class="n">doSegmentation</span><span class="p">(</span><span class="n">txpBlock</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Code block Shape:      &quot;</span><span class="p">,</span> <span class="n">codeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Code block:            &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Code block Shape:      "</span><span class="p">,</span> <span class="n">codeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Code block:            "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -232,8 +232,8 @@ Code block:             111011110011101011110100010011010100001100000101110011
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Perform Polar encoding</span>
 <span class="n">codedBlocks</span> <span class="o">=</span> <span class="n">polarEncoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">codeBlocks</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Coded block Shape:        &quot;</span><span class="p">,</span> <span class="n">codedBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Coded block first 10 bits:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codedBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Coded block Shape:        "</span><span class="p">,</span> <span class="n">codedBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Coded block first 10 bits:"</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codedBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
 <br/></pre></div>
 </div>
 </div>
@@ -252,8 +252,8 @@ Coded block first 10 bits: 1110101110
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Perform rate matching</span>
 <span class="n">rateMatchedCodedBlocks</span> <span class="o">=</span> <span class="n">polarEncoder</span><span class="o">.</span><span class="n">rateMatch</span><span class="p">(</span><span class="n">codedBlocks</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate-Matched Shape:  &quot;</span><span class="p">,</span> <span class="n">rateMatchedCodedBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 10 bits:       &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rateMatchedCodedBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Rate-Matched Shape:  "</span><span class="p">,</span> <span class="n">rateMatchedCodedBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"First 10 bits:       "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rateMatchedCodedBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
 <br/></pre></div>
 </div>
 </div>
@@ -271,8 +271,8 @@ First 10 bits:        1110101110
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># QPSK modulation</span>
-<span class="n">modulated</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s1">&#39;QPSK&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">rateMatchedCodedBlocks</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;modulated Shape:     &quot;</span><span class="p">,</span> <span class="n">modulated</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">modulated</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s1">'QPSK'</span><span class="p">)</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">rateMatchedCodedBlocks</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"modulated Shape:     "</span><span class="p">,</span> <span class="n">modulated</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -292,7 +292,7 @@ modulated Shape:      (1, 60)
 
 <span class="c1"># Add noise to the modulated signal</span>
 <span class="n">rxSymbols</span> <span class="o">=</span> <span class="n">modulated</span> <span class="o">+</span> <span class="n">noise</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 5 Rx Symbols:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rxSymbols</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"First 5 Rx Symbols:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">rxSymbols</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">5</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -311,9 +311,9 @@ First 5 Rx Symbols:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Demodulation: calculate LLR values from symbols</span>
-<span class="n">llrs</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s1">&#39;QPSK&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getLLRs</span><span class="p">(</span><span class="n">rxSymbols</span><span class="p">,</span> <span class="n">noiseVar</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;LLR Shape:     &quot;</span><span class="p">,</span> <span class="n">llrs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 10 LLRs: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">llrs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">llrs</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s1">'QPSK'</span><span class="p">)</span><span class="o">.</span><span class="n">getLLRs</span><span class="p">(</span><span class="n">rxSymbols</span><span class="p">,</span> <span class="n">noiseVar</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"LLR Shape:     "</span><span class="p">,</span> <span class="n">llrs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"First 10 LLRs: </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">llrs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
 <br/></pre></div>
 </div>
 </div>
@@ -334,8 +334,8 @@ First 10 LLRs:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hard decision</span>
 <span class="n">hardCodeBlocks</span> <span class="o">=</span> <span class="mi">1</span><span class="o">*</span><span class="p">(</span><span class="n">llrs</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hard Decision first 10 bits:       &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">hardCodeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Code block first 10 bits: &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Hard Decision first 10 bits:       "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">hardCodeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Original Code block first 10 bits: "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
 <br/></pre></div>
 </div>
 </div>
@@ -353,7 +353,7 @@ Original Code block first 10 bits:  1110111100
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Polar decoder</span>
-<span class="n">polarDecoder</span> <span class="o">=</span> <span class="n">PolarDecoder</span><span class="p">(</span><span class="n">payloadLen</span><span class="p">,</span> <span class="n">rateMatchedLen</span><span class="p">,</span> <span class="s1">&#39;dci&#39;</span><span class="p">,</span> <span class="n">sclListSize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">useMinsum</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">polarDecoder</span> <span class="o">=</span> <span class="n">PolarDecoder</span><span class="p">(</span><span class="n">payloadLen</span><span class="p">,</span> <span class="n">rateMatchedLen</span><span class="p">,</span> <span class="s1">'dci'</span><span class="p">,</span> <span class="n">sclListSize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">useMinsum</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">polarDecoder</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -387,8 +387,8 @@ Polar Decoder Properties:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Perform rate recovery</span>
 <span class="n">rateRecoveredRxBlocks</span> <span class="o">=</span> <span class="n">polarDecoder</span><span class="o">.</span><span class="n">recoverRate</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate Recovered Shape:     &quot;</span><span class="p">,</span> <span class="n">rateRecoveredRxBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 10 LLRs: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rateRecoveredRxBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Rate Recovered Shape:     "</span><span class="p">,</span> <span class="n">rateRecoveredRxBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"First 10 LLRs: </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">rateRecoveredRxBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
 <br/></pre></div>
 </div>
 </div>
@@ -409,10 +409,10 @@ First 10 LLRs:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Decode the rate-recovered transport blocks</span>
 <span class="n">decTxBlock</span><span class="p">,</span> <span class="n">numCrcErrors</span> <span class="o">=</span> <span class="n">polarDecoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">rateRecoveredRxBlocks</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of CRC Errors:          &quot;</span><span class="p">,</span> <span class="n">numCrcErrors</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Decoded Transport Block Shape: &quot;</span><span class="p">,</span> <span class="n">decTxBlock</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Decoded Transport Block:       &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">decTxBlock</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Transport Block:      &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">txpBlock</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of CRC Errors:          "</span><span class="p">,</span> <span class="n">numCrcErrors</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Decoded Transport Block Shape: "</span><span class="p">,</span> <span class="n">decTxBlock</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Decoded Transport Block:       "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">decTxBlock</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Original Transport Block:      "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">txpBlock</span><span class="p">))</span>
 <br/></pre></div>
 </div>
 </div>

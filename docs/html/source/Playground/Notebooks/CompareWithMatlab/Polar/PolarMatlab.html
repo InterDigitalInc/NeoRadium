@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Comparing the polar coding results with MATLAB &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Comparing the polar coding results with MATLAB &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -68,7 +68,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#research-papers">Research Papers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#other-examples">Other Examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id2">Antenna</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id3">Antenna</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#cdl-channel-model">CDL Channel Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#csi-rs">CSI-RS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#pdsch">PDSCH</a></li>
@@ -107,7 +107,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -139,7 +139,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nr</span>
 
-<span class="n">matlabFilesPath</span> <span class="o">=</span> <span class="s2">&quot;./MatlabFiles&quot;</span>
+<span class="n">matlabFilesPath</span> <span class="o">=</span> <span class="s2">"./MatlabFiles"</span>
 <br/></pre></div>
 </div>
 </div>
@@ -158,10 +158,10 @@
 <span class="n">snrdB</span> <span class="o">=</span> <span class="n">esNo</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">codeRate</span><span class="p">)</span> <span class="c1"># SNR in dB</span>
 <span class="n">noiseVar</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">snrdB</span><span class="o">/</span><span class="mi">10</span><span class="p">))</span>
 <span class="n">noiseStd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">noiseVar</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Code Rate:     &quot;</span><span class="p">,</span> <span class="n">codeRate</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SNR:           &quot;</span><span class="p">,</span> <span class="n">snrdB</span><span class="p">,</span> <span class="s2">&quot;dB&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Noise Variance:&quot;</span><span class="p">,</span> <span class="n">noiseVar</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Noise STD:     &quot;</span><span class="p">,</span> <span class="n">noiseStd</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Code Rate:     "</span><span class="p">,</span> <span class="n">codeRate</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"SNR:           "</span><span class="p">,</span> <span class="n">snrdB</span><span class="p">,</span> <span class="s2">"dB"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Noise Variance:"</span><span class="p">,</span> <span class="n">noiseVar</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Noise STD:     "</span><span class="p">,</span> <span class="n">noiseStd</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -181,7 +181,7 @@ Noise STD:      0.9613438343755353
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Polar Encoder</span>
-<span class="n">polarEncoder</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">PolarEncoder</span><span class="p">(</span><span class="n">payloadLen</span><span class="p">,</span> <span class="n">rateMatchedLen</span><span class="p">,</span> <span class="s1">&#39;dci&#39;</span><span class="p">)</span>
+<span class="n">polarEncoder</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">PolarEncoder</span><span class="p">(</span><span class="n">payloadLen</span><span class="p">,</span> <span class="n">rateMatchedLen</span><span class="p">,</span> <span class="s1">'dci'</span><span class="p">)</span>
 <span class="n">polarEncoder</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 <br/></pre></div>
 </div>
@@ -212,18 +212,18 @@ Polar Encoder Properties:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read input bits from MATLAB-generated file</span>
-<span class="n">txpBlock</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/msg.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;msg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transport Block Shape: &quot;</span><span class="p">,</span> <span class="n">txpBlock</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transport Block:       &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">txpBlock</span><span class="p">))</span>
+<span class="n">txpBlock</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/msg.mat'</span><span class="p">)[</span><span class="s1">'msg'</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Transport Block Shape: "</span><span class="p">,</span> <span class="n">txpBlock</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Transport Block:       "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">txpBlock</span><span class="p">))</span>
 
 <span class="c1"># Segmentation</span>
 <span class="n">codeBlocks</span> <span class="o">=</span> <span class="n">polarEncoder</span><span class="o">.</span><span class="n">doSegmentation</span><span class="p">(</span><span class="n">txpBlock</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Code Blocks Shape:     &quot;</span><span class="p">,</span> <span class="n">codeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Code Blocks:           &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Code Blocks Shape:     "</span><span class="p">,</span> <span class="n">codeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Code Blocks:           "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
 <span class="c1"># Compare with MATLAB</span>
-<span class="n">codeBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/msgcrc.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;msgcrc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codeBlocks</span><span class="o">-</span><span class="n">codeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">codeBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/msgcrc.mat'</span><span class="p">)[</span><span class="s1">'msgcrc'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codeBlocks</span><span class="o">-</span><span class="n">codeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 <br/></pre></div>
 </div>
 </div>
@@ -244,12 +244,12 @@ Code Blocks:            100100110110000110100110000010111100001010001110100010
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Encode</span>
 <span class="n">codedBlocks</span> <span class="o">=</span> <span class="n">polarEncoder</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">codeBlocks</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Coded blocks Shape:        &quot;</span><span class="p">,</span> <span class="n">codedBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Coded blocks first 10 bits:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codedBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Coded blocks Shape:        "</span><span class="p">,</span> <span class="n">codedBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Coded blocks first 10 bits:"</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codedBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
 
 <span class="c1"># Compare with MATLAB</span>
-<span class="n">codedBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/encOut.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;encOut&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codedBlocks</span><span class="o">-</span><span class="n">codedBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">codedBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/encOut.mat'</span><span class="p">)[</span><span class="s1">'encOut'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codedBlocks</span><span class="o">-</span><span class="n">codedBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 <br/></pre></div>
 </div>
 </div>
@@ -268,12 +268,12 @@ Coded blocks first 10 bits: 1001110011
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Rate Matching</span>
 <span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">polarEncoder</span><span class="o">.</span><span class="n">rateMatch</span><span class="p">(</span><span class="n">codedBlocks</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate-Matched Shape:  &quot;</span><span class="p">,</span> <span class="n">rateMatchedCodeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 10 bits:       &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rateMatchedCodeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Rate-Matched Shape:  "</span><span class="p">,</span> <span class="n">rateMatchedCodeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"First 10 bits:       "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">rateMatchedCodeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
 
 <span class="c1"># Compare with MATLAB</span>
-<span class="n">rateMatchedCodeBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/modIn.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;modIn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="o">-</span><span class="n">rateMatchedCodeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">rateMatchedCodeBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/modIn.mat'</span><span class="p">)[</span><span class="s1">'modIn'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="o">-</span><span class="n">rateMatchedCodeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 <br/></pre></div>
 </div>
 </div>
@@ -291,14 +291,14 @@ First 10 bits:        1001110011
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># QPSK Modulation</span>
-<span class="n">modulated</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">Modem</span><span class="p">(</span><span class="s1">&#39;QPSK&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;modulated Shape:     &quot;</span><span class="p">,</span> <span class="n">modulated</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">modulated</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">Modem</span><span class="p">(</span><span class="s1">'QPSK'</span><span class="p">)</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"modulated Shape:     "</span><span class="p">,</span> <span class="n">modulated</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
 <span class="c1"># Compare with MATLAB</span>
-<span class="n">modulatedMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/modOut.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;modOut&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">modulated</span><span class="o">-</span><span class="n">modulatedMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-12</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Max Diff. with MATLAB:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">modulated</span><span class="o">-</span><span class="n">modulatedMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 5 symbols:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">modulated</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">5</span><span class="p">])</span>
+<span class="n">modulatedMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/modOut.mat'</span><span class="p">)[</span><span class="s1">'modOut'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">modulated</span><span class="o">-</span><span class="n">modulatedMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-12</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Max Diff. with MATLAB:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">modulated</span><span class="o">-</span><span class="n">modulatedMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"First 5 symbols:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">modulated</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">5</span><span class="p">])</span>
 <br/></pre></div>
 </div>
 </div>
@@ -319,12 +319,12 @@ First 5 symbols:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read the noise from the MATLAB file</span>
-<span class="n">complexNoise</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/chanNoise.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;chanNoise&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Noise Shape:     &quot;</span><span class="p">,</span> <span class="n">complexNoise</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">complexNoise</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/chanNoise.mat'</span><span class="p">)[</span><span class="s1">'chanNoise'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Noise Shape:     "</span><span class="p">,</span> <span class="n">complexNoise</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
 <span class="c1"># Add noise to the modulated signal</span>
 <span class="n">rxSymbols</span> <span class="o">=</span> <span class="n">modulated</span> <span class="o">+</span> <span class="n">complexNoise</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 5 Rx Symbols:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rxSymbols</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"First 5 Rx Symbols:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">rxSymbols</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">5</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -344,16 +344,16 @@ First 5 Rx Symbols:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Demodulation: Calculate LLR values from symbols:</span>
-<span class="n">llrs</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">Modem</span><span class="p">(</span><span class="s1">&#39;QPSK&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getLLRs</span><span class="p">(</span><span class="n">rxSymbols</span><span class="p">,</span> <span class="n">noiseVar</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;LLR Shape:     &quot;</span><span class="p">,</span> <span class="n">llrs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 10 LLRs: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">llrs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">llrs</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">Modem</span><span class="p">(</span><span class="s1">'QPSK'</span><span class="p">)</span><span class="o">.</span><span class="n">getLLRs</span><span class="p">(</span><span class="n">rxSymbols</span><span class="p">,</span> <span class="n">noiseVar</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"LLR Shape:     "</span><span class="p">,</span> <span class="n">llrs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"First 10 LLRs: </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">llrs</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
 
 <span class="c1"># Compare with MATLAB</span>
-<span class="n">llrsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/rxLLR.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;rxLLR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MATLAB First 10 LLRs: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">llrsMatlab</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">llrsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/rxLLR.mat'</span><span class="p">)[</span><span class="s1">'rxLLR'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MATLAB First 10 LLRs: </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">llrsMatlab</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
 
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">llrs</span><span class="o">-</span><span class="n">llrsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-12</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Max Diff. with MATLAB:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">llrs</span><span class="o">-</span><span class="n">llrsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">llrs</span><span class="o">-</span><span class="n">llrsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-12</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Max Diff. with MATLAB:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">llrs</span><span class="o">-</span><span class="n">llrsMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 <br/></pre></div>
 </div>
 </div>
@@ -378,8 +378,8 @@ Max Diff. with MATLAB: 3.552713678800501e-15
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Hard Decision:</span>
 <span class="n">hardCodeBlock</span> <span class="o">=</span> <span class="mi">1</span><span class="o">*</span><span class="p">(</span><span class="n">llrs</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hard Decision first 10 bits:       &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">hardCodeBlock</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original code block first 10 bits: &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Hard Decision first 10 bits:       "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">hardCodeBlock</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Original code block first 10 bits: "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">codeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">10</span><span class="p">]))</span>
 <br/></pre></div>
 </div>
 </div>
@@ -397,7 +397,7 @@ Original code block first 10 bits:  1001001101
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Polar Decoder</span>
-<span class="n">polarDecoder</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">PolarDecoder</span><span class="p">(</span><span class="n">payloadLen</span><span class="p">,</span> <span class="n">rateMatchedLen</span><span class="p">,</span> <span class="s1">&#39;dci&#39;</span><span class="p">,</span>
+<span class="n">polarDecoder</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">PolarDecoder</span><span class="p">(</span><span class="n">payloadLen</span><span class="p">,</span> <span class="n">rateMatchedLen</span><span class="p">,</span> <span class="s1">'dci'</span><span class="p">,</span>
                                <span class="n">sclListSize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">useMinsum</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">polarDecoder</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </pre></div>
@@ -432,15 +432,15 @@ Polar Decoder Properties:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Recover rate</span>
 <span class="n">rateRecoveredRxBlocks</span> <span class="o">=</span> <span class="n">polarDecoder</span><span class="o">.</span><span class="n">recoverRate</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate Recovered Shape:     &quot;</span><span class="p">,</span> <span class="n">rateRecoveredRxBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First 10 LLRs: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rateRecoveredRxBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Rate Recovered Shape:     "</span><span class="p">,</span> <span class="n">rateRecoveredRxBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"First 10 LLRs: </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">rateRecoveredRxBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
 
 <span class="c1"># Compare with MATLAB</span>
-<span class="n">rateRecoveredRxBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/decIn.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;decIn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MATLAB First 10 LLRs: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">rateRecoveredRxBlocksMatlab</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">rateRecoveredRxBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/decIn.mat'</span><span class="p">)[</span><span class="s1">'decIn'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MATLAB First 10 LLRs: </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">rateRecoveredRxBlocksMatlab</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
 
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateRecoveredRxBlocks</span><span class="o">-</span><span class="n">rateRecoveredRxBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-12</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Max Diff. with MATLAB:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateRecoveredRxBlocks</span><span class="o">-</span><span class="n">rateRecoveredRxBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateRecoveredRxBlocks</span><span class="o">-</span><span class="n">rateRecoveredRxBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-12</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Max Diff. with MATLAB:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateRecoveredRxBlocks</span><span class="o">-</span><span class="n">rateRecoveredRxBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 <br/></pre></div>
 </div>
 </div>
@@ -465,16 +465,16 @@ Max Diff. with MATLAB: 3.552713678800501e-15
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Decode the rate-recovered transport blocks</span>
 <span class="n">decTxBlock</span><span class="p">,</span> <span class="n">numCrcErrors</span> <span class="o">=</span> <span class="n">polarDecoder</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">rateRecoveredRxBlocks</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of CRC Errors:          &quot;</span><span class="p">,</span> <span class="n">numCrcErrors</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Decoded Transport Block Shape: &quot;</span><span class="p">,</span> <span class="n">decTxBlock</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Decoded Transport Block:       &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">decTxBlock</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Transport Block:      &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">txpBlock</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of CRC Errors:          "</span><span class="p">,</span> <span class="n">numCrcErrors</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Decoded Transport Block Shape: "</span><span class="p">,</span> <span class="n">decTxBlock</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Decoded Transport Block:       "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">decTxBlock</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Original Transport Block:      "</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">txpBlock</span><span class="p">))</span>
 
 <span class="c1"># Compare with MATLAB</span>
-<span class="n">decTxBlockMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/decBits.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;decBits&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[:</span><span class="n">payloadLen</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MATLAB Decoded Transport Block:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">decTxBlockMatlab</span><span class="p">))</span>
+<span class="n">decTxBlockMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/decBits.mat'</span><span class="p">)[</span><span class="s1">'decBits'</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[:</span><span class="n">payloadLen</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MATLAB Decoded Transport Block:"</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">decTxBlockMatlab</span><span class="p">))</span>
 
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">txpBlock</span><span class="o">-</span><span class="n">decTxBlock</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH INPUT BITS!!!&quot;</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">txpBlock</span><span class="o">-</span><span class="n">decTxBlock</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH INPUT BITS!!!"</span>
 </pre></div>
 </div>
 </div>

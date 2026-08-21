@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NR PDSCH Throughput with HARQ &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>NR PDSCH Throughput with HARQ &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -104,7 +104,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -186,7 +186,7 @@ Carrier Properties:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize the modulation and code rate.</span>
-<span class="n">modulation</span> <span class="o">=</span> <span class="s1">&#39;16QAM&#39;</span>
+<span class="n">modulation</span> <span class="o">=</span> <span class="s1">'16QAM'</span>
 <span class="n">coderate</span> <span class="o">=</span> <span class="mi">490</span><span class="o">/</span><span class="mi">1024</span>
 <span class="c1"># Create a PDSCH onject with 2 tramsmission layers</span>
 <span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -194,15 +194,15 @@ Carrier Properties:
 <span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 
 <span class="c1"># Creating a HarqEntity object. (It also creates an LdpcCodec object internally):</span>
-<span class="n">harq</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getHarq</span><span class="p">(</span><span class="n">coderates</span> <span class="o">=</span> <span class="n">coderate</span><span class="p">,</span>      <span class="c1"># Coderate(s) used by HARQ&#39;s internal LDPC codec</span>
-                     <span class="n">harqType</span> <span class="o">=</span> <span class="s2">&quot;IR&quot;</span><span class="p">,</span>           <span class="c1"># &quot;IR&quot; -&gt; &quot;Incremental Redundancy&quot;, &quot;CC&quot; -&gt; &quot;Chase Combining&quot;</span>
+<span class="n">harq</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getHarq</span><span class="p">(</span><span class="n">coderates</span> <span class="o">=</span> <span class="n">coderate</span><span class="p">,</span>      <span class="c1"># Coderate(s) used by HARQ's internal LDPC codec</span>
+                     <span class="n">harqType</span> <span class="o">=</span> <span class="s2">"IR"</span><span class="p">,</span>           <span class="c1"># "IR" -&gt; "Incremental Redundancy", "CC" -&gt; "Chase Combining"</span>
                      <span class="n">numProc</span> <span class="o">=</span> <span class="mi">16</span><span class="p">)</span>              <span class="c1"># Number of HARQ processes</span>
 <span class="n">harq</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 
 <span class="c1"># Create the CDL channel model</span>
-<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>                     <span class="c1"># 8 TX antennas</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">75</span><span class="p">,</span><span class="mi">360</span><span class="p">]),</span> <span class="c1"># 2 RX antennas, Omni-directional</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">'C'</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">),</span>                     <span class="c1"># 8 TX antennas</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"+"</span><span class="p">,</span> <span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">75</span><span class="p">,</span><span class="mi">360</span><span class="p">]),</span> <span class="c1"># 2 RX antennas, Omni-directional</span>
                      <span class="n">rxOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>                                               <span class="c1"># Default is [180,0,0]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
 </pre></div>
@@ -310,8 +310,8 @@ CDL-C Channel Properties:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print header lines:</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SNR(dB)   Tx Bits     Rx Bits    Throughput(%)  TX Blocks  RX Blocks  BLER(%)  Avg. Retransmissions  time(Sec.)&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------  ----------  ----------  -------------  ---------  ---------  -------  --------------------  ----------&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"SNR(dB)   Tx Bits     Rx Bits    Throughput(%)  TX Blocks  RX Blocks  BLER(%)  Avg. Retransmissions  time(Sec.)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-------  ----------  ----------  -------------  ---------  ---------  -------  --------------------  ----------"</span><span class="p">)</span>
 
 <span class="n">txBlockSizes</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getTxBlockSize</span><span class="p">(</span><span class="n">coderate</span><span class="p">)</span>                   <span class="c1"># Calculate the Transport Block Size (TBS)</span>
 <span class="n">snrScheduler</span> <span class="o">=</span> <span class="n">SnrScheduler</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">loSnrVal</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hiSnrVal</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fastStep</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># Start at 0 dB, use increments of 1 dB</span>
@@ -322,8 +322,8 @@ CDL-C Channel Properties:
     <span class="n">harq</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>                                                <span class="c1"># Reset HARQ state and buffers</span>
 
     <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>                                       <span class="c1"># Start the timer</span>
-    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSlots</span><span class="p">):</span>                                   <span class="c1"># The inner loop doing &#39;numSlot&#39; transmissions</span>
-        <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                        <span class="c1"># Create and initialize PDSCH&#39;s internal grid</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numSlots</span><span class="p">):</span>                                   <span class="c1"># The inner loop doing 'numSlot' transmissions</span>
+        <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                        <span class="c1"># Create and initialize PDSCH's internal grid</span>
         <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()</span>                        <span class="c1"># Total number of PDSCH data bits available in the resource grid</span>
 
         <span class="c1"># Preparing the transport blocks</span>
@@ -350,7 +350,7 @@ CDL-C Channel Properties:
 
         <span class="c1"># Calculate the effective channel matrix with the precoding effect. This is assuming perfect channel</span>
         <span class="c1"># knowledge. For practical channel estimation we can use the DMRS reference signals and use the</span>
-        <span class="c1"># &quot;estimateChannel&quot; method of the PDSCH object.</span>
+        <span class="c1"># "estimateChannel" method of the PDSCH object.</span>
         <span class="n">effChannelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getEffChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>
 
         <span class="c1"># Use the effective channel matrix to equalize the received resource grid</span>
@@ -363,14 +363,14 @@ CDL-C Channel Properties:
         <span class="n">decodedTxBlocks</span><span class="p">,</span> <span class="n">crcMatches</span> <span class="o">=</span> <span class="n">harq</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>
 
         <span class="c1"># Get the statistics from HARQ entity and print them:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">snrDb</span><span class="si">:</span><span class="s2">^7.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">totalTxBits</span><span class="si">:</span><span class="s2">^10d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">totalRxBits</span><span class="si">:</span><span class="s2">^10d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">throughput</span><span class="si">:</span><span class="s2">^13.2f</span><span class="si">}</span><span class="s2">  &quot;</span>
-              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">totalTxBlocks</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">totalRxBlocks</span><span class="si">:</span><span class="s2">^9d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">bler</span><span class="si">:</span><span class="s2">^7.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">meanRetransmissions</span><span class="si">:</span><span class="s2">^20.3f</span><span class="si">}</span><span class="s2">  &quot;</span>
-              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="si">:</span><span class="s2">^-10.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">snrDb</span><span class="si">:</span><span class="s2">^7.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">totalTxBits</span><span class="si">:</span><span class="s2">^10d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">totalRxBits</span><span class="si">:</span><span class="s2">^10d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">throughput</span><span class="si">:</span><span class="s2">^13.2f</span><span class="si">}</span><span class="s2">  "</span>
+              <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">totalTxBlocks</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">totalRxBlocks</span><span class="si">:</span><span class="s2">^9d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">bler</span><span class="si">:</span><span class="s2">^7.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">harq</span><span class="o">.</span><span class="n">meanRetransmissions</span><span class="si">:</span><span class="s2">^20.3f</span><span class="si">}</span><span class="s2">  "</span>
+              <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="si">:</span><span class="s2">^-10.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">"</span><span class="se">\r</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
         <span class="n">harq</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
 
     <span class="n">snrScheduler</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">harq</span><span class="o">.</span><span class="n">throughput</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -410,11 +410,11 @@ SNR(dB)   Tx Bits     Rx Bits    Throughput(%)  TX Blocks  RX Blocks  BLER(%)  A
 <span class="n">snrDbs</span><span class="p">,</span> <span class="n">throughputs</span> <span class="o">=</span> <span class="n">snrScheduler</span><span class="o">.</span><span class="n">getSnrsAndData</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">,</span> <span class="n">throughputs</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;PDSCH throughput at different SNR values&quot;</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"PDSCH throughput at different SNR values"</span><span class="p">);</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;SNR (dB)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"SNR (dB)"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">snrDbs</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Throughput (%)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Throughput (%)"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>

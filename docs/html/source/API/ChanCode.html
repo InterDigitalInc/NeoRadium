@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Channel Coding &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Channel Coding &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -155,7 +155,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -366,7 +366,7 @@ following examples illustrate how to update existing code.</p>
 <div><ul class="simple">
 <li><p><strong>Instantiation:</strong></p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">modulation</span> <span class="o">=</span> <span class="s2">&quot;16QAM&quot;</span>       <span class="c1"># Modulation scheme</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">modulation</span> <span class="o">=</span> <span class="s2">"16QAM"</span>       <span class="c1"># Modulation scheme</span>
 <span class="n">coderate</span> <span class="o">=</span> <span class="mi">490</span><span class="o">/</span><span class="mi">1024</span>        <span class="c1"># Target code rate</span>
 <span class="n">txBlockSize</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getTxBlockSize</span><span class="p">(</span><span class="n">coderate</span><span class="p">)</span>
 
@@ -376,9 +376,9 @@ following examples illustrate how to update existing code.</p>
 
 <span class="c1"># New method 1 -----------------------------------------------------------------------------</span>
 <span class="c1"># Changes:</span>
-<span class="c1">#   1) &#39;baseGraphNo&#39; is no longer required (automatically selected).</span>
-<span class="c1">#   2) &#39;txBlockSizes&#39; must be provided.</span>
-<span class="c1">#   3) &#39;numIter&#39; is specified once during initialization.</span>
+<span class="c1">#   1) 'baseGraphNo' is no longer required (automatically selected).</span>
+<span class="c1">#   2) 'txBlockSizes' must be provided.</span>
+<span class="c1">#   3) 'numIter' is specified once during initialization.</span>
 <span class="n">ldpc</span> <span class="o">=</span> <span class="n">LdpcCodec</span><span class="p">(</span><span class="n">modulations</span><span class="o">=</span><span class="n">modulation</span><span class="p">,</span>
                  <span class="n">coderates</span><span class="o">=</span><span class="n">coderate</span><span class="p">,</span>
                  <span class="n">txBlockSizes</span><span class="o">=</span><span class="n">txBlockSize</span><span class="p">,</span>
@@ -401,10 +401,10 @@ following examples illustrate how to update existing code.</p>
 <span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpcEncoder</span><span class="o">.</span><span class="n">getRateMatchedCodeBlocks</span><span class="p">(</span><span class="n">txBlock</span><span class="p">,</span> <span class="n">numBits</span><span class="p">)</span>
 
 <span class="c1"># New method -------------------------------------------------------------------------------</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                     <span class="c1"># Initialize grid (replaces &#39;getGrid&#39;)</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                     <span class="c1"># Initialize grid (replaces 'getGrid')</span>
 <span class="n">txBlockSize</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getTxBlockSize</span><span class="p">(</span><span class="n">coderate</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">txBlockSize</span><span class="p">)</span>
-<span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>                   <span class="c1"># Replaces &#39;getBitSizes&#39;</span>
+<span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>                   <span class="c1"># Replaces 'getBitSizes'</span>
 
 <span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">txBlock</span><span class="p">,</span> <span class="n">numBits</span><span class="p">)</span>
 </pre></div>
@@ -422,19 +422,19 @@ following examples illustrate how to update existing code.</p>
 <span class="n">decodedTxBlockWithCRC</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrcAndMerge</span><span class="p">(</span><span class="n">decodedBlocks</span><span class="p">)</span>
 
 <span class="c1"># Check transport block CRC:</span>
-<span class="n">txBlockCrcMatch</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrc</span><span class="p">(</span><span class="n">decodedTxBlockWithCRC</span><span class="p">,</span> <span class="s1">&#39;24A&#39;</span><span class="p">)</span>
+<span class="n">txBlockCrcMatch</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrc</span><span class="p">(</span><span class="n">decodedTxBlockWithCRC</span><span class="p">,</span> <span class="s1">'24A'</span><span class="p">)</span>
 
 <span class="c1"># Remove CRC:</span>
 <span class="n">decodedTxBlock</span> <span class="o">=</span> <span class="n">decodedTxBlockWithCRC</span><span class="p">[:</span><span class="o">-</span><span class="mi">24</span><span class="p">]</span>
 
 <span class="c1"># New method -------------------------------------------------------------------------------</span>
 <span class="c1"># Changes:</span>
-<span class="c1">#   1) Single call to &#39;decode&#39;.</span>
-<span class="c1">#   2) &#39;numIter&#39; is configured during initialization.</span>
-<span class="c1">#   3) &#39;crcMatch&#39; is a boolean array:</span>
+<span class="c1">#   1) Single call to 'decode'.</span>
+<span class="c1">#   2) 'numIter' is configured during initialization.</span>
+<span class="c1">#   3) 'crcMatch' is a boolean array:</span>
 <span class="c1">#        - First element: transport block CRC result</span>
 <span class="c1">#        - Remaining elements: code block CRC results</span>
-<span class="c1">#   4) &#39;decodedTxBlock&#39; excludes the CRC bits.</span>
+<span class="c1">#   4) 'decodedTxBlock' excludes the CRC bits.</span>
 <span class="n">decodedTxBlock</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -453,11 +453,11 @@ following examples illustrate how to update existing code.</p>
 
 <span class="c1"># New method -------------------------------------------------------------------------------</span>
 <span class="c1"># Changes:</span>
-<span class="c1">#   1) Use &#39;LdpcCodec&#39; instead of &#39;LdpcEncoder&#39;.</span>
-<span class="c1">#   2) Use &#39;harq.encode&#39; instead of &#39;getRateMatchedCodeBlocks&#39;.</span>
-<span class="c1">#   3) Use &#39;harq.decode&#39; instead of &#39;decodeLLRs&#39;.</span>
-<span class="c1">#   4) &#39;crcMatches&#39; contains CRC results for transport blocks and code blocks.</span>
-<span class="c1">#   5) &#39;decodedTxBlocks&#39; contains decoded transport block(s) without CRC.</span>
+<span class="c1">#   1) Use 'LdpcCodec' instead of 'LdpcEncoder'.</span>
+<span class="c1">#   2) Use 'harq.encode' instead of 'getRateMatchedCodeBlocks'.</span>
+<span class="c1">#   3) Use 'harq.decode' instead of 'decodeLLRs'.</span>
+<span class="c1">#   4) 'crcMatches' contains CRC results for transport blocks and code blocks.</span>
+<span class="c1">#   5) 'decodedTxBlocks' contains decoded transport block(s) without CRC.</span>
 <span class="n">ldpc</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLdpcCodec</span><span class="p">(</span><span class="n">coderate</span><span class="p">)</span>
 <span class="n">harq</span> <span class="o">=</span> <span class="n">HarqEntity</span><span class="p">(</span><span class="n">ldpc</span><span class="p">,</span> <span class="n">harqType</span><span class="p">,</span> <span class="n">numProc</span><span class="p">)</span>
 
@@ -1528,10 +1528,10 @@ blocks:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">payloadLen</span> <span class="o">=</span> <span class="mi">30</span>             <span class="c1"># A</span>
 <span class="n">rateMatchedLen</span> <span class="o">=</span> <span class="mi">120</span>        <span class="c1"># E</span>
 
-<span class="c1"># Creating a polar decoder object for &quot;DCI&quot; data</span>
-<span class="n">polarDecoder</span> <span class="o">=</span> <span class="n">PolarDecoder</span><span class="p">(</span><span class="n">payloadLen</span><span class="p">,</span> <span class="n">rateMatchedLen</span><span class="p">,</span> <span class="s1">&#39;dci&#39;</span><span class="p">,</span> <span class="n">sclListSize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">useMinsum</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Creating a polar decoder object for "DCI" data</span>
+<span class="n">polarDecoder</span> <span class="o">=</span> <span class="n">PolarDecoder</span><span class="p">(</span><span class="n">payloadLen</span><span class="p">,</span> <span class="n">rateMatchedLen</span><span class="p">,</span> <span class="s1">'dci'</span><span class="p">,</span> <span class="n">sclListSize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">useMinsum</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># Rate recovery (Assuming &quot;llrs&quot; contains the LLR values from demodulation process)</span>
+<span class="c1"># Rate recovery (Assuming "llrs" contains the LLR values from demodulation process)</span>
 <span class="n">rateRecoveredRxBlocks</span> <span class="o">=</span> <span class="n">polarDecoder</span><span class="o">.</span><span class="n">recoverRate</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>
 
 <span class="c1"># Polar Decoding using SCL algorithm</span>
@@ -2085,7 +2085,7 @@ blocks:</p>
 <div class="literal-block-wrapper docutils container" id="id17">
 <div class="code-block-caption"><span class="caption-text">An example of LDPC decoding</span><a class="headerlink" href="#id17" title="Link to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Rate recovery</span>
-<span class="c1"># Let&#39;s assume we have:</span>
+<span class="c1"># Let's assume we have:</span>
 <span class="c1">#   An LdpcDecoder object (ldpcDecoder)</span>
 <span class="c1">#   The LLRs extracted from a received resource grid (llrs)</span>
 <span class="c1">#   The transport block size (txBlockSize)</span>
@@ -2098,7 +2098,7 @@ blocks:</p>
 <span class="n">decodedTxBlockWithCRC</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrcAndMerge</span><span class="p">(</span><span class="n">decodedBlocks</span><span class="p">)</span>
 
 <span class="c1"># Checking the CRC of the transport block</span>
-<span class="n">txBlockCrcMatch</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrc</span><span class="p">(</span><span class="n">decodedTxBlockWithCRC</span><span class="p">,</span><span class="s1">&#39;24A&#39;</span><span class="p">)</span>
+<span class="n">txBlockCrcMatch</span> <span class="o">=</span> <span class="n">ldpcDecoder</span><span class="o">.</span><span class="n">checkCrc</span><span class="p">(</span><span class="n">decodedTxBlockWithCRC</span><span class="p">,</span><span class="s1">'24A'</span><span class="p">)</span>
 
 <span class="c1"># Removing the transport block CRC</span>
 <span class="n">decodedTxBlock</span> <span class="o">=</span> <span class="n">decodedTxBlockWithCRC</span><span class="p">[:</span><span class="o">-</span><span class="mi">24</span><span class="p">]</span>

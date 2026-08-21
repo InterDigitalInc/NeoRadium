@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Working with DeepMIMO Scenarios &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Working with DeepMIMO Scenarios &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -114,7 +114,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -135,11 +135,11 @@
              
   <section id="Working-with-DeepMIMO-Scenarios">
 <h1>Working with DeepMIMO Scenarios<a class="headerlink" href="#Working-with-DeepMIMO-Scenarios" title="Link to this heading"></a></h1>
-<p><strong>NeoRadium</strong>’s <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData">DeepMimoData</a> class can be used with <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenarios to generate trajectories of user movements within a ray-tracing environment. By employing the <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/Channels.html#neoradium.trjchan.TrjChannel">TrjChannel</a> class, designed as a trajectory-based channel model, you can
-construct sequences of channels that adhere to temporal and spatial consistency, based on the provided trajectory.</p>
+<p><strong>NeoRadium</strong>’s <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData">DeepMimoData</a> class can be used with <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenarios to generate trajectories of user movements within a ray-tracing environment. By employing the <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/Channels.html#neoradium.trjchan.TrjChannel">TrjChannel</a> class, designed as a trajectory-based channel model, you can construct
+sequences of channels that adhere to temporal and spatial consistency, based on the provided trajectory.</p>
 <p>This notebook shows how to:</p>
 <ul class="simple">
-<li><p>Use the <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData">DeepMimoData</a> class to open a DeepMIMO scenario</p></li>
+<li><p>Use the <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData">DeepMimoData</a> class to open a DeepMIMO scenario</p></li>
 <li><p>Use its visialization method to draw the scenario map</p></li>
 <li><p>Create randomly generated trajectories</p></li>
 <li><p>Create your own trajectories interactively on the scenario map</p></li>
@@ -163,11 +163,11 @@ construct sequences of channels that adhere to temporal and spatial consistency,
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace this with the folder on your system where the DeepMIMO scenarios are stored</span>
-<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">&quot;/data/RayTracing/DeepMIMO/Scenarios/V4/&quot;</span>
+<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">"/data/RayTracing/DeepMIMO/Scenarios/V4/"</span>
 <span class="n">DeepMimoData</span><span class="o">.</span><span class="n">setScenariosPath</span><span class="p">(</span><span class="n">dataFolder</span><span class="p">)</span>
 
 <span class="c1"># Get information about a scenario:</span>
-<span class="n">DeepMimoData</span><span class="o">.</span><span class="n">showScenarioInfo</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">)</span>
+<span class="n">DeepMimoData</span><span class="o">.</span><span class="n">showScenarioInfo</span><span class="p">(</span><span class="s2">"asu_campus_3p5"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -193,7 +193,7 @@ Base Stations: (1)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using the above information create a DeepMimoData object for user grid 0 and base station 1:</span>
-<span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"asu_campus_3p5"</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">deepMimoData</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 <br/></pre></div>
 </div>
@@ -227,7 +227,7 @@ DeepMimoData Properties:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Draw a map of the scenario showing the Line-Of-Sight (LOS) vs Non-Line-Of-Sight (NLOS) communication</span>
 <span class="c1"># between the UEs and the base station.</span>
-<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">);</span>   <span class="c1"># Also try &quot;1stPathDelays&quot; or &quot;1stPathPowers&quot;</span>
+<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">"LOS-NLOS"</span><span class="p">);</span>   <span class="c1"># Also try "1stPathDelays" or "1stPathPowers"</span>
 <br/></pre></div>
 </div>
 </div>
@@ -244,7 +244,7 @@ DeepMimoData Properties:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let&#39;s create a random trajectory:</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let's create a random trajectory:</span>
 <span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>     <span class="c1"># Remark this out if you want new random trajectories on each run.</span>
 
 <span class="c1"># The points on a trajectory are determined by the timing of slots within 3GPP subframes, which are</span>
@@ -266,7 +266,7 @@ DeepMimoData Properties:
 <span class="n">trajectory</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 
 <span class="c1"># Draw the map with the trajectory:</span>
-<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">);</span>
+<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">"LOS-NLOS"</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">);</span>
 <br/></pre></div>
 </div>
 </div>
@@ -309,8 +309,8 @@ Trajectory Properties:
 <span class="c1"># “interactiveTrajPoints” can be used to obtain a list of points on the map representing the trajectory.</span>
 <span class="c1"># This function opens a new window displaying the current scenario’s map, and you can click on the points</span>
 <span class="c1"># of the trajectory one by one. Use left-click to select new points and right-click to undo last point.</span>
-<span class="n">points</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">interactiveTrajPoints</span><span class="p">(</span><span class="n">mapType</span><span class="o">=</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Selected Points:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">points</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">interactiveTrajPoints</span><span class="p">(</span><span class="n">mapType</span><span class="o">=</span><span class="s2">"LOS-NLOS"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Selected Points:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="n">points</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -359,7 +359,7 @@ Selected Points:
 <span class="n">trajectory</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 
 <span class="c1"># Draw the Map with the trajectory:</span>
-<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>
+<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">"LOS-NLOS"</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>

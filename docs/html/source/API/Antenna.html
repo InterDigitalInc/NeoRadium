@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Antenna &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Antenna &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -132,7 +132,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -156,7 +156,7 @@
 this API, you can easily create antenna arrays and study their characteristics.</p>
 <p><strong>Example</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">elementTemplate</span> <span class="o">=</span> <span class="n">AntennaElement</span><span class="p">(</span><span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">65</span><span class="p">,</span><span class="mi">65</span><span class="p">],</span> <span class="n">maxAttenuation</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="n">panelTemplate</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">elements</span><span class="o">=</span><span class="n">elementTemplate</span><span class="p">,</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">)</span>
+<span class="n">panelTemplate</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">elements</span><span class="o">=</span><span class="n">elementTemplate</span><span class="p">,</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"+"</span><span class="p">)</span>
 <span class="n">antennaArray</span> <span class="o">=</span> <span class="n">AntennaArray</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">spacing</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">panels</span><span class="o">=</span><span class="n">panelTemplate</span><span class="p">)</span>
 <span class="n">antennaArray</span><span class="o">.</span><span class="n">showElements</span><span class="p">(</span><span class="n">zeroTicks</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -164,7 +164,7 @@ this API, you can easily create antenna arrays and study their characteristics.<
 <figure class="align-center">
 <img alt="../../_images/AntennaArray.png" src="../../_images/AntennaArray.png" />
 </figure>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">antennaArray</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Directivity&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">antennaArray</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">"Directivity"</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <figure class="align-center">
@@ -510,10 +510,10 @@ parameter is ignored. The default is <code class="docutils literal notranslate">
 <li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes">matplotlib.axes.Axes</a> or None) – <p>If specified, it must be a matplotlib <code class="docutils literal notranslate"><span class="pre">Axis</span></code> object on which the radiation pattern is drawn. This can
 be used to create a group of matplotlib subplots and draw the radiation pattern in one of the subplots. For
 example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">panel</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;constrained&#39;</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;polar&#39;</span><span class="p">})</span>
-<span class="n">panel</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Horizontal cut&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">panel</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Vertical cut&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">panel</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">'constrained'</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'projection'</span><span class="p">:</span> <span class="s1">'polar'</span><span class="p">})</span>
+<span class="n">panel</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">"Field"</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Horizontal cut"</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">panel</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">"Field"</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Vertical cut"</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </p></li>
@@ -713,7 +713,7 @@ the second polarization (doubling the number of beams)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>steeringVectors</strong> (<em>NumPy array</em>) – Complex precoder matrix of shape <code class="docutils literal notranslate"><span class="pre">(numPorts,</span> <span class="pre">numBeams)</span></code>, where <code class="docutils literal notranslate"><span class="pre">numPorts</span></code> is the number
+<li><p><strong>steeringVectors</strong> (<em>NumPy array</em>) – Complex steering vector matrix of shape <code class="docutils literal notranslate"><span class="pre">(numPorts,</span> <span class="pre">numBeams)</span></code>, where <code class="docutils literal notranslate"><span class="pre">numPorts</span></code> is the number
 of antenna ports and <code class="docutils literal notranslate"><span class="pre">numBeams</span></code> is the number of sweeping beams. When <cite>polStrategy=”probe”</cite>
 on a dual-pol panel, <code class="docutils literal notranslate"><span class="pre">numBeams</span></code> is doubled.</p></li>
 <li><p><strong>beams</strong> (<em>list</em>) – Beam metadata as <code class="docutils literal notranslate"><span class="pre">[thetas,</span> <span class="pre">phis,</span> <span class="pre">pols]</span></code>, where <code class="docutils literal notranslate"><span class="pre">thetas</span></code> and <code class="docutils literal notranslate"><span class="pre">phis</span></code> have length <code class="docutils literal notranslate"><span class="pre">numBeams</span></code> and
@@ -730,12 +730,18 @@ if you need global angles for labeling/plotting.</p></li>
 <li><p>For <a class="reference internal" href="#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a>, <code class="docutils literal notranslate"><span class="pre">numPorts</span></code> is equal to number of antenna elements. For
 <a class="reference internal" href="#neoradium.antenna.AntennaArray" title="neoradium.antenna.AntennaArray"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaArray</span></code></a>, <code class="docutils literal notranslate"><span class="pre">numPorts</span></code> is equal to number of panels for single-polarization and 2 times
 number of panels for dual polarization.</p></li>
+<li><p>The returned columns are <strong>unnormalized steering vectors</strong>, not power-normalized precoders. For
+single-polarized panels/arrays and for dual-polarized cases with <code class="docutils literal notranslate"><span class="pre">polStrategy=&quot;equal&quot;</span></code>, each column
+has <span class="math notranslate nohighlight">\(\|w\|^2 = N_{ports}\)</span>. For <code class="docutils literal notranslate"><span class="pre">polStrategy=&quot;probe&quot;</span></code> (dual-polarized only), one polarization
+is zeroed per column, so <span class="math notranslate nohighlight">\(\|w\|^2 = N_{ports}/2\)</span> — a 3 dB power drop relative to the <code class="docutils literal notranslate"><span class="pre">&quot;equal&quot;</span></code>
+mode. If you use these as transmit precoders, apply your own normalization to control total transmit
+power, and account for the 3 dB gap when comparing beam metrics across <code class="docutils literal notranslate"><span class="pre">polStrategy</span></code> modes.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">angleMethod=&quot;sincos&quot;</span></code> samples uniformly in sin(φ) and cos(θ), which gives roughly equal angular
 separation in beam space — the same intuition behind a DFT-based beam codebook and the natural
 choice when the goal is uniform beam coverage. <code class="docutils literal notranslate"><span class="pre">&quot;linear&quot;</span></code> samples uniformly in degrees and is
 provided for the (less common) case where uniformly spaced angles are preferred over uniform beam
 spacing.</p></li>
-<li><p>On a dual-polarized antenna, <code class="docutils literal notranslate"><span class="pre">polStrategy=&quot;probe&quot;</span></code> returns <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">numTheta</span> <span class="pre">*</span> <span class="pre">numPhi</span></code> precoder
+<li><p>On a dual-polarized antenna, <code class="docutils literal notranslate"><span class="pre">polStrategy=&quot;probe&quot;</span></code> returns <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">numTheta</span> <span class="pre">*</span> <span class="pre">numPhi</span></code> steering-vector
 columns: the first half excites only the first polarization, the second half only the second.
 This doubles the number of beams compared to <code class="docutils literal notranslate"><span class="pre">polStrategy=&quot;equal&quot;</span></code>.</p></li>
 </ul>
@@ -773,7 +779,7 @@ It returns a matrix of beamforming weights and per-beam metadata (angles and pol
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>steeringVectors</strong> (<em>NumPy array</em>) – Complex precoder matrix of shape <code class="docutils literal notranslate"><span class="pre">(numPorts,</span> <span class="pre">numBeams)</span></code>, where <code class="docutils literal notranslate"><span class="pre">numPorts</span></code> is the number
+<li><p><strong>steeringVectors</strong> (<em>NumPy array</em>) – Complex steering vector matrix of shape <code class="docutils literal notranslate"><span class="pre">(numPorts,</span> <span class="pre">numBeams)</span></code>, where <code class="docutils literal notranslate"><span class="pre">numPorts</span></code> is the number
 of antenna ports and <code class="docutils literal notranslate"><span class="pre">numBeams</span></code> is the number of probing beams. When <cite>polStrategy=”probe”</cite>
 on a dual-pol panel, <code class="docutils literal notranslate"><span class="pre">numBeams</span></code> is doubled.</p></li>
 <li><p><strong>beams</strong> (<em>list</em>) – Beam metadata as <code class="docutils literal notranslate"><span class="pre">[thetas,</span> <span class="pre">phis,</span> <span class="pre">pols]</span></code>, where <code class="docutils literal notranslate"><span class="pre">thetas</span></code> and <code class="docutils literal notranslate"><span class="pre">phis</span></code> have length <code class="docutils literal notranslate"><span class="pre">numBeams</span></code> and
@@ -786,6 +792,12 @@ on a dual-pol panel, <code class="docutils literal notranslate"><span class="pre
 <ul class="simple">
 <li><p>All angles are in <strong>local</strong> panel coordinates (same convention as <a class="reference internal" href="#neoradium.antenna.AntennaBase.getSweepingBeams" title="neoradium.antenna.AntennaBase.getSweepingBeams"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getSweepingBeams()</span></code></a>).
 Broadside is at theta=90°, phi=0°.</p></li>
+<li><p>The returned columns are <strong>unnormalized steering vectors</strong>, not power-normalized precoders. For
+single-polarized panels/arrays and for dual-polarized cases with <code class="docutils literal notranslate"><span class="pre">polStrategy=&quot;equal&quot;</span></code>, each column
+has <span class="math notranslate nohighlight">\(\|w\|^2 = N_{ports}\)</span>. For <code class="docutils literal notranslate"><span class="pre">polStrategy=&quot;probe&quot;</span></code> (dual-polarized only), one polarization
+is zeroed per column, so <span class="math notranslate nohighlight">\(\|w\|^2 = N_{ports}/2\)</span> — a 3 dB power drop relative to the <code class="docutils literal notranslate"><span class="pre">&quot;equal&quot;</span></code>
+mode. If you use these as transmit precoders, apply your own normalization to control total transmit
+power, and account for the 3 dB gap when comparing beam metrics across <code class="docutils literal notranslate"><span class="pre">polStrategy</span></code> modes.</p></li>
 <li><p>Probing is intended to refine a beam selection around a <em>known</em> reference direction
 <code class="docutils literal notranslate"><span class="pre">(theta0,</span> <span class="pre">phi0)</span></code> — for example, after a coarse sweep with <a class="reference internal" href="#neoradium.antenna.AntennaBase.getSweepingBeams" title="neoradium.antenna.AntennaBase.getSweepingBeams"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getSweepingBeams()</span></code></a> has picked
 a best beam, <code class="docutils literal notranslate"><span class="pre">getProbingBeams</span></code> generates a small set of nearby beams to test for a finer choice.</p></li>

@@ -7,11 +7,11 @@
    "source": [
     "# Generating Random Channel Matrices from a DeepMIMO Scenario\n",
     "\n",
-    "This notebook demonstrates how to use **NeoRadium**'s [DeepMimoData.getChanGen](https://ail-wireless.pages.interdigital.com/neoradium/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen) function to generate random channel matrices from a [DeepMIMO](https://www.deepmimo.net) scenario.\n",
+    "This notebook demonstrates how to use **NeoRadium**'s [DeepMimoData.getChanGen](https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen) function to generate random channel matrices from a [DeepMIMO](https://www.deepmimo.net) scenario.\n",
     "\n",
     "The notebook first opens a DeepMIMO scenario and displays a map of the simulation area. It then creates channel generators for two examples:\n",
     "\n",
-    "1. **SISO channel generation with default settings:** creates 1,000 single-input single-output channel matrices using the default [getChanGen](https://ail-wireless.pages.interdigital.com/neoradium/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen) settings.\n",
+    "1. **SISO channel generation with default settings:** creates 1,000 single-input single-output channel matrices using the default [getChanGen](https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen) settings.\n",
     "2. **Filtered MIMO channel generation:** creates 1,000 multiple-input multiple-output channel matrices using additional filtering criteria, including LOS/NLOS condition, UE distance, UE position, and custom TX/RX antenna configurations.\n",
     "\n",
     "The generated channel matrices are collected into NumPy arrays using `np.stack`, and the resulting array shapes are printed to show the dimensions of the generated channel datasets.\n",
@@ -19,8 +19,8 @@
     "### Notes\n",
     "\n",
     "- The user may need to update the `dataFolder` variable based on the location of the DeepMIMO scenario files on their system.\n",
-    "- The [getChanGen](https://ail-wireless.pages.interdigital.com/neoradium/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen) function returns a channel generator. The channel matrices are generated when the generator is iterated over.\n",
-    "- The selected UE points can be visualized on the DeepMIMO map using [drawMap](https://ail-wireless.pages.interdigital.com/neoradium/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.drawMap).\n",
+    "- The [getChanGen](https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen) function returns a channel generator. The channel matrices are generated when the generator is iterated over.\n",
+    "- The selected UE points can be visualized on the DeepMIMO map using [drawMap](https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.drawMap).\n",
     "- Points with total blockage are ignored by the channel generator.\n",
     "- If the requested filtering criteria are too restrictive, the generator may return fewer channels than requested, or no channels at all."
    ]

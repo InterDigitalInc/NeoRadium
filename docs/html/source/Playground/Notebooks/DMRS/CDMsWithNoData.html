@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Demystifying numCdmGroupsWithoutData &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Demystifying numCdmGroupsWithoutData &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -101,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -181,17 +181,17 @@ Bandwidth Part Properties:
 
 <span class="c1"># Print some statistics about the PDSCH resource grid</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of resource elements:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">":"</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">numCdmGroupsWithoutData: </span><span class="si">{</span><span class="n">pdsch</span><span class="o">.</span><span class="n">dmrs</span><span class="o">.</span><span class="n">numCdmGroupsWithoutData</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">numCdmGroupsWithoutData: </span><span class="si">{</span><span class="n">pdsch</span><span class="o">.</span><span class="n">dmrs</span><span class="o">.</span><span class="n">numCdmGroupsWithoutData</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 <span class="c1"># Draw grid map for both layers</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
 
 <span class="c1"># Note that in this case:</span>
 <span class="c1">#   - We only have one CDM group</span>
 <span class="c1">#   - By default, `numCdmGroupsWithoutData` is set to 1.</span>
-<span class="c1">#   - There are no resource elements marked as &quot;NO_DATA&quot;</span>
+<span class="c1">#   - There are no resource elements marked as "NO_DATA"</span>
 <span class="c1">#   - There is no interference between DMRS and PDSCH resources</span>
 </pre></div>
 </div>
@@ -248,7 +248,7 @@ numCdmGroupsWithoutData: 1
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let&#39;s create a 4-layer PDSCH (using all default settings)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let's create a 4-layer PDSCH (using all default settings)</span>
 <span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">()</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
@@ -258,8 +258,8 @@ numCdmGroupsWithoutData: 1
 
 <span class="c1"># Print some statistics about the PDSCH resource grid</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of resource elements:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">":"</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
 <span class="c1"># Draw grid map for both layers</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
@@ -267,7 +267,7 @@ numCdmGroupsWithoutData: 1
 <span class="c1"># Note that in this case:</span>
 <span class="c1">#   - We have two CDM groups</span>
 <span class="c1">#   - By default, `numCdmGroupsWithoutData` is set to 2. This ensures no DMRS interference.</span>
-<span class="c1">#   - The resource elements between the DMRS REs are marked as &quot;NO_DATA&quot; and therefore</span>
+<span class="c1">#   - The resource elements between the DMRS REs are marked as "NO_DATA" and therefore</span>
 <span class="c1">#     not available for PDSCH.</span>
 <span class="c1">#   - There is no interference between DMRS and PDSCH resources</span>
 </pre></div>
@@ -323,7 +323,7 @@ Number of resource elements:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let&#39;s use a different DMRS configuration where we set the &#39;numCdmGroupsWithoutData&#39; to 1:</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let's use a different DMRS configuration where we set the 'numCdmGroupsWithoutData' to 1:</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">numCdmGroupsWithoutData</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 
@@ -332,8 +332,8 @@ Number of resource elements:
 
 <span class="c1"># Print some statistics about the PDSCH resource grid</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of resource elements:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">":"</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
 <span class="c1"># Draw grid map for both layers</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
@@ -341,7 +341,7 @@ Number of resource elements:
 <span class="c1"># Note that in this case:</span>
 <span class="c1">#   - We have two CDM groups</span>
 <span class="c1">#   - Since numCdmGroupsWithoutData = 1, the first CDM group has REs marked as</span>
-<span class="c1">#     &quot;NO_DATA&quot; (see this in ports 2 and 3 below).</span>
+<span class="c1">#     "NO_DATA" (see this in ports 2 and 3 below).</span>
 <span class="c1">#   - Since numCdmGroupsWithoutData = 1, the second CDM group is now available</span>
 <span class="c1">#     for PDSCH (see this in ports 0 and 1 below).</span>
 <span class="c1">#   - This means there will be some interference between the DMRS signals in</span>
@@ -411,8 +411,8 @@ Number of resource elements:
 
 <span class="c1"># Print some statistics about the PDSCH resource grid</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of resource elements:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">":"</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
 <span class="c1"># Draw grid map for both layers</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
@@ -420,7 +420,7 @@ Number of resource elements:
 <span class="c1"># Note that in this case:</span>
 <span class="c1">#   - We have three CDM groups</span>
 <span class="c1">#   - By default, `numCdmGroupsWithoutData` is set to 3.</span>
-<span class="c1">#   - The resource elements between the DMRS REs are marked as &quot;NO_DATA&quot; and therefore</span>
+<span class="c1">#   - The resource elements between the DMRS REs are marked as "NO_DATA" and therefore</span>
 <span class="c1">#     not available for PDSCH.</span>
 <span class="c1">#   - There is no interference between DMRS and PDSCH resources</span>
 </pre></div>
@@ -476,15 +476,15 @@ Number of resource elements:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now lets set &#39;numCdmGroupsWithoutData&#39; to 1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now lets set 'numCdmGroupsWithoutData' to 1</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">numCdmGroupsWithoutData</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
 
 <span class="c1"># Print some statistics about the PDSCH resource grid</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of resource elements:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">":"</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
 <span class="c1"># Draw grid map for both layers</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
@@ -492,7 +492,7 @@ Number of resource elements:
 <span class="c1"># Note that in this case:</span>
 <span class="c1">#   - We have three CDM groups</span>
 <span class="c1">#   - Since numCdmGroupsWithoutData = 1, the first CDM group has REs marked as</span>
-<span class="c1">#     &quot;NO_DATA&quot; (see this in ports 2, 3, 4, and 5 below).</span>
+<span class="c1">#     "NO_DATA" (see this in ports 2, 3, 4, and 5 below).</span>
 <span class="c1">#   - Since numCdmGroupsWithoutData = 1, the second and third CDM groups are</span>
 <span class="c1">#     now available for PDSCH (see this in ports 0, 1, 2, and 3 below).</span>
 <span class="c1">#   - This means there will be some interference between the DMRS signals and</span>
@@ -552,15 +552,15 @@ Number of resource elements:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># With the same 6-layer PDSCH, we now set &#39;numCdmGroupsWithoutData&#39; to 2:</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># With the same 6-layer PDSCH, we now set 'numCdmGroupsWithoutData' to 2:</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">numCdmGroupsWithoutData</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
 
 <span class="c1"># Print some statistics about the PDSCH resource grid</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of resource elements:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">":"</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
 <span class="c1"># Draw grid map for both layers</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">);</span>
@@ -568,7 +568,7 @@ Number of resource elements:
 <span class="c1"># Note that in this case:</span>
 <span class="c1">#   - We have three CDM groups</span>
 <span class="c1">#   - Since numCdmGroupsWithoutData = 2, the first and second CDM groups have</span>
-<span class="c1">#     REs marked as &quot;NO_DATA&quot;.</span>
+<span class="c1">#     REs marked as "NO_DATA".</span>
 <span class="c1">#   - Since numCdmGroupsWithoutData = 2, the third CDM group is now available</span>
 <span class="c1">#     for PDSCH (see this in ports 0, 1, 2, and 3 below).</span>
 <span class="c1">#   - This means there will be some interference between the DMRS signals in</span>

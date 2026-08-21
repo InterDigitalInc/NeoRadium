@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Channel Models &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Channel Models &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -137,7 +137,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -428,10 +428,10 @@ different <cite>sub-bands</cite> of the <code class="docutils literal notranslat
 <p>You can use the <a class="reference internal" href="PhyChannels.html#neoradium.pdsch.PDSCH.getPrecodingMatrix" title="neoradium.pdsch.PDSCH.getPrecodingMatrix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getPrecodingMatrix()</span></code></a> method to obtain a precoder.</p>
 </p></li>
 <li><p><strong>w</strong> (<em>NumPy array</em><em>, </em><em>optional</em>) – An optional steering vector of shape <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">1</span></code>, where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of transmitter antennas. When
-provided, each row of the precoding matrix is multiplied by the corresponding element of <code class="docutils literal notranslate"><span class="pre">w</span></code> before
-calculating the effective channel. This allows the effective channel to include both a steering vector
-and a PMI-based precoder. If omitted, the effective channel is calculated using only the specified
-precoder.</p></li>
+provided, the precoder is effectively pre-multiplied by <code class="docutils literal notranslate"><span class="pre">diag(w)</span></code> — that is, each transmit-antenna row
+of the precoder is scaled by the corresponding element of <code class="docutils literal notranslate"><span class="pre">w</span></code> before calculating the effective channel.
+This allows the effective channel to include both a steering vector and a PMI-based precoder. If omitted,
+the effective channel is calculated using only the specified precoder.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -909,18 +909,18 @@ Departure</em>, and <em>Zenith angle of Arrival</em>. For more information, plea
 
 <span class="c1"># Now create the generator</span>
 <span class="n">chanGen</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="o">.</span><span class="n">getChanGen</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span>       <span class="c1"># Number of channels and bandwidth part</span>
-                                <span class="n">profiles</span><span class="o">=</span><span class="s2">&quot;ABCDE&quot;</span><span class="p">,</span>           <span class="c1"># Randomly pick a CDL profile</span>
+                                <span class="n">profiles</span><span class="o">=</span><span class="s2">"ABCDE"</span><span class="p">,</span>           <span class="c1"># Randomly pick a CDL profile</span>
                                 <span class="n">delaySpread</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">500</span><span class="p">),</span>       <span class="c1"># Uniformly sample between 10 and 500 ns</span>
                                 <span class="n">ueSpeed</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span>             <span class="c1"># Uniformly sample between 5 and 20 m/s</span>
                                 <span class="n">ueDir</span><span class="o">=</span><span class="p">[</span><span class="mi">45</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">225</span><span class="p">,</span> <span class="mi">315</span><span class="p">],</span>  <span class="c1"># Randomly pick one of these UE directions</span>
                                 <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span>            <span class="c1"># Carrier frequency</span>
-                                <span class="n">txAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>  <span class="c1"># 16 TX antennas</span>
-                                <span class="n">rxAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>  <span class="c1"># 4 RX antennas</span>
+                                <span class="n">txAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">),</span>  <span class="c1"># 16 TX antennas</span>
+                                <span class="n">rxAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">),</span>  <span class="c1"># 4 RX antennas</span>
                                 <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
 
 <span class="c1"># Create the channel matrices</span>
 <span class="n">allChannels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">chan</span> <span class="k">for</span> <span class="n">chan</span> <span class="ow">in</span> <span class="n">chanGen</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of &#39;allChannels&#39;: </span><span class="si">{</span><span class="n">allChannels</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>       <span class="c1"># Prints (1000, 14, 300, 4, 16)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of 'allChannels': </span><span class="si">{</span><span class="n">allChannels</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>       <span class="c1"># Prints (1000, 14, 300, 4, 16)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1506,12 +1506,12 @@ the time of the last point on the trajectory (<code class="docutils literal notr
 </div></blockquote>
 <p><strong>Indexing</strong>:</p>
 <p>This class supports direct indexing with <a class="reference internal" href="#neoradium.trjchan.TrjPoint" title="neoradium.trjchan.TrjPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjPoint</span></code></a> objects. For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;O1_3p5B&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"O1_3p5B"</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>  <span class="c1"># Carrier with 25 Resource Blocks, 15 kHz spacing</span>
 <span class="n">xyBounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span> <span class="p">[</span><span class="mi">270</span><span class="p">,</span> <span class="mi">400</span><span class="p">]])</span>        <span class="c1"># [[minX, minY], [maxX, maxY]]</span>
 <span class="n">trajLen</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">segLen</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">traj</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">getRandomTrajectory</span><span class="p">(</span><span class="n">xyBounds</span><span class="p">,</span> <span class="n">segLen</span><span class="p">,</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">trajLen</span><span class="p">,</span> <span class="n">trajDir</span><span class="o">=</span><span class="s2">&quot;-X&quot;</span><span class="p">)</span>
+<span class="n">traj</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">getRandomTrajectory</span><span class="p">(</span><span class="n">xyBounds</span><span class="p">,</span> <span class="n">segLen</span><span class="p">,</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">trajLen</span><span class="p">,</span> <span class="n">trajDir</span><span class="o">=</span><span class="s2">"-X"</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">traj</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>   <span class="c1"># print the times of the first 5 points on the trajectory</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">traj</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>     <span class="c1"># print the time of the last point on the trajectory</span>
@@ -1520,12 +1520,12 @@ the time of the last point on the trajectory (<code class="docutils literal notr
 <p><strong>Iterating through points</strong>:</p>
 <p>This class has a generator function (<code class="docutils literal notranslate"><span class="pre">__iter__</span></code>) which makes it easier to use in a loop. For example, the
 following code finds the point on the trajectory that is farthest from the base station.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;O1_3p5B&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"O1_3p5B"</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>  <span class="c1"># Carrier with 25 Resource Blocks, 15 kHz spacing</span>
 <span class="n">xyBounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span> <span class="p">[</span><span class="mi">270</span><span class="p">,</span> <span class="mi">400</span><span class="p">]])</span>        <span class="c1"># [[minX, minY], [maxX, maxY]]</span>
 <span class="n">trajLen</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">segLen</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">traj</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">getRandomTrajectory</span><span class="p">(</span><span class="n">xyBounds</span><span class="p">,</span> <span class="n">segLen</span><span class="p">,</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">trajLen</span><span class="p">,</span> <span class="n">trajDir</span><span class="o">=</span><span class="s2">&quot;-X&quot;</span><span class="p">)</span>
+<span class="n">traj</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">getRandomTrajectory</span><span class="p">(</span><span class="n">xyBounds</span><span class="p">,</span> <span class="n">segLen</span><span class="p">,</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">trajLen</span><span class="p">,</span> <span class="n">trajDir</span><span class="o">=</span><span class="s2">"-X"</span><span class="p">)</span>
 
 <span class="n">farPoint</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">maxDist</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1561,12 +1561,12 @@ property in the <a class="reference internal" href="#neoradium.trjchan.TrjPoint"
 <dd><p>This visualization function draws this trajectory object using the <cite>matplotlib</cite> library. The starting point
 of the trajectory is shown with a small red circle.</p>
 <p><strong>Example:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;O1_3p5B&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"O1_3p5B"</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>  <span class="c1"># Carrier with 25 Resource Blocks, 15 kHz spacing</span>
 <span class="n">xyBounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">250</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span> <span class="p">[</span><span class="mi">270</span><span class="p">,</span> <span class="mi">400</span><span class="p">]])</span>        <span class="c1"># [[minX, minY], [maxX, maxY]]</span>
 <span class="n">trajLen</span> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">segLen</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">traj</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">getRandomTrajectory</span><span class="p">(</span><span class="n">xyBounds</span><span class="p">,</span> <span class="n">segLen</span><span class="p">,</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">trajLen</span><span class="p">,</span> <span class="n">trajDir</span><span class="o">=</span><span class="s2">&quot;-X&quot;</span><span class="p">)</span>
+<span class="n">traj</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">getRandomTrajectory</span><span class="p">(</span><span class="n">xyBounds</span><span class="p">,</span> <span class="n">segLen</span><span class="p">,</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">trajLen</span><span class="p">,</span> <span class="n">trajDir</span><span class="o">=</span><span class="s2">"-X"</span><span class="p">)</span>
 <span class="n">traj</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1896,9 +1896,9 @@ that do not contain any point with total blockage.</p>
 
 <span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span> <span class="c1"># Carrier with 25 RBs, 30 kHz subcarrier spacing</span>
 <span class="n">channel</span> <span class="o">=</span> <span class="n">TrjChannel</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span>
-                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>       <span class="c1"># 8 TX antennas</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">))</span>       <span class="c1"># 2 RX antennas</span>
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">),</span>       <span class="c1"># 8 TX antennas</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">))</span>       <span class="c1"># 2 RX antennas</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">"16QAM"</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">chanCallback</span><span class="p">(</span><span class="n">seqNo</span><span class="p">,</span> <span class="n">elementNo</span><span class="p">,</span> <span class="n">channelMatrix</span><span class="p">,</span> <span class="n">channel</span><span class="p">):</span>
     <span class="c1"># Drop the channels with total blockage</span>

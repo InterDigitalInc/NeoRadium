@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resource Grid &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Resource Grid &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -100,7 +100,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -218,9 +218,9 @@ properties directly: <code class="docutils literal notranslate"><span class="pre
 <p>a) <em>Reading</em>: You can directly access the contents of the resource grid using indices. Here are a few
 examples of accessing the RE values in the resource grid:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">myREs</span> <span class="o">=</span> <span class="n">myGrid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">,:]</span>     <span class="c1"># instead of using myGrid.grid[0,2:5,:]</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">myREs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>          <span class="c1"># Assuming 612 subcarriers, this will print: &quot;(3, 612)&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">myREs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>          <span class="c1"># Assuming 612 subcarriers, this will print: "(3, 612)"</span>
 
-<span class="n">indexes</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>   <span class="c1"># Get the indices of all DM-RS REs</span>
+<span class="n">indexes</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">"DMRS"</span><span class="p">)</span>   <span class="c1"># Get the indices of all DM-RS REs</span>
 <span class="n">dmrsValues</span> <span class="o">=</span> <span class="n">myGrid</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span>            <span class="c1"># Get all DM-RS values as a 1-D array.</span>
 </pre></div>
 </div>
@@ -228,15 +228,15 @@ examples of accessing the RE values in the resource grid:</p>
 <li><p><em>Writing</em>: You can assign different values to different REs in the resource grid. Here are a few examples:</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the RE at layer 1, symbol 2, and subcarrier 3 to the value</span>
-<span class="c1"># 0.707 - 0.707j and RE type &quot;DMRS&quot;.</span>
-<span class="n">myGrid</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.707</span> <span class="o">-</span> <span class="mf">0.707</span><span class="n">j</span><span class="p">,</span> <span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>
+<span class="c1"># 0.707 - 0.707j and RE type "DMRS".</span>
+<span class="n">myGrid</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.707</span> <span class="o">-</span> <span class="mf">0.707</span><span class="n">j</span><span class="p">,</span> <span class="s2">"DMRS"</span><span class="p">)</span>
 
-<span class="c1"># Mark all REs in the time symbol 5 as &quot;RESERVED&quot; for layer 1. The</span>
+<span class="c1"># Mark all REs in the time symbol 5 as "RESERVED" for layer 1. The</span>
 <span class="c1"># RE values are set to 0 in this case.</span>
-<span class="n">myGrid</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,:]</span> <span class="o">=</span> <span class="s2">&quot;RESERVED&quot;</span>
+<span class="n">myGrid</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,:]</span> <span class="o">=</span> <span class="s2">"RESERVED"</span>
 
 <span class="c1"># Update the 3 RE values at layer 0, subcarrier 5, and symbols [1, 4, 7]</span>
-<span class="c1"># and set their RE content type to the grid&#39;s default content type.</span>
+<span class="c1"># and set their RE content type to the grid's default content type.</span>
 <span class="n">myGrid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.948</span> <span class="o">-</span> <span class="mf">0.948</span><span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.316</span><span class="o">+</span><span class="mf">0.316</span><span class="n">j</span><span class="p">,</span> <span class="mf">0.316</span><span class="o">-</span><span class="mf">0.948</span><span class="n">j</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -342,14 +342,14 @@ this resource grid.</p>
 <dd><p>Returns the indices of all resource elements in the resource grid with the content type specified by the
 <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>. For example, the code below gets the indices of all DM-RS resource elements in the resource grid
 and uses the returned indices to retrieve these values. Here are some examples:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dmrsIdx</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>   <span class="c1"># Get the indices of all DM-RS resource elements</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dmrsIdx</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">"DMRS"</span><span class="p">)</span>   <span class="c1"># Get the indices of all DM-RS resource elements</span>
 <span class="n">dmrsValues</span> <span class="o">=</span> <span class="n">myGrid</span><span class="p">[</span><span class="n">dmrsIdx</span><span class="p">]</span>            <span class="c1"># Get all DM-RS values as a 1-D array.</span>
 
 <span class="c1"># Get indices of all CSI-RS resource elements</span>
-<span class="n">allCsiRsIdx</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;CSIRS_NZP&quot;</span><span class="p">)</span>
+<span class="n">allCsiRsIdx</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">"CSIRS_NZP"</span><span class="p">)</span>
 
 <span class="c1"># Get indices of CSI-RS resource elements corresponding to a CsiRs with resourceId=1</span>
-<span class="n">csiRsIdx1</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;CSIRS_NZP&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Get indices of CSI-RS resource elements for the CsiRs</span>
+<span class="n">csiRsIdx1</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">"CSIRS_NZP"</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Get indices of CSI-RS resource elements for the CsiRs</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -427,8 +427,8 @@ used directly to access REs at the specified locations. (See the above example)<
 <dd><p>Returns the values of all resource elements in the resource grid with the content type specified by the
 <code class="docutils literal notranslate"><span class="pre">reTypeStr</span></code>. This is a shortcut method that allows accessing all the values in one step. For example, the
 following two methods are equivalent.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dmrsValues1</span> <span class="o">=</span> <span class="n">myGrid</span><span class="p">[</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;DMRS&quot;</span><span class="p">)</span> <span class="p">]</span> <span class="c1"># Get indices, then access values</span>
-<span class="n">dmrsValues2</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReValues</span><span class="p">(</span><span class="s2">&quot;DMRS&quot;</span><span class="p">)</span>            <span class="c1"># Using this method</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dmrsValues1</span> <span class="o">=</span> <span class="n">myGrid</span><span class="p">[</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">"DMRS"</span><span class="p">)</span> <span class="p">]</span> <span class="c1"># Get indices, then access values</span>
+<span class="n">dmrsValues2</span> <span class="o">=</span> <span class="n">myGrid</span><span class="o">.</span><span class="n">getReValues</span><span class="p">(</span><span class="s2">"DMRS"</span><span class="p">)</span>            <span class="c1"># Using this method</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">dmrsValues1</span><span class="o">==</span><span class="n">dmrsValues2</span><span class="p">)</span>             <span class="c1"># The results are the same</span>
 </pre></div>
 </div>

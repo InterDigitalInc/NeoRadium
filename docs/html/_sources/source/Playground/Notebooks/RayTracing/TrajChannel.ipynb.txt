@@ -7,11 +7,11 @@
    "source": [
     "# Applying a Trajectory-Based Channel in the Frequency and Time Domains\n",
     "\n",
-    "This notebook demonstrates how to apply a **NeoRadium** trajectory-based channel in both the frequency domain and the time domain. It first opens a [DeepMIMO](https://www.deepmimo.net) scenario, creates a random UE trajectory, and then creates a [TrjChannel](https://ail-wireless.pages.interdigital.com/neoradium/source/API/Channels.html#neoradium.trjchan.TrjChannel) object from that trajectory.\n",
+    "This notebook demonstrates how to apply a **NeoRadium** trajectory-based channel in both the frequency domain and the time domain. It first opens a [DeepMIMO](https://www.deepmimo.net) scenario, creates a random UE trajectory, and then creates a [TrjChannel](https://interdigitalinc.github.io/NeoRadium/html/source/API/Channels.html#neoradium.trjchan.TrjChannel) object from that trajectory.\n",
     "\n",
     "The notebook then creates a random transmit resource grid and applies the same channel in two different ways:\n",
     "\n",
-    "1. **Frequency-domain channel application:** the channel matrix is obtained from the [TrjChannel](https://ail-wireless.pages.interdigital.com/neoradium/source/API/Channels.html#neoradium.trjchan.TrjChannel) object and applied directly to the transmit resource grid.\n",
+    "1. **Frequency-domain channel application:** the channel matrix is obtained from the [TrjChannel](https://interdigitalinc.github.io/NeoRadium/html/source/API/Channels.html#neoradium.trjchan.TrjChannel) object and applied directly to the transmit resource grid.\n",
     "2. **Time-domain channel application:** the transmit resource grid is first converted to a waveform using OFDM modulation, the trajectory-based channel is applied to the waveform, and the received waveform is synchronized and demodulated back to a resource grid.\n",
     "\n",
     "Finally, the notebook compares the received resource grids from the two methods using the normalized mean squared error (NMSE).\n",

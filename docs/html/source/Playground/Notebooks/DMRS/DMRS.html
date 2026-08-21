@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exploring PDSCH DM-RS Configurations &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Exploring PDSCH DM-RS Configurations &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -101,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -189,12 +189,12 @@ Bandwidth Part Properties:
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
 
 <span class="c1"># Print some statistics about the PDSCH resource grid</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of resource elements:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of resource elements:"</span><span class="p">)</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"  </span><span class="si">%-15s</span><span class="s2"> </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="o">+</span><span class="s2">":"</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 
 <span class="c1"># Draw grid map for both layers</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Default DMRS configuration&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">portSet</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Default DMRS configuration"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -247,14 +247,14 @@ Number of resource elements:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s see an example of DM-RS with double symbols (symbols=2) - (shown for one layer only)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let's see an example of DM-RS with double symbols (symbols=2) - (shown for one layer only)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="c1"># Reinitialize the PDSCH resource grid because the DM-RS configuration has changed</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
 
 <span class="c1"># Draw grid map for first layer</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;DM-RS with Double Symbols&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"DM-RS with Double Symbols"</span><span class="p">);</span>
 <br/></pre></div>
 </div>
 </div>
@@ -274,7 +274,7 @@ Number of resource elements:
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
 
 <span class="c1"># Draw grid map for first layer</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;DM-RS with Two Additional Symbol Positions (additionalPos=2)&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"DM-RS with Two Additional Symbol Positions (additionalPos=2)"</span><span class="p">);</span>
 <br/></pre></div>
 </div>
 </div>
@@ -293,7 +293,7 @@ Number of resource elements:
 <span class="c1"># Note that this works only for PDSCH with Mapping Type A</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">typeA1stPos</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;DM-RS Starting at Symbol Index 3 (typeA1stPos=3)&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"DM-RS Starting at Symbol Index 3 (typeA1stPos=3)"</span><span class="p">);</span>
 <br/></pre></div>
 </div>
 </div>
@@ -308,10 +308,10 @@ Number of resource elements:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let&#39;s see an example of DM-RS configuration type 2 and double DMRS symbols (symbols=2)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now let's see an example of DM-RS configuration type 2 and double DMRS symbols (symbols=2)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;DM-RS Configuration Type 2 with Double Symbols&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"DM-RS Configuration Type 2 with Double Symbols"</span><span class="p">);</span>
 <br/></pre></div>
 </div>
 </div>
@@ -329,7 +329,7 @@ Number of resource elements:
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using 2 additional symbol positions for DMRS (additionalPos=2)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Configuration Type 2 with Single-Symbol DM-RS</span><span class="se">\n</span><span class="s2">and Two Additional Symbol Positions&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Configuration Type 2 with Single-Symbol DM-RS</span><span class="se">\n</span><span class="s2">and Two Additional Symbol Positions"</span><span class="p">);</span>
 <br/></pre></div>
 </div>
 </div>
@@ -348,7 +348,7 @@ Number of resource elements:
 <span class="c1"># Note that this works only for PDSCH with Mapping Type A</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">typeA1stPos</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Starting at symbol index 3 (typeA1stPos=3)&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Starting at symbol index 3 (typeA1stPos=3)"</span><span class="p">);</span>
 <br/></pre></div>
 </div>
 </div>
@@ -365,13 +365,13 @@ Number of resource elements:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now using a PDSCH with mapping type B (DM-RS symbols are relative to PDSCH start symbol)</span>
 <span class="c1"># This PDSCH uses OFDM symbols 1 through 9.</span>
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">mappingType</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symStart</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">symLen</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">mappingType</span><span class="o">=</span><span class="s1">'B'</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symStart</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">symLen</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
 
 <span class="c1"># Default DM-RS settings with one additional symbol position and double symbols</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">additionalPos</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Mapping Type B with Double-Symbol DM-RS</span><span class="se">\n</span><span class="s2">and One Additional Symbol Positions&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Mapping Type B with Double-Symbol DM-RS</span><span class="se">\n</span><span class="s2">and One Additional Symbol Positions"</span><span class="p">);</span>
 <br/></pre></div>
 </div>
 </div>
@@ -421,12 +421,12 @@ PDSCH Properties:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use a PDSCH with mapping type B over OFDM symbols 1 through 11.</span>
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">mappingType</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symStart</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">symLen</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">mappingType</span><span class="o">=</span><span class="s1">'B'</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">symStart</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">symLen</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
 
 <span class="c1"># Now using configuration type 2 with 3 additional symbol positions</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Mapping Type B with configuration type 2</span><span class="se">\n</span><span class="s2">and Three Additional Symbol Positions&quot;</span><span class="p">);</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Mapping Type B with configuration type 2</span><span class="se">\n</span><span class="s2">and Three Additional Symbol Positions"</span><span class="p">);</span>
 <br/></pre></div>
 </div>
 </div>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HARQ Event Callback &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>HARQ Event Callback &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -106,7 +106,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -146,12 +146,12 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span>              <span class="c1"># Modulation scheme</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">modulation</span><span class="o">=</span><span class="s2">"16QAM"</span>              <span class="c1"># Modulation scheme</span>
 <span class="n">coderate</span> <span class="o">=</span> <span class="mi">490</span><span class="o">/</span><span class="mi">1024</span>             <span class="c1"># Target code rate</span>
 <span class="n">numLayers</span> <span class="o">=</span> <span class="mi">1</span>                   <span class="c1"># To test this with 2 codewords, set this to a value between 5 and 8</span>
 <span class="n">txBlockSizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10000</span><span class="p">,</span><span class="mi">10000</span><span class="p">]</span>    <span class="c1"># Transport block size (TBS) (one per codeword)</span>
 <span class="n">ldpc</span> <span class="o">=</span> <span class="n">LdpcCodec</span><span class="p">(</span><span class="n">modulation</span><span class="p">,</span> <span class="n">coderate</span><span class="p">,</span> <span class="n">txBlockSizes</span><span class="p">,</span> <span class="n">numLayers</span><span class="p">)</span>
-<span class="n">ldpc</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>                    <span class="c1"># Print the LDPC encoder&#39;s properties</span>
+<span class="n">ldpc</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>                    <span class="c1"># Print the LDPC encoder's properties</span>
 </pre></div>
 </div>
 </div>
@@ -188,10 +188,10 @@ LDPC Encode/Decode Properties:
 <span class="k">def</span><span class="w"> </span><span class="nf">handleEvents</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">harqCW</span><span class="p">):</span>
     <span class="c1"># event: The event string. It can be one of ”RXFAILED”, ”RXSUCCESS”, or ”TIMEOUT”</span>
     <span class="c1"># harqCW: The instance of HarqCW class that triggered the event</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HARQ Process </span><span class="si">{</span><span class="n">harqCW</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">   CW</span><span class="si">{</span><span class="n">harqCW</span><span class="o">.</span><span class="n">cwIdx</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event</span><span class="si">:</span><span class="s2">10s</span><span class="si">}</span><span class="s2">   curTry: </span><span class="si">{</span><span class="n">harqCW</span><span class="o">.</span><span class="n">curTry</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"HARQ Process </span><span class="si">{</span><span class="n">harqCW</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">   CW</span><span class="si">{</span><span class="n">harqCW</span><span class="o">.</span><span class="n">cwIdx</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event</span><span class="si">:</span><span class="s2">10s</span><span class="si">}</span><span class="s2">   curTry: </span><span class="si">{</span><span class="n">harqCW</span><span class="o">.</span><span class="n">curTry</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-<span class="c1"># Create the HARQ entity with &quot;Chase Combining&quot; and 8 processes</span>
-<span class="n">harq</span> <span class="o">=</span> <span class="n">HarqEntity</span><span class="p">(</span><span class="n">ldpc</span><span class="p">,</span> <span class="n">harqType</span><span class="o">=</span><span class="s2">&quot;CC&quot;</span><span class="p">,</span> <span class="n">numProc</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">eventCallback</span><span class="o">=</span><span class="n">handleEvents</span><span class="p">)</span>
+<span class="c1"># Create the HARQ entity with "Chase Combining" and 8 processes</span>
+<span class="n">harq</span> <span class="o">=</span> <span class="n">HarqEntity</span><span class="p">(</span><span class="n">ldpc</span><span class="p">,</span> <span class="n">harqType</span><span class="o">=</span><span class="s2">"CC"</span><span class="p">,</span> <span class="n">numProc</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">eventCallback</span><span class="o">=</span><span class="n">handleEvents</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -213,7 +213,7 @@ LDPC Encode/Decode Properties:
 <span class="n">numTransmissions</span> <span class="o">=</span> <span class="mi">50</span>                                   <span class="c1"># Total number of transmissions</span>
 
 <span class="n">harq</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>                                            <span class="c1"># Reset HARQ for each execution of this cell</span>
-<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numTransmissions</span><span class="p">):</span>                       <span class="c1"># Run this &quot;numTransmissions&quot; times</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numTransmissions</span><span class="p">):</span>                       <span class="c1"># Run this "numTransmissions" times</span>
     <span class="n">txBlocks</span> <span class="o">=</span> <span class="p">[]</span>                                       <span class="c1"># Transport blocks. One per codeword.</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">harq</span><span class="o">.</span><span class="n">numCW</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">harq</span><span class="o">.</span><span class="n">needNewData</span><span class="p">[</span><span class="n">c</span><span class="p">]:</span>                         <span class="c1"># New transmission.</span>
@@ -231,7 +231,7 @@ LDPC Encode/Decode Properties:
 
     <span class="n">decodedTxBlocks</span><span class="p">,</span> <span class="n">blockErrors</span> <span class="o">=</span> <span class="n">harq</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>
     <span class="n">harq</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>                                       <span class="c1"># Get ready for the next transmission</span>
-<span class="n">harq</span><span class="o">.</span><span class="n">printStats</span><span class="p">()</span>                                       <span class="c1"># Print HARQ entity&#39;s statistics</span>
+<span class="n">harq</span><span class="o">.</span><span class="n">printStats</span><span class="p">()</span>                                       <span class="c1"># Print HARQ entity's statistics</span>
 </pre></div>
 </div>
 </div>

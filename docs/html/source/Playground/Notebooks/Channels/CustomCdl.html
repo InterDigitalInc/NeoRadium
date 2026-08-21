@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Customizing CDL Channels &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Customizing CDL Channels &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -109,7 +109,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -154,19 +154,19 @@
 <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">numPorts</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>                    <span class="c1"># Create an empty resource grid</span>
 
 <span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>                              <span class="c1"># Get statistics about the resource grid</span>
-<span class="n">modem</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>                                 <span class="c1"># Use 16QAM modulation</span>
-<span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;UNASSIGNED&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>           <span class="c1"># Total number of bits available in the resource grid</span>
+<span class="n">modem</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s2">"16QAM"</span><span class="p">)</span>                                 <span class="c1"># Use 16QAM modulation</span>
+<span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">'UNASSIGNED'</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>           <span class="c1"># Total number of bits available in the resource grid</span>
 
 <span class="n">bits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numRandomBits</span><span class="p">)</span>                      <span class="c1"># Generate random bits</span>
 <span class="n">symbols</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>                         <span class="c1"># Modulate bits to obtain symbols</span>
 
-<span class="n">Indices</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;UNASSIGNED&quot;</span><span class="p">)</span>            <span class="c1"># Indices of the &quot;UNASSIGNED&quot; resources</span>
+<span class="n">Indices</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">"UNASSIGNED"</span><span class="p">)</span>            <span class="c1"># Indices of the "UNASSIGNED" resources</span>
 <span class="n">txGrid</span><span class="p">[</span><span class="n">Indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbols</span>                              <span class="c1"># Map symbols to the resource grid</span>
 
 <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>                     <span class="c1"># OFDM-modulate the resource grid to obtain a waveform</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of Resource Grid:&quot;</span><span class="p">,</span><span class="n">txGrid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of Waveform:     &quot;</span><span class="p">,</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Shape of Resource Grid:"</span><span class="p">,</span><span class="n">txGrid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Shape of Waveform:     "</span><span class="p">,</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -187,9 +187,9 @@ Shape of Waveform:      (8, 30720)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a CDL-C channel model with 300 ns delay spread, 4 GHz carrier frequency, and 5 Hz Doppler shift</span>
 <span class="c1"># with angle scaling</span>
-<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>       <span class="c1"># 8 TX antennas</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>       <span class="c1"># 2 RX antennas</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">'D'</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">),</span>       <span class="c1"># 8 TX antennas</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">),</span>       <span class="c1"># 2 RX antennas</span>
                      <span class="n">angleScaling</span> <span class="o">=</span> <span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">85</span><span class="p">],</span>         <span class="c1"># Mean values for AoDs, AoAs, ZoDs, ZoAs</span>
                                      <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]))</span>           <span class="c1"># Spread values for AoDs, AoAs, ZoDs, ZoAs</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
@@ -259,15 +259,15 @@ CDL-D Channel Properties:
 <span class="c1"># the original path powers are attenuated by 3 dB</span>
 <span class="c1"># Note: If you want to set your own delays:</span>
 <span class="c1">#   - Values must be in normalized form similar to those in TR 38.901,</span>
-<span class="c1">#     Tables 7.7.1-1 to 7.7.1-5. They are scaled using &#39;delaySpread&#39;.</span>
+<span class="c1">#     Tables 7.7.1-1 to 7.7.1-5. They are scaled using 'delaySpread'.</span>
 <span class="c1">#   - The values must be in increasing order.</span>
-<span class="n">delays</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="o">.</span><span class="n">getCdlParams</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s2">&quot;delay&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
-<span class="n">powers</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="o">.</span><span class="n">getCdlParams</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s2">&quot;power&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span>
-<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="n">delays</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="o">.</span><span class="n">getCdlParams</span><span class="p">(</span><span class="s1">'D'</span><span class="p">,</span> <span class="s2">"delay"</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="n">powers</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="o">.</span><span class="n">getCdlParams</span><span class="p">(</span><span class="s1">'D'</span><span class="p">,</span> <span class="s2">"power"</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">'D'</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                      <span class="n">pathDelays</span> <span class="o">=</span> <span class="n">delays</span><span class="p">,</span>
                      <span class="n">pathPowers</span> <span class="o">=</span> <span class="n">powers</span><span class="p">,</span>
-                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>       <span class="c1"># 8 TX antennas</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">))</span>       <span class="c1"># 2 RX antennas</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">),</span>       <span class="c1"># 8 TX antennas</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">))</span>       <span class="c1"># 2 RX antennas</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -332,14 +332,14 @@ CDL-D Channel Properties:
 <span class="c1"># Notes:</span>
 <span class="c1">#   - The profile must be set to None to indicate a customized CDL model.</span>
 <span class="c1">#   - The delays must be in increasing order.</span>
-<span class="c1">#   - The delays must be in nanoseconds (&#39;delaySpread&#39; is ignored).</span>
+<span class="c1">#   - The delays must be in nanoseconds ('delaySpread' is ignored).</span>
 <span class="c1">#   - Azimuth angles are in the range [-180°, 180°].</span>
 <span class="c1">#   - Zenith angles are in the range [0°, 180°] (90° is horizontal).</span>
 <span class="c1">#   - Path powers are specified in dB.</span>
 <span class="c1">#   - If a line-of-sight (LOS) path exists, the path information should follow the</span>
 <span class="c1">#     CDL rules for specular and Laplacian paths. Refer to TR 38.901, Tables</span>
 <span class="c1">#     7.7.1-4 and 7.7.1-5 for CDL-D and CDL-E, respectively, and follow those patterns.</span>
-<span class="c1">#   - Set the &#39;hasLos&#39; argument based on your path information.</span>
+<span class="c1">#   - Set the 'hasLos' argument based on your path information.</span>
 <span class="n">delays</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">200</span><span class="p">])</span>                          <span class="c1"># Delays (ns)</span>
 <span class="n">powers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.4</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.2</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mf">8.2</span><span class="p">])</span>                       <span class="c1"># Path powers in dB</span>
 <span class="n">aods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">160</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">131</span><span class="p">,</span> <span class="o">-</span><span class="mi">81</span><span class="p">,</span> <span class="mi">148</span><span class="p">])</span>                          <span class="c1"># Azimuth angles of departure (degrees)</span>
@@ -354,8 +354,8 @@ CDL-D Channel Properties:
                      <span class="n">zods</span> <span class="o">=</span> <span class="n">zods</span><span class="p">,</span> <span class="n">zoas</span> <span class="o">=</span> <span class="n">zoas</span><span class="p">,</span>
                      <span class="n">hasLos</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                      <span class="n">angleSpreads</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>                      <span class="c1"># Customized angle spreads</span>
-                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span> <span class="c1"># 8 TX antennas</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">))</span> <span class="c1"># 2 RX antennas</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">),</span> <span class="c1"># 8 TX antennas</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">))</span> <span class="c1"># 2 RX antennas</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
 </pre></div>
@@ -411,7 +411,7 @@ Customized CDL Channel Properties:
 <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>
 <span class="n">rxGridF</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>
 <span class="n">t1</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time to apply channel in Freq. Domain:&quot;</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Time to apply channel in Freq. Domain:"</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -436,8 +436,8 @@ Time to apply channel in Freq. Domain: 0.003696918487548828
 <span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>                 <span class="c1"># Apply timing synchronization</span>
 <span class="n">rxGridT</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>             <span class="c1"># OFDM-demodulate the waveform to obtain a resource grid</span>
 <span class="n">t1</span> <span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time to apply channel in Time Domain:&quot;</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NMSE between the rxGrid in Time and Freq. domains: &quot;</span><span class="p">,</span> <span class="n">getNmse</span><span class="p">(</span><span class="n">rxGridT</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="n">rxGridF</span><span class="o">.</span><span class="n">grid</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Time to apply channel in Time Domain:"</span><span class="p">,</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"NMSE between the rxGrid in Time and Freq. domains: "</span><span class="p">,</span> <span class="n">getNmse</span><span class="p">(</span><span class="n">rxGridT</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="n">rxGridF</span><span class="o">.</span><span class="n">grid</span><span class="p">))</span>
 <br/></pre></div>
 </div>
 </div>

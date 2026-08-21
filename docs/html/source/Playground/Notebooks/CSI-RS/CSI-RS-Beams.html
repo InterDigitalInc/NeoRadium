@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CSI-RS Configuration for Beam Management &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>CSI-RS Configuration for Beam Management &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -105,7 +105,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -153,12 +153,12 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a &#39;BandwidthPart&#39; and a CDL-C channel object:</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a 'BandwidthPart' and a CDL-C channel object:</span>
 <span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">52</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
-<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                     <span class="n">txAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">65</span><span class="p">,</span><span class="mi">65</span><span class="p">]),</span>
-                     <span class="n">rxAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">65</span><span class="p">,</span><span class="mi">360</span><span class="p">]),</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">'C'</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                     <span class="n">txAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">'x'</span><span class="p">,</span> <span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">65</span><span class="p">,</span><span class="mi">65</span><span class="p">]),</span>
+                     <span class="n">rxAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s1">'x'</span><span class="p">,</span> <span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">65</span><span class="p">,</span><span class="mi">360</span><span class="p">]),</span>
                      <span class="n">rxOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
 <br/></pre></div>
@@ -224,9 +224,9 @@ CDL-C Channel Properties:
 <p><strong>Notes:</strong></p>
 <ol class="arabic simple">
 <li><p>This method uses a simple static beam sweeping/probing approach. In practice, adaptive beam sweeping can be used by incorporating the previously selected probing beam into the subsequent sweeping set and centering future sweeps around it. This approach resembles a wider beam probing around the current best beam, including a few wider beams to detect beam drift and prevent getting stuck in a local maximum.</p></li>
-<li><p>The <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/CsiReport.html#neoradium.csireport.CsiReportMan.beamformingReports">beamformingReports</a> class method may be used to create a <code class="docutils literal notranslate"><span class="pre">CsiReportMan</span></code> object containing CSI report information corresponding to the CSI-RS resources created by <code class="docutils literal notranslate"><span class="pre">beamformingConfig</span></code>.</p></li>
+<li><p>The <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/CsiReport.html#neoradium.csireport.CsiReportMan.beamformingReports">beamformingReports</a> class method may be used to create a <code class="docutils literal notranslate"><span class="pre">CsiReportMan</span></code> object containing CSI report information corresponding to the CSI-RS resources created by <code class="docutils literal notranslate"><span class="pre">beamformingConfig</span></code>.</p></li>
 </ol>
-<p>For more details, refer to the documentation of <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/RefSig.html#neoradium.csirs.CsiRsConfig.beamformingConfig">beamformingConfig</a>.</p>
+<p>For more details, refer to the documentation of <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/RefSig.html#neoradium.csirs.CsiRsConfig.beamformingConfig">beamformingConfig</a>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -421,10 +421,10 @@ CSI-RS Configuration: (3 Resource Sets)
 <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="o">.</span><span class="n">numPorts</span><span class="p">)</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">txGrid</span><span class="p">)</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="n">rsIdStrs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;CSIRS_NZP&quot;</span> <span class="ow">in</span> <span class="n">key</span> <span class="p">]</span>
+<span class="n">rsIdStrs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"("</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s2">"CSIRS_NZP"</span> <span class="ow">in</span> <span class="n">key</span> <span class="p">]</span>
 
 <span class="n">axes</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
-                      <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Grid map for slot </span><span class="si">{</span><span class="mi">0</span><span class="si">}</span><span class="s2"> with CSI-RS Resource IDs: </span><span class="si">{</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rsIdStrs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                      <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Grid map for slot </span><span class="si">{</span><span class="mi">0</span><span class="si">}</span><span class="s2"> with CSI-RS Resource IDs: </span><span class="si">{</span><span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rsIdStrs</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1"># Callback function to update the grid map</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">updateMap</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
@@ -437,8 +437,8 @@ CSI-RS Configuration: (3 Resource Sets)
     <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="o">.</span><span class="n">numPorts</span><span class="p">)</span>
     <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">txGrid</span><span class="p">)</span>
     <span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-    <span class="n">rsIdStrs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;CSIRS_NZP&quot;</span> <span class="ow">in</span> <span class="n">key</span> <span class="p">]</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Grid map for slot </span><span class="si">{</span><span class="n">frame</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="s1">&#39;No CSI-RS resources&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">rsIdStrs</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;CSI-RS Resource IDs: &#39;</span><span class="o">+</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rsIdStrs</span><span class="p">))</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="n">rsIdStrs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"("</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s2">"CSIRS_NZP"</span> <span class="ow">in</span> <span class="n">key</span> <span class="p">]</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Grid map for slot </span><span class="si">{</span><span class="n">frame</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="s1">'No CSI-RS resources'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">rsIdStrs</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">(</span><span class="s1">'CSI-RS Resource IDs: '</span><span class="o">+</span><span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rsIdStrs</span><span class="p">))</span><span class="si">}</span><span class="s2">)"</span>
     <span class="n">txGrid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">()</span>
 
@@ -447,8 +447,8 @@ CSI-RS Configuration: (3 Resource Sets)
 <span class="n">anim</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FuncAnimation</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">updateMap</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>  <span class="n">interval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">blit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>      <span class="c1"># Prevent duplicate static plots</span>
 
-<span class="n">anim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;CsiRsBeams.gif&quot;</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="n">animation</span><span class="o">.</span><span class="n">PillowWriter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>      <span class="c1"># Show one frames per second</span>
-<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;![demo](CsiRsBeams.gif)&quot;</span><span class="p">))</span>
+<span class="n">anim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">"CsiRsBeams.gif"</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="n">animation</span><span class="o">.</span><span class="n">PillowWriter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>      <span class="c1"># Show one frames per second</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"![demo](CsiRsBeams.gif)"</span><span class="p">))</span>
 
 <span class="c1"># Another option is to use the following command which gives you more controls for running</span>
 <span class="c1"># the animation.</span>

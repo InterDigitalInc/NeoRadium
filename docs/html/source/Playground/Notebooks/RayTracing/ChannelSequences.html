@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Creating Temporally and Spatially Consistent Channel-Matrix Sequences &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Creating Temporally and Spatially Consistent Channel-Matrix Sequences &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -113,7 +113,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -134,12 +134,12 @@
              
   <section id="Creating-Temporally-and-Spatially-Consistent-Channel-Matrix-Sequences">
 <h1>Creating Temporally and Spatially Consistent Channel-Matrix Sequences<a class="headerlink" href="#Creating-Temporally-and-Spatially-Consistent-Channel-Matrix-Sequences" title="Link to this heading"></a></h1>
-<p>This notebook demonstrates how to use NeoRadium’s <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/Channels.html#neoradium.trjchan.TrjChannel.getChanSeqGen">TrjChannel.getChanSeqGen</a> method to create temporally and spatially consistent sequences of channel matrices from a trajectory-based channel model.</p>
-<p>The notebook first opens a <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario, creates a random UE trajectory, and then creates a <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/Channels.html#neoradium.trjchan.TrjChannel">TrjChannel</a> object from that trajectory. The trajectory-based channel is then used to generate sequences of channel matrices as the UE moves along the trajectory.</p>
+<p>This notebook demonstrates how to use NeoRadium’s <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/Channels.html#neoradium.trjchan.TrjChannel.getChanSeqGen">TrjChannel.getChanSeqGen</a> method to create temporally and spatially consistent sequences of channel matrices from a trajectory-based channel model.</p>
+<p>The notebook first opens a <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario, creates a random UE trajectory, and then creates a <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/Channels.html#neoradium.trjchan.TrjChannel">TrjChannel</a> object from that trajectory. The trajectory-based channel is then used to generate sequences of channel matrices as the UE moves along the trajectory.</p>
 <p>Two examples are shown:</p>
 <ol class="arabic simple">
-<li><p><strong>Raw channel-matrix sequences:</strong> <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/Channels.html#neoradium.trjchan.TrjChannel.getChanSeqGen">getChanSeqGen</a> is used to generate sequences of channel matrices sampled along the trajectory. Each sequence contains multiple channel snapshots separated by a fixed number of trajectory points.</p></li>
-<li><p><strong>Effective channel-matrix sequences with callbacks:</strong> <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/Channels.html#neoradium.trjchan.TrjChannel.getChanSeqGen">getChanSeqGen</a> is used with callback functions to generate effective channel matrices after PDSCH-based precoding. The callbacks are used to process individual channel matrices and optionally filter generated sequences.</p></li>
+<li><p><strong>Raw channel-matrix sequences:</strong> <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/Channels.html#neoradium.trjchan.TrjChannel.getChanSeqGen">getChanSeqGen</a> is used to generate sequences of channel matrices sampled along the trajectory. Each sequence contains multiple channel snapshots separated by a fixed number of trajectory points.</p></li>
+<li><p><strong>Effective channel-matrix sequences with callbacks:</strong> <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/Channels.html#neoradium.trjchan.TrjChannel.getChanSeqGen">getChanSeqGen</a> is used with callback functions to generate effective channel matrices after PDSCH-based precoding. The callbacks are used to process individual channel matrices and optionally filter generated sequences.</p></li>
 </ol>
 <p>The generated channel sequences are stacked into NumPy arrays so that their dimensions can be inspected and used as datasets for further processing.</p>
 <section id="Notes">
@@ -166,11 +166,11 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace this with the folder on your system where the DeepMIMO scenarios are stored</span>
-<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">&quot;/data/RayTracing/DeepMIMO/Scenarios/V4/&quot;</span>
+<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">"/data/RayTracing/DeepMIMO/Scenarios/V4/"</span>
 <span class="n">DeepMimoData</span><span class="o">.</span><span class="n">setScenariosPath</span><span class="p">(</span><span class="n">dataFolder</span><span class="p">)</span>
 
 <span class="c1"># Create a DeepMimoData object</span>
-<span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">)</span>
+<span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"asu_campus_3p5"</span><span class="p">)</span>
 <span class="n">deepMimoData</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -213,7 +213,7 @@ DeepMimoData Properties:
                                               <span class="n">speedMps</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span> <span class="c1"># Speed in m/s</span>
 
 <span class="n">trajectory</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>                                  <span class="c1"># Print the trajectory information</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>   <span class="c1"># Draw the map with the trajectory</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">"LOS-NLOS"</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>   <span class="c1"># Draw the map with the trajectory</span>
 <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>                   <span class="c1"># TX antenna with a 180-degree bearing angle</span>
 </pre></div>
 </div>
@@ -253,8 +253,8 @@ Trajectory Properties:
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a trajectory-based channel model</span>
 <span class="n">channel</span> <span class="o">=</span> <span class="n">TrjChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span>
                      <span class="n">txOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="c1"># BS antenna facing the left side of the map</span>
-                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="c1"># 16 TX antennas</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">))</span> <span class="c1"># 4 RX antennas</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">),</span> <span class="c1"># 16 TX antennas</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">))</span> <span class="c1"># 4 RX antennas</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -323,7 +323,7 @@ TrjChannel Properties:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">chanSeqGen</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># Reset so this cell can be rerun and produce the same sequence list</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chanSeq</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chanSeqGen</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of sequence </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">chanSeq</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of sequence </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">chanSeq</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -361,9 +361,9 @@ Shape of sequence 19: (10, 14, 288, 4, 16)
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The following example uses the callback functions to modify the channel sequences</span>
 <span class="n">channel</span> <span class="o">=</span> <span class="n">TrjChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span>
                      <span class="n">txOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="c1"># BS antenna facing the left side of the map</span>
-                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="c1"># 16 TX antennas</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">))</span> <span class="c1"># 4 RX antennas</span>
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span> <span class="c1"># Create a PDSCH object with two layers</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">),</span> <span class="c1"># 16 TX antennas</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">))</span> <span class="c1"># 4 RX antennas</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">"16QAM"</span><span class="p">)</span> <span class="c1"># Create a PDSCH object with two layers</span>
 
 
 <span class="c1"># Channel callback used to process each channel matrix</span>

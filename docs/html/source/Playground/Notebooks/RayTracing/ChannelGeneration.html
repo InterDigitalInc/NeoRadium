@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generating Random Channel Matrices from a DeepMIMO Scenario &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Generating Random Channel Matrices from a DeepMIMO Scenario &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -113,7 +113,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -134,10 +134,10 @@
              
   <section id="Generating-Random-Channel-Matrices-from-a-DeepMIMO-Scenario">
 <h1>Generating Random Channel Matrices from a DeepMIMO Scenario<a class="headerlink" href="#Generating-Random-Channel-Matrices-from-a-DeepMIMO-Scenario" title="Link to this heading"></a></h1>
-<p>This notebook demonstrates how to use <strong>NeoRadium</strong>’s <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen">DeepMimoData.getChanGen</a> function to generate random channel matrices from a <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario.</p>
+<p>This notebook demonstrates how to use <strong>NeoRadium</strong>’s <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen">DeepMimoData.getChanGen</a> function to generate random channel matrices from a <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario.</p>
 <p>The notebook first opens a DeepMIMO scenario and displays a map of the simulation area. It then creates channel generators for two examples:</p>
 <ol class="arabic simple">
-<li><p><strong>SISO channel generation with default settings:</strong> creates 1,000 single-input single-output channel matrices using the default <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen">getChanGen</a> settings.</p></li>
+<li><p><strong>SISO channel generation with default settings:</strong> creates 1,000 single-input single-output channel matrices using the default <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen">getChanGen</a> settings.</p></li>
 <li><p><strong>Filtered MIMO channel generation:</strong> creates 1,000 multiple-input multiple-output channel matrices using additional filtering criteria, including LOS/NLOS condition, UE distance, UE position, and custom TX/RX antenna configurations.</p></li>
 </ol>
 <p>The generated channel matrices are collected into NumPy arrays using <code class="docutils literal notranslate"><span class="pre">np.stack</span></code>, and the resulting array shapes are printed to show the dimensions of the generated channel datasets.</p>
@@ -145,8 +145,8 @@
 <h2>Notes<a class="headerlink" href="#Notes" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>The user may need to update the <code class="docutils literal notranslate"><span class="pre">dataFolder</span></code> variable based on the location of the DeepMIMO scenario files on their system.</p></li>
-<li><p>The <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen">getChanGen</a> function returns a channel generator. The channel matrices are generated when the generator is iterated over.</p></li>
-<li><p>The selected UE points can be visualized on the DeepMIMO map using <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.drawMap">drawMap</a>.</p></li>
+<li><p>The <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.getChanGen">getChanGen</a> function returns a channel generator. The channel matrices are generated when the generator is iterated over.</p></li>
+<li><p>The selected UE points can be visualized on the DeepMIMO map using <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/DeepMIMO.html#neoradium.deepmimo.DeepMimoData.drawMap">drawMap</a>.</p></li>
 <li><p>Points with total blockage are ignored by the channel generator.</p></li>
 <li><p>If the requested filtering criteria are too restrictive, the generator may return fewer channels than requested, or no channels at all.</p></li>
 </ul>
@@ -164,11 +164,11 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace this with the folder on your system where the DeepMIMO scenarios are stored</span>
-<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">&quot;/data/RayTracing/DeepMIMO/Scenarios/V4/&quot;</span>
+<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">"/data/RayTracing/DeepMIMO/Scenarios/V4/"</span>
 <span class="n">DeepMimoData</span><span class="o">.</span><span class="n">setScenariosPath</span><span class="p">(</span><span class="n">dataFolder</span><span class="p">)</span>
 
 <span class="c1"># Create a DeepMimoData object</span>
-<span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">)</span>
+<span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"asu_campus_3p5"</span><span class="p">)</span>
 <span class="n">deepMimoData</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -202,7 +202,7 @@ DeepMimoData Properties:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Draw a map of the scenario showing line-of-sight (LOS) vs non-line-of-sight (NLOS) communication</span>
 <span class="c1"># between the UEs and the base station.</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">)</span>   <span class="c1"># Other map options include &quot;1stPathDelays&quot; and &quot;1stPathPowers&quot;</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">"LOS-NLOS"</span><span class="p">)</span>   <span class="c1"># Other map options include "1stPathDelays" and "1stPathPowers"</span>
 <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>       <span class="c1"># TX antenna with a 180-degree bearing angle</span>
 </pre></div>
 </div>
@@ -225,11 +225,11 @@ DeepMimoData Properties:
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>                  <span class="c1"># Create a BandwidthPart object</span>
 <span class="n">chanGen</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">getChanGen</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1234</span><span class="p">)</span>     <span class="c1"># Create a channel generator with default settings</span>
 
-<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">chanGen</span><span class="o">.</span><span class="n">pointIdx</span><span class="p">)</span>     <span class="c1"># Draw the selected points on the map</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">"LOS-NLOS"</span><span class="p">,</span> <span class="n">chanGen</span><span class="o">.</span><span class="n">pointIdx</span><span class="p">)</span>     <span class="c1"># Draw the selected points on the map</span>
 <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>                           <span class="c1"># TX antenna with a 180-degree bearing angle</span>
 
 <span class="n">allChannels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">chan</span> <span class="k">for</span> <span class="n">chan</span> <span class="ow">in</span> <span class="n">chanGen</span><span class="p">])</span>          <span class="c1"># Create the channel matrices</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of &#39;allChannels&#39;: </span><span class="si">{</span><span class="n">allChannels</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of 'allChannels': </span><span class="si">{</span><span class="n">allChannels</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -268,19 +268,19 @@ Shape of &#39;allChannels&#39;: (1000, 14, 288, 1, 1)
                                   <span class="n">ueSpeed</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span>            <span class="c1"># Use random UE speed between 10 and 20 m/s</span>
                                   <span class="n">ueDir</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">270</span><span class="p">],</span>             <span class="c1"># Use random UE direction: right or down</span>
                                   <span class="n">txOrientation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">180</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>    <span class="c1"># BS antenna facing the left side of the map</span>
-                                  <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>    <span class="c1"># 16 TX antennas</span>
-                                  <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>    <span class="c1"># 4 RX antennas</span>
+                                  <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">),</span>    <span class="c1"># 16 TX antennas</span>
+                                  <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">),</span>    <span class="c1"># 4 RX antennas</span>
                                   <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">)</span>                   <span class="c1"># Make the results reproducible</span>
 
 
-<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">chanGen</span><span class="o">.</span><span class="n">pointIdx</span><span class="p">)</span>         <span class="c1"># Draw the selected points on the map</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">"LOS-NLOS"</span><span class="p">,</span> <span class="n">chanGen</span><span class="o">.</span><span class="n">pointIdx</span><span class="p">)</span>         <span class="c1"># Draw the selected points on the map</span>
 <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>                               <span class="c1"># TX antenna with a 180-degree bearing angle</span>
 
 <span class="c1"># Create the channel matrices</span>
 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chanGen</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No channels were generated. Try relaxing the filter criteria.&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"No channels were generated. Try relaxing the filter criteria."</span><span class="p">)</span>
 <span class="n">allChannels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">chan</span> <span class="k">for</span> <span class="n">chan</span> <span class="ow">in</span> <span class="n">chanGen</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of &#39;allChannels&#39;: </span><span class="si">{</span><span class="n">allChannels</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of 'allChannels': </span><span class="si">{</span><span class="n">allChannels</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

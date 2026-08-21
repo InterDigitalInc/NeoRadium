@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generating the Dataset for Channel Estimation Training &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Generating the Dataset for Channel Estimation Training &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -75,6 +75,7 @@
 <li class="toctree-l4"><a class="reference internal" href="MLChEstEvaluateHARQ.html">Evaluating Communication Throughput with HARQ</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id2">LWM-Spectro: A Foundation Model for Wireless Baseband Signal Spectrograms</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#other-examples">Other Examples</a></li>
@@ -107,7 +108,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -160,12 +161,12 @@
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">makeDataset</span><span class="p">(</span><span class="n">numSlots</span><span class="p">,</span> <span class="n">snrDbs</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">pdsch</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">freqDomain</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="n">bwp</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">bwp</span>                       <span class="c1"># The only bandwidth part in the carrier</span>
 
-    <span class="c1"># We don&#39;t need to use channel coding in the pipeline during dataset generation. However, we need</span>
+    <span class="c1"># We don't need to use channel coding in the pipeline during dataset generation. However, we need</span>
     <span class="c1"># to know the code-block sizes to be able to find the corresponding REs in the grid. The following</span>
     <span class="c1"># code calculates the code-block sizes for each of the four code blocks.</span>
     <span class="n">ldpc</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLdpcCodec</span><span class="p">(</span><span class="n">coderates</span><span class="o">=</span><span class="mi">490</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
 
-    <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                            <span class="c1"># Create and initialize PDSCH&#39;s internal grid</span>
+    <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                            <span class="c1"># Create and initialize PDSCH's internal grid</span>
     <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()</span>                            <span class="c1"># number of bits available in the resource grid</span>
     <span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">ldpc</span><span class="o">.</span><span class="n">txBlockSizes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>                 <span class="c1"># Create random binary data for txBlock</span>
     <span class="n">rateMatchedCBs</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">txBlock</span><span class="p">,</span> <span class="n">numBits</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">concatCBs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -173,20 +174,20 @@
 
     <span class="c1"># Create a random CDL channel-matrix generator</span>
     <span class="n">chanGen</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="o">.</span><span class="n">getChanGen</span><span class="p">(</span><span class="n">numSlots</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span>              <span class="c1"># Number of channels and bandwidth part</span>
-                                    <span class="n">profiles</span><span class="o">=</span><span class="s2">&quot;ABCDE&quot;</span><span class="p">,</span>           <span class="c1"># Randomly pick a CDL profile</span>
+                                    <span class="n">profiles</span><span class="o">=</span><span class="s2">"ABCDE"</span><span class="p">,</span>           <span class="c1"># Randomly pick a CDL profile</span>
                                     <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>            <span class="c1"># 300 ns</span>
                                     <span class="n">ueSpeed</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>                <span class="c1"># 0.5 m/s ≈ 6.7 Hz Doppler</span>
                                     <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span>            <span class="c1"># Carrier frequency</span>
-                                    <span class="n">txAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>  <span class="c1"># 16 TX antennas</span>
-                                    <span class="n">rxAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span>  <span class="c1"># 4 RX antennas</span>
+                                    <span class="n">txAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">),</span>  <span class="c1"># 16 TX antennas</span>
+                                    <span class="n">rxAntenna</span><span class="o">=</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">),</span>  <span class="c1"># 4 RX antennas</span>
                                     <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
 
     <span class="n">samples</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>                        <span class="c1"># Initialize samples and labels</span>
     <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>                           <span class="c1"># Start time for time estimation</span>
     <span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Making dataset for </span><span class="si">{</span><span class="n">numSlots</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> slots&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Making dataset for </span><span class="si">{</span><span class="n">numSlots</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> slots"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">channelMatrix</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chanGen</span><span class="p">):</span>
-        <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                            <span class="c1"># Create and initialize PDSCH&#39;s internal grid</span>
+        <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                            <span class="c1"># Create and initialize PDSCH's internal grid</span>
         <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>         <span class="c1"># Number of bits available in the resource grid</span>
         <span class="n">txBits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numBits</span><span class="p">)</span>               <span class="c1"># Create random binary data</span>
 
@@ -227,8 +228,8 @@
 
         <span class="c1"># Print progress messages</span>
         <span class="n">remainTime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="n">dt</span><span class="o">/</span><span class="n">percentDone</span><span class="o">-</span><span class="n">dt</span><span class="p">))</span>       <span class="c1"># Estimated remaining time</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">percentDone</span><span class="p">)</span><span class="si">}</span><span class="s2">% done in </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> Sec., Remaining time: </span><span class="si">{</span><span class="n">remainTime</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> Sec.&quot;</span><span class="p">,</span>
-              <span class="n">end</span><span class="o">=</span><span class="s1">&#39;            </span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">percentDone</span><span class="p">)</span><span class="si">}</span><span class="s2">% done in </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> Sec., Remaining time: </span><span class="si">{</span><span class="n">remainTime</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> Sec."</span><span class="p">,</span>
+              <span class="n">end</span><span class="o">=</span><span class="s1">'            </span><span class="se">\r</span><span class="s1">'</span><span class="p">)</span>
 
     <span class="c1"># n: Number of samples in the dataset, pp: Number of ports, ll: Number of OFDM symbols, kk: Number of subcarriers</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>       <span class="c1"># n x 2*(pp+1) x ll x kk</span>
@@ -236,9 +237,9 @@
 
     <span class="k">if</span> <span class="n">fileName</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">samples</span><span class="p">,</span><span class="n">labels</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>   <span class="c1"># Save the dataset to the specified file</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  Done. (</span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> Sec.) Saved to </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">fileName</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">.                       &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\r</span><span class="s2">  Done. (</span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> Sec.) Saved to </span><span class="se">\"</span><span class="si">{</span><span class="n">fileName</span><span class="si">}</span><span class="se">\"</span><span class="s2">.                       "</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">  Done. (</span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> Sec.)                                                &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\r</span><span class="s2">  Done. (</span><span class="si">{</span><span class="n">dt</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> Sec.)                                                "</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">samples</span><span class="p">,</span> <span class="n">labels</span>
 </pre></div>
@@ -251,18 +252,18 @@
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>  <span class="c1"># Create a BandwidthPart object</span>
 
 <span class="c1"># Create a 2-layer PDSCH object with type-2 DMRS on symbols 2 and 11</span>
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">"16QAM"</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="n">dataPath</span> <span class="o">=</span> <span class="s2">&quot;/data/datasets/SelfRefine/&quot;</span>     <span class="c1"># Replace with the location of your data files</span>
+<span class="n">dataPath</span> <span class="o">=</span> <span class="s2">"/data/datasets/SelfRefine/"</span>     <span class="c1"># Replace with the location of your data files</span>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>        <span class="c1"># Create the data folder if it does not exist</span>
 
 <span class="n">snrDbs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span><span class="mf">.5</span><span class="p">)</span>               <span class="c1"># Set the range of SNR values (in dB)</span>
 
 <span class="c1"># Create training, validation, and test dataset files (About 30 GB of disk space needed):</span>
-<span class="n">makeDataset</span><span class="p">(</span><span class="mi">17500</span><span class="p">,</span> <span class="n">snrDbs</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span> <span class="n">pdsch</span><span class="o">=</span><span class="n">pdsch</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">&quot;Train.npy&quot;</span><span class="p">))</span>
-<span class="n">makeDataset</span><span class="p">(</span><span class="mi">2500</span><span class="p">,</span>  <span class="n">snrDbs</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">456</span><span class="p">,</span> <span class="n">pdsch</span><span class="o">=</span><span class="n">pdsch</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">&quot;Valid.npy&quot;</span><span class="p">))</span>
-<span class="n">makeDataset</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span>  <span class="n">snrDbs</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">789</span><span class="p">,</span> <span class="n">pdsch</span><span class="o">=</span><span class="n">pdsch</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">&quot;Test.npy&quot;</span><span class="p">));</span>
+<span class="n">makeDataset</span><span class="p">(</span><span class="mi">17500</span><span class="p">,</span> <span class="n">snrDbs</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span> <span class="n">pdsch</span><span class="o">=</span><span class="n">pdsch</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">"Train.npy"</span><span class="p">))</span>
+<span class="n">makeDataset</span><span class="p">(</span><span class="mi">2500</span><span class="p">,</span>  <span class="n">snrDbs</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">456</span><span class="p">,</span> <span class="n">pdsch</span><span class="o">=</span><span class="n">pdsch</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">"Valid.npy"</span><span class="p">))</span>
+<span class="n">makeDataset</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span>  <span class="n">snrDbs</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">789</span><span class="p">,</span> <span class="n">pdsch</span><span class="o">=</span><span class="n">pdsch</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">"Test.npy"</span><span class="p">));</span>
 </pre></div>
 </div>
 </div>

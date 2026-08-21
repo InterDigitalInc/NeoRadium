@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Animating Channel Condition Number Along a UE Trajectory &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Animating Channel Condition Number Along a UE Trajectory &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -113,7 +113,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -135,7 +135,7 @@
   <section id="Animating-Channel-Condition-Number-Along-a-UE-Trajectory">
 <h1>Animating Channel Condition Number Along a UE Trajectory<a class="headerlink" href="#Animating-Channel-Condition-Number-Along-a-UE-Trajectory" title="Link to this heading"></a></h1>
 <p>This notebook demonstrates how to use <strong>NeoRadium</strong> to evaluate and animate the condition number of a trajectory-based channel as a UE moves along a trajectory in a <a class="reference external" href="https://www.deepmimo.net">DeepMIMO</a> scenario.</p>
-<p>The notebook first opens a DeepMIMO scenario, creates a random UE trajectory, and then creates a <a class="reference external" href="https://ail-wireless.pages.interdigital.com/neoradium/source/API/Channels.html#neoradium.trjchan.TrjChannel">TrjChannel</a> object from that trajectory. As the UE moves along the trajectory, the notebook computes the channel condition number from the channel matrix and updates an animation.</p>
+<p>The notebook first opens a DeepMIMO scenario, creates a random UE trajectory, and then creates a <a class="reference external" href="https://interdigitalinc.github.io/NeoRadium/html/source/API/Channels.html#neoradium.trjchan.TrjChannel">TrjChannel</a> object from that trajectory. As the UE moves along the trajectory, the notebook computes the channel condition number from the channel matrix and updates an animation.</p>
 <p>The animation shows the UE moving along the trajectory on the DeepMIMO map. Below the map, two graphs are updated as the UE moves:</p>
 <ol class="arabic simple">
 <li><p><strong>Condition number:</strong> shows the average condition number over each animation update interval, with a shaded region indicating the minimum-to-maximum range.</p></li>
@@ -168,11 +168,11 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Replace this with the folder on your system where the DeepMIMO scenarios are stored</span>
-<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">&quot;/data/RayTracing/DeepMIMO/Scenarios/V4/&quot;</span>
+<span class="n">dataFolder</span> <span class="o">=</span> <span class="s2">"/data/RayTracing/DeepMIMO/Scenarios/V4/"</span>
 <span class="n">DeepMimoData</span><span class="o">.</span><span class="n">setScenariosPath</span><span class="p">(</span><span class="n">dataFolder</span><span class="p">)</span>
 
 <span class="c1"># Create a DeepMimoData object</span>
-<span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">)</span>
+<span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"asu_campus_3p5"</span><span class="p">)</span>
 <span class="n">deepMimoData</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -215,7 +215,7 @@ DeepMimoData Properties:
                                               <span class="n">speedMps</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>  <span class="c1"># Speed in m/s</span>
 
 <span class="n">trajectory</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>                                  <span class="c1"># Print the trajectory information</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>   <span class="c1"># Draw the map with the trajectory</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">"LOS-NLOS"</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>   <span class="c1"># Draw the map with the trajectory</span>
 <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>                   <span class="c1"># TX antenna with a 180-degree bearing angle</span>
 </pre></div>
 </div>
@@ -271,22 +271,27 @@ Trajectory Properties:
 
 <span class="c1"># A callback function used to draw condition-number and path-count graphs below the animated trajectory</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">handleGraph</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;Config&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">==</span><span class="s2">"Config"</span><span class="p">:</span>
         <span class="c1"># Configure both graphs</span>
         <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span><span class="p">)</span>
-        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Condition Number (dB)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">70</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Condition Number (dB)"</span><span class="p">)</span>
         <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="s1">'red'</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">([],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="n">color</span><span class="o">=</span><span class="s1">'pink'</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Set `numGraphs` to 2 to draw the number of paths in the second graph</span>
             <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span><span class="p">)</span>
-            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Number of Paths&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Number of Paths"</span><span class="p">)</span>
             <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([],</span> <span class="p">[],</span> <span class="s1">'blue'</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;ConfigMap&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">"ConfigMap"</span><span class="p">:</span>
         <span class="c1"># Customize the drawn map</span>
-        <span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>     <span class="c1"># TX antenna with a 180-degree bearing angle</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">drawBsPanel</span><span class="p">(</span><span class="mi">180</span><span class="p">)</span>         <span class="c1"># Draw TX antenna panel (180-degree bearing angle)</span>
 
-    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">&quot;Draw&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">request</span><span class="o">==</span><span class="s2">"Draw"</span><span class="p">:</span>
         <span class="c1"># Per-frame updates to the graphs below the map</span>
         <span class="c1"># ax is an array with `numGraphs` elements</span>
         <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">points</span>
@@ -300,16 +305,12 @@ Trajectory Properties:
             <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
         <span class="n">cnMin</span><span class="p">,</span> <span class="n">cnMean</span><span class="p">,</span> <span class="n">cnMax</span><span class="p">,</span> <span class="n">numPaths</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">cnMin</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">cnMean</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">cnMax</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">numPaths</span><span class="p">)</span>
 
-        <span class="k">global</span> <span class="n">prevInfo</span>
-        <span class="n">prevMin</span><span class="p">,</span> <span class="n">prevMean</span><span class="p">,</span> <span class="n">prevMax</span><span class="p">,</span> <span class="n">prevNumPaths</span> <span class="o">=</span> <span class="n">prevInfo</span>
-        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">],</span> <span class="p">[</span><span class="n">prevMean</span><span class="p">,</span>  <span class="n">cnMean</span><span class="p">],</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_between</span><span class="p">([</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">],</span> <span class="p">[</span><span class="n">prevMin</span><span class="p">,</span>  <span class="n">cnMin</span><span class="p">],</span> <span class="p">[</span><span class="n">prevMax</span><span class="p">,</span>  <span class="n">cnMax</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;pink&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-
+        <span class="n">updatedItems</span> <span class="o">=</span> <span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">addNewPoint</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">cnMean</span><span class="p">),</span>
+                        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">addNewRange</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">cnMin</span><span class="p">,</span> <span class="n">cnMax</span><span class="p">)</span> <span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Set `numGraphs` to 2 to draw the number of paths in the second graph</span>
-            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">],</span> <span class="p">[</span><span class="n">prevNumPaths</span><span class="p">,</span>  <span class="n">numPaths</span><span class="p">],</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">prevInfo</span> <span class="o">=</span> <span class="p">[</span><span class="n">cnMin</span><span class="p">,</span> <span class="n">cnMean</span><span class="p">,</span> <span class="n">cnMax</span><span class="p">,</span> <span class="n">numPaths</span><span class="p">]</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">Processed trajectory point: </span><span class="si">{</span><span class="n">p1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">updatedItems</span> <span class="o">+=</span> <span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">addNewPoint</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">numPaths</span><span class="p">),)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\r</span><span class="s2">Processed trajectory point: </span><span class="si">{</span><span class="n">p1</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">updatedItems</span>
 <br/></pre></div>
 </div>
 </div>
@@ -362,15 +363,14 @@ TrjChannel Properties:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the animation, save it as a GIF, and display it below. This step may take some time.</span>
 <span class="n">channel</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
-<span class="n">prevInfo</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="n">anim</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">animateTrajectory</span><span class="p">(</span><span class="n">trajectory</span><span class="p">,</span> <span class="n">numGraphs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pointsPerFrame</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-                                      <span class="n">graphCallback</span><span class="o">=</span><span class="n">handleGraph</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="s1">&#39;AnimateCN.gif&#39;</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;![demo](AnimateCN.gif)&quot;</span><span class="p">))</span>
+                                      <span class="n">graphCallback</span><span class="o">=</span><span class="n">handleGraph</span><span class="p">,</span> <span class="n">fileName</span><span class="o">=</span><span class="s1">'AnimateCN.gif'</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"![demo](AnimateCN.gif)"</span><span class="p">))</span>
 
 <span class="c1"># Another option is to use the following command which gives you more controls for running</span>
 <span class="c1"># the animation.</span>
 <span class="c1">#    # Increase the animation memory limit for HTML-based animation display</span>
-<span class="c1">#    matplotlib.rcParams[&#39;animation.embed_limit&#39;] = 100000000</span>
+<span class="c1">#    matplotlib.rcParams['animation.embed_limit'] = 100000000</span>
 <span class="c1">#    HTML(anim.to_jshtml())</span>
 </pre></div>
 </div>

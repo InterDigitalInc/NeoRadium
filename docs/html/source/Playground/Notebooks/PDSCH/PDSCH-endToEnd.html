@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>End-to-End PDSCH Communication Simulation &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>End-to-End PDSCH Communication Simulation &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -121,7 +121,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -318,15 +318,15 @@ LDPC Encode/Decode Properties:
 <span class="c1"># Populate the PDSCH resource grid with the coded data. This includes QAM modulation and resource mapping.</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setPdschData</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TX Block Size:                        </span><span class="si">{</span><span class="n">ldpc</span><span class="o">.</span><span class="n">txBlockSizes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Resource grid capacity (bits):        </span><span class="si">{</span><span class="n">numBits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Size of the rate-matched coded block: </span><span class="si">{</span><span class="n">rateMatchedCodeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"TX Block Size:                        </span><span class="si">{</span><span class="n">ldpc</span><span class="o">.</span><span class="n">txBlockSizes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Resource grid capacity (bits):        </span><span class="si">{</span><span class="n">numBits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Size of the rate-matched coded block: </span><span class="si">{</span><span class="n">rateMatchedCodeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1"># Get statistics for the resource-grid allocation</span>
 <span class="n">gridStats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Grid Allocation Stats:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Grid Allocation Stats:"</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">gridStats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">key</span><span class="o">+</span><span class="s2">&quot;:&quot;</span><span class="si">:</span><span class="s2">&lt;10s</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">key</span><span class="o">+</span><span class="s2">":"</span><span class="si">:</span><span class="s2">&lt;10s</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1"># Draw a resource-grid map showing the data and DMRS in the first RB of the BWP</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">();</span>
@@ -367,9 +367,9 @@ Grid Allocation Stats:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a CdlChannel object</span>
-<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>  <span class="c1"># 8 TX antennas</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">))</span>  <span class="c1"># 2 RX antennas</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">'C'</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">),</span>  <span class="c1"># 8 TX antennas</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">))</span>  <span class="c1"># 2 RX antennas</span>
 <span class="c1"># channel.print()                                       # Uncomment to print all channel information</span>
 
 <span class="c1"># Get the precoding matrix and precode the resource grid</span>
@@ -379,9 +379,9 @@ Grid Allocation Stats:
 <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">txAntenna</span><span class="p">))</span>         <span class="c1"># Create the transmit resource grid</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">precodeTo</span><span class="p">(</span><span class="n">txGrid</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>                       <span class="c1"># Perform the precoding</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of channel matrix:         </span><span class="si">{</span><span class="n">channelMatrix</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of resource grid:          </span><span class="si">{</span><span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of precoded resource grid: </span><span class="si">{</span><span class="n">txGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of channel matrix:         </span><span class="si">{</span><span class="n">channelMatrix</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of resource grid:          </span><span class="si">{</span><span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of precoded resource grid: </span><span class="si">{</span><span class="n">txGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -405,7 +405,7 @@ Shape of precoded resource grid: (8, 14, 624)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>
 <span class="c1"># txWaveform contains the time domain waveform for each transmit antenna</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of txWaveform: </span><span class="si">{</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of txWaveform: </span><span class="si">{</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -429,12 +429,12 @@ Shape of txWaveform: (8, 15360)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Append zeros to the end of the signal based on the maximum channel filter delay</span>
 <span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Maximum channel delay: </span><span class="si">{</span><span class="n">maxDelay</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Maximum channel delay: </span><span class="si">{</span><span class="n">maxDelay</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>
 
 <span class="c1"># Apply the channel to the transmitted signal</span>
 <span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of rxWaveform:   </span><span class="si">{</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of rxWaveform:   </span><span class="si">{</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -472,11 +472,11 @@ Shape of rxWaveform:   (2, 15447)
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Synchronization: get the timing offset</span>
 <span class="n">offset</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getTimingOffset</span><span class="p">()</span>
 <span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">noisyRxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Timing Offset:                   </span><span class="si">{</span><span class="n">offset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Timing Offset:                   </span><span class="si">{</span><span class="n">offset</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1"># OFDM demodulation</span>
 <span class="n">noisyRxGrid</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of received resource grid: </span><span class="si">{</span><span class="n">noisyRxGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of received resource grid: </span><span class="si">{</span><span class="n">noisyRxGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -506,7 +506,7 @@ Shape of received resource grid: (2, 14, 624)
 
 <span class="c1"># Compare the noisy received resource grids in the time and frequency domains.</span>
 <span class="c1"># Note that the difference is partly because of different noise values.</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NMSE between received grids in the time and frequency domains: </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">noisyRxGridFreq</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="w"> </span><span class="n">noisyRxGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"NMSE between received grids in the time and frequency domains: </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">noisyRxGridFreq</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="w"> </span><span class="n">noisyRxGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -539,8 +539,8 @@ NMSE between received grids in the time and frequency domains: 0.001305
 <span class="c1"># Least-squares channel estimation</span>
 <span class="n">estChannelMatrix</span><span class="p">,</span> <span class="n">errVar</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">estimateChannel</span><span class="p">(</span><span class="n">noisyRxGrid</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of perfect channel matrix:   </span><span class="si">{</span><span class="n">perfectChannelMatrix</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of estimated channel matrix: </span><span class="si">{</span><span class="n">estChannelMatrix</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of perfect channel matrix:   </span><span class="si">{</span><span class="n">perfectChannelMatrix</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of estimated channel matrix: </span><span class="si">{</span><span class="n">estChannelMatrix</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -566,14 +566,14 @@ Shape of estimated channel matrix: (14, 624, 2, 2)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using the perfect channel matrix</span>
 <span class="n">eqGridPerf</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">noisyRxGrid</span><span class="p">,</span> <span class="n">perfectChannelMatrix</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of equalized grid (perfect):                   </span><span class="si">{</span><span class="n">eqGridPerf</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of equalized grid (perfect):                   </span><span class="si">{</span><span class="n">eqGridPerf</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1"># Using the estimated channel matrix</span>
 <span class="n">eqGridEst</span><span class="p">,</span> <span class="n">llrScalesEst</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">noisyRxGrid</span><span class="p">,</span> <span class="n">estChannelMatrix</span><span class="p">,</span> <span class="n">errVar</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of equalized grid (estimated):                 </span><span class="si">{</span><span class="n">eqGridEst</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of equalized grid (estimated):                 </span><span class="si">{</span><span class="n">eqGridEst</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NMSE between equalized grids (perfect vs estimated): </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">eqGridPerf</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="w"> </span><span class="n">eqGridEst</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of LLR Scales:                                 </span><span class="si">{</span><span class="n">llrScales</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"NMSE between equalized grids (perfect vs estimated): </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">eqGridPerf</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="w"> </span><span class="n">eqGridEst</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of LLR Scales:                                 </span><span class="si">{</span><span class="n">llrScales</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -597,7 +597,7 @@ Shape of LLR Scales:                                 (2, 14, 624)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">llrs</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLLRs</span><span class="p">(</span><span class="n">eqGridPerf</span><span class="p">,</span> <span class="n">llrScales</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Length of LLRs for the first codeword: </span><span class="si">{</span><span class="n">llrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Length of LLRs for the first codeword: </span><span class="si">{</span><span class="n">llrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -619,9 +619,9 @@ the CRC matches for the whole transport block, and the remaining flags indicate 
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">decodedTxBlocks</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of decoded transport block: </span><span class="si">{</span><span class="n">decodedTxBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># decodedTxBlocks[0] -&gt; first codeword</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transport block CRC match:        </span><span class="si">{</span><span class="n">crcMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>            <span class="c1"># crcMatch[0] -&gt; CRC match flags for the first codeword</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CRC match for each decoded block: </span><span class="si">{</span><span class="n">crcMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of decoded transport block: </span><span class="si">{</span><span class="n">decodedTxBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>  <span class="c1"># decodedTxBlocks[0] -&gt; first codeword</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Transport block CRC match:        </span><span class="si">{</span><span class="n">crcMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>            <span class="c1"># crcMatch[0] -&gt; CRC match flags for the first codeword</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CRC match for each decoded block: </span><span class="si">{</span><span class="n">crcMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -643,8 +643,8 @@ CRC match for each decoded block: [ True  True  True  True]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of bit mismatches between the decoded and original transport blocks: &quot;</span>
-      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">decodedTxBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">txBlock</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of bit mismatches between the decoded and original transport blocks: "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">decodedTxBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">txBlock</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>

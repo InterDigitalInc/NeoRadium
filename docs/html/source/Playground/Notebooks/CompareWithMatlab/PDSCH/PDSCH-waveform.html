@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PDSCH Waveform generation &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>PDSCH Waveform generation &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -68,7 +68,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#research-papers">Research Papers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#other-examples">Other Examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id2">Antenna</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id3">Antenna</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#cdl-channel-model">CDL Channel Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#csi-rs">CSI-RS</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../../Playground.html#pdsch">PDSCH</a><ul class="current">
@@ -106,7 +106,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -137,7 +137,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">PDSCH</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">AntennaPanel</span><span class="p">,</span> <span class="n">LdpcEncoder</span><span class="p">,</span> <span class="n">LdpcDecoder</span><span class="p">,</span> <span class="n">Grid</span>
 
-<span class="n">matlabFilesPath</span> <span class="o">=</span> <span class="s2">&quot;./MatlabFiles&quot;</span>
+<span class="n">matlabFilesPath</span> <span class="o">=</span> <span class="s2">"./MatlabFiles"</span>
 <br/></pre></div>
 </div>
 </div>
@@ -264,7 +264,7 @@ PDSCH Properties:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dmrsSymbolsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">&#39;/dmrsSymbols.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;dmrsSymbols&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dmrsSymbolsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">'/dmrsSymbols.mat'</span><span class="p">)[</span><span class="s1">'dmrsSymbols'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 <span class="n">dmrsSymbolsMatlab</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
@@ -282,17 +282,17 @@ PDSCH Properties:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># MATLAB&#39;s DMRS symbols are in PRB order. NeoRadium Keeps everything VRB order before precoding. Here we</span>
-<span class="c1"># convert NeoRadium&#39;s DMRS symbols to PRB order before comparing them with MATLAB.</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># MATLAB's DMRS symbols are in PRB order. NeoRadium Keeps everything VRB order before precoding. Here we</span>
+<span class="c1"># convert NeoRadium's DMRS symbols to PRB order before comparing them with MATLAB.</span>
 <span class="n">reInx</span> <span class="o">=</span> <span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">prb2Grb</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="mi">12</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 <span class="n">dmrsSymbols</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,</span><span class="n">reInx</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[::</span><span class="mi">2</span><span class="p">]</span>
 
-<span class="n">dmrsSymbolsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">&#39;/dmrsSymbols.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;dmrsSymbols&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dmrsSymbolsMatlab</span><span class="o">-</span><span class="n">dmrsSymbols</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-10</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">dmrsSymbolsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">'/dmrsSymbols.mat'</span><span class="p">)[</span><span class="s1">'dmrsSymbols'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dmrsSymbolsMatlab</span><span class="o">-</span><span class="n">dmrsSymbols</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-10</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 
 <span class="c1"># Print the first 10 DMRS Symbols:</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DMRS Values:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">dmrsSymbols</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MATLAB-Generated DMRS Values:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">dmrsSymbolsMatlab</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"DMRS Values:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="n">dmrsSymbols</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MATLAB-Generated DMRS Values:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="n">dmrsSymbolsMatlab</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -329,7 +329,7 @@ MATLAB-Generated DMRS Values:
 <span class="c1"># bits = np.random.randint(2,size=numBits)  # Uncomment this to generate random bits</span>
 
 <span class="c1"># Loading the random bits from file to have deterministic results and be able to compare with MATLAB</span>
-<span class="n">bits</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">&#39;/pdschBits.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;pdschBits&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">bits</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">'/pdschBits.mat'</span><span class="p">)[</span><span class="s1">'pdschBits'</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 <span class="k">assert</span><span class="p">(</span><span class="n">numBits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">bits</span><span class="p">))</span>
 
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setPdschData</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>
@@ -348,12 +348,12 @@ MATLAB-Generated DMRS Values:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataSymbols</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getDataSymbols</span><span class="p">()</span>
 
-<span class="n">dataSymbolsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">&#39;/pdschSymbols.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;pdschSymbols&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dataSymbolsMatlab</span><span class="o">-</span><span class="n">dataSymbols</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-10</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">dataSymbolsMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">'/pdschSymbols.mat'</span><span class="p">)[</span><span class="s1">'pdschSymbols'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dataSymbolsMatlab</span><span class="o">-</span><span class="n">dataSymbols</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-10</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 
 <span class="c1"># Print the first 20 Data Symbols:</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data Symbols:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">dataSymbols</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MATLAB-Generated Data Symbols:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">dataSymbolsMatlab</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Data Symbols:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">dataSymbols</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MATLAB-Generated Data Symbols:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">dataSymbolsMatlab</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -389,7 +389,7 @@ MATLAB-Generated Data Symbols:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%-10s</span><span class="s2">: </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="si">%-10s</span><span class="s2">: </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -433,7 +433,7 @@ DMRS      : 624
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numTxAntenna</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">numTxAntenna</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">numTxAntenna</span><span class="p">)</span>
-<span class="c1"># Get a sub-matrix by using only the first &#39;numLayers&#39; rows and normalize it accordingly.</span>
+<span class="c1"># Get a sub-matrix by using only the first 'numLayers' rows and normalize it accordingly.</span>
 <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="p">[:</span><span class="n">pdsch</span><span class="o">.</span><span class="n">numLayers</span><span class="p">,:]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">pdsch</span><span class="o">.</span><span class="n">numLayers</span><span class="p">)</span>
 
 <span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">w</span>
@@ -477,13 +477,13 @@ DMRS      : 624
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdschGridMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">&#39;/pdschGrid.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;pdschGrid&#39;</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdschGridMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">'/pdschGrid.mat'</span><span class="p">)[</span><span class="s1">'pdschGrid'</span><span class="p">]</span>
 <span class="n">pdschGridMatlab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">pdschGridMatlab</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="c1"># MATLAB uses a different order</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">pdschGridMatlab</span><span class="o">-</span><span class="n">precodedGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-10</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">pdschGridMatlab</span><span class="o">-</span><span class="n">precodedGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-10</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 
 <span class="c1"># Print the first 10 Data Symbols:</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Precoded Grid:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">precodedGrid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MATLAB-Generated Precoded Grid:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">pdschGridMatlab</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Precoded Grid:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">precodedGrid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MATLAB-Generated Precoded Grid:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">pdschGridMatlab</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -512,13 +512,13 @@ MATLAB-Generated Precoded Grid:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">waveForm</span> <span class="o">=</span> <span class="n">precodedGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>
 <span class="n">waveForm</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
-<span class="n">waveformMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">&#39;/txWaveform.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;txWaveform&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="n">waveformMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span> <span class="o">+</span> <span class="s1">'/txWaveform.mat'</span><span class="p">)[</span><span class="s1">'txWaveform'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">waveForm</span><span class="p">[:]</span><span class="o">-</span><span class="n">waveformMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">&lt;</span><span class="mf">1e-10</span><span class="p">,</span> \
-    <span class="s2">&quot;MISMATCH WITH MATLAB!!! (max Diff: </span><span class="si">%f</span><span class="s2">)&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">waveForm</span><span class="o">-</span><span class="n">waveformMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+    <span class="s2">"MISMATCH WITH MATLAB!!! (max Diff: </span><span class="si">%f</span><span class="s2">)"</span><span class="o">%</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">waveForm</span><span class="o">-</span><span class="n">waveformMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 
 <span class="c1"># print the first 10 samples of the waveForm for first TX antenna</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Waveform Data:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">waveForm</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MATLAB-Generated Waveform Data:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">waveformMatlab</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Waveform Data:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">waveForm</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MATLAB-Generated Waveform Data:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">waveformMatlab</span><span class="p">[</span><span class="mi">0</span><span class="p">,:</span><span class="mi">10</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -550,9 +550,9 @@ MATLAB-Generated Waveform Data:
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">waveForm</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Samples&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Magnitude&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Magnitude of the time-domain waveform for the first antenna&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Samples"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Magnitude"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Magnitude of the time-domain waveform for the first antenna"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>

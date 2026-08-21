@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Physical Channels &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Physical Channels &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -111,7 +111,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -206,8 +206,8 @@ The default is <code class="docutils literal notranslate"><span class="pre">'16Q
 same modulation scheme is used for both codewords. If there are two codewords in this
 <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a>, and you want to use different modulation schemes for the two codewords, you
 can specify two different modulation schemes in a tuple or list of strings. For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using &quot;QPSK&quot; for the first codeword and &quot;16QAM&quot; for the second codeword</span>
-<span class="n">modulation</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;QPSK&quot;</span><span class="p">,</span> <span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using "QPSK" for the first codeword and "16QAM" for the second codeword</span>
+<span class="n">modulation</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"QPSK"</span><span class="p">,</span> <span class="s2">"16QAM"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The specified modulation scheme(s) are used to create one or two
@@ -534,7 +534,7 @@ shows how to migrate existing code to use this method:</p>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">rateMatchedCodeBlocks</span><span class="p">)</span>
 
 <span class="c1"># New:</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                             <span class="c1"># Create and initialize PDSCH&#39;s internal grid</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                             <span class="c1"># Create and initialize PDSCH's internal grid</span>
 <span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">ldpc</span><span class="o">.</span><span class="n">txBlockSizes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># Create random binary data</span>
 <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()</span>             <span class="c1"># Actual number of bits available in the resource grid</span>
 <span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">txBlock</span><span class="p">,</span> <span class="n">numBits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -750,11 +750,11 @@ following example shows how to migrate existing code to use this method:</p>
 <span class="sig-name descname"><span class="pre">getDataSymbols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.pdsch.PDSCH.getDataSymbols" title="Link to this definition"></a></dt>
 <dd><p>This is a helper function that returns the modulated complex symbols for all user data in <code class="docutils literal notranslate"><span class="pre">grid</span></code> for this
 <a class="reference internal" href="#neoradium.pdsch.PDSCH" title="neoradium.pdsch.PDSCH"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDSCH</span></code></a> object. The following code shows two different ways to do this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting the indices of user data in &quot;grid&quot; and then using them to get &quot;dataSymbols1&quot;:</span>
-<span class="n">dataReIndexes</span> <span class="o">=</span> <span class="n">myPdsch</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">&quot;PDSCH&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting the indices of user data in "grid" and then using them to get "dataSymbols1":</span>
+<span class="n">dataReIndexes</span> <span class="o">=</span> <span class="n">myPdsch</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">"PDSCH"</span><span class="p">)</span>
 <span class="n">dataSymbols1</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span> <span class="n">dataReIndexes</span> <span class="p">]</span>
 
-<span class="c1"># Using the &quot;getDataSymbols&quot; function:</span>
+<span class="c1"># Using the "getDataSymbols" function:</span>
 <span class="n">dataSymbols2</span> <span class="o">=</span> <span class="n">myPdsch</span><span class="o">.</span><span class="n">getDataSymbols</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
 
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">dataSymbols1</span><span class="o">==</span><span class="n">dataSymbols2</span><span class="p">)</span>             <span class="c1"># The results are the same</span>
@@ -861,9 +861,10 @@ of the resource blocks listed in <code class="docutils literal notranslate"><spa
 </dl>
 </p></li>
 <li><p><strong>w</strong> (<em>NumPy array</em><em>, </em><em>optional</em>) – An optional steering vector of shape <code class="docutils literal notranslate"><span class="pre">Nt</span> <span class="pre">x</span> <span class="pre">1</span></code> applied before the precoder, where <code class="docutils literal notranslate"><span class="pre">Nt</span></code> is the number of
-transmitter antennas. When provided, each row of the precoding matrix is multiplied by the corresponding
-element of <code class="docutils literal notranslate"><span class="pre">w</span></code>. This allows a directional steering vector to be combined with a PMI-based precoder. If
-omitted, only the specified precoder is applied.</p></li>
+transmitter antennas. When provided, the precoder is effectively pre-multiplied by <code class="docutils literal notranslate"><span class="pre">diag(w)</span></code> — that is,
+each transmit-antenna row of the precoder is scaled by the corresponding element of <code class="docutils literal notranslate"><span class="pre">w</span></code> before the
+precoder is applied to the grid. This allows a directional steering vector to be combined with a PMI-based
+precoder. If omitted, only the specified precoder is applied.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1010,11 +1011,11 @@ returned by that function must be passed to this function through the <code clas
 <code class="docutils literal notranslate"><span class="pre">errVar</span></code> is not exactly the AWGN noise variance applied to the received signal, it should be used for
 equalization whenever an estimated channel is used. The following example shows equalization with
 perfect channel knowledge versus equalization with an estimated channel:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using the perfect channel from a channel model &#39;channel&#39;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using the perfect channel from a channel model 'channel'</span>
 <span class="n">channelMatrix</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getChannelMatrix</span><span class="p">()</span>
 <span class="n">precoder</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getPrecodingMatrix</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">)</span>
 <span class="n">effChannelMatrix</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="o">.</span><span class="n">getEffChannel</span><span class="p">(</span><span class="n">channelMatrix</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>
-<span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">,</span> <span class="n">effChannelMatrix</span><span class="p">)</span>    <span class="c1"># &#39;noiseVar&#39; is stored in &#39;rxGrid&#39;</span>
+<span class="n">eqGrid</span><span class="p">,</span> <span class="n">llrScales</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">equalize</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">,</span> <span class="n">effChannelMatrix</span><span class="p">)</span>    <span class="c1"># 'noiseVar' is stored in 'rxGrid'</span>
 
 <span class="c1"># Using an estimated channel</span>
 <span class="n">estChannelMatrix</span><span class="p">,</span> <span class="n">errVar</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">estimateChannel</span><span class="p">(</span><span class="n">rxGrid</span><span class="p">)</span>

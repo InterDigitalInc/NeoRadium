@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Channel Timing &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Channel Timing &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -104,7 +104,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -154,17 +154,17 @@
 <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">numPorts</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>                     <span class="c1"># Create an empty resource grid (8 antenna ports)</span>
 
 <span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>                               <span class="c1"># Get grid statistics</span>
-<span class="n">modem</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>                                  <span class="c1"># Create a Modulator/Demodulator object</span>
-<span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;UNASSIGNED&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>            <span class="c1"># Calculate total number of bits available in the grid</span>
+<span class="n">modem</span> <span class="o">=</span> <span class="n">Modem</span><span class="p">(</span><span class="s2">"16QAM"</span><span class="p">)</span>                                  <span class="c1"># Create a Modulator/Demodulator object</span>
+<span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">'UNASSIGNED'</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>            <span class="c1"># Calculate total number of bits available in the grid</span>
 
 <span class="n">bits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numRandomBits</span><span class="p">)</span>                       <span class="c1"># Create random bits</span>
 <span class="n">symbols</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>                          <span class="c1"># Modulate the bits to complex symbols</span>
 
-<span class="n">indexes</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;UNASSIGNED&quot;</span><span class="p">)</span>             <span class="c1"># Get indexes of &quot;UNASSIGNED&quot; REs in the grid</span>
+<span class="n">indexes</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">"UNASSIGNED"</span><span class="p">)</span>             <span class="c1"># Get indexes of "UNASSIGNED" REs in the grid</span>
 <span class="n">txGrid</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbols</span>                               <span class="c1"># Set them to symbols</span>
 
 <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">(</span><span class="n">carrierFreq</span><span class="p">)</span>           <span class="c1"># OFDM modulation: Grid -&gt; Waveform</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of transmitted signal in time domain:&quot;</span><span class="p">,</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Shape of transmitted signal in time domain:"</span><span class="p">,</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -195,8 +195,8 @@ Shape of transmitted signal in time domain: (8, 15360)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Baseline performance (no channel, no noise): ofdmModulate → ofdmDemodulate</span>
 <span class="n">rxGridTD</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="n">carrierFreq</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NMSE: </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">txGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="n">rxGridTD</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MAE: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">txGrid</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="n">rxGridTD</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"NMSE: </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">txGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="n">rxGridTD</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"MAE: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">txGrid</span><span class="o">.</span><span class="n">grid</span><span class="o">-</span><span class="n">rxGridTD</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -214,9 +214,9 @@ MAE: 7.108895957933346e-16
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a CDL-D channel model</span>
-<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>  <span class="c1"># 8 TX antenna</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>  <span class="c1"># 2 RX antenna</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">'D'</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">),</span>  <span class="c1"># 8 TX antenna</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">),</span>  <span class="c1"># 2 RX antenna</span>
                      <span class="n">seed</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">)</span>
 <span class="n">channel</span>
 </pre></div>
@@ -288,7 +288,7 @@ CDL-D Channel Properties:
 <span class="n">rxGridFd</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">applyChannel</span><span class="p">(</span><span class="n">chanMat</span><span class="p">)</span>
 
 <span class="c1"># Compare time-domain vs. frequency-domain results</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NMSE: </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">rxGridFd</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="n">rxGridTd</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"NMSE: </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">rxGridFd</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="n">rxGridTd</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -313,10 +313,10 @@ NMSE: 8.292828250427552e-06
     <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">numPorts</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 
     <span class="n">stats</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getStats</span><span class="p">()</span>
-    <span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;UNASSIGNED&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>
+    <span class="n">numRandomBits</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">'UNASSIGNED'</span><span class="p">]</span><span class="o">*</span><span class="n">modem</span><span class="o">.</span><span class="n">qm</span>
     <span class="n">bits</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">numRandomBits</span><span class="p">)</span>
     <span class="n">symbols</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">modulate</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">&quot;UNASSIGNED&quot;</span><span class="p">)</span>
+    <span class="n">indexes</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">getReIndexes</span><span class="p">(</span><span class="s2">"UNASSIGNED"</span><span class="p">)</span>
     <span class="n">txGrid</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbols</span>
 
     <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">(</span><span class="n">carrierFreq</span><span class="p">)</span>
@@ -343,8 +343,8 @@ NMSE: 8.292828250427552e-06
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">chanMat</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">chanMat</span> <span class="ow">in</span> <span class="n">chanMats</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">gs</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;The channel gains for the first pair of RX/TX antenna </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">+</span>
-          <span class="s2">&quot;and first subcarrier during 100 slots&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"The channel gains for the first pair of RX/TX antenna </span><span class="se">\n</span><span class="s2">"</span><span class="o">+</span>
+          <span class="s2">"and first subcarrier during 100 slots"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 </pre></div>
 </div>

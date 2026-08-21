@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CSI Reporting &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>CSI Reporting &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -34,7 +34,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -100,7 +100,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -176,26 +176,34 @@ default is <code class="docutils literal notranslate"><span class="pre">5</span>
 <dd class="field-even"><p>Type of CSI quantity to report. Supported values are <code class="docutils literal notranslate"><span class="pre">&quot;Cri&quot;</span></code> (default),
 <code class="docutils literal notranslate"><span class="pre">&quot;RiPmiCqi&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;CriRiPmiCqi&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;RiPmi&quot;</span></code>.</p>
 </dd>
-<dt class="field-odd">txAntenna<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Transmit antenna configuration used for PMI/RI/CQI processing (An
+<dt class="field-odd">numCri<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Number of <code class="docutils literal notranslate"><span class="pre">(resourceId,</span> <span class="pre">RSRP)</span></code> pairs reported when <code class="docutils literal notranslate"><span class="pre">quantity</span></code> is set to
+<code class="docutils literal notranslate"><span class="pre">&quot;Cri&quot;</span></code>. If <code class="docutils literal notranslate"><span class="pre">1</span></code> (default), <code class="docutils literal notranslate"><span class="pre">CriFeedback.cri</span></code> is the resource ID corresponding
+to the highest RSRP, and <code class="docutils literal notranslate"><span class="pre">CriFeedback.rsrp</span></code> is that RSRP value (in dB). If
+<code class="docutils literal notranslate"><span class="pre">K</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">CriFeedback.cri</span></code> is a list of top-K resource IDs, and <code class="docutils literal notranslate"><span class="pre">CriFeedback.rsrp</span></code>
+is a list of their corresponding RSRP values (in dB, descending order). This
+Corresponds to <code class="docutils literal notranslate"><span class="pre">nrofReportedRS</span></code> in <strong>3GPP TS 38.214 and TS 38.331</strong>.</p>
+</dd>
+<dt class="field-even">txAntenna<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transmit antenna configuration used for PMI/RI/CQI processing (An
 <a class="reference internal" href="Antenna.html#neoradium.antenna.AntennaPanel" title="neoradium.antenna.AntennaPanel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AntennaPanel</span></code></a> object). This is required when
 quantity is set to <code class="docutils literal notranslate"><span class="pre">&quot;RiPmiCqi&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;RiPmi&quot;</span></code>.</p>
 </dd>
-<dt class="field-even">codebookType<span class="colon">:</span></dt>
-<dd class="field-even"><p>Precoder codebook type. Currently only <code class="docutils literal notranslate"><span class="pre">&quot;Type1SP&quot;</span></code> is supported.</p>
+<dt class="field-odd">codebookType<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Precoder codebook type. Currently only <code class="docutils literal notranslate"><span class="pre">&quot;Type1SP&quot;</span></code> is supported.</p>
 </dd>
-<dt class="field-odd">allowedRanks<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List of allowed transmission ranks considered during RI/PMI selection. The
+<dt class="field-even">allowedRanks<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of allowed transmission ranks considered during RI/PMI selection. The
 default is <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4]</span></code>.</p>
 </dd>
-<dt class="field-even">prgSize<span class="colon">:</span></dt>
-<dd class="field-even"><p>Size of precoding resource groups (PRGs). A value of 0 (default) means wideband PMI.</p>
+<dt class="field-odd">prgSize<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Size of precoding resource groups (PRGs). A value of 0 (default) means wideband PMI.</p>
 </dd>
-<dt class="field-odd">pmiGranularity<span class="colon">:</span></dt>
-<dd class="field-odd"><p>PMI granularity, either <code class="docutils literal notranslate"><span class="pre">&quot;wideband&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;subband&quot;</span></code>.</p>
+<dt class="field-even">pmiGranularity<span class="colon">:</span></dt>
+<dd class="field-even"><p>PMI granularity, either <code class="docutils literal notranslate"><span class="pre">&quot;wideband&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;subband&quot;</span></code>.</p>
 </dd>
-<dt class="field-even">cqiTable<span class="colon">:</span></dt>
-<dd class="field-even"><p>CQI table index as defined by <strong>3GPP TS 38.214</strong>. The default is <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<dt class="field-odd">cqiTable<span class="colon">:</span></dt>
+<dd class="field-odd"><p>CQI table index as defined by <strong>3GPP TS 38.214</strong>. The default is <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
 </dd>
 </dl>
 </p></li>
@@ -339,11 +347,16 @@ requested (e.g. the <code class="docutils literal notranslate"><span class="pre"
 contains:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>cri<span class="classifier">int</span></dt><dd><p>CSI-RS resource indicator. This identifies the CSI-RS resource selected by the
-receiver, corresponding to the strongest beam.</p>
+<dt>cri<span class="classifier">int or list of ints</span></dt><dd><p>CSI-RS resource indicator(s). If <code class="docutils literal notranslate"><span class="pre">numCri</span></code> is <code class="docutils literal notranslate"><span class="pre">1</span></code>, this identifies
+the resource ID corresponding to the highest RSRP. If <code class="docutils literal notranslate"><span class="pre">numCri</span></code> is <code class="docutils literal notranslate"><span class="pre">K</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>,
+this is a list of top-K resource IDs.</p>
 </dd>
-<dt>rsrp<span class="classifier">float</span></dt><dd><p>RSRP value (in dB) associated with the selected CSI-RS resource. This is the
-computed reference signal received power for the selected beam/resource.</p>
+<dt>rsrp<span class="classifier">float, list of floats, or None</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">numCri</span></code> is <code class="docutils literal notranslate"><span class="pre">1</span></code>, this is the RSRP value (in dB) associated with
+the CSI-RS resource identified by <code class="docutils literal notranslate"><span class="pre">cri</span></code>. If <code class="docutils literal notranslate"><span class="pre">numCri</span></code> is <code class="docutils literal notranslate"><span class="pre">K</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, this
+is a list of RSRP values corresponding to the cri list (in dB, descending order).
+This is set only when quantity=”Cri”.</p>
+</dd>
+<dt>score<span class="classifier">float or None</span></dt><dd><p>Spectral-efficiency score of the best beam. Set when quantity=”CriRiPmiCqi”.</p>
 </dd>
 </dl>
 </div></blockquote>

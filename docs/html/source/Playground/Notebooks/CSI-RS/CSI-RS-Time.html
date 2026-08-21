@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CSI-RS Timing Configurations &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>CSI-RS Timing Configurations &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -101,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -179,9 +179,9 @@ Bandwidth Part Properties:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using row 3 of 3GPP 38.211 Table 7.4.1.5.3-1</span>
-<span class="c1"># The default setting is a &#39;Periodic&#39; resource type with `period=4` and `offset=0`, meaning</span>
+<span class="c1"># The default setting is a 'Periodic' resource type with `period=4` and `offset=0`, meaning</span>
 <span class="c1"># slots 0, 4, and so on contain CSI-RS.</span>
-<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">2</span><span class="p">)])</span>
+<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">"NZP"</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">2</span><span class="p">)])</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 
 <span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">=</span> <span class="mi">0</span>
@@ -189,7 +189,7 @@ Bandwidth Part Properties:
     <span class="n">grid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="o">.</span><span class="n">numPorts</span><span class="p">)</span>
     <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
     <span class="c1"># Show only the first port</span>
-    <span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CSI-RS Slot Map, Slot </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span><span class="p">))</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"CSI-RS Slot Map, Slot </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span><span class="p">))</span>
     <span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
 </div>
@@ -262,7 +262,7 @@ CSI-RS Configuration: (1 Resource Sets)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using row 3 of 3GPP 38.211 Table 7.4.1.5.3-1</span>
 <span class="c1"># Same as before, but with `offset=1`, meaning slots 1, 5, and so on contain CSI-RS.</span>
-<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">)])</span>
+<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">"NZP"</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">)])</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 
 <span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">=</span> <span class="mi">0</span>
@@ -270,7 +270,7 @@ CSI-RS Configuration: (1 Resource Sets)
     <span class="n">grid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="o">.</span><span class="n">numPorts</span><span class="p">)</span>
     <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
     <span class="c1"># Show only the first port</span>
-    <span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CSI-RS Slot Map, Slot </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span><span class="p">))</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"CSI-RS Slot Map, Slot </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span><span class="p">))</span>
     <span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
 </div>
@@ -350,7 +350,7 @@ CSI-RS Configuration: (1 Resource Sets)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using row 3 of 3GPP 38.211 Table 7.4.1.5.3-1</span>
 <span class="c1"># Use `period=5` and `offset=2`; slots 2, 7, and so on contain CSI-RS.</span>
-<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">2</span><span class="p">)])</span>
+<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">"NZP"</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">2</span><span class="p">)])</span>
 <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 
 <span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">=</span> <span class="mi">0</span>
@@ -358,7 +358,7 @@ CSI-RS Configuration: (1 Resource Sets)
     <span class="n">grid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">csiRsConfig</span><span class="o">.</span><span class="n">numPorts</span><span class="p">)</span>
     <span class="n">csiRsConfig</span><span class="o">.</span><span class="n">populateGrid</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
     <span class="c1"># Show only the first port</span>
-    <span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CSI-RS Slot Map, Slot </span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span><span class="p">))</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="n">rbRange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">title</span><span class="o">=</span><span class="s2">"CSI-RS Slot Map, Slot </span><span class="si">%d</span><span class="s2">"</span><span class="o">%</span><span class="p">(</span><span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span><span class="p">))</span>
     <span class="n">carrier</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
 </div>

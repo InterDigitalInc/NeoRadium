@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Comparing SISO CDL Channel results with MATLAB &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Comparing SISO CDL Channel results with MATLAB &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -68,7 +68,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#research-papers">Research Papers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#other-examples">Other Examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id2">Antenna</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id3">Antenna</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="../../../Playground.html#cdl-channel-model">CDL Channel Model</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../CDL/CDL-Matlab.html">Comparing the CDL Channel results with MATLAB</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Comparing SISO CDL Channel results with MATLAB</a></li>
@@ -107,7 +107,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -140,7 +140,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">CdlChannel</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">Waveform</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">neoradium.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">getNmse</span>
 
-<span class="n">matlabFilesPath</span> <span class="o">=</span> <span class="s2">&quot;./MatlabFiles&quot;</span>
+<span class="n">matlabFilesPath</span> <span class="o">=</span> <span class="s2">"./MatlabFiles"</span>
 </pre></div>
 </div>
 </div>
@@ -151,7 +151,7 @@
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>    <span class="c1"># Carrier 25 Resource Blocks, 15 kHz subcarrier spacing</span>
 <span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>                                   <span class="c1"># The only bandwidth part in the carrier</span>
 
-<span class="n">cdlModel</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
+<span class="n">cdlModel</span> <span class="o">=</span> <span class="s1">'C'</span>
 <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span>
 <span class="n">phiInit</span><span class="p">,</span> <span class="n">coupling</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="o">.</span><span class="n">getMatlabRandomInit</span><span class="p">(</span><span class="n">cdlModel</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span> <span class="c1"># Match MATLAB random values</span>
 
@@ -161,14 +161,14 @@
 <span class="n">fc</span> <span class="o">=</span> <span class="mf">4e9</span>                     <span class="c1"># 4 GHz</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">speed</span><span class="o">*</span><span class="n">fc</span><span class="o">/</span><span class="n">c</span>               <span class="c1"># Doppler Shift (Hz)</span>
 
-<span class="c1"># NOTE: Always make sure to use this antenna config in MATLAB to match the standard and NeoRadium&#39;s default</span>
+<span class="c1"># NOTE: Always make sure to use this antenna config in MATLAB to match the standard and NeoRadium's default</span>
 <span class="c1"># cdl.TransmitAntennaArray.Size = [1 1 1 1 1];     % 1x1 antenna panel</span>
-<span class="c1"># cdl.TransmitAntennaArray.Element = &#39;38.901&#39;;     % Make sure we are using 3GPP antennas. (Default is not 3GPP)</span>
+<span class="c1"># cdl.TransmitAntennaArray.Element = '38.901';     % Make sure we are using 3GPP antennas. (Default is not 3GPP)</span>
 <span class="c1"># cdl.TransmitArrayOrientation = [0; 0; 0];        % Transmit antenna orientation bearing(α), downtilt(β), and slant(γ) angles in degrees</span>
 <span class="c1"># cdl.TransmitAntennaArray.PolarizationAngles = [0 90];</span>
 
 <span class="c1"># cdl.ReceiveAntennaArray.Size = [1 1 1 1 1];     % 1x1 antenna</span>
-<span class="c1"># cdl.ReceiveAntennaArray.Element = &#39;38.901&#39;;     % Make sure we are using 3GPP antennas. (Default is not 3GPP)</span>
+<span class="c1"># cdl.ReceiveAntennaArray.Element = '38.901';     % Make sure we are using 3GPP antennas. (Default is not 3GPP)</span>
 <span class="c1"># cdl.ReceiveArrayOrientation = [180; 0; 0];      % Receive antenna orientation bearing(α), downtilt(β), and slant(γ) angles in degrees</span>
 <span class="c1"># cdl.ReceiveAntennaArray.PolarizationAngles = [0 90];</span>
 
@@ -244,13 +244,13 @@ CDL-C Channel Properties:
 <span class="n">numInputSamples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">channel</span><span class="o">.</span><span class="n">sampleRate</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
 <span class="n">nr</span><span class="p">,</span> <span class="n">nt</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">nrNt</span>     <span class="c1"># Get the number of antenna from the channel</span>
 
-<span class="c1"># Load the &quot;txWaveform&quot; generated by the MATLAB code</span>
-<span class="n">txWaveform</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/txWaveform.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;txWaveform&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="c1"># Load the "txWaveform" generated by the MATLAB code</span>
+<span class="n">txWaveform</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/txWaveform.mat'</span><span class="p">)[</span><span class="s1">'txWaveform'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
 <span class="k">assert</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">numInputSamples</span><span class="p">)</span>
 
 <span class="c1"># Check the following numbers with the MATLAB-generated numbers to make sure we are using</span>
 <span class="c1"># the same input signal:</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TX Waveform Data:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">:</span><span class="mi">204</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>  <span class="c1"># MATLAB: txWaveform(201:204,3:4)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"TX Waveform Data:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">:</span><span class="mi">204</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>  <span class="c1"># MATLAB: txWaveform(201:204,3:4)</span>
 
 <span class="c1"># Use the following line instead of above line to create a random signal (The result will be</span>
 <span class="c1"># different from MATLAB)</span>
@@ -258,12 +258,12 @@ CDL-C Channel Properties:
 
 <span class="c1"># Now apply the channel to the waveform</span>
 <span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RX Waveform Data:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">rxWaveform</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">:</span><span class="mi">204</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>  <span class="c1"># MATLAB: rxWaveform(201:204,2)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"RX Waveform Data:</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">rxWaveform</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">200</span><span class="p">:</span><span class="mi">204</span><span class="p">],</span><span class="mi">4</span><span class="p">))</span>  <span class="c1"># MATLAB: rxWaveform(201:204,2)</span>
 
 <span class="c1"># Load MATLAB results and compare with the above results</span>
-<span class="n">rxWaveformMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/rxWaveform.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;rxWaveform&#39;</span><span class="p">]</span>
+<span class="n">rxWaveformMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/rxWaveform.mat'</span><span class="p">)[</span><span class="s1">'rxWaveform'</span><span class="p">]</span>
 <span class="k">assert</span> <span class="n">rxWaveformMatlab</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="n">numInputSamples</span><span class="p">,</span> <span class="n">nr</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NMSE:&quot;</span><span class="p">,</span> <span class="n">getNmse</span><span class="p">(</span><span class="n">rxWaveformMatlab</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">waveform</span><span class="p">))</span>   <span class="c1"># NMSE between NeoRadium and MATLAB results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"NMSE:"</span><span class="p">,</span> <span class="n">getNmse</span><span class="p">(</span><span class="n">rxWaveformMatlab</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">waveform</span><span class="p">))</span>   <span class="c1"># NMSE between NeoRadium and MATLAB results</span>
 </pre></div>
 </div>
 </div>

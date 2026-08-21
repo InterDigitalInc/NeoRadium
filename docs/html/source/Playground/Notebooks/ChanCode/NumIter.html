@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Effect of LDPC Decoding Iterations on PDSCH BLER &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Effect of LDPC Decoding Iterations on PDSCH BLER &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -101,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -146,7 +146,7 @@
 <span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>          <span class="c1"># Create the BandwidthPart object</span>
 
 <span class="c1"># Create a PDSCH object</span>
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">"16QAM"</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">additionalPos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Create an LDPC codec</span>
@@ -156,9 +156,9 @@
 <span class="k">for</span> <span class="n">numIter</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]:</span>
     <span class="n">results</span><span class="p">[</span><span class="n">numIter</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">ldpc</span><span class="o">.</span><span class="n">cwCodecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numIter</span> <span class="o">=</span> <span class="n">numIter</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Simulating end-to-end with numIter = </span><span class="si">{</span><span class="n">numIter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SNR(dB)    Total Blocks  Block Errors  BLER(%)  Time(Sec.)&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---------  ------------  ------------  -------  ----------&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Simulating end-to-end with numIter = </span><span class="si">{</span><span class="n">numIter</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"SNR(dB)    Total Blocks  Block Errors  BLER(%)  Time(Sec.)"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"---------  ------------  ------------  -------  ----------"</span><span class="p">)</span>
     <span class="n">snrScheduler</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrScheduler</span><span class="p">:</span>
         <span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                             <span class="c1"># Make the results reproducible for each SNR</span>
@@ -166,9 +166,9 @@
         <span class="n">bwp</span><span class="o">.</span><span class="n">slotNo</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># Create a CdlChannel object</span>
-        <span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                             <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="c1"># 16 TX antenna elements</span>
-                             <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">))</span> <span class="c1"># 4 RX antenna elements</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">'C'</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                             <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">),</span> <span class="c1"># 16 TX antenna elements</span>
+                             <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"x"</span><span class="p">))</span> <span class="c1"># 4 RX antenna elements</span>
 
         <span class="n">blockErrors</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">totalBlocks</span> <span class="o">=</span> <span class="mi">0</span>
@@ -198,12 +198,12 @@
             <span class="n">totalBlocks</span> <span class="o">+=</span> <span class="mi">1</span>                                                    <span class="c1"># Update number of transport blocks</span>
             <span class="n">bler</span> <span class="o">=</span> <span class="n">blockErrors</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="n">totalBlocks</span>                                  <span class="c1"># BLER in percent</span>
 
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="si">{</span><span class="n">snrDb</span><span class="si">:</span><span class="s2">^9.1f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">totalBlocks</span><span class="si">:</span><span class="s2">^12d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">blockErrors</span><span class="si">:</span><span class="s2">^12d</span><span class="si">}</span><span class="s2">  &quot;</span>
-                  <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bler</span><span class="si">:</span><span class="s2">^7.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="si">:</span><span class="s2">^10.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\r</span><span class="si">{</span><span class="n">snrDb</span><span class="si">:</span><span class="s2">^9.1f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">totalBlocks</span><span class="si">:</span><span class="s2">^12d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">blockErrors</span><span class="si">:</span><span class="s2">^12d</span><span class="si">}</span><span class="s2">  "</span>
+                  <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">bler</span><span class="si">:</span><span class="s2">^7.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="si">:</span><span class="s2">^10.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span>
             <span class="n">channel</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
 
         <span class="n">snrScheduler</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">bler</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
     <span class="n">results</span><span class="p">[</span><span class="n">numIter</span><span class="p">]</span> <span class="o">=</span> <span class="n">snrScheduler</span><span class="o">.</span><span class="n">getSnrsAndData</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -311,12 +311,12 @@ SNR(dB)    Total Blocks  Block Errors  BLER(%)  Time(Sec.)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare the results in a plot</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">numIter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">numIter</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="n">numIter</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;numIter=</span><span class="si">{</span><span class="n">numIter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">numIter</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="n">numIter</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"numIter=</span><span class="si">{</span><span class="n">numIter</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;BLER for Different Numbers of LDPC Decoding Iterations&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"BLER for Different Numbers of LDPC Decoding Iterations"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;SNR (dB)&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;BLER (%)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"SNR (dB)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"BLER (%)"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>

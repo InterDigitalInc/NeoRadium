@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Training the Channel Estimation Model &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Training the Channel Estimation Model &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -75,6 +75,7 @@
 <li class="toctree-l4"><a class="reference internal" href="MLChEstEvaluateHARQ.html">Evaluating Communication Throughput with HARQ</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id2">LWM-Spectro: A Foundation Model for Wireless Baseband Signal Spectrograms</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#other-examples">Other Examples</a></li>
@@ -107,7 +108,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -149,11 +150,11 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the datasets:</span>
-<span class="n">dataPath</span> <span class="o">=</span> <span class="s2">&quot;/data/datasets/SelfRefine&quot;</span>      <span class="c1"># Replace with the path to your dataset files</span>
+<span class="n">dataPath</span> <span class="o">=</span> <span class="s2">"/data/datasets/SelfRefine"</span>      <span class="c1"># Replace with the path to your dataset files</span>
 <span class="n">batchSize</span> <span class="o">=</span> <span class="mi">64</span>
-<span class="n">trainDS</span> <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">&quot;Train.npy&quot;</span><span class="p">),</span> <span class="n">batchSize</span> <span class="p">)</span>
-<span class="n">validDS</span> <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">&quot;Valid.npy&quot;</span><span class="p">),</span> <span class="n">batchSize</span> <span class="p">)</span>
-<span class="n">testDS</span> <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">&quot;Test.npy&quot;</span><span class="p">),</span> <span class="n">batchSize</span> <span class="p">)</span>
+<span class="n">trainDS</span> <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">"Train.npy"</span><span class="p">),</span> <span class="n">batchSize</span> <span class="p">)</span>
+<span class="n">validDS</span> <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">"Valid.npy"</span><span class="p">),</span> <span class="n">batchSize</span> <span class="p">)</span>
+<span class="n">testDS</span> <span class="o">=</span> <span class="n">ChEstDataset</span><span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataPath</span><span class="p">,</span><span class="s2">"Test.npy"</span><span class="p">),</span> <span class="n">batchSize</span> <span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -161,10 +162,10 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">modelFileName</span> <span class="o">=</span> <span class="s2">&quot;Models/Trained.pth&quot;</span>        <span class="c1"># Output filename for the trained model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">modelFileName</span> <span class="o">=</span> <span class="s2">"Models/Trained.pth"</span>        <span class="c1"># Output filename for the trained model</span>
 <span class="n">numEpochs</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="n">lrStart</span><span class="p">,</span> <span class="n">lrEnd</span> <span class="o">=</span> <span class="mf">0.002</span><span class="p">,</span> <span class="mf">0.00002</span>             <span class="c1"># Learning rate decays exponentially from &#39;lrStart&#39; to &#39;lrEnd&#39;</span>
-<span class="n">device</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;cuda:0&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;mps&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span>
+<span class="n">lrStart</span><span class="p">,</span> <span class="n">lrEnd</span> <span class="o">=</span> <span class="mf">0.002</span><span class="p">,</span> <span class="mf">0.00002</span>             <span class="c1"># Learning rate decays exponentially from 'lrStart' to 'lrEnd'</span>
+<span class="n">device</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"cuda:0"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"mps"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">ChEstNet</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>                    <span class="c1"># Create the model</span>
 
 <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">lrStart</span><span class="p">)</span>
@@ -180,27 +181,27 @@
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Main training loop:</span>
 <span class="n">lowestLoss</span><span class="p">,</span> <span class="n">bestEpoch</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 <span class="n">validLoss</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Epoch   Learning Rate   Training Loss   Validation Loss&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-----   -------------   -------------   ---------------&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Epoch   Learning Rate   Training Loss   Validation Loss"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-----   -------------   -------------   ---------------"</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numEpochs</span><span class="p">):</span>
     <span class="n">curLr</span> <span class="o">=</span> <span class="n">lrScheduler</span><span class="o">.</span><span class="n">get_last_lr</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="si">:</span><span class="s2">-4d</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">curLr</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">      &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">" </span><span class="si">{</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="si">:</span><span class="s2">-4d</span><span class="si">}</span><span class="s2">     </span><span class="si">{</span><span class="n">curLr</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">      "</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
 
     <span class="c1"># Train one epoch</span>
     <span class="n">lossMin</span><span class="p">,</span> <span class="n">lossMean</span><span class="p">,</span> <span class="n">lossMax</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">trainEpoch</span><span class="p">(</span><span class="n">trainDS</span><span class="p">,</span> <span class="n">lossFunction</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">lossMean</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">      &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">lossMean</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">      "</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
 
     <span class="n">validLoss</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">validDS</span><span class="p">,</span> <span class="n">lossFunction</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">lowestLoss</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">lowestLoss</span><span class="p">,</span> <span class="n">bestEpoch</span> <span class="o">=</span> <span class="n">validLoss</span><span class="p">,</span> <span class="n">epoch</span><span class="o">+</span><span class="mi">1</span>
         <span class="n">model</span><span class="o">.</span><span class="n">saveParams</span><span class="p">(</span><span class="n">modelFileName</span><span class="p">)</span>     <span class="c1"># Save the best model so far</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">validLoss</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">   &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">validLoss</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">   "</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">validLoss</span><span class="o">&lt;</span><span class="n">lowestLoss</span><span class="p">:</span>
         <span class="n">lowestLoss</span><span class="p">,</span> <span class="n">bestEpoch</span> <span class="o">=</span> <span class="n">validLoss</span><span class="p">,</span> <span class="n">epoch</span><span class="o">+</span><span class="mi">1</span>
         <span class="n">model</span><span class="o">.</span><span class="n">saveParams</span><span class="p">(</span><span class="n">modelFileName</span><span class="p">)</span>     <span class="c1"># Save the best model so far</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">validLoss</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2"> * &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">validLoss</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2"> * "</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">validLoss</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">   &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">validLoss</span><span class="si">:</span><span class="s2">-10f</span><span class="si">}</span><span class="s2">   "</span><span class="p">)</span>
     <span class="n">lrScheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
 
 <span class="n">model</span><span class="o">.</span><span class="n">loadParams</span><span class="p">(</span><span class="n">modelFileName</span><span class="p">)</span>             <span class="c1"># Load the best model</span>

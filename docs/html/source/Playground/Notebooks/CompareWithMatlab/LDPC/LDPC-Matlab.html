@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Comparing the LDPC results with MATLAB &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Comparing the LDPC results with MATLAB &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -68,7 +68,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#research-papers">Research Papers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#other-examples">Other Examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id2">Antenna</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#id3">Antenna</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#cdl-channel-model">CDL Channel Model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#csi-rs">CSI-RS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../Playground.html#pdsch">PDSCH</a></li>
@@ -107,7 +107,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -139,7 +139,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="kn">import</span> <span class="n">LdpcCodec</span>
 
-<span class="n">matlabFilesPath</span> <span class="o">=</span> <span class="s2">&quot;./MatlabFiles&quot;</span>
+<span class="n">matlabFilesPath</span> <span class="o">=</span> <span class="s2">"./MatlabFiles"</span>
 </pre></div>
 </div>
 </div>
@@ -148,11 +148,11 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read input bits from MATLAB-generated file</span>
-<span class="n">inBits</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/in.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;in&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;First 10 bits: </span><span class="si">{</span><span class="n">inBits</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">inBits</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/in.mat'</span><span class="p">)[</span><span class="s1">'in'</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"First 10 bits: </span><span class="si">{</span><span class="n">inBits</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1"># Create an LDPC encoder object</span>
-<span class="n">ldpc</span> <span class="o">=</span> <span class="n">LdpcCodec</span><span class="p">(</span><span class="n">modulations</span><span class="o">=</span><span class="s1">&#39;QPSK&#39;</span><span class="p">,</span> <span class="n">coderates</span><span class="o">=</span><span class="mi">449</span><span class="o">/</span><span class="mi">1024</span><span class="p">,</span> <span class="n">txBlockSizes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">inBits</span><span class="p">),</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ldpc</span> <span class="o">=</span> <span class="n">LdpcCodec</span><span class="p">(</span><span class="n">modulations</span><span class="o">=</span><span class="s1">'QPSK'</span><span class="p">,</span> <span class="n">coderates</span><span class="o">=</span><span class="mi">449</span><span class="o">/</span><span class="mi">1024</span><span class="p">,</span> <span class="n">txBlockSizes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">inBits</span><span class="p">),</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ldpc</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -186,7 +186,7 @@ LDPC Encode/Decode Properties:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Transport block padded with a 24-bit CRC</span>
 <span class="n">cwCodec</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">cwCodecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>      <span class="c1"># The LDPC codec for the first codeword</span>
-<span class="n">tbWithCrc</span> <span class="o">=</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">appendCrc</span><span class="p">(</span><span class="n">inBits</span><span class="p">,</span><span class="s1">&#39;24A&#39;</span><span class="p">)</span>
+<span class="n">tbWithCrc</span> <span class="o">=</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">appendCrc</span><span class="p">(</span><span class="n">inBits</span><span class="p">,</span><span class="s1">'24A'</span><span class="p">)</span>
 <span class="n">tbWithCrc</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
@@ -213,13 +213,13 @@ LDPC Encode/Decode Properties:
 <span class="n">codeBlocksCrc</span><span class="p">[:,</span> <span class="n">fillerStart</span> <span class="p">:</span> <span class="n">fillerStart</span><span class="o">+</span><span class="n">cwCodec</span><span class="o">.</span><span class="n">numFillerBits</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
 <span class="c1"># Compare results with MATLAB:</span>
-<span class="n">codeBlocksCrcMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/cbsIn.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;cbsIn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="o">-</span><span class="n">codeBlocksCrcMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">codeBlocksCrcMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/cbsIn.mat'</span><span class="p">)[</span><span class="s1">'cbsIn'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="o">-</span><span class="n">codeBlocksCrcMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CodeBlocks Shape (Including CRC):&quot;</span><span class="p">,</span> <span class="n">codeBlocksCrc</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;liftingSize (Zc):                &quot;</span><span class="p">,</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">liftingSize</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;setIndex (Zero-Based):           &quot;</span><span class="p">,</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">setIndex</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;numFillerBits:                   &quot;</span><span class="p">,</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">numFillerBits</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"CodeBlocks Shape (Including CRC):"</span><span class="p">,</span> <span class="n">codeBlocksCrc</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"liftingSize (Zc):                "</span><span class="p">,</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">liftingSize</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"setIndex (Zero-Based):           "</span><span class="p">,</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">setIndex</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"numFillerBits:                   "</span><span class="p">,</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">numFillerBits</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -238,9 +238,9 @@ numFillerBits:                    244
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Base Graph Shape:&quot;</span><span class="p">,</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">baseGraph</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;8x8 sub-matrix at the </span><span class="se">\&quot;</span><span class="s2">Double Diagonal</span><span class="se">\&quot;</span><span class="s2"> section:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">baseGraph</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="mi">22</span><span class="p">:</span><span class="mi">30</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="s2">&quot;   &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%3d</span><span class="s2">&quot;</span><span class="o">%</span><span class="k">x</span> for x in r))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Base Graph Shape:"</span><span class="p">,</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">baseGraph</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"8x8 sub-matrix at the </span><span class="se">\"</span><span class="s2">Double Diagonal</span><span class="se">\"</span><span class="s2"> section:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">baseGraph</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="mi">22</span><span class="p">:</span><span class="mi">30</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"    "</span> <span class="o">+</span> <span class="s2">"   "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"</span><span class="si">%3d</span><span class="s2">"</span><span class="o">%</span><span class="k">x</span> for x in r))
 </pre></div>
 </div>
 </div>
@@ -267,7 +267,7 @@ Base Graph Shape: (46, 68)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check the valid LDPC coded blocks:</span>
 <span class="c1"># Do not puncture first 2 columns because we need the whole coded blocks for the</span>
-<span class="c1"># &quot;isValidCodedBlock&quot; function below</span>
+<span class="c1"># "isValidCodedBlock" function below</span>
 <span class="n">testCodedBlocks</span> <span class="o">=</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">encodeCodeBlocks</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="p">,</span> <span class="n">puncture</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="p">(</span><span class="n">cwCodec</span><span class="o">.</span><span class="n">isValidCodedBlock</span><span class="p">(</span><span class="n">testCodedBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
@@ -295,7 +295,7 @@ Base Graph Shape: (46, 68)
 <span class="n">codeBlocksCrc</span> <span class="o">=</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">doSegmentation</span><span class="p">(</span><span class="n">tbWithCrc</span><span class="p">)</span>
 <span class="c1"># Encoding:</span>
 <span class="n">codedBlocks</span> <span class="o">=</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">encodeCodeBlocks</span><span class="p">(</span><span class="n">codeBlocksCrc</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;codedBlocks Shape:&quot;</span><span class="p">,</span> <span class="n">codedBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"codedBlocks Shape:"</span><span class="p">,</span> <span class="n">codedBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
 <span class="c1"># NeoRadium does not set filler bits to -1. To match with MATLAB, we need to set these bits</span>
 <span class="c1"># to -1. This is only needed when comparing encoder output (before rate matching) with MATLAB.</span>
@@ -303,8 +303,8 @@ Base Graph Shape: (46, 68)
 <span class="n">codedBlocks</span><span class="p">[:,</span> <span class="n">fillerStart</span> <span class="p">:</span> <span class="n">fillerStart</span><span class="o">+</span><span class="n">cwCodec</span><span class="o">.</span><span class="n">numFillerBits</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
 <span class="c1"># Compare results with MATLAB:</span>
-<span class="n">codedBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/enc.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;enc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codedBlocks</span><span class="o">-</span><span class="n">codedBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">codedBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/enc.mat'</span><span class="p">)[</span><span class="s1">'enc'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">codedBlocks</span><span class="o">-</span><span class="n">codedBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 <br/><br/></pre></div>
 </div>
 </div>
@@ -321,11 +321,11 @@ codedBlocks Shape: (2, 15840)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">rateMatch</span><span class="p">(</span><span class="n">codedBlocks</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate-Matched coded blocks Shape:&quot;</span><span class="p">,</span> <span class="n">rateMatchedCodeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Rate-Matched coded blocks Shape:"</span><span class="p">,</span> <span class="n">rateMatchedCodeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
 <span class="c1"># Compare results with MATLAB:</span>
-<span class="n">rateMatchedCodeBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/chIn.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;chIn&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="o">-</span><span class="n">rateMatchedCodeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">rateMatchedCodeBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/chIn.mat'</span><span class="p">)[</span><span class="s1">'chIn'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="o">-</span><span class="n">rateMatchedCodeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 <br/><br/></pre></div>
 </div>
 </div>
@@ -345,7 +345,7 @@ Rate-Matched coded blocks Shape: (22808,)
 <span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">inBits</span><span class="p">)</span>
 
 <span class="c1"># Compare results with MATLAB:</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="o">-</span><span class="n">rateMatchedCodeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="o">-</span><span class="n">rateMatchedCodeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 <br/><br/></pre></div>
 </div>
 </div>
@@ -366,9 +366,9 @@ Rate-Matched coded blocks Shape: (22808,)
 <span class="n">rxCodedBlocks</span> <span class="o">=</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">recoverRate</span><span class="p">(</span><span class="n">channelOutput</span><span class="p">)</span>
 
 <span class="c1"># Compare results with MATLAB:</span>
-<span class="n">rxCodedBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/raterec.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;raterec&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="n">rxCodedBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/raterec.mat'</span><span class="p">)[</span><span class="s1">'raterec'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
 <span class="n">rxCodedBlocksMatlab</span><span class="p">[</span><span class="n">rxCodedBlocksMatlab</span><span class="o">==</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]</span><span class="o">=</span><span class="n">cwCodec</span><span class="o">.</span><span class="n">LARGE_LLR</span>  <span class="c1"># Replace inf with our LARGE_LLR</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodedBlocks</span><span class="o">-</span><span class="n">rxCodedBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodedBlocks</span><span class="o">-</span><span class="n">rxCodedBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 
 <span class="n">rxCodedBlocks</span><span class="o">.</span><span class="n">shape</span>
 <br/></pre></div>
@@ -407,8 +407,8 @@ Rate-Matched coded blocks Shape: (22808,)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare results with MATLAB:</span>
-<span class="n">rxCodeBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/decBits.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;decBits&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodeBlocks</span><span class="o">-</span><span class="n">rxCodeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">rxCodeBlocksMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/decBits.mat'</span><span class="p">)[</span><span class="s1">'decBits'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodeBlocks</span><span class="o">-</span><span class="n">rxCodeBlocksMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 </pre></div>
 </div>
 </div>
@@ -418,11 +418,11 @@ Rate-Matched coded blocks Shape: (22808,)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Undo Segmentation and CRC checking</span>
 <span class="n">rxCodeBlocksWithoutCrc</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">checkCrcAndMerge</span><span class="p">(</span><span class="n">rxCodeBlocks</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CRC Matched:&quot;</span><span class="p">,</span> <span class="n">crcMatch</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"CRC Matched:"</span><span class="p">,</span> <span class="n">crcMatch</span><span class="p">)</span>
 
 <span class="c1"># Compare results with MATLAB:</span>
-<span class="n">rxCodeBlocksWithoutCrcMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/decBlk.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;decBlk&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="o">-</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">rxCodeBlocksWithoutCrcMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/decBlk.mat'</span><span class="p">)[</span><span class="s1">'decBlk'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="o">-</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 <span class="n">rxCodeBlocksWithoutCrc</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
@@ -449,7 +449,7 @@ CRC Matched: [ True  True]
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The transport block CRC checking</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">cwCodec</span><span class="o">.</span><span class="n">checkCrc</span><span class="p">(</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="p">,</span><span class="s1">&#39;24A&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cwCodec</span><span class="o">.</span><span class="n">checkCrc</span><span class="p">(</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="p">,</span><span class="s1">'24A'</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -466,7 +466,7 @@ True
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare with original input</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="p">[:</span><span class="o">-</span><span class="mi">24</span><span class="p">]</span><span class="o">-</span><span class="n">inBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH INPUT BITS!!!&quot;</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxCodeBlocksWithoutCrc</span><span class="p">[:</span><span class="o">-</span><span class="mi">24</span><span class="p">]</span><span class="o">-</span><span class="n">inBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH INPUT BITS!!!"</span>
 </pre></div>
 </div>
 </div>
@@ -476,14 +476,14 @@ True
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Do the whole decoding process in one call:</span>
 <span class="n">rxBlock</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">cwCodec</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">channelOutput</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CRC Matched:&quot;</span><span class="p">,</span> <span class="n">crcMatch</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"CRC Matched:"</span><span class="p">,</span> <span class="n">crcMatch</span><span class="p">)</span>
 
 <span class="c1"># Compare results with MATLAB:</span>
-<span class="n">rxTxBlocksWithCrcMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">&#39;/decBlk.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;decBlk&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxTxBlocksWithCrcMatlab</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">24</span><span class="p">]</span><span class="o">-</span><span class="n">rxBlock</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH MATLAB!!!&quot;</span>
+<span class="n">rxTxBlocksWithCrcMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">matlabFilesPath</span><span class="o">+</span><span class="s1">'/decBlk.mat'</span><span class="p">)[</span><span class="s1">'decBlk'</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxTxBlocksWithCrcMatlab</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">24</span><span class="p">]</span><span class="o">-</span><span class="n">rxBlock</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH MATLAB!!!"</span>
 
 <span class="c1"># Compare with original input</span>
-<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBlock</span><span class="o">-</span><span class="n">inBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;MISMATCH WITH INPUT BITS!!!&quot;</span>
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBlock</span><span class="o">-</span><span class="n">inBits</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"MISMATCH WITH INPUT BITS!!!"</span>
 </pre></div>
 </div>
 </div>

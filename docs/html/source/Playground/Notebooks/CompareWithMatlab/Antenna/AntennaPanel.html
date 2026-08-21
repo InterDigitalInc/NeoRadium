@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Comparing Antenna Panel Calculations with MATLAB &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Comparing Antenna Panel Calculations with MATLAB &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -68,7 +68,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#research-papers">Research Papers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../Playground.html#other-examples">Other Examples</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../Playground.html#comparing-with-matlab">Comparing with MATLAB</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../../../Playground.html#id2">Antenna</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../Playground.html#id3">Antenna</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="AntennaElement.html">Comparing Antenna Element Calculations with MATLAB</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Comparing Antenna Panel Calculations with MATLAB</a></li>
 <li class="toctree-l4"><a class="reference internal" href="AntennaArray.html">Comparing Antenna Array Calculations with MATLAB</a></li>
@@ -108,7 +108,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -139,7 +139,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">neoradium</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nr</span>
-<span class="c1"># Note: See the &quot;AntennaPanel.mlx&quot; file in the &quot;MatlabFiles&quot; directory and compare with the</span>
+<span class="c1"># Note: See the "AntennaPanel.mlx" file in the "MatlabFiles" directory and compare with the</span>
 <span class="c1"># following results.</span>
 </pre></div>
 </div>
@@ -148,15 +148,15 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We first create an antenna element template. The antenna panel class &quot;AntennaPanel&quot; uses this</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We first create an antenna element template. The antenna panel class "AntennaPanel" uses this</span>
 <span class="c1"># template to create the elements of the panel.</span>
 <span class="n">elementTemplate</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">AntennaElement</span><span class="p">(</span><span class="n">beamWidth</span><span class="o">=</span><span class="p">[</span><span class="mi">65</span><span class="p">,</span><span class="mi">65</span><span class="p">],</span> <span class="n">maxAttenuation</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 
 <span class="c1"># Now we can create the antenna panel using the antenna element template. Note that the spacing between the</span>
 <span class="c1"># elements is 0.5𝜆 by default.</span>
-<span class="n">panel</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">elements</span><span class="o">=</span><span class="n">elementTemplate</span><span class="p">,</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">)</span>
+<span class="n">panel</span> <span class="o">=</span> <span class="n">nr</span><span class="o">.</span><span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">elements</span><span class="o">=</span><span class="n">elementTemplate</span><span class="p">,</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"+"</span><span class="p">)</span>
 
-<span class="c1"># The &quot;showElements&quot; method draws the antenna panel showing all the elements.</span>
+<span class="c1"># The "showElements" method draws the antenna panel showing all the elements.</span>
 <span class="n">panel</span><span class="o">.</span><span class="n">showElements</span><span class="p">(</span><span class="n">zeroTicks</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <br/></pre></div>
 </div>
@@ -172,9 +172,9 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Depending on the input parameters the &quot;drawRadiation&quot; method can create different types of graphs. Here</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Depending on the input parameters the "drawRadiation" method can create different types of graphs. Here</span>
 <span class="c1"># we draw the Field values of the antenna panel at the horizontal plane of zero elevation.</span>
-<span class="n">panel</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">viewAngles</span><span class="o">=</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">panel</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">viewAngles</span><span class="o">=</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">"Field"</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">radValues</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">getField</span><span class="p">(</span><span class="n">theta</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
 
 <span class="c1"># We can print a selected portion of the field values returned by this function and compare the results</span>
@@ -211,8 +211,8 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here the &quot;drawRadiation&quot; method is used to draw the Field values in the vertical plane at azimuth angle 0.</span>
-<span class="n">panel</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">&quot;Field&quot;</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here the "drawRadiation" method is used to draw the Field values in the vertical plane at azimuth angle 0.</span>
+<span class="n">panel</span><span class="o">.</span><span class="n">drawRadiation</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">radiationType</span><span class="o">=</span><span class="s2">"Field"</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">radValues</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">getField</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="c1"># Print a selected portion of the field values and compare the results with MATLAB.</span>
@@ -251,13 +251,13 @@
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Comparing the directivity calculations with MATLAB</span>
 <span class="n">directivity</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">getDirectivity</span><span class="p">()</span>
 
-<span class="c1"># Read the file created by MATLAB for &quot;directivity&quot; values</span>
-<span class="n">directivityMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s1">&#39;MatlabFiles/PanelDirectivity.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;directivity&#39;</span><span class="p">]</span>
+<span class="c1"># Read the file created by MATLAB for "directivity" values</span>
+<span class="n">directivityMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s1">'MatlabFiles/PanelDirectivity.mat'</span><span class="p">)[</span><span class="s1">'directivity'</span><span class="p">]</span>
 <span class="n">directivityMatlab</span> <span class="o">=</span> <span class="n">directivityMatlab</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">directivityMatlab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="n">directivityMatlab</span><span class="p">)</span> <span class="c1"># We clip the minimum to -120 db (linearly to 1e-12)</span>
 <span class="k">assert</span> <span class="n">directivityMatlab</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="n">directivity</span><span class="o">.</span><span class="n">shape</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of Directivity results:&quot;</span><span class="p">,</span> <span class="n">directivity</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum difference between the results:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">directivity</span><span class="o">-</span><span class="n">directivityMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Shape of Directivity results:"</span><span class="p">,</span> <span class="n">directivity</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Maximum difference between the results:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">directivity</span><span class="o">-</span><span class="n">directivityMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 <br/></pre></div>
 </div>
 </div>
@@ -277,12 +277,12 @@ Maximum difference between the results: 1.6200374375330284e-11
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Comparing the field calculations with MATLAB</span>
 <span class="n">field</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">getField</span><span class="p">()</span>
 
-<span class="c1"># Read the file created by MATLAB for &quot;field&quot; values</span>
-<span class="n">fieldMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s1">&#39;MatlabFiles/PanelField.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;field&#39;</span><span class="p">]</span>
+<span class="c1"># Read the file created by MATLAB for "field" values</span>
+<span class="n">fieldMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s1">'MatlabFiles/PanelField.mat'</span><span class="p">)[</span><span class="s1">'field'</span><span class="p">]</span>
 <span class="n">fieldMatlab</span> <span class="o">=</span> <span class="n">fieldMatlab</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 <span class="k">assert</span> <span class="n">fieldMatlab</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="n">field</span><span class="o">.</span><span class="n">shape</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of Field values:&quot;</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum difference between the results:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">field</span><span class="o">-</span><span class="n">fieldMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Shape of Field values:"</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Maximum difference between the results:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">field</span><span class="o">-</span><span class="n">fieldMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 <br/></pre></div>
 </div>
 </div>
@@ -302,13 +302,13 @@ Maximum difference between the results: 4.263256414560601e-14
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Comparing the power calculations with MATLAB</span>
 <span class="n">powerDb</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">getPowerPatternDb</span><span class="p">()</span>
 
-<span class="c1"># Read the file created by MATLAB for &quot;powerDb&quot; values</span>
-<span class="n">powerDbMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s1">&#39;MatlabFiles/PanelPowerDb.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;powerDb&#39;</span><span class="p">]</span>
+<span class="c1"># Read the file created by MATLAB for "powerDb" values</span>
+<span class="n">powerDbMatlab</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s1">'MatlabFiles/PanelPowerDb.mat'</span><span class="p">)[</span><span class="s1">'powerDb'</span><span class="p">]</span>
 <span class="n">powerDbMatlab</span> <span class="o">=</span> <span class="n">powerDbMatlab</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">powerDbMatlab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="n">powerDbMatlab</span><span class="p">)</span>             <span class="c1"># We clip the minimum to -120 db (linearly to 1e-12)</span>
 <span class="k">assert</span> <span class="n">powerDbMatlab</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="n">powerDb</span><span class="o">.</span><span class="n">shape</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Shape of power values:&quot;</span><span class="p">,</span> <span class="n">powerDb</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum difference between the results:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">powerDb</span><span class="o">-</span><span class="n">powerDbMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Shape of power values:"</span><span class="p">,</span> <span class="n">powerDb</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Maximum difference between the results:"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">powerDb</span><span class="o">-</span><span class="n">powerDbMatlab</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 <br/></pre></div>
 </div>
 </div>

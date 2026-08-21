@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modeling Transport Channel &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Modeling Transport Channel &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -101,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -141,7 +141,7 @@
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">52</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>      <span class="c1"># First create a bandwidth part with 52 RBs and 15 kHz subcarrier spacing</span>
 
 <span class="n">snrDb</span> <span class="o">=</span> <span class="mi">5</span>                                       <span class="c1"># SNR (dB)</span>
-<span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span>                              <span class="c1"># Modulation scheme</span>
+<span class="n">modulation</span><span class="o">=</span><span class="s2">"16QAM"</span>                              <span class="c1"># Modulation scheme</span>
 <span class="n">coderate</span> <span class="o">=</span> <span class="mi">490</span><span class="o">/</span><span class="mi">1024</span>                             <span class="c1"># Target code rate</span>
 
 <span class="c1"># Create the PDSCH object</span>
@@ -152,20 +152,20 @@
 <span class="n">ldpc</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLdpcCodec</span><span class="p">(</span><span class="n">coderate</span><span class="p">)</span>             <span class="c1"># Create the LDPC coding object</span>
 
 <span class="c1"># HARQ configuration:</span>
-<span class="n">harqType</span> <span class="o">=</span> <span class="s2">&quot;IR&quot;</span>                                 <span class="c1"># &quot;IR&quot; -&gt; &quot;Incremental Redundancy&quot;, &quot;CC&quot; -&gt; &quot;Chase Combining&quot;</span>
+<span class="n">harqType</span> <span class="o">=</span> <span class="s2">"IR"</span>                                 <span class="c1"># "IR" -&gt; "Incremental Redundancy", "CC" -&gt; "Chase Combining"</span>
 <span class="n">numProc</span> <span class="o">=</span> <span class="mi">16</span>                                    <span class="c1"># Number of HARQ processes</span>
 <span class="n">harq</span> <span class="o">=</span> <span class="n">HarqEntity</span><span class="p">(</span><span class="n">ldpc</span><span class="p">,</span> <span class="n">harqType</span><span class="p">,</span> <span class="n">numProc</span><span class="p">)</span>      <span class="c1"># Create the HARQ entity</span>
-<span class="n">harq</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>                                    <span class="c1"># Print the HARQ entity&#39;s properties</span>
+<span class="n">harq</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>                                    <span class="c1"># Print the HARQ entity's properties</span>
 
 <span class="n">rangen</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">getGenerator</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>               <span class="c1"># Create a new random generator to make results reproducible</span>
 <span class="n">numTransmissions</span> <span class="o">=</span> <span class="mi">100</span>                          <span class="c1"># Number of transmissions to simulate</span>
 
 <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>                                <span class="c1"># Start the timer</span>
 <span class="c1"># Print the header lines:</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tx Bits     Rx Bits     Throughput(%)  TX Blocks  RX Blocks  BLER(%)  Avg. Retransmissions  time(Sec.)&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----------  ----------  -------------  ---------  ---------  -------  --------------------  ----------&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Tx Bits     Rx Bits     Throughput(%)  TX Blocks  RX Blocks  BLER(%)  Avg. Retransmissions  time(Sec.)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"----------  ----------  -------------  ---------  ---------  -------  --------------------  ----------"</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numTransmissions</span><span class="p">):</span>
-    <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                <span class="c1"># Create and initialize PDSCH&#39;s internal grid</span>
+    <span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                <span class="c1"># Create and initialize PDSCH's internal grid</span>
     <span class="n">txBlockSizes</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getTxBlockSize</span><span class="p">(</span><span class="n">coderate</span><span class="p">)</span>   <span class="c1"># Transport Block Size</span>
     <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>             <span class="c1"># Actual number of bits available in the resource grid</span>
 
@@ -186,16 +186,16 @@
     <span class="n">decodedTxBlocks</span><span class="p">,</span> <span class="n">crcMatches</span> <span class="o">=</span> <span class="n">harq</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>
 
     <span class="c1"># Print the statistics so far:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r</span><span class="si">%-10d</span><span class="s2">  </span><span class="si">%-10d</span><span class="s2">  </span><span class="si">%-13.2f</span><span class="s2">  </span><span class="si">%-9d</span><span class="s2">  </span><span class="si">%-9d</span><span class="s2">  </span><span class="si">%-7.2f</span><span class="s2">  </span><span class="si">%-20.2f</span><span class="s2">  </span><span class="si">%-10.2f</span><span class="s2">&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\r</span><span class="si">%-10d</span><span class="s2">  </span><span class="si">%-10d</span><span class="s2">  </span><span class="si">%-13.2f</span><span class="s2">  </span><span class="si">%-9d</span><span class="s2">  </span><span class="si">%-9d</span><span class="s2">  </span><span class="si">%-7.2f</span><span class="s2">  </span><span class="si">%-20.2f</span><span class="s2">  </span><span class="si">%-10.2f</span><span class="s2">"</span>
           <span class="o">%</span><span class="p">(</span><span class="n">harq</span><span class="o">.</span><span class="n">totalTxBits</span><span class="p">,</span> <span class="n">harq</span><span class="o">.</span><span class="n">totalRxBits</span><span class="p">,</span> <span class="n">harq</span><span class="o">.</span><span class="n">throughput</span><span class="p">,</span> <span class="n">harq</span><span class="o">.</span><span class="n">totalTxBlocks</span><span class="p">,</span>
-            <span class="n">harq</span><span class="o">.</span><span class="n">totalRxBlocks</span><span class="p">,</span> <span class="n">harq</span><span class="o">.</span><span class="n">bler</span><span class="p">,</span> <span class="n">harq</span><span class="o">.</span><span class="n">meanRetransmissions</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">harq</span><span class="o">.</span><span class="n">totalRxBlocks</span><span class="p">,</span> <span class="n">harq</span><span class="o">.</span><span class="n">bler</span><span class="p">,</span> <span class="n">harq</span><span class="o">.</span><span class="n">meanRetransmissions</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span>
 
     <span class="c1"># Prepare for the next transmission</span>
     <span class="n">bwp</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
     <span class="n">harq</span><span class="o">.</span><span class="n">goNext</span><span class="p">()</span>
 
 <span class="c1"># Print all statistics collected by the HARQ entity:</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 <span class="n">harq</span><span class="o">.</span><span class="n">printStats</span><span class="p">()</span>
 </pre></div>
 </div>

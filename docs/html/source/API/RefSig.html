@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reference Signals &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Reference Signals &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -120,7 +120,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -169,13 +169,13 @@ configured individually with different settings.</p>
 <span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">bwps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c1"># Create a ZP CSI-RS resource and add it to the ZP CSI-RS resource set</span>
-<span class="n">zpCsiRs</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;000000001000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-<span class="n">zpCsiRsSet</span> <span class="o">=</span> <span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;ZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">csiRsList</span><span class="o">=</span><span class="p">[</span><span class="n">zpCsiRs</span><span class="p">],</span> <span class="n">resourceType</span><span class="o">=</span><span class="s1">&#39;semiPersistent&#39;</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">zpCsiRs</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">"000000001000"</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">zpCsiRsSet</span> <span class="o">=</span> <span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">"ZP"</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">csiRsList</span><span class="o">=</span><span class="p">[</span><span class="n">zpCsiRs</span><span class="p">],</span> <span class="n">resourceType</span><span class="o">=</span><span class="s1">'semiPersistent'</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="c1"># Create two NZP CSI-RS resources and add them to the NZP CSI-RS resource set</span>
-<span class="n">nzpCsiRs1</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;1000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">nzpCsiRs2</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">&quot;000000001000&quot;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">nzpCsiRsSet</span> <span class="o">=</span> <span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">csiRsList</span><span class="o">=</span><span class="p">[</span><span class="n">nzpCsiRs1</span><span class="p">,</span> <span class="n">nzpCsiRs2</span><span class="p">],</span> <span class="n">resourceType</span><span class="o">=</span><span class="s1">&#39;periodic&#39;</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">nzpCsiRs1</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">"1000"</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">nzpCsiRs2</span> <span class="o">=</span> <span class="n">CsiRs</span><span class="p">(</span><span class="n">offset</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">freqMap</span><span class="o">=</span><span class="s2">"000000001000"</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">nzpCsiRsSet</span> <span class="o">=</span> <span class="n">CsiRsSet</span><span class="p">(</span><span class="s2">"NZP"</span><span class="p">,</span> <span class="n">bwp</span><span class="p">,</span> <span class="n">csiRsList</span><span class="o">=</span><span class="p">[</span><span class="n">nzpCsiRs1</span><span class="p">,</span> <span class="n">nzpCsiRs2</span><span class="p">],</span> <span class="n">resourceType</span><span class="o">=</span><span class="s1">'periodic'</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
 <span class="c1"># Now create the CSI-RS configuration using the ZP and NZP resource sets</span>
 <span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">([</span><span class="n">zpCsiRsSet</span><span class="p">,</span> <span class="n">nzpCsiRsSet</span><span class="p">])</span>
@@ -195,7 +195,7 @@ configuration parameters. For example, the following code configures CSI-RS with
 
 <span class="c1"># Create the CSI-RS configuration with a single call. The CSI-RS resource and</span>
 <span class="c1"># resource set are automatically configured using the parameters provided.</span>
-<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">(</span><span class="n">csiType</span><span class="o">=</span><span class="s2">&quot;NZP&quot;</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">csiRsConfig</span> <span class="o">=</span> <span class="n">CsiRsConfig</span><span class="p">(</span><span class="n">csiType</span><span class="o">=</span><span class="s2">"NZP"</span><span class="p">,</span> <span class="n">bwp</span><span class="o">=</span><span class="n">bwp</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numPorts</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

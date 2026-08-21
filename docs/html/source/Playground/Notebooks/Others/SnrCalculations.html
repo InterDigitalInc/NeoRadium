@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SNR Calculations in NeoRadium &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>SNR Calculations in NeoRadium &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -103,7 +103,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -165,13 +165,13 @@
 <span class="n">nr</span><span class="p">,</span> <span class="n">nt</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span>           <span class="c1"># receiver and transmitter antennas</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
 
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">&#39;16QAM&#39;</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">)</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">'16QAM'</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">prgSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="n">ldpc</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLdpcCodec</span><span class="p">(</span><span class="n">coderates</span><span class="o">=</span><span class="mi">490</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
 
 <span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                          <span class="c1"># Make the results reproducible.</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                             <span class="c1"># Create and initialize PDSCH&#39;s internal grid</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                             <span class="c1"># Create and initialize PDSCH's internal grid</span>
 <span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">ldpc</span><span class="o">.</span><span class="n">txBlockSizes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># Create random binary data</span>
 <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()</span>             <span class="c1"># Actual number of bits available in the resource grid</span>
 
@@ -187,16 +187,16 @@
 <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">nt</span><span class="p">)</span>                             <span class="c1"># Create the transmitted resource grid</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">precodeTo</span><span class="p">(</span><span class="n">txGrid</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>                       <span class="c1"># Perform precoding</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of Resource Grid:          </span><span class="si">{</span><span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of Precoded Resource Grid: </span><span class="si">{</span><span class="n">txGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of Resource Grid:          </span><span class="si">{</span><span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of Precoded Resource Grid: </span><span class="si">{</span><span class="n">txGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of txWaveform:             </span><span class="si">{</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of txWaveform:             </span><span class="si">{</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">Waveform</span><span class="p">(</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">waveform</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nr</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of rxWaveform:             </span><span class="si">{</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of rxWaveform:             </span><span class="si">{</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of rxGrid:                 </span><span class="si">{</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of rxGrid:                 </span><span class="si">{</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -240,7 +240,7 @@ Shape of rxGrid:                 (2, 14, 624)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noiseStdTime</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">getNoiseStd</span><span class="p">(</span><span class="n">snr</span><span class="p">,</span> <span class="n">bwp</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Time): </span><span class="si">{</span><span class="n">noiseStdTime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Time): </span><span class="si">{</span><span class="n">noiseStdTime</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -262,7 +262,7 @@ Noise STD (Time): 0.0220441589451537
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noiseStdFreq</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">getNoiseStd</span><span class="p">(</span><span class="n">snr</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -282,7 +282,7 @@ Noise STD (Freq): 0.705375297931587
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq)/sqrt(</span><span class="si">{</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="p">)</span><span class="si">}</span><span class="s2"> = Noise STD (Time)&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Freq)/sqrt(</span><span class="si">{</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="p">)</span><span class="si">}</span><span class="s2"> = Noise STD (Time)"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -302,8 +302,8 @@ Noise STD (Freq)/sqrt(1024): 0.022042978060362095 = Noise STD (Time)
 <span class="n">noisyRxWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">addNoise</span><span class="p">(</span><span class="n">noiseStd</span><span class="o">=</span><span class="n">noiseStdTime</span><span class="p">)</span>
 <span class="n">noisyRxGrid</span> <span class="o">=</span> <span class="n">noisyRxWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
 <span class="n">noiseGrid</span> <span class="o">=</span> <span class="n">noisyRxGrid</span><span class="o">.</span><span class="n">grid</span> <span class="o">-</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise Grid STD:   </span><span class="si">{</span><span class="n">noiseGrid</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise Grid STD:   </span><span class="si">{</span><span class="n">noiseGrid</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -355,8 +355,8 @@ Noise STD (Freq): 0.705375297931587
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noiseStdTime1</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nr</span><span class="o">*</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="o">*</span><span class="n">snr</span><span class="p">)</span>
 <span class="n">noiseStdFreq1</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nr</span><span class="o">*</span><span class="n">snr</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Time Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdTime1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdFreq1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Time Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdTime1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Freq Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdFreq1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -411,13 +411,13 @@ Noise STD (Freq Domain - RxPower=1/Nr): 0.7071067811865475
 <span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">52</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 <span class="n">bwp</span> <span class="o">=</span> <span class="n">carrier</span><span class="o">.</span><span class="n">curBwp</span>
 
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">&#39;16QAM&#39;</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">)</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s1">'16QAM'</span><span class="p">,</span> <span class="n">nID</span><span class="o">=</span><span class="n">carrier</span><span class="o">.</span><span class="n">cellId</span><span class="p">)</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">(</span><span class="n">prgSize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">configType</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">additionalPos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="n">ldpc</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getLdpcCodec</span><span class="p">(</span><span class="n">coderates</span><span class="o">=</span><span class="mi">490</span><span class="o">/</span><span class="mi">1024</span><span class="p">)</span>
 
 <span class="n">random</span><span class="o">.</span><span class="n">setSeed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>                          <span class="c1"># Make the results reproducible.</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                             <span class="c1"># Create and initialize PDSCH&#39;s internal grid</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                             <span class="c1"># Create and initialize PDSCH's internal grid</span>
 <span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">ldpc</span><span class="o">.</span><span class="n">txBlockSizes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># Create random binary data</span>
 <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()</span>             <span class="c1"># Actual number of bits available in the resource grid</span>
 
@@ -426,9 +426,9 @@ Noise STD (Freq Domain - RxPower=1/Nr): 0.7071067811865475
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setPdschData</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">)</span>    <span class="c1"># Map encoded data to the resource elements</span>
 
 <span class="c1"># Create a CdlChannel object:</span>
-<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>  <span class="c1"># 4 TX antennas</span>
-                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">&quot;|&quot;</span><span class="p">),</span>  <span class="c1"># 2 RX antennas</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="s1">'C'</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                     <span class="n">txAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">),</span>  <span class="c1"># 4 TX antennas</span>
+                     <span class="n">rxAntenna</span> <span class="o">=</span> <span class="n">AntennaPanel</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">polarization</span><span class="o">=</span><span class="s2">"|"</span><span class="p">),</span>  <span class="c1"># 2 RX antennas</span>
                      <span class="n">normalizeGains</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">normalizeOutput</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">nr</span><span class="p">,</span><span class="n">nt</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">nrNt</span>
 
@@ -439,29 +439,29 @@ Noise STD (Freq Domain - RxPower=1/Nr): 0.7071067811865475
 <span class="n">txGrid</span> <span class="o">=</span> <span class="n">bwp</span><span class="o">.</span><span class="n">createGrid</span><span class="p">(</span><span class="n">nt</span><span class="p">)</span>                             <span class="c1"># Create the transmitted resource grid</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">precodeTo</span><span class="p">(</span><span class="n">txGrid</span><span class="p">,</span> <span class="n">precoder</span><span class="p">)</span>                       <span class="c1"># Perform precoding</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of Resource Grid:          </span><span class="si">{</span><span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of Precoded Resource Grid: </span><span class="si">{</span><span class="n">txGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of Resource Grid:          </span><span class="si">{</span><span class="n">pdsch</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of Precoded Resource Grid: </span><span class="si">{</span><span class="n">txGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txGrid</span><span class="o">.</span><span class="n">ofdmModulate</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of txWaveform:             </span><span class="si">{</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of txWaveform:             </span><span class="si">{</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">maxDelay</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getMaxDelay</span><span class="p">()</span>
 <span class="n">txWaveform</span> <span class="o">=</span> <span class="n">txWaveform</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">maxDelay</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of txWaveform (padded):    </span><span class="si">{</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of txWaveform (padded):    </span><span class="si">{</span><span class="n">txWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">rxWaveform</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToSignal</span><span class="p">(</span><span class="n">txWaveform</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of rxWaveform:             </span><span class="si">{</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of rxWaveform:             </span><span class="si">{</span><span class="n">rxWaveform</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">offset</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">getTimingOffset</span><span class="p">()</span>
 <span class="n">syncedWaveform</span> <span class="o">=</span> <span class="n">rxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Timing Offset:                   </span><span class="si">{</span><span class="n">offset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Timing Offset:                   </span><span class="si">{</span><span class="n">offset</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">rxGrid</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of rxGrid:                 </span><span class="si">{</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of rxGrid:                 </span><span class="si">{</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="n">rxGridF</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">applyToGrid</span><span class="p">(</span><span class="n">txGrid</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shape of rxGridF:                </span><span class="si">{</span><span class="n">rxGridF</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;NMSE(rxGrid,rxGridF):            </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="w"> </span><span class="n">rxGridF</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of rxGridF:                </span><span class="si">{</span><span class="n">rxGridF</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"NMSE(rxGrid,rxGridF):            </span><span class="si">{</span><span class="n">getNmse</span><span class="p">(</span><span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span><span class="w"> </span><span class="n">rxGridF</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -486,7 +486,7 @@ NMSE(rxGrid,rxGridF):            6.85103515277688e-07
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noiseStdTime</span> <span class="o">=</span> <span class="n">syncedWaveform</span><span class="o">.</span><span class="n">getNoiseStd</span><span class="p">(</span><span class="n">snr</span><span class="p">,</span> <span class="n">bwp</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Time): </span><span class="si">{</span><span class="n">noiseStdTime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Time): </span><span class="si">{</span><span class="n">noiseStdTime</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -503,7 +503,7 @@ Noise STD (Time): 0.06340067458970321
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">noiseStdFreq</span> <span class="o">=</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">getNoiseStd</span><span class="p">(</span><span class="n">snr</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -519,7 +519,7 @@ Noise STD (Freq): 2.028813976984786
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq)/sqrt(</span><span class="si">{</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="p">)</span><span class="si">}</span><span class="s2"> = Noise STD (Time)&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Freq)/sqrt(</span><span class="si">{</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="p">)</span><span class="si">}</span><span class="s2"> = Noise STD (Time)"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -538,8 +538,8 @@ Noise STD (Freq)/sqrt(1024): 0.06340043678077456 = Noise STD (Time)
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># These values do not match the calculated STD values above.</span>
 <span class="n">noiseStdTime1</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nr</span><span class="o">*</span><span class="n">bwp</span><span class="o">.</span><span class="n">nFFT</span><span class="o">*</span><span class="n">snr</span><span class="p">)</span>
 <span class="n">noiseStdFreq1</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nr</span><span class="o">*</span><span class="n">snr</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Time Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdTime1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdFreq1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Time Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdTime1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Freq Domain - RxPower=1/Nr): </span><span class="si">{</span><span class="n">noiseStdFreq1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -561,8 +561,8 @@ Noise STD (Freq Domain - RxPower=1/Nr): 0.7071067811865475
 <span class="n">noisySyncedWaveform</span> <span class="o">=</span> <span class="n">noisyRxWaveform</span><span class="o">.</span><span class="n">sync</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
 <span class="n">noisyRxGrid</span> <span class="o">=</span> <span class="n">noisySyncedWaveform</span><span class="o">.</span><span class="n">ofdmDemodulate</span><span class="p">(</span><span class="n">bwp</span><span class="p">)</span>
 <span class="n">noiseGrid</span> <span class="o">=</span> <span class="n">noisyRxGrid</span><span class="o">.</span><span class="n">grid</span> <span class="o">-</span> <span class="n">rxGrid</span><span class="o">.</span><span class="n">grid</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise Grid STD: </span><span class="si">{</span><span class="n">noiseGrid</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise Grid STD: </span><span class="si">{</span><span class="n">noiseGrid</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Noise STD (Freq): </span><span class="si">{</span><span class="n">noiseStdFreq</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

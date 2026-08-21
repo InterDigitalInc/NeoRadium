@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DeepMIMO and UE Trajectories &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>DeepMIMO and UE Trajectories &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -70,6 +70,15 @@
 <li class="toctree-l1"><a class="reference internal" href="Channels.html">Channel Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Random.html">Random Number Generator</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">DeepMIMO and UE Trajectories</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#neoradium.deepmimo.NrAxes"><code class="docutils literal notranslate"><span class="pre">NrAxes</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.NrAxes.addNewPoint"><code class="docutils literal notranslate"><span class="pre">NrAxes.addNewPoint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.NrAxes.addNewRange"><code class="docutils literal notranslate"><span class="pre">NrAxes.addNewRange()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.NrAxes.updateImage"><code class="docutils literal notranslate"><span class="pre">NrAxes.updateImage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.NrAxes.drawBsPanel"><code class="docutils literal notranslate"><span class="pre">NrAxes.drawBsPanel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.NrAxes.drawBeamArrow"><code class="docutils literal notranslate"><span class="pre">NrAxes.drawBeamArrow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.NrAxes.updateBeamArrow"><code class="docutils literal notranslate"><span class="pre">NrAxes.updateBeamArrow()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData"><code class="docutils literal notranslate"><span class="pre">DeepMimoData</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.showScenarioInfo"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.showScenarioInfo()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.print"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.print()</span></code></a></li>
@@ -78,6 +87,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.drawMap"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.drawMap()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.drawBsPanel"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.drawBsPanel()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.drawBeamArrow"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.drawBeamArrow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.saveGif"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.saveGif()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.animateTrajectory"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.animateTrajectory()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.interactiveTrajPoints"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.interactiveTrajPoints()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.trajectoryFromPoints"><code class="docutils literal notranslate"><span class="pre">DeepMimoData.trajectoryFromPoints()</span></code></a></li>
@@ -97,7 +107,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -124,6 +134,175 @@ a random trajectory within the specified <a class="reference external" href="htt
 <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.interactiveTrajPoints" title="neoradium.deepmimo.DeepMimoData.interactiveTrajPoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interactiveTrajPoints()</span></code></a> method enables you to define your own trajectory on
 an interactive map. A complete example of using the <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData" title="neoradium.deepmimo.DeepMimoData"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeepMimoData</span></code></a> class is available at
 <a class="reference internal" href="../Playground/Notebooks/RayTracing/DeepMimo.html"><span class="doc">Working with DeepMIMO Scenarios</span></a> in the playground.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="neoradium.deepmimo.NrAxes">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.deepmimo.</span></span><span class="sig-name descname"><span class="pre">NrAxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dmData</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.NrAxes" title="Link to this definition"></a></dt>
+<dd><p>Thin wrapper around a <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html">matplotlib Axes</a>
+that adds incremental-drawing helpers used during animation. Instances of this class are passed to the drawing
+callback of <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.animateTrajectory" title="neoradium.deepmimo.DeepMimoData.animateTrajectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DeepMimoData.animateTrajectory()</span></code></a> in place of the raw <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code> object so
+the callback can:</p>
+<ul class="simple">
+<li><p>append new samples to an existing <code class="docutils literal notranslate"><span class="pre">plot()</span></code> line without re-plotting (<a class="reference internal" href="#neoradium.deepmimo.NrAxes.addNewPoint" title="neoradium.deepmimo.NrAxes.addNewPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNewPoint()</span></code></a>),</p></li>
+<li><p>append new samples to an existing <code class="docutils literal notranslate"><span class="pre">fill_between()</span></code> shaded region (<a class="reference internal" href="#neoradium.deepmimo.NrAxes.addNewRange" title="neoradium.deepmimo.NrAxes.addNewRange"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNewRange()</span></code></a>),</p></li>
+<li><p>swap the data of an existing <code class="docutils literal notranslate"><span class="pre">imshow()</span></code> image (<a class="reference internal" href="#neoradium.deepmimo.NrAxes.updateImage" title="neoradium.deepmimo.NrAxes.updateImage"><code class="xref py py-meth docutils literal notranslate"><span class="pre">updateImage()</span></code></a>),</p></li>
+<li><p>draw or update a beam-direction arrow anchored at the base-station position
+(<a class="reference internal" href="#neoradium.deepmimo.NrAxes.drawBeamArrow" title="neoradium.deepmimo.NrAxes.drawBeamArrow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">drawBeamArrow()</span></code></a>, <a class="reference internal" href="#neoradium.deepmimo.NrAxes.updateBeamArrow" title="neoradium.deepmimo.NrAxes.updateBeamArrow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">updateBeamArrow()</span></code></a>).</p></li>
+</ul>
+<p>Every unrecognized attribute access falls through to the underlying <code class="docutils literal notranslate"><span class="pre">Axes</span></code> object via <code class="docutils literal notranslate"><span class="pre">__getattr__</span></code>, so a
+<a class="reference internal" href="#neoradium.deepmimo.NrAxes" title="neoradium.deepmimo.NrAxes"><code class="xref py py-class docutils literal notranslate"><span class="pre">NrAxes</span></code></a> behaves like a regular <code class="docutils literal notranslate"><span class="pre">Axes</span></code> for the rest of the matplotlib API (<code class="docutils literal notranslate"><span class="pre">set_title</span></code>,
+<code class="docutils literal notranslate"><span class="pre">set_xlim</span></code>, <code class="docutils literal notranslate"><span class="pre">legend</span></code>, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html">matplotlib.axes.Axes</a>) – The matplotlib axes being wrapped.</p></li>
+<li><p><strong>dmData</strong> (<a class="reference internal" href="#neoradium.deepmimo.DeepMimoData" title="neoradium.deepmimo.DeepMimoData"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeepMimoData</span></code></a>) – The <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData" title="neoradium.deepmimo.DeepMimoData"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeepMimoData</span></code></a> object whose scenario metadata (base-station position, x/y bounds) is
+used by <a class="reference internal" href="#neoradium.deepmimo.NrAxes.drawBsPanel" title="neoradium.deepmimo.NrAxes.drawBsPanel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">drawBsPanel()</span></code></a>, <a class="reference internal" href="#neoradium.deepmimo.NrAxes.drawBeamArrow" title="neoradium.deepmimo.NrAxes.drawBeamArrow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">drawBeamArrow()</span></code></a>, and <a class="reference internal" href="#neoradium.deepmimo.NrAxes.updateBeamArrow" title="neoradium.deepmimo.NrAxes.updateBeamArrow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">updateBeamArrow()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.NrAxes.addNewPoint">
+<span class="sig-name descname"><span class="pre">addNewPoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineIdx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.NrAxes.addNewPoint" title="Link to this definition"></a></dt>
+<dd><p>Append a new <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> sample to an existing line on this axes. Used to grow a line incrementally during
+an animation without re-plotting the entire history each frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newX</strong> (<em>float</em><em> or </em><em>array-like</em>) – X-coordinate(s) of the new sample(s) to append.</p></li>
+<li><p><strong>newY</strong> (<em>float</em><em> or </em><em>array-like</em>) – Y-coordinate(s) of the new sample(s) to append.</p></li>
+<li><p><strong>lineIdx</strong> (<em>int</em><em>, </em><em>default=0</em>) – Index of the line inside <code class="docutils literal notranslate"><span class="pre">ax.lines</span></code> (in the order they were created). Use this when more than one
+<code class="docutils literal notranslate"><span class="pre">plot()</span></code> call has been made on the same axes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated line object. Return it from the animation callback so <code class="docutils literal notranslate"><span class="pre">blit=True</span></code> matplotlib animations
+re-render it correctly.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.lines.Line2D.html">matplotlib.lines.Line2D</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.NrAxes.addNewRange">
+<span class="sig-name descname"><span class="pre">addNewRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newMinY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newMaxY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polyIdx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.NrAxes.addNewRange" title="Link to this definition"></a></dt>
+<dd><p>Append a new <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">minY,</span> <span class="pre">maxY)</span></code> sample to an existing <code class="docutils literal notranslate"><span class="pre">fill_between()</span></code> shaded region so the region can
+grow incrementally during an animation.</p>
+<p>The polygon’s raw <code class="docutils literal notranslate"><span class="pre">x</span></code>/<code class="docutils literal notranslate"><span class="pre">minY</span></code>/<code class="docutils literal notranslate"><span class="pre">maxY</span></code> sample arrays are cached as attributes (<code class="docutils literal notranslate"><span class="pre">_xdata</span></code>, <code class="docutils literal notranslate"><span class="pre">_miny</span></code>,
+<code class="docutils literal notranslate"><span class="pre">_maxy</span></code>) on the underlying <code class="docutils literal notranslate"><span class="pre">PolyCollection</span></code>, and the polygon’s closed 2-D boundary is reconstructed on
+every call (upper edge forward, then lower edge backward).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newX</strong> (<em>float</em><em> or </em><em>array-like</em>) – X-coordinate(s) of the new sample(s).</p></li>
+<li><p><strong>newMinY</strong> (<em>float</em><em> or </em><em>array-like</em>) – Lower-edge Y-coordinate(s) at <code class="docutils literal notranslate"><span class="pre">newX</span></code>.</p></li>
+<li><p><strong>newMaxY</strong> (<em>float</em><em> or </em><em>array-like</em>) – Upper-edge Y-coordinate(s) at <code class="docutils literal notranslate"><span class="pre">newX</span></code>.</p></li>
+<li><p><strong>polyIdx</strong> (<em>int</em><em>, </em><em>default=0</em>) – Index of the fill region in <code class="docutils literal notranslate"><span class="pre">ax.collections</span></code> (in the order they were created).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated fill-between polygon collection. Return it from the animation callback so it re-renders
+correctly under <code class="docutils literal notranslate"><span class="pre">blit=True</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/collections_api.html#matplotlib.collections.PolyCollection">matplotlib.collections.PolyCollection</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.NrAxes.updateImage">
+<span class="sig-name descname"><span class="pre">updateImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newImage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imageIdx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.NrAxes.updateImage" title="Link to this definition"></a></dt>
+<dd><p>Replace the pixel data of an existing <code class="docutils literal notranslate"><span class="pre">imshow()</span></code> image without re-creating the image, which preserves
+the colorbar, extent, and colormap so no flicker occurs during animation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newImage</strong> (<em>NumPy array</em>) – New pixel data with the same shape and dtype as the original <code class="docutils literal notranslate"><span class="pre">imshow()</span></code> array.</p></li>
+<li><p><strong>imageIdx</strong> (<em>int</em><em>, </em><em>default=0</em>) – Index of the image inside <code class="docutils literal notranslate"><span class="pre">ax.images</span></code> (in the order they were created).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated image artist. Return it from the animation callback so <code class="docutils literal notranslate"><span class="pre">blit=True</span></code> re-renders it.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.image.AxesImage.html">matplotlib.image.AxesImage</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.NrAxes.drawBsPanel">
+<span class="sig-name descname"><span class="pre">drawBsPanel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txBearingAngle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.NrAxes.drawBsPanel" title="Link to this definition"></a></dt>
+<dd><p>Draw the base-station panel indicator on this axes. This is a thin passthrough to
+<a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.drawBsPanel" title="neoradium.deepmimo.DeepMimoData.drawBsPanel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DeepMimoData.drawBsPanel()</span></code></a> on the associated <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData" title="neoradium.deepmimo.DeepMimoData"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeepMimoData</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>txBearingAngle</strong> (<em>float</em>) – Bearing angle of the base-station panel in degrees, in the scenario’s global coordinate system.</p></li>
+<li><p><strong>length</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Length of the panel marker in meters. When omitted, a sensible default based on the scenario extent
+is used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The patch representing the base-station panel.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.Patch.html">matplotlib.patches.Patch</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.NrAxes.drawBeamArrow">
+<span class="sig-name descname"><span class="pre">drawBeamArrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">globalPhi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'orange'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.NrAxes.drawBeamArrow" title="Link to this definition"></a></dt>
+<dd><p>Draw a beam-direction arrow anchored at the base-station position, pointing at azimuth <code class="docutils literal notranslate"><span class="pre">globalPhi</span></code>
+(in the scenario’s global coordinate system). The arrow length and color are cached on this
+<a class="reference internal" href="#neoradium.deepmimo.NrAxes" title="neoradium.deepmimo.NrAxes"><code class="xref py py-class docutils literal notranslate"><span class="pre">NrAxes</span></code></a> for later use by <a class="reference internal" href="#neoradium.deepmimo.NrAxes.updateBeamArrow" title="neoradium.deepmimo.NrAxes.updateBeamArrow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">updateBeamArrow()</span></code></a>.</p>
+<p>The returned patch is flagged as animated (<code class="docutils literal notranslate"><span class="pre">set_animated(True)</span></code>) so <code class="docutils literal notranslate"><span class="pre">blit=True</span></code> animations can
+cheaply repaint it every frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>globalPhi</strong> (<em>float</em>) – Azimuth angle of the beam in degrees. Values greater than 180 are wrapped by subtracting 360.</p></li>
+<li><p><strong>color</strong> (<em>str</em><em>, </em><em>default='orange'</em>) – Any matplotlib-recognized color specification.</p></li>
+<li><p><strong>length</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – Length of the arrow in meters. When omitted, defaults to one quarter of the scenario extent.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The arrow patch. Return it from the animation callback so <code class="docutils literal notranslate"><span class="pre">blit=True</span></code> re-renders it.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.FancyArrow.html">matplotlib.patches.FancyArrow</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.NrAxes.updateBeamArrow">
+<span class="sig-name descname"><span class="pre">updateBeamArrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">globalPhi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patchIdx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.NrAxes.updateBeamArrow" title="Link to this definition"></a></dt>
+<dd><p>Update an existing beam arrow (previously created with <a class="reference internal" href="#neoradium.deepmimo.NrAxes.drawBeamArrow" title="neoradium.deepmimo.NrAxes.drawBeamArrow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">drawBeamArrow()</span></code></a>) to point at a new
+azimuth. Reuses the color and length set on the initial call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>globalPhi</strong> (<em>float</em>) – New azimuth angle in degrees. Values greater than 180 are wrapped by subtracting 360.</p></li>
+<li><p><strong>patchIdx</strong> (<em>int</em><em>, </em><em>default=-1</em>) – Index of the arrow inside <code class="docutils literal notranslate"><span class="pre">ax.patches</span></code>. The default <code class="docutils literal notranslate"><span class="pre">-1</span></code> targets the most-recently-added patch.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated arrow patch.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.patches.FancyArrow.html">matplotlib.patches.FancyArrow</a></p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neoradium.deepmimo.</span></span><span class="sig-name descname"><span class="pre">DeepMimoData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseStationId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData" title="Link to this definition"></a></dt>
@@ -204,7 +383,7 @@ station.</p>
 <p><strong>Indexing:</strong></p>
 <p>This class supports direct indexing to the <a class="reference internal" href="Channels.html#neoradium.trjchan.TrjPoint" title="neoradium.trjchan.TrjPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrjPoint</span></code></a> objects in the DeepMIMO
 dataset. For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;O1_3p5B&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Read and create dataset</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"O1_3p5B"</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Read and create dataset</span>
 <span class="n">tenFirstPoints</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>      <span class="c1"># Get the first 10 points in the dataset</span>
 </pre></div>
 </div>
@@ -213,9 +392,9 @@ rather than copies; mutating a returned point will mutate the corresponding entr
 <p><strong>Iterating through points:</strong></p>
 <p>This class has a generator function (<code class="docutils literal notranslate"><span class="pre">__iter__</span></code>) which makes it easier to use it in a loop. For example, the
 following code counts the number of points with LOS paths.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;O1_3p5B&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Read and create dataset</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"O1_3p5B"</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Read and create dataset</span>
 <span class="n">numLosPoints</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">deepMimoData</span><span class="p">:</span>  <span class="c1"># Use &quot;deepMimoData&quot; directly with the &quot;for&quot; loop</span>
+<span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">deepMimoData</span><span class="p">:</span>  <span class="c1"># Use "deepMimoData" directly with the "for" loop</span>
     <span class="k">if</span> <span class="n">point</span><span class="o">.</span><span class="n">hasLos</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
         <span class="n">numLosPoints</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
@@ -388,7 +567,7 @@ this case all the points in the list will be drawn (scatter plot) over the map.<
 <li><p><strong>figSize</strong> (<em>float</em>) – This value determines the approximate size of the drawn map. If the maximum of the map’s width and height
 are less than the specified value, the map is scaled to match the specified size. The default value is set
 to <code class="docutils literal notranslate"><span class="pre">6</span></code>.</p></li>
-<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes">matplotlib.axes.Axes</a> or None) – If specified, it must be a matplotlib <code class="docutils literal notranslate"><span class="pre">Axes</span></code> object on which the scenario map is drawn. This can be used
+<li><p><strong>ax</strong> – If specified, it must be a matplotlib <code class="docutils literal notranslate"><span class="pre">Axes</span></code> object on which the scenario map is drawn. This can be used
 if you want to have a group of matplotlib subplots and draw the map in one of them.</p></li>
 </ul>
 </dd>
@@ -401,8 +580,8 @@ if you want to have a group of matplotlib subplots and draw the map in one of th
 </dd>
 </dl>
 <p><strong>Example:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus1&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">&quot;1stPathDelays&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"asu_campus1"</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">deepMimoData</span><span class="o">.</span><span class="n">drawMap</span><span class="p">(</span><span class="s2">"1stPathDelays"</span><span class="p">)</span>
 </pre></div>
 </div>
 <figure class="align-center" style="width: 600px">
@@ -468,8 +647,36 @@ function.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.saveGif">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">saveGif</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frameDuration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lastFrameDur</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.saveGif" title="Link to this definition"></a></dt>
+<dd><p>Save a matplotlib <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.FuncAnimation.html">FuncAnimation</a> object to an
+animated GIF file using a <strong>single global 256-color palette</strong> derived from the first frame. Reusing the
+same palette across every frame prevents the color-flickering artifact that occurs when PIL/Pillow
+assigns a fresh palette per frame — particularly noticeable when the animation contains a colorbar or
+smooth color gradient.</p>
+<p>Blitting is temporarily disabled during frame capture so the entire canvas is drawn every frame; the
+animation’s original <code class="docutils literal notranslate"><span class="pre">_blit</span></code> flag and the <code class="docutils literal notranslate"><span class="pre">animated</span></code> flags of all patches are restored before the
+method returns so live playback of the same animation is not affected.</p>
+<p>This function relies on a small number of matplotlib private attributes (<code class="docutils literal notranslate"><span class="pre">anim._fig</span></code>, <code class="docutils literal notranslate"><span class="pre">anim._blit</span></code>,
+<code class="docutils literal notranslate"><span class="pre">anim._init_func</span></code>, <code class="docutils literal notranslate"><span class="pre">anim._draw_frame</span></code>, and <code class="docutils literal notranslate"><span class="pre">anim.new_saved_frame_seq()</span></code>). Matplotlib does not
+currently expose an official frame-by-frame render API, so this is the standard workaround.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anim</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.FuncAnimation.html">matplotlib.animation.FuncAnimation</a>) – The animation object to save. Typically obtained from
+<a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.animateTrajectory" title="neoradium.deepmimo.DeepMimoData.animateTrajectory"><code class="xref py py-meth docutils literal notranslate"><span class="pre">DeepMimoData.animateTrajectory()</span></code></a>.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Output GIF file path.</p></li>
+<li><p><strong>frameDuration</strong> (<em>int</em><em>, </em><em>default=30</em>) – Per-frame display duration in milliseconds. Used for every frame except (optionally) the last.</p></li>
+<li><p><strong>lastFrameDur</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>default=None</em>) – If specified, sets the display duration (in milliseconds) of the final frame before the GIF loops.
+When <code class="docutils literal notranslate"><span class="pre">None</span></code>, the last frame uses the same duration as every other frame.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="neoradium.deepmimo.DeepMimoData.animateTrajectory">
-<span class="sig-name descname"><span class="pre">animateTrajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trajectory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numGraphs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graphCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LOS-NLOS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pointsPerFrame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lastFrameDur</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.animateTrajectory" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">animateTrajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trajectory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numGraphs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graphCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LOS-NLOS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pointsPerFrame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fileName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lastFrameDur</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speedRatio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neoradium.deepmimo.DeepMimoData.animateTrajectory" title="Link to this definition"></a></dt>
 <dd><p>Animate a scenario map showing the movement of a UE along a given trajectory.
 Optionally, up to three graphs can be displayed and updated below the map.</p>
 <p>A complete example is available in: <a class="reference internal" href="../Playground/Notebooks/RayTracing/TrajChannelAnim.html"><span class="doc">Animating a UE Trajectory in a DeepMIMO Scenario</span></a>.</p>
@@ -482,10 +689,11 @@ The default is 0, which displays only the trajectory on the map.</p></li>
 <li><p><strong>graphCallback</strong> (<em>function</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Callback function used to configure and update the graphs. If
 <code class="docutils literal notranslate"><span class="pre">numGraphs</span></code> is greater than zero, this function must be provided.
 It is called once for initialization and then for each animation frame.
-See the <em>Animation Callback Function</em> section below for details.</p></li>
+See the <a class="reference internal" href="#callback"><span class="std std-ref">Animation Callback Function</span></a> section
+below for details.</p></li>
 <li><p><strong>mapType</strong> (<em>str</em><em>, </em><em>optional</em>) – Type of map used as the background of the animation. See
 <a class="reference internal" href="#neoradium.deepmimo.DeepMimoData.drawMap" title="neoradium.deepmimo.DeepMimoData.drawMap"><code class="xref py py-meth docutils literal notranslate"><span class="pre">drawMap()</span></code></a> for available options.</p></li>
-<li><p><strong>pointsPerFrame</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Number of trajectory points per animation frame. The default is 10.
+<li><p><strong>pointsPerFrame</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Number of trajectory points per animation frame. The default is 20.
 Setting this value to 1 generates one frame per trajectory point, which increases
 memory usage significantly.</p>
 <div class="admonition note">
@@ -495,7 +703,7 @@ memory and may be truncated by Matplotlib. To reduce memory usage,
 increase <code class="docutils literal notranslate"><span class="pre">pointsPerFrame</span></code>. Alternatively, increase the animation
 memory limit, for example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
-<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;animation.embed_limit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100000000</span>  <span class="c1"># 100 MB</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'animation.embed_limit'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100000000</span>  <span class="c1"># 100 MB</span>
 </pre></div>
 </div>
 </div>
@@ -503,6 +711,11 @@ memory limit, for example:</p>
 <li><p><strong>fileName</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If specified, the animation is saved as a GIF file at the given path.</p></li>
 <li><p><strong>lastFrameDur</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If specified, it is the duration (in milliseconds) to hold the final frame of the GIF
 before it loops. Ignored if <code class="docutils literal notranslate"><span class="pre">fileName</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>speedRatio</strong> (<em>float</em><em>, </em><em>default=1</em>) – Playback-speed multiplier. Values greater than 1 speed the animation up (frames are held for a
+shorter time); values less than 1 slow it down. The natural pace (<code class="docutils literal notranslate"><span class="pre">speedRatio=1</span></code>) picks the
+per-frame interval so that the animation covers the full trajectory in <code class="docutils literal notranslate"><span class="pre">trajectory.time</span></code> seconds.
+The trajectory geometry itself is unchanged — this parameter only affects per-frame display time
+(both interactive playback <code class="docutils literal notranslate"><span class="pre">interval</span></code> and the saved-GIF frame duration).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -510,69 +723,83 @@ before it loops. Ignored if <code class="docutils literal notranslate"><span cla
 using the <code class="docutils literal notranslate"><span class="pre">to_jshtml()</span></code> method.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.FuncAnimation.html">matplotlib.animation.FuncAnimation</a></p>
+<dd class="field-odd"><p><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.FuncAnimation.html">matplotlib.animation.FuncAnimation</a></p>
+</p>
 </dd>
 </dl>
 <p id="callback"><strong>Animation Callback Function</strong></p>
-<p>The callback function is used to configure and update additional graphs and
-map elements during the animation. It is invoked with the following parameters:</p>
+<p>The callback function is used to configure and update additional graphs and map elements during the
+animation. It is invoked with the following parameters:</p>
 <blockquote>
 <div><dl class="field-list">
 <dt class="field-odd">request<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Specifies the type of operation:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code>: Called once at the beginning to configure the graphs.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ConfigMap&quot;</span></code>: Called once to customize the scenario map.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;Draw&quot;</span></code>: Called for each frame to update the graphs.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;DrawOnMap&quot;</span></code>: Called for each frame to draw additional elements on the map.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code>: Called once at the beginning to configure the graphs (set titles, axis
+limits, and seed any lines / images / fill regions that will grow during the animation).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;ConfigMap&quot;</span></code>: Called once to customize the scenario map (e.g. add a base-station panel
+via <a class="reference internal" href="#neoradium.deepmimo.NrAxes.drawBsPanel" title="neoradium.deepmimo.NrAxes.drawBsPanel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NrAxes.drawBsPanel()</span></code></a> or an initial beam arrow via
+<a class="reference internal" href="#neoradium.deepmimo.NrAxes.drawBeamArrow" title="neoradium.deepmimo.NrAxes.drawBeamArrow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NrAxes.drawBeamArrow()</span></code></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;Draw&quot;</span></code>: Called for each frame to update the graphs. Typical implementations use
+<a class="reference internal" href="#neoradium.deepmimo.NrAxes.addNewPoint" title="neoradium.deepmimo.NrAxes.addNewPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NrAxes.addNewPoint()</span></code></a>, <a class="reference internal" href="#neoradium.deepmimo.NrAxes.addNewRange" title="neoradium.deepmimo.NrAxes.addNewRange"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NrAxes.addNewRange()</span></code></a>, or
+<a class="reference internal" href="#neoradium.deepmimo.NrAxes.updateImage" title="neoradium.deepmimo.NrAxes.updateImage"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NrAxes.updateImage()</span></code></a> to grow / update artists in place.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;DrawOnMap&quot;</span></code>: Called for each frame to update or draw items on the map (for example,
+<a class="reference internal" href="#neoradium.deepmimo.NrAxes.updateBeamArrow" title="neoradium.deepmimo.NrAxes.updateBeamArrow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NrAxes.updateBeamArrow()</span></code></a> to re-aim the base-station beam).</p></li>
 </ul>
 </div></blockquote>
 </dd>
 <dt class="field-even">ax<span class="colon">:</span></dt>
-<dd class="field-even"><p>A <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes">matplotlib.axes.Axes</a>
-object or a list of such objects.</p>
+<dd class="field-even"><p>A <a class="reference internal" href="#neoradium.deepmimo.NrAxes" title="neoradium.deepmimo.NrAxes"><code class="xref py py-class docutils literal notranslate"><span class="pre">NrAxes</span></code></a> object or a list of such objects (never the raw <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code>).
+<a class="reference internal" href="#neoradium.deepmimo.NrAxes" title="neoradium.deepmimo.NrAxes"><code class="xref py py-class docutils literal notranslate"><span class="pre">NrAxes</span></code></a> wraps <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code> and adds incremental-drawing helpers
+(<a class="reference internal" href="#neoradium.deepmimo.NrAxes.addNewPoint" title="neoradium.deepmimo.NrAxes.addNewPoint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNewPoint()</span></code></a>, <a class="reference internal" href="#neoradium.deepmimo.NrAxes.addNewRange" title="neoradium.deepmimo.NrAxes.addNewRange"><code class="xref py py-meth docutils literal notranslate"><span class="pre">addNewRange()</span></code></a>, <a class="reference internal" href="#neoradium.deepmimo.NrAxes.updateImage" title="neoradium.deepmimo.NrAxes.updateImage"><code class="xref py py-meth docutils literal notranslate"><span class="pre">updateImage()</span></code></a>,
+<a class="reference internal" href="#neoradium.deepmimo.NrAxes.drawBsPanel" title="neoradium.deepmimo.NrAxes.drawBsPanel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">drawBsPanel()</span></code></a>, <a class="reference internal" href="#neoradium.deepmimo.NrAxes.drawBeamArrow" title="neoradium.deepmimo.NrAxes.drawBeamArrow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">drawBeamArrow()</span></code></a>,
+<a class="reference internal" href="#neoradium.deepmimo.NrAxes.updateBeamArrow" title="neoradium.deepmimo.NrAxes.updateBeamArrow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">updateBeamArrow()</span></code></a>) that are the recommended way to update artists per frame
+without re-plotting the entire history. Any attribute not defined on <a class="reference internal" href="#neoradium.deepmimo.NrAxes" title="neoradium.deepmimo.NrAxes"><code class="xref py py-class docutils literal notranslate"><span class="pre">NrAxes</span></code></a> falls
+through to the underlying <code class="docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code> (<code class="docutils literal notranslate"><span class="pre">set_title</span></code>, <code class="docutils literal notranslate"><span class="pre">set_xlim</span></code>, <code class="docutils literal notranslate"><span class="pre">plot</span></code>,
+<code class="docutils literal notranslate"><span class="pre">imshow</span></code>, <code class="docutils literal notranslate"><span class="pre">legend</span></code>, etc.), so <a class="reference internal" href="#neoradium.deepmimo.NrAxes" title="neoradium.deepmimo.NrAxes"><code class="xref py py-class docutils literal notranslate"><span class="pre">NrAxes</span></code></a> is a drop-in replacement anywhere a
+matplotlib <code class="docutils literal notranslate"><span class="pre">Axes</span></code> is expected.</p>
 <ul class="simple">
-<li><p>For <code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;Draw&quot;</span></code>, this is a list of axes used for the graphs.</p></li>
-<li><p>For <code class="docutils literal notranslate"><span class="pre">&quot;ConfigMap&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;DrawOnMap&quot;</span></code>, this is the map axes.</p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;Draw&quot;</span></code>, this is a list of <a class="reference internal" href="#neoradium.deepmimo.NrAxes" title="neoradium.deepmimo.NrAxes"><code class="xref py py-class docutils literal notranslate"><span class="pre">NrAxes</span></code></a> objects (one per graph).</p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">&quot;ConfigMap&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;DrawOnMap&quot;</span></code>, this is a single <a class="reference internal" href="#neoradium.deepmimo.NrAxes" title="neoradium.deepmimo.NrAxes"><code class="xref py py-class docutils literal notranslate"><span class="pre">NrAxes</span></code></a> (the map axes).</p></li>
 </ul>
 </dd>
 <dt class="field-odd">trajectory<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The <a class="reference internal" href="Channels.html#neoradium.trjchan.Trajectory" title="neoradium.trjchan.Trajectory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trajectory</span></code></a> used in the animation.</p>
 </dd>
 <dt class="field-even">points<span class="colon">:</span></dt>
-<dd class="field-even"><p>A tuple <code class="docutils literal notranslate"><span class="pre">(p0,</span> <span class="pre">p1)</span></code> representing the indices of the previous and
-current trajectory points. Used only for <code class="docutils literal notranslate"><span class="pre">&quot;Draw&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;DrawOnMap&quot;</span></code> requests.</p>
+<dd class="field-even"><p>A tuple <code class="docutils literal notranslate"><span class="pre">(p0,</span> <span class="pre">p1)</span></code> giving the indices of the previous and current trajectory points. Only
+supplied for <code class="docutils literal notranslate"><span class="pre">&quot;Draw&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;DrawOnMap&quot;</span></code> requests; omitted (<code class="docutils literal notranslate"><span class="pre">None</span></code>) for <code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&quot;ConfigMap&quot;</span></code>.</p>
 </dd>
 </dl>
 </div></blockquote>
+<p><strong>Return value</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;Draw&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;DrawOnMap&quot;</span></code> callbacks should return a tuple of matplotlib artists — typically the
+objects returned by the <a class="reference internal" href="#neoradium.deepmimo.NrAxes" title="neoradium.deepmimo.NrAxes"><code class="xref py py-class docutils literal notranslate"><span class="pre">NrAxes</span></code></a> incremental-drawing methods — so <code class="docutils literal notranslate"><span class="pre">blit=True</span></code> re-renders
+them correctly. Returning <code class="docutils literal notranslate"><span class="pre">None</span></code> (or omitting the return) is accepted but disables blitting for those
+artists. The <code class="docutils literal notranslate"><span class="pre">&quot;Config&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;ConfigMap&quot;</span></code> callbacks are not expected to return anything.</p>
 <p class="rubric">Example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">handleGraph</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">request</span> <span class="o">==</span> <span class="s2">&quot;Config&quot;</span><span class="p">:</span>
-        <span class="c1"># Configure first graph: delay of the first path</span>
+    <span class="k">if</span> <span class="n">request</span> <span class="o">==</span> <span class="s2">"Config"</span><span class="p">:</span>
+        <span class="c1"># One-time setup: axis limits, titles, and a seed sample per graph so the "Draw" callback</span>
+        <span class="c1"># can grow each line with NrAxes.addNewPoint().</span>
         <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span><span class="p">)</span>
         <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mi">1300</span><span class="p">)</span>
-        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Delay of First Path (ns)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Delay of First Path (ns)"</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">delays</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">],</span> <span class="s1">'blue'</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="c1"># Configure second graph: power of the first path</span>
         <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">numPoints</span><span class="p">)</span>
         <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">130</span><span class="p">,</span> <span class="o">-</span><span class="mi">80</span><span class="p">)</span>
-        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Power of First Path (dB)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Power of First Path (dB)"</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">powers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">],</span> <span class="s1">'red'</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">request</span> <span class="o">==</span> <span class="s2">&quot;Draw&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">request</span> <span class="o">==</span> <span class="s2">"Draw"</span><span class="p">:</span>
+        <span class="c1"># Grow each seeded line by one sample per frame and return the updated Line2D artists so</span>
+        <span class="c1"># blit=True re-renders them.</span>
         <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">points</span>
-        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">p0</span><span class="p">]</span><span class="o">.</span><span class="n">delays</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span><span class="o">.</span><span class="n">delays</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
-            <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
-            <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span>
-        <span class="p">)</span>
-        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">],</span>
-            <span class="p">[</span><span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">p0</span><span class="p">]</span><span class="o">.</span><span class="n">powers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span><span class="o">.</span><span class="n">powers</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
-            <span class="s1">&#39;red&#39;</span><span class="p">,</span>
-            <span class="n">markersize</span><span class="o">=</span><span class="mi">1</span>
-        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">addNewPoint</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span><span class="o">.</span><span class="n">delays</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">addNewPoint</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span><span class="o">.</span><span class="n">powers</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -628,8 +855,8 @@ map coordinates) of the <code class="docutils literal notranslate"><span class="
 <p>The code below can be used to generate a trajectory of points for the “asu_campus1” scenario. The image
 below illustrates the current trajectory, depicted by blue lines, and the starting point, marked by a small
 blue circle.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus1&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">points</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">interactiveTrajPoints</span><span class="p">(</span><span class="n">mapType</span><span class="o">=</span><span class="s2">&quot;LOS-NLOS&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"asu_campus1"</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">deepMimoData</span><span class="o">.</span><span class="n">interactiveTrajPoints</span><span class="p">(</span><span class="n">mapType</span><span class="o">=</span><span class="s2">"LOS-NLOS"</span><span class="p">)</span>
 </pre></div>
 </div>
 <figure class="align-center" style="width: 600px">
@@ -900,7 +1127,7 @@ random angle is picked from those specified in the list.</p></li>
 </dd>
 </dl>
 <p><strong>Example:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">&quot;asu_campus_3p5&quot;</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">deepMimoData</span> <span class="o">=</span> <span class="n">DeepMimoData</span><span class="p">(</span><span class="s2">"asu_campus_3p5"</span><span class="p">,</span> <span class="n">baseStationId</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gridId</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">carrier</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">startRb</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numRbs</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span> <span class="c1"># Carrier with 25 PRBs, 15 kHz subcarrier spacing</span>
 
 <span class="c1"># Create 100 channel matrices</span>

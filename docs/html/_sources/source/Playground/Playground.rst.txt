@@ -127,6 +127,16 @@ Research Papers
         Notebooks/Research/SelfRefining/MLChEstEvaluateHARQ.ipynb
 
 
+`LWM-Spectro: A Foundation Model for Wireless Baseband Signal Spectrograms <https://arxiv.org/abs/2601.08780>`_
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+    .. toctree::
+        :maxdepth: 1
+            
+        View the code <https://huggingface.co/wi-lab/lwm-spectro>
+        
+
 Other Examples
 --------------
 

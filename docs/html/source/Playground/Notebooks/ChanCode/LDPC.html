@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Low-Density Parity Check (LDPC) &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>Low-Density Parity Check (LDPC) &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -15,7 +15,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -37,7 +37,7 @@
           
           
           <a href="../../../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -106,7 +106,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -146,7 +146,7 @@
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an LDPC codec object</span>
 <span class="n">txBlockSize</span> <span class="o">=</span> <span class="mi">10000</span>
 <span class="n">coderate</span> <span class="o">=</span> <span class="mi">449</span><span class="o">/</span><span class="mi">1024</span>
-<span class="n">modulation</span> <span class="o">=</span> <span class="s2">&quot;16QAM&quot;</span>
+<span class="n">modulation</span> <span class="o">=</span> <span class="s2">"16QAM"</span>
 <span class="n">ldpc</span> <span class="o">=</span> <span class="n">LdpcCodec</span><span class="p">(</span><span class="n">modulation</span><span class="p">,</span> <span class="n">coderate</span><span class="p">,</span> <span class="n">txBlockSize</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">ldpc</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </pre></div>
@@ -178,9 +178,9 @@ LDPC Encode/Decode Properties:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Base Graph Shape:&quot;</span><span class="p">,</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">cwCodecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">baseGraph</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;8x8 sub-matrix at the </span><span class="se">\&quot;</span><span class="s2">Double Diagonal</span><span class="se">\&quot;</span><span class="s2"> section:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">cwCodecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">baseGraph</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="mi">22</span><span class="p">:</span><span class="mi">30</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="s2">&quot;   &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%3d</span><span class="s2">&quot;</span><span class="o">%</span><span class="k">x</span> for x in r))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Base Graph Shape:"</span><span class="p">,</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">cwCodecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">baseGraph</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"8x8 sub-matrix at the </span><span class="se">\"</span><span class="s2">Double Diagonal</span><span class="se">\"</span><span class="s2"> section:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">cwCodecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">baseGraph</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span><span class="mi">22</span><span class="p">:</span><span class="mi">30</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">"    "</span> <span class="o">+</span> <span class="s2">"   "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"</span><span class="si">%3d</span><span class="s2">"</span><span class="o">%</span><span class="k">x</span> for x in r))
 </pre></div>
 </div>
 </div>
@@ -207,7 +207,7 @@ Base Graph Shape: (46, 68)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">txBlockSize</span><span class="p">)</span>                  <span class="c1"># Create a random Transport Block</span>
 <span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">txBlock</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate-Matched coded blocks Shape:&quot;</span><span class="p">,</span> <span class="n">rateMatchedCodeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Rate-Matched coded blocks Shape:"</span><span class="p">,</span> <span class="n">rateMatchedCodeBlocks</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -236,7 +236,7 @@ Rate-Matched coded blocks Shape: (22808,)
 <span class="n">rxBlock</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">channelOutput</span><span class="p">)</span>
 
 <span class="c1"># Check CRC and compare with the original txBlock</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;crcMatch:&quot;</span><span class="p">,</span> <span class="n">crcMatch</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"crcMatch:"</span><span class="p">,</span> <span class="n">crcMatch</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBlock</span><span class="o">-</span><span class="n">txBlock</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span>
 <br/></pre></div>
 </div>
@@ -258,7 +258,7 @@ crcMatch: [ True  True  True]
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">txBlockSizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">]</span>
 <span class="n">coderates</span> <span class="o">=</span> <span class="p">[</span><span class="mi">449</span><span class="o">/</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">193</span><span class="o">/</span><span class="mi">1024</span><span class="p">]</span>
-<span class="n">modulations</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;16QAM&quot;</span><span class="p">,</span> <span class="s2">&quot;QPSK&quot;</span><span class="p">]</span>
+<span class="n">modulations</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"16QAM"</span><span class="p">,</span> <span class="s2">"QPSK"</span><span class="p">]</span>
 <span class="n">ldpc</span> <span class="o">=</span> <span class="n">LdpcCodec</span><span class="p">(</span><span class="n">modulations</span><span class="p">,</span> <span class="n">coderates</span><span class="p">,</span> <span class="n">txBlockSizes</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">ldpc</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
 </pre></div>
@@ -302,9 +302,9 @@ LDPC Encode/Decode Properties:
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">txBlocks</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">txBlockSize</span><span class="p">)</span> <span class="k">for</span> <span class="n">txBlockSize</span> <span class="ow">in</span> <span class="n">txBlockSizes</span><span class="p">]</span>   <span class="c1"># Create random Transport Blocks</span>
 <span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">txBlocks</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate-Matched coded block lengths:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  First codeword:  </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Second codeword: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Rate-Matched coded block lengths:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  First codeword:  </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Second codeword: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -335,8 +335,8 @@ Rate-Matched coded block lengths:
 <span class="n">rxBlocks</span><span class="p">,</span> <span class="n">crcMatches</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">channelOutput</span><span class="p">)</span>
 
 <span class="c1"># Check CRCs and compare with the original txBlocks</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;First codeword crcMatch:  </span><span class="si">{</span><span class="n">crcMatches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Second codeword crcMatch: </span><span class="si">{</span><span class="n">crcMatches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"First codeword crcMatch:  </span><span class="si">{</span><span class="n">crcMatches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Second codeword crcMatch: </span><span class="si">{</span><span class="n">crcMatches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">txBlocks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBlocks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">txBlocks</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span>
 <br/></pre></div>
@@ -359,9 +359,9 @@ Second codeword crcMatch: [ True  True  True]
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bwp</span> <span class="o">=</span> <span class="n">BandwidthPart</span><span class="p">(</span><span class="n">numRbs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">spacing</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>          <span class="c1"># Create a bandwidth part with 24 RBs and 15 kHz subcarrier spacing</span>
-<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">&quot;16QAM&quot;</span><span class="p">)</span> <span class="c1"># Create a 1-layer PDSCH</span>
+<span class="n">pdsch</span> <span class="o">=</span> <span class="n">PDSCH</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">numLayers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">modulation</span><span class="o">=</span><span class="s2">"16QAM"</span><span class="p">)</span> <span class="c1"># Create a 1-layer PDSCH</span>
 <span class="n">pdsch</span><span class="o">.</span><span class="n">setDMRS</span><span class="p">()</span>                                     <span class="c1"># Use default DMRS configuration</span>
-<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>   <span class="c1"># Create a SISO channel</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">CdlChannel</span><span class="p">(</span><span class="n">bwp</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="s1">'C'</span><span class="p">,</span> <span class="n">delaySpread</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">carrierFreq</span><span class="o">=</span><span class="mf">4e9</span><span class="p">,</span> <span class="n">dopplerShift</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>   <span class="c1"># Create a SISO channel</span>
 </pre></div>
 </div>
 </div>
@@ -402,11 +402,11 @@ LDPC Encode/Decode Properties:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                <span class="c1"># Initialize PDSCH&#39;s internal resource grid and populate it with DMRS</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdsch</span><span class="o">.</span><span class="n">initGrid</span><span class="p">()</span>                                <span class="c1"># Initialize PDSCH's internal resource grid and populate it with DMRS</span>
 <span class="n">numBits</span> <span class="o">=</span> <span class="n">pdsch</span><span class="o">.</span><span class="n">getBitCapacity</span><span class="p">()</span>                                    <span class="c1"># Number of PDSCH data bits in the resource grid</span>
 <span class="n">txBlock</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">bits</span><span class="p">(</span><span class="n">ldpc</span><span class="o">.</span><span class="n">cwCodecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">txBlockSize</span><span class="p">)</span>                 <span class="c1"># Random transport block</span>
 <span class="n">rateMatchedCodeBlocks</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">txBlock</span><span class="p">,</span> <span class="n">numBits</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>            <span class="c1"># LDPC-encoded and rate-matched bitstream</span>
-<span class="n">pdsch</span><span class="o">.</span><span class="n">setPdschData</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">)</span>                           <span class="c1"># Populates the PDSCH&#39;s grid with encoded bits</span>
+<span class="n">pdsch</span><span class="o">.</span><span class="n">setPdschData</span><span class="p">(</span><span class="n">rateMatchedCodeBlocks</span><span class="p">)</span>                           <span class="c1"># Populates the PDSCH's grid with encoded bits</span>
 </pre></div>
 </div>
 </div>
@@ -469,7 +469,7 @@ LDPC Encode/Decode Properties:
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rxBlock</span><span class="p">,</span> <span class="n">crcMatch</span> <span class="o">=</span> <span class="n">ldpc</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">llrs</span><span class="p">)</span>                               <span class="c1"># Use our LdpcCodec object to decode LLRs</span>
 
 <span class="c1"># Check CRC and compare with the original txBlock</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;crcMatch:&quot;</span><span class="p">,</span> <span class="n">crcMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"crcMatch:"</span><span class="p">,</span> <span class="n">crcMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rxBlock</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">txBlock</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span>
 </pre></div>
 </div>

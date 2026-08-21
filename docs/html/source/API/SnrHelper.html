@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SnrScheduler &mdash; NeoRadium 0.5.1 Documentation</title>
+  <title>SnrScheduler &mdash; NeoRadium 0.5.2 Documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/neoradium.css?v=45ad03f8" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=b9afe91b"></script>
+      <script src="../../_static/documentation_options.js?v=8e576371"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -36,7 +36,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            NeoRadium 0.5.1
+            NeoRadium 0.5.2
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -88,7 +88,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">NeoRadium 0.5.1</a>
+          <a href="../../index.html">NeoRadium 0.5.2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -182,13 +182,13 @@ by <a class="reference internal" href="#neoradium.snrhelper.SnrScheduler.getSnrs
 
 <span class="k">for</span> <span class="n">snrDb</span> <span class="ow">in</span> <span class="n">snrScheduler</span><span class="p">:</span>                      <span class="c1"># Start your loop</span>
     <span class="c1"># ...</span>
-    <span class="c1"># Calculate &quot;ber&quot; and &quot;bler&quot; values in your loop for current snrDb</span>
+    <span class="c1"># Calculate "ber" and "bler" values in your loop for current snrDb</span>
     <span class="c1"># ...</span>
 
-    <span class="c1"># Call setData with &#39;bler&#39; as the main metric and &#39;ber&#39; as &#39;otherValues&#39;.</span>
+    <span class="c1"># Call setData with 'bler' as the main metric and 'ber' as 'otherValues'.</span>
     <span class="n">snrScheduler</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">bler</span><span class="p">,</span> <span class="n">ber</span><span class="p">)</span>
 
-<span class="c1"># After the loop, call the &#39;getSnrsAndData&#39; method. It returns 3 numpy arrays for SNR values,</span>
+<span class="c1"># After the loop, call the 'getSnrsAndData' method. It returns 3 numpy arrays for SNR values,</span>
 <span class="c1"># the corresponding BLER values, and the corresponding BER values.</span>
 <span class="n">snrs</span><span class="p">,</span> <span class="n">blers</span><span class="p">,</span> <span class="n">bers</span> <span class="o">=</span> <span class="n">snrScheduler</span><span class="o">.</span><span class="n">getSnrsAndData</span><span class="p">()</span>
 </pre></div>
