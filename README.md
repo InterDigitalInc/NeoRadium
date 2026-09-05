@@ -1,8 +1,8 @@
-<img src="NeoRadium.png" alt="NeoRadium" width="400px"/>
+<img src="https://raw.githubusercontent.com/InterDigitalInc/NeoRadium/main/NeoRadium.png" alt="NeoRadium" width="400px"/>
 
 **NeoRadium** is a Python library for simulating end-to-end wireless communication systems based on the latest **3GPP 5G NR** standards. Its object-oriented design abstracts much of the complexity involved in physical-layer modeling, enabling researchers and engineers to rapidly build, customize, and evaluate communication pipelines using standard Python workflows.
 
-<img src="Playground/RayTracing/AnimateLA.gif" alt="AnimateLA"/>
+<img src="https://raw.githubusercontent.com/InterDigitalInc/NeoRadium/main/Playground/RayTracing/AnimateLA.gif" alt="AnimateLA"/>
 
 In many wireless communication projects, the primary focus is a specific component of the physical layer, such as channel estimation, equalization, precoding, beam management, scheduling, or channel coding. Implementing an entire standards-compliant communication pipeline simply to evaluate a single algorithm can be time-consuming and error-prone. **NeoRadium** addresses this challenge by providing a comprehensive 3GPP-based simulation framework that allows researchers to focus on the components they care about while leveraging a complete, interoperable end-to-end system.
 
