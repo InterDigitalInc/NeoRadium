@@ -1,12 +1,16 @@
 <img src="https://raw.githubusercontent.com/InterDigitalInc/NeoRadium/main/NeoRadium.png" alt="NeoRadium" width="400px"/>
 
+[![version](https://img.shields.io/pypi/v/neoradium)](https://pypi.org/project/neoradium/)
+[![Python versions](https://img.shields.io/pypi/pyversions/neoradium)](https://pypi.org/project/neoradium/)
+[![Docs](https://img.shields.io/badge/docs-online-brightgreen)](https://interdigitalinc.github.io/NeoRadium/)
+
 **NeoRadium** is a Python library for simulating end-to-end wireless communication systems based on the latest **3GPP 5G NR** standards. Its object-oriented design abstracts much of the complexity involved in physical-layer modeling, enabling researchers and engineers to rapidly build, customize, and evaluate communication pipelines using standard Python workflows.
 
 <img src="https://raw.githubusercontent.com/InterDigitalInc/NeoRadium/main/Playground/RayTracing/AnimateLA.gif" alt="AnimateLA"/>
 
 In many wireless communication projects, the primary focus is a specific component of the physical layer, such as channel estimation, equalization, precoding, beam management, scheduling, or channel coding. Implementing an entire standards-compliant communication pipeline simply to evaluate a single algorithm can be time-consuming and error-prone. **NeoRadium** addresses this challenge by providing a comprehensive 3GPP-based simulation framework that allows researchers to focus on the components they care about while leveraging a complete, interoperable end-to-end system.
 
-**NeoRadium** is designed to run on standard desktop and laptop computers without requiring specialized hardware, complex software stacks, or GPUs. If your system supports Python 3.9 or later, you can start exploring and developing communication-system simulations immediately.
+**NeoRadium** is designed to run on standard desktop and laptop computers without requiring specialized hardware, complex software stacks, or GPUs. If your system supports Python 3.10 or later, you can start exploring and developing communication-system simulations immediately.
 
 The project includes a comprehensive **Playground** containing numerous tutorials and examples presented as **Jupyter Notebooks**. These notebooks demonstrate key APIs, explain core concepts, and provide practical examples ranging from basic resource-grid operations to complete end-to-end 5G NR simulations.
 
@@ -22,6 +26,9 @@ The **Playground** directory contains a collection of tutorial notebooks coverin
 
 The tutorials range from introductory examples to advanced end-to-end simulations and provide a practical way to learn **NeoRadium**'s APIs and capabilities.
 
+## Author
+* Shahab Hamidi-Rad, InterDigital AI Lab
+
 ## Citation
 If you use **NeoRadium** in your work, please cite it as:
 
@@ -29,9 +36,9 @@ If you use **NeoRadium** in your work, please cite it as:
 @software{Id_AILAB_NeoRadium_2026,
   author  = {Hamidi-Rad, Shahab},
   title   = {NeoRadium},
-  version = {0.5.2},
+  version = {0.5.3},
   year    = {2026},
-  month   = {August},
+  month   = {September},
   url     = {https://github.com/InterDigitalInc/NeoRadium}
 }
 ```

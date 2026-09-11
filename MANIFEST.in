@@ -1,2 +1,4 @@
 include README.md
 include LICENSE
+recursive-include neoradium/nrext *.c *.h
+recursive-include neoradium/data *.json

@@ -225,7 +225,8 @@ class TrjPoint:
             if self.hasLos==1:
                 self.losPhase, self.losDelay, self.losPower, self.losAoa, self.losZoa, self.losAod, self.losZod = \
                     self.pathInfo.T[:7,0]
-                assert self.bounces[0] in [0,-1], "LOS bounce must be 0 if available!"
+                # In some scenarios, there are LOS bounces set to 3 (Scattering). Remarking this out for now:
+                # assert self.bounces[0] in [0,-1], f"LOS bounce must be 0 if available! {self.bounces[0]}"
                 if self.numPaths>1:
                     self.nlosPhases, self.nlosDelays, self.nlosPowers, self.nlosAoas, self.nlosZoas, self.nlosAods, \
                         self.nlosZods, self.nlosBounces = self.pathInfo.T[:,1:]

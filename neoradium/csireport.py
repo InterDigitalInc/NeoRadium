@@ -261,7 +261,9 @@ class CsiReport:
 
         if self.quantity == 'Cri':
             # CRI settings/initialization ------------------------------------------------------------------------------
-            self.criRsrpValues = {rs.resourceId: None for s in self.csiRsSets for rs in s.csiRsList}
+            self.processMeasuredSet = kwargs.get('processMeasuredSet', None)
+            self.criRsrpValues = {csiRsSet.rsId: {rs.resourceId: None for rs in csiRsSet.csiRsList}
+                                                for csiRsSet in self.csiRsSets}
 
         if self.quantity == 'CriRiPmiCqi':
             # For this case we need to store RI/PMI information until we have them for all resources
@@ -396,20 +398,23 @@ class CsiReport:
         # The selected CRI and the corresponding RSRP are stored in ``self.csiFeedback``.
         for resourceId, (lIdx, kIdx, csiRsValues) in setResources.items():
             rxCsiRsValues = rxGrid[:,lIdx, kIdx]                       # Get received CSI-RS REs at each RX antenna
-            rsrp = self.getRsrp(rxCsiRsValues, csiRsValues, rxGrid.noiseVar)   # No noise power compensation
-            self.criRsrpValues[ resourceId ] = rsrp
+            rsrp = self.getRsrp(rxCsiRsValues, csiRsValues, rxGrid.noiseVar)
+            self.criRsrpValues[ csiRsSet.rsId ][ resourceId ] = rsrp
 
-        rsrps = list(self.criRsrpValues.values())
-        if None in rsrps:   return          # We don't have RSRP for all resources yet -> Cannot get CRI
+        rsrps = list(self.criRsrpValues[ csiRsSet.rsId ].values())
+        if None in rsrps:   return                      # We don't have RSRP for all resources yet -> Cannot get CRI
         idx = np.argsort(rsrps)[::-1][:self.numCri]     # Top-K RSRP indices (K=self.numCri)
-        ids = np.array(list(self.criRsrpValues.keys()))[idx].tolist()
+        ids = np.array(list(self.criRsrpValues[ csiRsSet.rsId ].keys()))[idx].tolist()
 
         if self.numCri == 1:    self.csiFeedback.cri = CriFeedback(ids[0], toDb(rsrps[ idx[0] ]))       # Best
         else:                   self.csiFeedback.cri = CriFeedback(ids, toDb(rsrps)[idx].tolist() )     # Top-K
         
-        # Now reset all RSRPs in 'criRsrpValues' to prepare for the next measurement round.
-        for resourceId in self.criRsrpValues:
-            self.criRsrpValues[resourceId] = None
+        if self.processMeasuredSet is not None:
+            self.processMeasuredSet(csiRsSet.rsId, self.criRsrpValues[csiRsSet.rsId])
+
+        # Now reset all RSRPs in 'criRsrpValues' for this CSI-RS set to prepare for the next measurement round.
+        for resourceId in self.criRsrpValues[csiRsSet.rsId]:
+            self.criRsrpValues[csiRsSet.rsId][resourceId] = None
        
     # ******************************************************************************************************************
     def getModRate(self, cqi):

@@ -271,16 +271,17 @@ class PDSCH:
         elif (symStart is not None) and (symLen is not None):
             self.symSet = np.uint32(range(symStart, symStart+symLen))
         else:
-            if self.mappingType=='A':           defaultSymSet = range(self.bwp.symbolsPerSlot)
-            elif self.bwp.cpType=='normal':     defaultSymSet = range(13)
-            else:                               defaultSymSet = range(6)
+            # See TS 38.214 Table 5.1.2.1-1
+            if self.mappingType=='A':           defaultSymSet = range(self.bwp.symbolsPerSlot)    # 14 or 12
+            else:                               defaultSymSet = range(self.bwp.symbolsPerSlot//2) # 7 or 6
             self.symSet = np.sort(np.uint32(kwargs.get('symSet', defaultSymSet)))   # The set of symbols allocated
 
         if len(self.symSet)==0:             raise ValueError(f"'symSet' must not be empty!")
         if self.symSet[-1]>=self.bwp.symbolsPerSlot or self.symSet[0]<0:
             raise ValueError(f"Invalid 'symSet' values! (They must be in [0..{self.bwp.symbolsPerSlot-1}])")
         if len(self.symSet)>1 and np.diff(self.symSet).max()>1:
-            raise ValueError(f"Invalid 'symSet' values! The OFDM symbol allocation must be contiguous!")
+            raise ValueError(f"Invalid 'symSet' values! The OFDM symbol allocation must be contiguous!\n"
+                             f"    symSet: {self.symSet}")
 
         # The size of Precoding RB groups (PRGs). See 3GPP TS 38.214, Section 5.1.2.3
         self.prgSize = kwargs.get('prgSize', 0) # 0 -> 'Wideband', which means a single precoding is used for all PRBs
@@ -300,7 +301,7 @@ class PDSCH:
         # Interleaving is implemented in the BandwidthPart class starting in NeoRadium 0.5.
         interleavingBundleSize = kwargs.get('interleavingBundleSize', None)
         if interleavingBundleSize is not None:
-            warnOnce("'interleavingBundleSize' is a property of the BandwidthPart class. "+
+            warnOnce("'interleavingBundleSize' is now a property of the BandwidthPart class. "+
                      "It will be removed from the PDSCH class in future releases.")
             # Warning: You should set interleavingBundleSize for the bandwidth part.
             if interleavingBundleSize not in [0,2,4]:
@@ -1427,14 +1428,11 @@ class PDSCH:
         
         if nr>nl:   # SU-MIMO cases
             a = herm(h) @ h + np.eye(nl) * noiseVar                 # L x Kp x nl x nl
-            la = np.linalg.cholesky(a)  # a is Hermitian Positive Definite => a=la*herm(la) <= Cholesky decomposition
-            g = scipy.linalg.cho_solve((la, True), herm(h))         # Use Cholesky to get the equalizer
-            
-            aInv = scipy.linalg.cho_solve((la, True), np.eye(nl))   # L x Kp x nl x nl
+            aInv = np.linalg.inv(a)                                 # L x Kp x nl x nl (batched)
+            g = aInv @ herm(h)                                      # L x Kp x nl x nr
         else:   # nr <= nl -> MU-MIMO cases
             b = h @ herm(h) + np.eye(nr) * noiseVar                 # L x Kp x nr x nr
-            lb = np.linalg.cholesky(b)  # b is Hermitian Positive Definite => a=lb*herm(lb) <= Cholesky decomposition
-            bInv = scipy.linalg.cho_solve( (lb, True), np.eye(nr))  # Use Cholesky to get inverse of b
+            bInv = np.linalg.inv(b)                                 # L x Kp x nr x nr (batched)
             g = herm(h) @ bInv                                      # L x Kp x nl x nr
             aInv = (np.eye(nl)-herm(h) @ bInv @ h)/noiseVar         # L x Kp x nl x nl
 

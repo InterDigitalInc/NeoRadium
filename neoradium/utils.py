@@ -15,7 +15,7 @@ from scipy.stats import norm
 import warnings, functools
 
 __all__ = ['toRadian', 'toDegrees', 'toLinear', 'toDb', 'herm', 'getMse', 'getNmse']
-DOCS_LOC = "https://interdigitalinc.github.io/NeoRadium/html/"        # For InterDigital GitHub
+DOCS_LOC = "https://interdigitalinc.github.io/NeoRadium/html/"
 
 # **********************************************************************************************************************
 def toRadian(angle):
@@ -237,7 +237,6 @@ def freqStr(f):
     return f"{f:.4g} Hz"
 
 # **********************************************************************************************************************
-warnings.simplefilter('module', DeprecationWarning)     # Print the Deprecation Warning only once
 warnedMessages = set()
 def deprecated(replacement=None, docFile=None):
     # A decorator to mark functions as deprecated. It emits a warning when the function is used.
@@ -266,10 +265,10 @@ def deprecated(replacement=None, docFile=None):
     return decorator
     
 # **********************************************************************************************************************
-def warnOnce(message):
+def warnOnce(message, category=DeprecationWarning):
     if message in warnedMessages: return
     warnedMessages.add(message)
-    warnings.warn(message, category=DeprecationWarning, stacklevel=3)
+    warnings.warn(message, category=category, stacklevel=3)
 
 # **********************************************************************************************************************
 def getNumBlocks(errorMargin=0.01, confidence=0.95, blerEst=0.5):
@@ -289,9 +288,9 @@ def getNumBlocks(errorMargin=0.01, confidence=0.95, blerEst=0.5):
 # **********************************************************************************************************************
 def validateRange(var, valids, context="", varName=None):
     if varName is None:
-        import inspect
-        frame = inspect.getouterframes(inspect.currentframe())[1]
-        string = inspect.getframeinfo(frame[0]).code_context[0].strip()
+        import sys, linecache
+        frame = sys._getframe(1)
+        string = linecache.getline(frame.f_code.co_filename, frame.f_lineno).strip()
         varName = string[string.find('(') + 1:-1].split(',')[0].strip("self.")
 
     if isinstance(valids, list):

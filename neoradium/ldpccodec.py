@@ -142,10 +142,14 @@ following examples illustrate how to update existing code.
 # ------------  --------------------    --------------------------------------------------------------------------------
 # 04/10/2026    Shahab Hamidi-Rad       First version of the file using the code in the ldpc.py.
 # 04/10/2026    Shahab                  Completed the documentation
+# 09/10/2026    Shahab                  Starting version 0.5.3, decodeCodeBlocks uses C extensions which makes
+#                                       it much faster.
 # **********************************************************************************************************************
 import numpy as np
-from .utils import validateRange
+from .utils import validateRange, warnOnce
 from .chancodebase import ChanCodeBase
+from .nrext import decodeLBP as _decodeLBP, HAS_C_EXT as _HAS_C_EXT
+
 
 # See the "LDPC Coding" page in the "Implementation Notes".
 
@@ -1470,7 +1474,7 @@ class LdpcCodecCW(ChanCodeBase):
         # p0 (undo the shift)
         codedBlocks[:,k] = self.mulShift(rowSum.sum(1)%2 , np.int32(c*[p0UndoShift]))   # c x z
 
-        # Calculate p1, p2, p2
+        # Calculate p1, p2, p3
         for i in range(3):   # for p1, p2, p3
             # Reuse the already calculated sum for the first k columns. All shapes are:   c x z
             codedBlocks[:,k+i+1] = (rowSum[:,i] +
@@ -1743,49 +1747,56 @@ class LdpcCodecCW(ChanCodeBase):
 
         c, _ = rxCodeBlock.shape   # Number of code blocks
         rxCodeBlock = np.clip(rxCodeBlock, -1e10, 1e10)
-        z = self.liftingSize
-        r = np.concatenate([np.zeros((c,2,z)), rxCodeBlock.reshape(c, -1, z)],1)    # Add the 2z punctured message bits
-        bg = self.baseGraph
-        assert(r.shape[1] == bg.shape[1])
-        
-        nnCounts = (bg>=0).sum(1)                    # number of non-negatives in rows of bg
-        ll = [np.zeros((c,q,z)) for q in nnCounts]   # list of tensors of shape (cc, q, zz) for each layer
 
-        for i in range(self.numIter):
-            for row, layer in enumerate(bg):  # Each layer is a row of base graph
-                nnColIdx = np.where(layer>=0)[0]          # Column indices of non-negative values in current row
+        if _HAS_C_EXT:
+            llrs = np.asarray(rxCodeBlock, dtype=np.float32)
+            bg   = np.ascontiguousarray(self.baseGraph, dtype=np.int16)
+            r = _decodeLBP(llrs, bg, self.liftingSize, self.numIter, 0.75).reshape(c, -1)
+        else:
+            z = self.liftingSize
+            r = np.concatenate([np.zeros((c,2,z)), rxCodeBlock.reshape(c, -1, z)],1)    # Add the 2z punctured message bits
+            bg = self.baseGraph
+            assert(r.shape[1] == bg.shape[1])
 
-                # Subtract current value in ll
-                r[:,nnColIdx,:] -= ll[row]                                          # Shape:  cc x q x zz
+            nnCounts = (bg>=0).sum(1)                    # number of non-negatives in rows of bg
+            ll = [np.zeros((c,q,z)) for q in nnCounts]   # list of tensors of shape (cc, q, zz) for each layer
 
-                # Shift r before applying "min-sum"
-                rShifted = self.mulShift(r[:,nnColIdx,:], layer[nnColIdx])          # Shape:  cc x q x zz
-        
-                # Applying "min-sum" algorithm
-                signs = 1 - 2*(rShifted<0)             # Signs of r (sign of 0 is 1), Shape:  cc x q x zz
-                parity = np.prod(1 - 2*(rShifted<0),1)                              # Shape:  cc x zz
-                
-                minIdx = np.argmin(np.abs(rShifted), axis=1)                        # Shape:  cc x zz
-                minLocs = (np.arange(z*c)//z, minIdx.flatten(), np.arange(z*c)%z)   # Locations of min values
-                mins1st = np.abs(rShifted[minLocs])                                 # Shape:  cc x zz
-                # Make current mins values large so that we can find 2nd mins
-                rShifted[minLocs] += 100000
-                mins2nd = np.min(np.abs(rShifted), axis=1)                          # Shape:  cc x zz
-                
-                # Update the belief storage
-                ll[row] = mins1st.reshape(-1,1,z)*np.ones((1,len(nnColIdx),1))      # Shape:  cc x q x zz
-                ll[row][minLocs] = mins2nd.flatten()
-                # Set the sign:
-                ll[row] *= signs*parity[:,None,:]
-                
-                # Shift back the results after min-sum:
-                # Note: The "0.75" is the  Min-sum damping; it is conventional value, not from TS 38.212
-                ll[row] = self.mulShift(ll[row], z-layer[nnColIdx])*0.75            # Shape:  cc x q x zz
+            for i in range(self.numIter):
+                for row, layer in enumerate(bg):  # Each layer is a row of base graph
+                    nnColIdx = np.where(layer>=0)[0]          # Column indices of non-negative values in current row
 
-                # Add the "min-sum" results to current belief
-                r[:,nnColIdx,:] += ll[row]
+                    # Subtract current value in ll
+                    r[:,nnColIdx,:] -= ll[row]                                          # Shape:  cc x q x zz
 
-        r = r.reshape(c,-1)
+                    # Shift r before applying "min-sum"
+                    rShifted = self.mulShift(r[:,nnColIdx,:], layer[nnColIdx])          # Shape:  cc x q x zz
+
+                    # Applying "min-sum" algorithm
+                    signs = 1 - 2*(rShifted<0)             # Signs of r (sign of 0 is 1), Shape:  cc x q x zz
+                    parity = np.prod(1 - 2*(rShifted<0),1)                              # Shape:  cc x zz
+
+                    minIdx = np.argmin(np.abs(rShifted), axis=1)                        # Shape:  cc x zz
+                    minLocs = (np.arange(z*c)//z, minIdx.flatten(), np.arange(z*c)%z)   # Locations of min values
+                    mins1st = np.abs(rShifted[minLocs])                                 # Shape:  cc x zz
+                    # Make current mins values large so that we can find 2nd mins
+                    rShifted[minLocs] += 100000
+                    mins2nd = np.min(np.abs(rShifted), axis=1)                          # Shape:  cc x zz
+
+                    # Update the belief storage
+                    ll[row] = mins1st.reshape(-1,1,z)*np.ones((1,len(nnColIdx),1))      # Shape:  cc x q x zz
+                    ll[row][minLocs] = mins2nd.flatten()
+                    # Set the sign:
+                    ll[row] *= signs*parity[:,None,:]
+
+                    # Shift back the results after min-sum:
+                    # Note: The "0.75" is the  Min-sum damping; it is conventional value, not from TS 38.212
+                    ll[row] = self.mulShift(ll[row], z-layer[nnColIdx])*0.75            # Shape:  cc x q x zz
+
+                    # Add the "min-sum" results to current belief
+                    r[:,nnColIdx,:] += ll[row]
+
+            r = r.reshape(c,-1)
+
         if onlyInfoBits: r = r[:,:self.codeBlockSize]
         if outputBelief: return r
         return np.int8(r<0)

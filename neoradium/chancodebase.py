@@ -20,14 +20,15 @@ Here is the hierarchy of current channel coding classes in **NeoRadium**:
 # Date Changed  By                      Description
 # ------------  --------------------    --------------------------------------------------------------------------------
 # 07/18/2023    Shahab Hamidi-Rad       First version of the file.
-# 01/05/2024    Shahab Hamidi-Rad       Completed the documentation
+# 01/05/2024    Shahab                  Completed the documentation
+# 09/10/2026    Shahab                  Starting version 0.5.3, getCRC uses C extensions which makes it much faster.
 # **********************************************************************************************************************
 import numpy as np
 
-from .utils import validateRange
+from .utils import validateRange, warnOnce
+from .nrext import getCrc as _getCrc_c, HAS_C_EXT as _HAS_C_EXT
 
 # This file is based on 3GPP TS 38.212
-
 # **********************************************************************************************************************
 strToPoly = {   # 3GPP TS 38.212, Section 5.1
              '6':   [1, 1, 0, 0, 0, 0, 1],
@@ -113,6 +114,15 @@ class ChanCodeBase:
             ``C`` is the CRC length.
         """
         if not isinstance(poly, str):   raise ValueError("'poly' must be a string!")
+        if _HAS_C_EXT:
+            isFlat = bits.ndim == 1
+            # C function always receives 2D uint8; returns 2D uint8
+            inBits = np.ascontiguousarray(bits[np.newaxis, :] if isFlat else bits, dtype=np.uint8)
+            crc = _getCrc_c(inBits, poly)
+            if bits.dtype != np.uint8:
+                crc = crc.astype(bits.dtype)
+            return crc[0] if isFlat else crc
+            
         validateRange(poly, ['6', '11', '16', '24A', '24B', '24C'])
         poly = np.uint8(strToPoly[poly])
         polyLen = len(poly)

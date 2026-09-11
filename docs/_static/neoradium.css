@@ -1,0 +1,14 @@
+.wy-nav-content {
+    max-width: none;
+}
+
+.red {
+    color: red;
+}
+
+/* Left-align captions for code blocks */
+div.literal-block-wrapper figcaption,
+div.literal-block-wrapper .code-block-caption {
+    text-align: left !important;
+    margin-left: 0 !important;
+}

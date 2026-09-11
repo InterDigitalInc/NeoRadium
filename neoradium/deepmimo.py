@@ -1400,6 +1400,8 @@ class DeepMimoData:
             grid = np.array([p.powers[0] if p.hasLos>-1 else 1 for p in self]).reshape(self.gridSize[::-1])
             cmap = 'viridis'
             title = "Power of first path (dB)"
+        else:
+            raise ValueError(f"Unsupported 'mapType': '{mapType}'!")
         
         # heatMap includes the margins around the grid
         heatMap[-gridMin[1]:self.gridSize[1]-gridMin[1], -gridMin[0]:self.gridSize[0]-gridMin[0]] = grid
@@ -1507,7 +1509,7 @@ class DeepMimoData:
         # Apex of the triangle (points in the bearing direction)
         p3 = (bsX + px*height, bsY + py*height)
 
-        triangle = mpatches.Polygon([p1, p2, p3], closed=True, facecolor='orange')
+        triangle = mpatches.Polygon([p1, p2, p3], closed=True, facecolor='yellow')
         ax.add_patch(triangle)
 
     # ******************************************************************************************************************
@@ -1821,8 +1823,20 @@ class DeepMimoData:
             if numGraphs>0: graphCallback("Config", ax[1:], trajectory) # One-time Configuration the graphs
             graphCallback("ConfigMap", axMap, trajectory)               # One-time customization of the map
 
+        alreadyPlayed = False
         def animate(p):
             p0, p1 = (p-1)*pointsPerFrame, p*pointsPerFrame
+            if (p==1) and (alreadyPlayed):
+                # Animation rewinding is not supported. Calling 'anim.to_jshtml()' after saving
+                # to a GIF breaks the animation's internal state because the frames have already
+                # been consumed.
+                # Recommended approach:
+                #   * When saving to GIF: Use display(Markdown("![demo](MyAnim.gif)")) to display it.
+                #   * When rendering inline (fileName=None): Use anim.to_jshtml().
+                import warnings
+                warnings.warn("Using `anim.to_jshtml()` after writing a GIF file may cause in unexpected results!",
+                              category=Warning, stacklevel=3)
+                    
             x, y = trajectory.points[p1].xyz[:2]
             point.set_data([x], [y])                                    # Update UE position
             updatedItems = (point,)
@@ -1848,7 +1862,10 @@ class DeepMimoData:
         anim = animation.FuncAnimation(fig, animate, frames=trajectory.numPoints//pointsPerFrame,
                                        interval=frameDuration, blit=True, repeat=False)
 
-        if fileName is not None:    self.saveGif(anim, fileName, frameDuration, lastFrameDur)
+        if fileName is not None:
+            self.saveGif(anim, fileName, frameDuration, lastFrameDur)
+            alreadyPlayed = True        # Mark the animation as 'played'
+            
         plt.close(fig)
         return anim
 

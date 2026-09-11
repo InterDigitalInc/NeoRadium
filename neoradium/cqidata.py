@@ -136,9 +136,7 @@ class CqiData:
     def __init__(self, **kwargs):
         # cqiInfoFileName: Path to the JSON file containing the CQI information (e.g. AWGN SNR-BLER curves
         # and beta/delta values).
-        dataPath = os.path.join( os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data" )
-        self.betaLookupFileName = kwargs.get("betaLookupFileName", os.path.join(dataPath, "BetaValues.csv"))
-        self.awgnBlerCurvesFileName = kwargs.get("awgnBlerCurvesFileName", os.path.join(dataPath, "AwgnBlerCurves.csv"))
+        dataPath = os.path.join( os.path.dirname(os.path.abspath(__file__)), "data" )
         self.cqiInfoFileName = kwargs.get("cqiInfoFileName", os.path.join(dataPath, "CqiInfo.json"))
         global cqiInfoDic
         if cqiInfoDic is None:
