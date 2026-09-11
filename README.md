@@ -2,7 +2,7 @@
 
 [![version](https://img.shields.io/pypi/v/neoradium)](https://pypi.org/project/neoradium/)
 [![Python versions](https://img.shields.io/pypi/pyversions/neoradium)](https://pypi.org/project/neoradium/)
-[![Docs](https://img.shields.io/badge/docs-online-brightgreen)](https://interdigitalinc.github.io/NeoRadium/)
+[![Docs](https://img.shields.io/badge/docs-online-brightgreen)](https://interdigitalinc.github.io/NeoRadium/html/)
 
 **NeoRadium** is a Python library for simulating end-to-end wireless communication systems based on the latest **3GPP 5G NR** standards. Its object-oriented design abstracts much of the complexity involved in physical-layer modeling, enabling researchers and engineers to rapidly build, customize, and evaluate communication pipelines using standard Python workflows.
 
